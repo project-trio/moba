@@ -1,0 +1,8 @@
+{
+	"strict": "global",
+	"unused": true,
+	"indent": 1,
+	"node": true,
+	"globals": {"require":false, "module":false},
+	"esversion": 6
+}
