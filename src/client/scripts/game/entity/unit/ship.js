@@ -46,13 +46,9 @@ const Ship = function(name, player, team, x, y, angle) {
 
 	// Unit
 
-	const arrow = Render.sprite('tank', {parent: this.top});
-	// arrow.anchor.set(0.5);
-	// arrow.scale.set(0.75, 0.75, 1);
+	const arrow = Render.vox('roller', {parent: this.top});
 
 	// const base = Render.sprite('ship');
-	// base.anchor.set(0.5);
-	// base.scale.set(0.5, 0.5, 1);
 	// this.base.add(base);
 
 	const nameText = Render.text(player.name + ' [1]', 0, -Local.shipSize, {font: '13px Arial', fill: 0xff1010}, this.container);
@@ -146,7 +142,7 @@ const Ship = function(name, player, team, x, y, angle) {
 			return false;
 		}
 
-		this.top.rotation.set(0, Util.atan(moveX, moveY), 0);
+		this.top.rotation.z = Util.atan(moveX, moveY);
 		this.setMovePoint(x, y, moveX, moveY);
 	};
 

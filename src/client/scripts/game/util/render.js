@@ -1,6 +1,7 @@
 'use strict';
 
 const THREE = require('three');
+const Vox = require('external/vox');
 
 let scene, camera, renderer;
 
@@ -22,13 +23,13 @@ module.exports = {
 		var ambient = new THREE.AmbientLight(0x111111);
 		scene.add(ambient);
 
-		// var directionalLight = new THREE.DirectionalLight(0xffffff, 0.25);
-		// directionalLight.position.set(width / 2, height / 2, 512);
-		// scene.add(directionalLight);
-		var light = new THREE.PointLight(0xffffff, 0.9, 0);
-		light.position.set(width / 2, height / 2, 10);
-		// light.position.set(0, 0, 10);
-		camera.add(light);
+		var light = new THREE.DirectionalLight(0xffffff, 0.5);
+		light.position.set(width / 2, height / 2, 512);
+		scene.add(light);
+		// var light = new THREE.PointLight(0xffffff, 0.9, 0);
+		// light.position.set(width / 2, height / 2, 10);
+		// // light.position.set(0, 0, 10);
+		// camera.add(light);
 
 		renderer = new THREE.WebGLRenderer({antialias: true});
 		// renderer.physicallyCorrectLights = true;
@@ -86,6 +87,21 @@ module.exports = {
 			options.parent.add(sprite);
 		}
 		return sprite;
+	},
+
+	vox: function(name, options) {
+		var parser = new Vox.Parser();
+		parser.parse(require(`images/${name}.vox`)).then(function(voxelData) {
+			var builder = new Vox.MeshBuilder(voxelData, {voxelSize: 2});
+			var mesh = builder.createMesh();
+			mesh.rotation.x = Math.PI / 2;
+			if (options.z) {
+				mesh.position.z = options.z;
+			}
+			if (options.parent) {
+				options.parent.add(mesh);
+			}
+		});
 	},
 
 	// Shapes

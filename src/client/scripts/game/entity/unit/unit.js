@@ -145,9 +145,9 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 		this.sightCircle.y = y;
 		this.healthContainer.position.set(x, y, 0);
 
-		// const angle = -Math.PI * 1.5 * (team == 0 ? -1 : 1);
-		// this.base.rotation.x = angle;
-		// this.top.rotation.x = angle;
+		const angle = -Math.PI * 1.5 * (team == 0 ? -1 : 1);
+		this.base.rotation.z = angle;
+		this.top.rotation.z = angle;
 	};
 	this.setLocation(x, y);
 	map.addSight(this.sightCircle);

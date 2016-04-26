@@ -44,14 +44,11 @@ module.exports = function(team, towerType, parent, x, y) {
 	this.__proto__ = superUnit;
 	Unit.addBase(this);
 
-	const platform = Render.sprite('turret-base', {parent: this.base});
-	// platform.anchor.set(0.5);
-	// platform.scale.set(1/3, 1/3, 1);
+	const platform = Render.vox('turret-base', {parent: this.base});
 
-	const arrow = Render.sprite('turret-arrow', {parent: this.top});
-	// arrow.anchor.set(0.5);
-	// arrow.scale.set(0.5, 0.5, 1);
-	arrow.position.set(-32, 0, 10);
+	const arrow = Render.vox('turret-top', {
+		parent: this.top,
+	});
 
 	this.renderInBackground = true;
 
@@ -73,7 +70,7 @@ module.exports = function(team, towerType, parent, x, y) {
 	this.attack = function(enemy, renderTime) {
 		superUnit.attack(enemy, renderTime);
 
-		this.top.rotation.x = Util.angleBetween(this, enemy) + Math.PI;
+		this.top.rotation.z = Util.angleBetween(this, enemy) + Math.PI;
 	};
 
 };

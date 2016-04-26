@@ -19,7 +19,8 @@ module.exports = {
 	module: {
 		loaders: [
 			{ test: /\.css$/, loader: 'style-loader!css-loader' },
-			{ test: /\.(png)$/, loader: 'url-loader?limit=4096' },
+			{ test: /\.png$/, loader: 'url-loader?limit=4096' },
+			{ test: /\.vox$/, loader: 'url-loader?limit=1' },
 			{ test: /\.(json)$/, loader: 'json-loader' },
 
 			{
@@ -42,7 +43,6 @@ module.exports = {
 
 	externals: {
 		'jquery': 'jQuery',
-		// 'fs': 'fs',
 	},
 
 };
