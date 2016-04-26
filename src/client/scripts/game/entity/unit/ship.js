@@ -17,7 +17,7 @@ const units = {
 	pewpew: {
 		maxHealth: [60, 10, 0],
 		regenerate: [40, 4, 0],
-		speed: [14 * 10, 0, 0], //TODO
+		speed: [14 * 2, 0, 0], //TODO
 		damage: [8, 1, 0],
 		sightRange: [160, 1, 0],
 		attackRange: [140, 1, 0],
@@ -31,7 +31,7 @@ const units = {
 
 const Ship = function(name, player, team, x, y, angle) {
 
-	const statBase = units[name];
+	const statBase = units[name] || units['pewpew'];
 	const superUnit = new Unit(team, statBase, Local.game.map.floorContainer, x, y, angle);
 	this.__proto__ = superUnit;
 	Unit.addBase(this);
@@ -46,13 +46,14 @@ const Ship = function(name, player, team, x, y, angle) {
 
 	// Unit
 
-	const arrow = Render.voxel('roller', {parent: this.top, z: -19});
+	const offset = name == 'roller' ? -19 : 0;
+
+	Render.voxel(name, {parent: this.top, z: offset});
 
 	// const base = Render.sprite('ship');
 	// this.base.add(base);
 
-	const nameText = Render.text(player.name + ' [1]', 0, -Local.shipSize, {font: '13px Arial', fill: 0xff1010}, this.container);
-	// nameText.anchor.set(0.5, 1.0);
+	// const nameText = Render.text(player.name + ' [1]', 0, -Local.shipSize, {font: '13px Arial', fill: 0xff1010}, this.container);
 
 	// Health
 

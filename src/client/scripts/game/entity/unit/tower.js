@@ -21,7 +21,7 @@ const towerStats = {
 		attackRange: [160, 0, 0],
 		attackCooldown: [6, 0, 0],
 
-		collision: 30
+		collision: 30,
 	},
 	base: {
 		maxHealth: [300, 0, 0],
@@ -32,7 +32,7 @@ const towerStats = {
 		attackRange: [200, 0, 0],
 		attackCooldown: [5, 0, 0],
 
-		collision: 35
+		collision: 35,
 	}
 };
 
@@ -44,9 +44,9 @@ module.exports = function(team, towerType, parent, x, y) {
 	this.__proto__ = superUnit;
 	Unit.addBase(this);
 
-	const platform = Render.voxel('turret-base', {parent: this.base});
+	Render.voxel('turret-base', {parent: this.base});
 
-	const arrow = Render.voxel('turret-top', {
+	Render.voxel('turret-top', {
 		parent: this.top,
 	});
 
@@ -58,7 +58,15 @@ module.exports = function(team, towerType, parent, x, y) {
 		this.sightCircle.visible = false;
 		this.healthContainer.parent.remove(this.healthContainer);
 		this.setBlocking(false);
-		this.top.remove(arrow);
+		this.container.position.z = -40;
+		this.container.remove(this.top);
+
+
+		const baseMesh = this.base.children[0];
+		if (baseMesh) {
+			baseMesh.material.transparent = true;
+			baseMesh.material.opacity = 0.5;
+		}
 
 		superUnit.die(time);
 

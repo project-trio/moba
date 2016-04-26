@@ -25,13 +25,21 @@ module.exports = {
 		const ambient = new THREE.AmbientLight(0x333333);
 		scene.add(ambient);
 
-		const light = new THREE.DirectionalLight(0xffffff, 0.5);
-		light.position.set(width / 2, height / 2, 512);
-		scene.add(light);
-		// const light = new THREE.PointLight(0xffffff, 0.9, 0);
-		// light.position.set(width / 2, height / 2, 10);
+		// const light = new THREE.DirectionalLight(0xffffff, 0.5);
+		// light.position.set(width / 2, height / 2, 512);
+		const light = new THREE.PointLight(0xffffff, 0.9, 0);
+		light.position.set(width / 2, height / 2, 100);
 		// // light.position.set(0, 0, 10);
 		// camera.add(light);
+		light.castShadow = true;
+		let shadowCamera = new THREE.PerspectiveCamera(50, 1, 1200, 2500);
+		let lightShadow = new THREE.LightShadow(shadowCamera);
+		lightShadow.bias = 0.0001;
+		lightShadow.mapSize.width = 1024;
+		lightShadow.mapSize.height = 1024;
+		light.shadow = lightShadow;
+		scene.add(light);
+
 
 		renderer = new THREE.WebGLRenderer({antialias: true});
 		// renderer.physicallyCorrectLights = true;
@@ -104,6 +112,7 @@ module.exports = {
 			if (options.parent) {
 				options.parent.add(mesh);
 			}
+			mesh.castShadow = true;
 		});
 	},
 

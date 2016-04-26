@@ -110,7 +110,8 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 
 	// Health Bar
 
-	const hpOffset = -48;
+	const hpOffsetY = -40;
+	const hpOffsetZ = 60;
 	const hpWidth = 64;
 	const hpHeight = 4;
 	const outlineWeight = 1;
@@ -118,17 +119,19 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 
 	this.healthContainer = Render.group();
 
-	Render.rectangle(0, hpOffset, hpWidth, hpHeight, { // HP Backing
+	Render.rectangle(0, hpOffsetY, hpWidth, hpHeight, { // HP Backing
 		color: 0xFF3333,
 		strokeWidth: outlineWeight,
 		strokeColor: 0xFFFFFF,
 		radius: hpRadius,
+		z: hpOffsetZ,
 		parent: this.healthContainer,
 	});
 
-	this.healthBar = Render.rectangle(0, hpOffset, hpWidth, hpHeight, {
+	this.healthBar = Render.rectangle(0, hpOffsetY, hpWidth, hpHeight, {
 		color: 0x33FF99,
 		radius: hpRadius+2,
+		z: hpOffsetZ,
 		parent: this.healthContainer,
 	});
 
@@ -143,7 +146,8 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 		this.container.position.set(x, y, 0);
 		this.sightCircle.x = x;
 		this.sightCircle.y = y;
-		this.healthContainer.position.set(x, y, 0);
+		this.healthContainer.position.x = x;
+		this.healthContainer.position.y = y;
 
 		const angle = -Math.PI * 1.5 * (team == 0 ? -1 : 1);
 		this.base.rotation.z = angle;
@@ -300,8 +304,10 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 			moveToX *= 0.001;
 			moveToY *= 0.001;
 		}
-		this.container.position.set(moveToX, moveToY, 0);
-		this.healthContainer.position.set(moveToX, moveToY, 0);
+		this.container.position.x = moveToX;
+		this.container.position.y = moveToY;
+		this.healthContainer.position.x = moveToX;
+		this.healthContainer.position.y = moveToY;
 		this.sightCircle.x = moveToX;
 		this.sightCircle.y = moveToY;
 	};
@@ -343,6 +349,8 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 			if (reached) {
 				isMoving = false;
 			}
+
+			// Walls
 			const walls = map.blockCheck(movingToX, movingToY);
 			let willBlock = walls == null;
 			const collisionSize = this.stats.collision;
@@ -371,6 +379,8 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 					}
 				}
 			}
+
+			//Units
 			if (!willBlock) {
 				for (let idx in allUnits) {
 					const unit = allUnits[idx];
@@ -383,6 +393,8 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 					}
 				}
 			}
+
+			// Move
 			this.blocked = willBlock;
 			if (!willBlock) {
 				px = movingToX;

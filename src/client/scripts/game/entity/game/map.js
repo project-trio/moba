@@ -27,7 +27,7 @@ maps.small = {
 	]
 };
 
-const wallR = 16;
+const wallR = 24;
 const wallH = 80;
 
 maps.standard = {
@@ -40,13 +40,13 @@ maps.standard = {
 	],
 	walls: [
 		{
-			x: 300, y: 320,
+			x: 300, y: 360,
 			w: wallH * 2, h: wallR * 2,
 			capStart: true, capEnd: true,
 			mirror: true
 		},
 		{
-			x: 300 - wallH, y: 320 - wallH,
+			x: 300 - wallH, y: 360 - wallH,
 			w: wallR * 2, h: wallH * 2,
 			capStart: true, capEnd: false,
 			mirror: true
