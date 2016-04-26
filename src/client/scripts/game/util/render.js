@@ -1,9 +1,11 @@
 'use strict';
 
 const THREE = require('three');
-const Vox = require('external/vox');
 
-let scene, camera, renderer;
+const Vox = require('external/vox');
+const DomEvents = require('external/threex.domevents');
+
+let scene, camera, renderer, domEvents;
 
 const WALL_HEIGHT = 50;
 
@@ -38,6 +40,7 @@ module.exports = {
 		renderer.setSize(width, height);
 
 		document.getElementById('game-viewport').appendChild(renderer.domElement);
+		domEvents = new DomEvents(camera, renderer.domElement);
 		return renderer;
 	},
 
@@ -54,8 +57,8 @@ module.exports = {
 		return renderer.domElement;
 	},
 
-	on: function(listener, callback) {
-		renderer.domElement.addEventListener(listener, callback);
+	on: function(object, listener, callback) {
+		domEvents.addEventListener(object, listener, callback);
 	},
 
 	add: function(object) {

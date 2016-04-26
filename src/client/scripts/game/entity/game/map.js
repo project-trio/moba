@@ -78,27 +78,6 @@ const GameMap = function(parent) {
 
 	container.interactive = true;
 
-	let automateTimer;
-	function onDown(event) { //TODO
-		const clickX = -event.layerX - previousCameraX;
-		const clickY = event.layerY - previousCameraY;
-		const dest = Local.player.unit.requestedDestination(clickX, clickY);
-		Bridge.emit('update', {dest: dest});
-		if (automateTimer) {
-			clearInterval(automateTimer);
-			automateTimer = null;
-		}
-	}
-	Render.on('mousedown', onDown);
-	Render.on('touchstart', onDown);
-
-	automateTimer = setInterval(function() {
-		if (Local.player) {
-			const dest = Local.player.unit.requestedDestination(Math.random()*layout.width, Math.random()*layout.height);
-			Bridge.emit('update', {dest: dest});
-		}
-	}, Math.random()*2000+1000);
-
 //MANAGE
 
 	const sightsArray = [];
@@ -145,10 +124,30 @@ const GameMap = function(parent) {
 		var mapHeight = layout.height;
 		Render.positionCamera(mapWidth / 2, mapHeight / 2);
 
-		Render.ground(mapWidth, mapHeight, {
 			color: 0x00220a,
+		const ground = Render.ground(mapWidth, mapHeight, {
 			parent: floorContainer,
 		});
+
+		let automateTimer;
+		Render.on(ground, 'mousedown', (event) => {
+			const clickPoint = event.intersect.point;
+			const diffX = Math.round(clickPoint.x) - previousCameraX;
+			const diffY = Math.round(clickPoint.y) - previousCameraY;
+			const dest = Local.player.unit.requestedDestination(diffX, diffY);
+			Bridge.emit('update', {dest: dest});
+			if (automateTimer) {
+				clearInterval(automateTimer);
+				automateTimer = null;
+			}
+		});
+
+		automateTimer = setInterval(function() {
+			if (Local.player) {
+				const dest = Local.player.unit.requestedDestination(Math.random()*layout.width, Math.random()*layout.height);
+				Bridge.emit('update', {dest: dest});
+			}
+		}, Math.random()*2000+1000);
 
 		for (let widx in layout.walls) {
 			const wall = layout.walls[widx];
