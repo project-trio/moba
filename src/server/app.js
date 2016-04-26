@@ -5,6 +5,8 @@ const CommonConsts = require('../common/constants');
 //EXPRESS
 
 const express = require('express');
+const path = require('path');
+
 const app = express();
 const http = require('http').createServer(app);
 
@@ -19,7 +21,7 @@ SocketIO.io = io;
 app.use(express.static('public'));
 
 app.get('*', (request, response, next) => {
-	response.sendFile(__dirname + '/public/index.html');
+	response.sendFile(path.resolve(__dirname, '/public/index.html'));
 });
 
 //SETUP

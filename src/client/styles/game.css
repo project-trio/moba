@@ -31,12 +31,3 @@ h2 {
 }
 
 /* GAME CANVAS */
-
-canvas {
-	position: absolute;
-}
-
-#canvas-fog {
-	pointer-events: none;
-	opacity: 0.2;
-}

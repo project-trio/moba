@@ -17,7 +17,7 @@ const units = {
 	pewpew: {
 		maxHealth: [60, 10, 0],
 		regenerate: [40, 4, 0],
-		speed: [14, 0, 0],
+		speed: [14 * 10, 0, 0], //TODO
 		damage: [8, 1, 0],
 		sightRange: [160, 1, 0],
 		attackRange: [140, 1, 0],
@@ -46,19 +46,17 @@ const Ship = function(name, player, team, x, y, angle) {
 
 	// Unit
 
-	const arrow = Render.sprite('tank');
-	arrow.anchor.set(0.5);
-	arrow.scale.set(0.75);
-	this.top.addChild(arrow);
+	const arrow = Render.sprite('tank', {parent: this.top});
+	// arrow.anchor.set(0.5);
+	// arrow.scale.set(0.75, 0.75, 1);
 
 	// const base = Render.sprite('ship');
 	// base.anchor.set(0.5);
-	// base.scale.set(0.5);
-	// this.base.addChild(base);
+	// base.scale.set(0.5, 0.5, 1);
+	// this.base.add(base);
 
-	const nameText = Render.text(player.name + ' [1]', 0, -Local.shipSize, {font: '13px Arial', fill: 0xff1010});
-	nameText.anchor.set(0.5, 1.0);
-	this.container.addChild(nameText);
+	const nameText = Render.text(player.name + ' [1]', 0, -Local.shipSize, {font: '13px Arial', fill: 0xff1010}, this.container);
+	// nameText.anchor.set(0.5, 1.0);
 
 	// Health
 
@@ -98,7 +96,7 @@ const Ship = function(name, player, team, x, y, angle) {
 	this.levelUp = function(over) {
 		levelExp = over;
 		++level;
-		nameText.text = player.name + ' [' + level+ ']';
+		// nameText.text = player.name + ' [' + level+ ']'; //TODO
 
 		const healthIncrease = statBase.maxHealth[1] * 1000;
 		this.stats.maxHealth += healthIncrease;
@@ -148,7 +146,7 @@ const Ship = function(name, player, team, x, y, angle) {
 			return false;
 		}
 
-		this.top.rotation = Util.atan(moveX, moveY);
+		this.top.rotation.set(0, Util.atan(moveX, moveY), 0);
 		this.setMovePoint(x, y, moveX, moveY);
 	};
 

@@ -2,7 +2,7 @@
 
 const Local = require('local');
 
-const Canvas = require('game/util/canvas');
+const Render = require('game/util/render');
 
 const Unit = require('game/entity/unit/unit');
 
@@ -19,15 +19,14 @@ const animate = function() {
 			if (game.performTicks(currentTime)) {
 				const tickDelta = currentTime - lastTick;
 				const fps = Math.min(Math.round(1000 * 3 / tickDelta), 60);
-				game.fpsText.text = fps + ' fps';
+				// game.fpsText.text = fps + ' fps';
 				lastTick = currentTime;
 			} else {
 				const timeDelta = currentTime - lastUpdate;
 				Unit.update(currentTime, timeDelta, true);
 			}
 		}
-		Canvas.render(game.container);
-		// game.map.updateFog();
+		Render.render();
 	}
 	lastUpdate = currentTime;
 };

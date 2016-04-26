@@ -18,9 +18,9 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 	this.base = Render.group();
 	this.top = Render.group();
 
-	this.container.addChild(this.base);
-	this.container.addChild(this.top);
-	parent.addChild(this.container);
+	this.container.add(this.base);
+	this.container.add(this.top);
+	parent.add(this.container);
 
 	// Stats
 
@@ -81,7 +81,7 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 	let isBlocking = true;
 	this.isBlocking = function() {
 		return isBlocking;
-	}
+	};
 	this.setBlocking = function(blocking) {
 		isBlocking = blocking;
 	};
@@ -110,15 +110,15 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 
 	// Health Bar
 
-	const hpOffset = -44;
+	const hpOffset = -48;
 	const hpWidth = 64;
 	const hpHeight = 4;
 	const outlineWeight = 1;
 	const hpRadius = 3;
 
 	this.healthContainer = Render.group();
-	
-	Render.rectangle(-hpWidth*0.5, hpOffset, hpWidth, hpHeight, { // HP Backing
+
+	Render.rectangle(0, hpOffset, hpWidth, hpHeight, { // HP Backing
 		color: 0xFF3333,
 		strokeWidth: outlineWeight,
 		strokeColor: 0xFFFFFF,
@@ -126,8 +126,7 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 		parent: this.healthContainer,
 	});
 
-	const healthOrigin = (-hpWidth+outlineWeight)*0.5;
-	this.healthBar = Render.rectangle(healthOrigin, hpOffset+outlineWeight*0.5, hpWidth, hpHeight, {
+	this.healthBar = Render.rectangle(0, hpOffset, hpWidth, hpHeight, {
 		color: 0x33FF99,
 		radius: hpRadius+2,
 		parent: this.healthContainer,
@@ -141,14 +140,14 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 	this.setLocation = function(x, y) {
 		px = x * 1000;
 		py = y * 1000;
-		this.container.position.set(x, y);
+		this.container.position.set(x, y, 0);
 		this.sightCircle.x = x;
 		this.sightCircle.y = y;
-		this.healthContainer.position.set(x, y);
+		this.healthContainer.position.set(x, y, 0);
 
-		const angle = -Math.PI * 1.5 * (team == 0 ? -1 : 1);
-		this.base.rotation = angle;
-		this.top.rotation = angle;
+		// const angle = -Math.PI * 1.5 * (team == 0 ? -1 : 1);
+		// this.base.rotation.x = angle;
+		// this.top.rotation.x = angle;
 	};
 	this.setLocation(x, y);
 	map.addSight(this.sightCircle);
@@ -181,13 +180,13 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 		} else {
 			newHealth = this.stats.health;
 		}
-		const healthScale = newHealth / this.stats.maxHealth;
-		this.healthBar.scale.x = healthScale;
-		this.healthBar.position.x = healthOrigin * (1 - healthScale);
+		// const healthScale = newHealth / this.stats.maxHealth;
+		// this.healthBar.scale.setX(healthScale);
+		// this.healthBar.position.setX(healthOrigin * (1 - healthScale));
 	};
 
 	this.destroy = function() {
-		parent.removeChild(this.container);
+		parent.remove(this.container);
 		// container.destroy(true);
 		this.container = null;
 	};
@@ -301,8 +300,8 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 			moveToX *= 0.001;
 			moveToY *= 0.001;
 		}
-		this.container.position.set(moveToX, moveToY);
-		this.healthContainer.position.set(moveToX, moveToY);
+		this.container.position.set(moveToX, moveToY, 0);
+		this.healthContainer.position.set(moveToX, moveToY, 0);
 		this.sightCircle.x = moveToX;
 		this.sightCircle.y = moveToY;
 	};

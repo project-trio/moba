@@ -44,16 +44,14 @@ module.exports = function(team, towerType, parent, x, y) {
 	this.__proto__ = superUnit;
 	Unit.addBase(this);
 
-	const platform = Render.sprite('turret-base');
-	platform.anchor.set(0.5);
-	platform.scale.set(1/3);
-	this.base.addChild(platform);
+	const platform = Render.sprite('turret-base', {parent: this.base});
+	// platform.anchor.set(0.5);
+	// platform.scale.set(1/3, 1/3, 1);
 
-	const arrow = Render.sprite('turret-arrow');
-	arrow.anchor.set(0.5);
-	arrow.scale.set(0.5);
-	arrow.position.x += 16;
-	this.top.addChild(arrow);
+	const arrow = Render.sprite('turret-arrow', {parent: this.top});
+	// arrow.anchor.set(0.5);
+	// arrow.scale.set(0.5, 0.5, 1);
+	arrow.position.set(-32, 0, 10);
 
 	this.renderInBackground = true;
 
@@ -61,9 +59,9 @@ module.exports = function(team, towerType, parent, x, y) {
 
 	this.die = function(time) {
 		this.sightCircle.visible = false;
-		this.healthContainer.parent.removeChild(this.healthContainer);
+		this.healthContainer.parent.remove(this.healthContainer);
 		this.setBlocking(false);
-		this.top.removeChild(arrow);
+		this.top.remove(arrow);
 
 		superUnit.die(time);
 
@@ -75,7 +73,7 @@ module.exports = function(team, towerType, parent, x, y) {
 	this.attack = function(enemy, renderTime) {
 		superUnit.attack(enemy, renderTime);
 
-		this.top.rotation = Util.angleBetween(this, enemy) + Math.PI;
+		this.top.rotation.x = Util.angleBetween(this, enemy) + Math.PI;
 	};
 
 };

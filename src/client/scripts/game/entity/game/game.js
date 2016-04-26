@@ -35,6 +35,8 @@ const Game = function(gid, size) {
 
 	let localUnit;
 
+	Render.add(gameContainer);
+
 	// Update
 
 	let ticksRendered = 0;
@@ -66,7 +68,7 @@ const Game = function(gid, size) {
 			localUnit.updateVisibility();
 			map.track(localUnit.px() * 0.001, localUnit.py() * 0.001);
 		}
-		map.updateFog();
+		// map.updateFog();
 		return true;
 	};
 
@@ -150,8 +152,8 @@ const Game = function(gid, size) {
 		const overText = Render.text('GAME OVER', centerX, centerY, {font: '64px Arial', fill: 0xff1010}, gameContainer);
 		const winnerText = Render.text('Team ' + (2-losingTeam) + ' won!', centerX, centerY + 88, {font: '44px Arial', fill: 0xff1010}, gameContainer);
 
-		overText.anchor.set(0.5);
-		winnerText.anchor.set(0.5);
+		// overText.anchor.set(0.5);
+		// winnerText.anchor.set(0.5);
 	};
 
 	// Players

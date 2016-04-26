@@ -66,14 +66,13 @@ module.exports = {
 		columnsValues.updated_at = Util.seconds();
 
 		const columns = [], values = [], placeholders = [];
-	
 		let index = 0;
 		for (let column in columnsValues) {
 			columns.push(column);
 			values.push(columnsValues[column]);
 			placeholders.push('$' + (++index));
 		}
-	
+
 		let queryString = 'UPDATE ' + table + ' SET (' + columns.join() + ') = (' + placeholders.join() + ') WHERE ' + where;
 		if (returning) {
 			queryString += ' RETURNING ' + returning;
@@ -86,16 +85,14 @@ module.exports = {
 		columnsValues.created_at = now;
 		columnsValues.updated_at = now;
 
-		
 		let columns = [], values = [], placeholders = [];
-		
 		let index = 0;
 		for (let column in columnsValues) {
 			columns.push(column);
 			values.push(columnsValues[column]);
 			placeholders.push('$' + (++index));
 		}
-	
+
 		let queryString = 'INSERT INTO ' + table + ' (' + columns.join() + ') VALUES (' + placeholders.join() + ')';
 		if (returning) {
 			queryString += ' RETURNING ' + returning;

@@ -3,7 +3,6 @@
 const Bridge = require('bridge');
 const Local = require('local');
 
-const Canvas = require('game/util/canvas');
 const Render = require('game/util/render');
 
 const Tower = require('game/entity/unit/tower');
@@ -28,9 +27,9 @@ maps.small = {
 	]
 };
 
-const mapW = 0.035;
-const mapL = 0.16;
-const wallH = 0.24;
+const wallR = 16;
+const wallH = 80;
+
 maps.standard = {
 	width: 1024,
 	height: 1600,
@@ -41,17 +40,15 @@ maps.standard = {
 	],
 	walls: [
 		{
-			x: 2/3, y: wallH,
-			w: mapL, h: mapW,
+			x: 300, y: 320,
+			w: wallH * 2, h: wallR * 2,
 			capStart: true, capEnd: true,
 			mirror: true
 		},
-
 		{
-			x: 2/3 + mapL, y: wallH - mapL / 2,
-			w: mapW, h: mapL,
+			x: 300 - wallH, y: 320 - wallH,
+			w: wallR * 2, h: wallH * 2,
 			capStart: true, capEnd: false,
-			offset: 10,
 			mirror: true
 		}
 	]
@@ -63,16 +60,14 @@ const GameMap = function(parent) {
 
 	let layout;
 
-	Canvas.create();
-
-	const fogContext = Canvas.get().getContext('2d');
+	Render.create();
 
 	let container = Render.group();
 	const floorContainer = Render.group();
 	const healthContainer = Render.group();
-	container.addChild(floorContainer);
-	container.addChild(healthContainer);
-	parent.addChild(container);
+	container.add(floorContainer);
+	container.add(healthContainer);
+	parent.add(container);
 	this.floorContainer = floorContainer;
 
 	const walls = [];
@@ -84,10 +79,9 @@ const GameMap = function(parent) {
 	container.interactive = true;
 
 	let automateTimer;
-	function onDown(event) {
-		const location = event.data.originalEvent;
-		const clickX = location.layerX - previousCameraX;
-		const clickY = location.layerY - previousCameraY;
+	function onDown(event) { //TODO
+		const clickX = -event.layerX - previousCameraX;
+		const clickY = event.layerY - previousCameraY;
 		const dest = Local.player.unit.requestedDestination(clickX, clickY);
 		Bridge.emit('update', {dest: dest});
 		if (automateTimer) {
@@ -95,15 +89,15 @@ const GameMap = function(parent) {
 			automateTimer = null;
 		}
 	}
-	container.on('mousedown', onDown);
-	container.on('touchstart', onDown);
+	Render.on('mousedown', onDown);
+	Render.on('touchstart', onDown);
 
 	automateTimer = setInterval(function() {
 		if (Local.player) {
 			const dest = Local.player.unit.requestedDestination(Math.random()*layout.width, Math.random()*layout.height);
 			Bridge.emit('update', {dest: dest});
 		}
-	}, Math.random()*2000+2000);
+	}, Math.random()*2000+1000);
 
 //MANAGE
 
@@ -114,28 +108,7 @@ const GameMap = function(parent) {
 	};
 
 	this.addHealthbar = function(bar) {
-		healthContainer.addChild(bar);
-	};
-
-	this.updateFog = function() {
-		fogContext.globalCompositeOperation = 'source-over';
-		// fogContext.clearRect(0, 0, layout.width, layout.height);
-		fogContext.fillStyle = 'rgba(128, 128, 128)';
-		fogContext.fillRect(0, 0, layout.width, layout.height);
-
-		fogContext.globalCompositeOperation = 'destination-out';
-		// fogContext.fillStyle = 'rgba(255, 255, 255, 255)';
-		fogContext.fillStyle = 'white';
-		for (let idx in sightsArray) {
-			const sight = sightsArray[idx];
-			if (!sight.visible) {
-				continue;
-			}
-			fogContext.beginPath();
-			fogContext.arc(sight.x, sight.y, sight.radius, 0, 2*Math.PI, false);
-			fogContext.fill();
-			// fogContext.closePath();
-		}
+		healthContainer.add(bar);
 	};
 
 	this.blockCheck = function(moveX, moveY) {
@@ -146,95 +119,87 @@ const GameMap = function(parent) {
 	};
 
 	const createWallRect = function(x, y, w, h) {
-		walls.push([x * 1000, y * 1000, w * 1000, h * 1000]);
+		walls.push([(x - w/2) * 1000, (y - h/2) * 1000, w * 1000, h * 1000]);
 
-		Render.rectangle(x, y, w, h, {
+		Render.wall(x, y, w, h, {
 			color: 0xeeeeee,
 			parent: floorContainer,
 		});
 	};
 
-	const createWallCap = function(vertical, mp, x, y, radius) {
+	const createWallCap = function(vertical, x, y, radius) {
 		radius = Math.round(radius / 2);
-		if (vertical) {
-			x += radius * mp;
-		} else {
-			y += radius;
-		}
 		walls.push([x * 1000, y * 1000, radius * 1000]);
 
-		Render.circle(x, y, radius, 0xeeeeee, floorContainer);
+		Render.wallCap(x, y, radius, {
+			color: 0xeeeeee,
+			parent: floorContainer,
+		});
 	};
 
 	this.build = function(name) {
 		name = 'standard';
 		layout = maps[name];
 
-		Render.rectangle(0, 0, layout.width, layout.height, {
-			color: 0x000000,
+		var mapWidth = layout.width;
+		var mapHeight = layout.height;
+		Render.positionCamera(mapWidth / 2, mapHeight / 2);
+
+		Render.ground(mapWidth, mapHeight, {
+			color: 0x00220a,
 			parent: floorContainer,
 		});
 
-		Canvas.get().width = layout.width;
-		Canvas.get().height = layout.height;
 		for (let widx in layout.walls) {
 			const wall = layout.walls[widx];
-			let x = Math.round(wall.x * layout.width);
-			let y = Math.round(wall.y * layout.height) + (wall.offset || 0);
-			let minWH = Math.min(layout.width, layout.height);
-			let w = Math.round(wall.w * minWH);
-			let h = Math.round(wall.h * minWH);
+			let w = wall.w;
+			let h = wall.h;
 			let vertical = h > w;
-			if (vertical) {
-				x -= w / 2;
-			} else {
-				y -= h;
-			}
+
 			for (let team = 0; team < 2; ++team) {
 				let t0 = team == 0;
-				let teamMp = t0 ? -1 : 1;
-				let tx = t0 ? layout.width - x : x;
-				let ty = team == 0 ? layout.height - y : y;
-				ty -= Math.round(h / 2);
+				let tx = t0 ? mapWidth - wall.x : wall.x;
+				let ty = team == 0 ? mapHeight - wall.y : wall.y;
+				const teamMp = team == 0 ? -1 : 1;
 
 				for (let mirror = 0; mirror < (wall.mirror ? 2 : 1); ++mirror) {
 					const mirrored = mirror > 0;
+					const mirroredMp = mirrored ? 1 : -1;
 					if (mirrored) {
-						tx = (layout.width - tx) - w * teamMp;
+						tx = (mapWidth - tx);
 					}
 					if (wall.capStart) {
 						let capX = tx;
 						let capY = ty;
 						if (vertical) {
-							capY = t0 ? ty - h * teamMp : ty;
+							capY = ty - h / 2 * teamMp;
 						} else {
-							capX = mirrored ? tx + w * teamMp : tx;
+							capX = tx + w / 2 * teamMp * mirroredMp;
 						}
-						createWallCap(vertical, teamMp, capX, capY, Math.min(w, h));
+						createWallCap(vertical, capX, capY, Math.min(w, h));
 					}
 					if (wall.capEnd) {
 						let capX = tx;
 						let capY = ty;
 						if (vertical) {
-							capY = t0 ? ty : ty - h * teamMp;
+							capY = ty + h / 2 * teamMp;
 						} else {
-							capX = mirrored ? tx : tx + w * teamMp;
+							capX = tx - w / 2 * teamMp * mirroredMp;
 						}
-						createWallCap(vertical, teamMp, capX, capY, Math.min(w, h));
+						createWallCap(vertical, capX, capY, Math.min(w, h));
 					}
-					const wx = t0 ? tx - w : tx;
-					createWallRect(wx, ty, w, h);
+					createWallRect(tx, ty, w, h);
 				}
 			}
 		}
 		for (let tidx in layout.towers) {
 			const tower = layout.towers[tidx];
-			const x = Math.round(tower[1] * layout.width);
-			const y = Math.round(tower[2] * layout.height) + 44;
+			const x = Math.round(tower[1] * mapWidth);
+			const y = Math.round(tower[2] * mapHeight) + 64;
 			const towerType = tower[0];
 			for (let team = 0; team < 2; ++team) {
-				const tx = team == 0 ? layout.width - x : x;
-				const ty = team == 0 ? layout.height - y : y;
+				const tx = team == 0 ? mapWidth - x : x;
+				const ty = team == 0 ? mapHeight - y : y;
 				new Tower(team, towerType, floorContainer, tx, ty);
 			}
 		}
@@ -251,32 +216,30 @@ const GameMap = function(parent) {
 		if (cameraX != previousPositionX) {
 			previousPositionX = cameraX;
 
-			const containerWidth = window.innerWidth;
-			cameraX = -cameraX + containerWidth / 2;
-			if (cameraX > 0) {
-				cameraX = 0;
-			} else if (cameraX < -layout.width + containerWidth) {
-				cameraX = -layout.width + containerWidth;
+			const lwh = layout.width / 2;
+			cameraX = -cameraX + lwh;
+			if (cameraX < -lwh / 2) {
+				cameraX = -lwh / 2;
+			} else if (cameraX > lwh / 2) {
+				cameraX = lwh / 2;
 			}
 			if (cameraX != previousCameraX) {
 				container.position.x = cameraX;
-				Canvas.get().style['margin-left'] = cameraX + 'px';
 				previousCameraX = cameraX;
 			}
 		}
 		if (cameraY != previousPositionY) {
 			previousPositionY = cameraY;
 
-			const containerHeight = window.innerHeight;
-			cameraY = -cameraY + containerHeight / 2;
-			if (cameraY > 0) {
-				cameraY = 0;
-			} else if (cameraY < -layout.height + containerHeight) {
-				cameraY = -layout.height + containerHeight;
+			const lhh = layout.height / 2;
+			cameraY = -cameraY + lhh;
+			if (cameraY < -lhh / 2) {
+				cameraY = -lhh / 2;
+			} else if (cameraY > lhh / 2) {
+				cameraY = lhh / 2;
 			}
 			if (cameraY != previousCameraY) {
 				container.position.y = cameraY;
-				Canvas.get().style['margin-top'] = cameraY + 'px';
 				previousCameraY = cameraY;
 			}
 		}
