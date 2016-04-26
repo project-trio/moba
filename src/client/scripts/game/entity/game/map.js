@@ -31,13 +31,17 @@ const wallR = 24;
 const wallH = 80;
 
 maps.standard = {
-	width: 1024,
-	height: 1600,
+	width: 1200,
+	height: 1800,
+
 	towers: [
-		['base', 0.5, 0],
-		['standard', 1/4, 1/3],
-		['standard', 3/4, 1/3]
+		['base', 600, 44],
+
+		['standard', 435, 360, true],
+		['turret', 44, 420, true],
+		['turret', 300, 760, true],
 	],
+
 	walls: [
 		{
 			x: 300, y: 360,
@@ -193,13 +197,18 @@ const GameMap = function(parent) {
 		}
 		for (let tidx in layout.towers) {
 			const tower = layout.towers[tidx];
-			const x = Math.round(tower[1] * mapWidth);
-			const y = Math.round(tower[2] * mapHeight) + 64;
 			const towerType = tower[0];
-			for (let team = 0; team < 2; ++team) {
-				const tx = team == 0 ? mapWidth - x : x;
-				const ty = team == 0 ? mapHeight - y : y;
-				new Tower(team, towerType, floorContainer, tx, ty);
+			const x = tower[1];
+			const y = tower[2];
+			const mirroring = tower[3];
+			var mirrored = false;
+			for (let mirror = 0; mirror < (mirroring ? 2 : 1); ++mirror) {
+				mirrored = !mirrored;
+				for (let team = 0; team < 2; ++team) {
+					const tx = (team == 0) != mirrored ? mapWidth - x : x;
+					const ty = team == 0 ? mapHeight - y : y;
+					new Tower(team, towerType, floorContainer, tx, ty);
+				}
 			}
 		}
 	};

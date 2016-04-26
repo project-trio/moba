@@ -11,9 +11,21 @@ const Unit = require('game/entity/unit/unit');
 
 const TOWER_SIZE = 88;
 
-const towerStats = {
+const TOWER_STATS = {
+	base: {
+		maxHealth: [300, 0, 0],
+		regenerate: [0, 0, 0],
+		speed: [0, 0, 0],
+		damage: [5, 0, 0],
+		sightRange: [200, 0, 0],
+		attackRange: [200, 0, 0],
+		attackCooldown: [1, 0, 0],
+
+		z: -5,
+		collision: 35,
+	},
 	standard: {
-		maxHealth: [160, 0, 0],
+		maxHealth: [200, 0, 0],
 		regenerate: [0, 0, 0],
 		speed: [0, 0, 0],
 		damage: [8, 0, 0],
@@ -21,26 +33,29 @@ const towerStats = {
 		attackRange: [160, 0, 0],
 		attackCooldown: [6, 0, 0],
 
+		z: -15,
 		collision: 30,
 	},
-	base: {
-		maxHealth: [300, 0, 0],
+	turret: {
+		maxHealth: [160, 0, 0],
 		regenerate: [0, 0, 0],
 		speed: [0, 0, 0],
-		damage: [10, 0, 0],
-		sightRange: [200, 0, 0],
-		attackRange: [200, 0, 0],
-		attackCooldown: [5, 0, 0],
+		damage: [6, 0, 0],
+		sightRange: [160, 0, 0],
+		attackRange: [160, 0, 0],
+		attackCooldown: [6, 0, 0],
 
-		collision: 35,
-	}
+		z: -25,
+		collision: 30,
+	},
 };
 
 //CONSTRUCTOR
 
 module.exports = function(team, towerType, parent, x, y) {
 
-	const superUnit = new Unit(team, towerStats[towerType], parent, x, y);
+	const towerStats = TOWER_STATS[towerType];
+	const superUnit = new Unit(team, towerStats, parent, x, y);
 	this.__proto__ = superUnit;
 	Unit.addBase(this);
 
@@ -51,6 +66,8 @@ module.exports = function(team, towerType, parent, x, y) {
 	});
 
 	this.renderInBackground = true;
+
+	this.container.position.z = towerStats.z;
 
 	// Damage
 
