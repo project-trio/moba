@@ -46,7 +46,7 @@ const Ship = function(name, player, team, x, y, angle) {
 
 	// Unit
 
-	const arrow = Render.vox('roller', {parent: this.top});
+	const arrow = Render.voxel('roller', {parent: this.top, z: -19});
 
 	// const base = Render.sprite('ship');
 	// this.base.add(base);

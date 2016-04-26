@@ -7,28 +7,28 @@ const DomEvents = require('external/threex.domevents');
 
 let scene, camera, renderer, domEvents;
 
-const WALL_HEIGHT = 50;
+const WALL_HEIGHT = 60;
 
 //PUBLIC
 
 module.exports = {
 
 	create: function() {
-		var width = window.innerWidth;
-		var height = window.innerHeight;
+		const width = window.innerWidth;
+		const height = window.innerHeight;
 		scene = new THREE.Scene();
 		camera = new THREE.PerspectiveCamera(90, width / height, 1, 1024);
 		camera.up.set(0, -1, 0);
 		camera.lookAt(scene);
 		camera.position.z = 512;
 
-		var ambient = new THREE.AmbientLight(0x111111);
+		const ambient = new THREE.AmbientLight(0x333333);
 		scene.add(ambient);
 
-		var light = new THREE.DirectionalLight(0xffffff, 0.5);
+		const light = new THREE.DirectionalLight(0xffffff, 0.5);
 		light.position.set(width / 2, height / 2, 512);
 		scene.add(light);
-		// var light = new THREE.PointLight(0xffffff, 0.9, 0);
+		// const light = new THREE.PointLight(0xffffff, 0.9, 0);
 		// light.position.set(width / 2, height / 2, 10);
 		// // light.position.set(0, 0, 10);
 		// camera.add(light);
@@ -92,7 +92,7 @@ module.exports = {
 		return sprite;
 	},
 
-	vox: function(name, options) {
+	voxel: function(name, options) {
 		var parser = new Vox.Parser();
 		parser.parse(require(`images/${name}.vox`)).then(function(voxelData) {
 			var builder = new Vox.MeshBuilder(voxelData, {voxelSize: 2});
@@ -150,7 +150,7 @@ module.exports = {
 		let geometry = new THREE.BoxGeometry(w, h, options.depth || 1);
 		let material = new THREE.MeshBasicMaterial({color: options.color});
 		let rectangle = new THREE.Mesh(geometry, material);
-		rectangle.position.set(x, y, 0);
+		rectangle.position.set(x, y, options.z || 0);
 		if (options.parent) {
 			options.parent.add(rectangle);
 		}

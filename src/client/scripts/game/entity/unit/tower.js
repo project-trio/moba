@@ -44,9 +44,9 @@ module.exports = function(team, towerType, parent, x, y) {
 	this.__proto__ = superUnit;
 	Unit.addBase(this);
 
-	const platform = Render.vox('turret-base', {parent: this.base});
+	const platform = Render.voxel('turret-base', {parent: this.base});
 
-	const arrow = Render.vox('turret-top', {
+	const arrow = Render.voxel('turret-top', {
 		parent: this.top,
 	});
 

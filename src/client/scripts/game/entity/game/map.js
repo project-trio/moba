@@ -124,8 +124,8 @@ const GameMap = function(parent) {
 		var mapHeight = layout.height;
 		Render.positionCamera(mapWidth / 2, mapHeight / 2);
 
-			color: 0x00220a,
 		const ground = Render.ground(mapWidth, mapHeight, {
+			color: 0x00440a,
 			parent: floorContainer,
 		});
 
