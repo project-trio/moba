@@ -1,5 +1,7 @@
 'use strict';
 
+const Stats = require('stats.js');
+
 const Local = require('local');
 
 const Render = require('game/util/render');
@@ -9,8 +11,14 @@ const Unit = require('game/entity/unit/unit');
 let lastUpdate = 0;
 let lastTick = 0;
 
+var stats = new Stats();
+stats.showPanel(1);
+document.body.appendChild(stats.dom);
+
+//LOOP
+
 const animate = function() {
-	window.requestAnimationFrame(animate);
+	stats.begin();
 
 	const currentTime = Date.now();
 	const game = Local.game;
@@ -29,7 +37,12 @@ const animate = function() {
 		Render.render();
 	}
 	lastUpdate = currentTime;
+
+	stats.end();
+	window.requestAnimationFrame(animate);
 };
+
+//PUBLIC
 
 module.exports = {
 
