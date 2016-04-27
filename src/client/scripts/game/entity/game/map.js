@@ -11,24 +11,54 @@ const Tower = require('game/entity/unit/tower');
 
 const maps = {};
 
-maps.small = {
+const wallR = 24;
+
+maps.tiny = {
 	width: 800,
 	height: 800,
 	towers: [
-		['base', 0.5, 0],
-		['turret', 0.25, 1/3]
+		['base', 400, 44],
+		['turret', 300, 300],
 	],
 	walls: [
 		{
-			x: 0.7, y: 0.3,
-			w: 0.3, h: 0.1,
-			capStart: true
+			x: 650, y: 240,
+			w: 300, h: wallR * 2,
+			capStart: true,
 		}
 	]
 };
 
-const wallR = 24;
-const wallH = 80;
+const wallSmallH = 50;
+
+maps.small = {
+	width: 800,
+	height: 1400,
+
+	towers: [
+		['base', 400, 44],
+
+		['turret', 190, 380, true],
+		['turret', 470, 600],
+	],
+
+	walls: [
+		{
+			x: 240, y: 320,
+			w: wallSmallH * 2, h: wallR * 2,
+			capStart: true, capEnd: true,
+			mirror: true,
+		},
+		{
+			x: 240 - wallSmallH, y: 320 - wallSmallH,
+			w: wallR * 2, h: wallSmallH * 2,
+			capStart: true, capEnd: false,
+			mirror: true,
+		}
+	]
+};
+
+const wallStandardH = 80;
 
 maps.standard = {
 	width: 1200,
@@ -45,15 +75,15 @@ maps.standard = {
 	walls: [
 		{
 			x: 300, y: 360,
-			w: wallH * 2, h: wallR * 2,
+			w: wallStandardH * 2, h: wallR * 2,
 			capStart: true, capEnd: true,
-			mirror: true
+			mirror: true,
 		},
 		{
-			x: 300 - wallH, y: 360 - wallH,
-			w: wallR * 2, h: wallH * 2,
+			x: 300 - wallStandardH, y: 360 - wallStandardH,
+			w: wallR * 2, h: wallStandardH * 2,
 			capStart: true, capEnd: false,
-			mirror: true
+			mirror: true,
 		}
 	]
 };
@@ -121,7 +151,7 @@ const GameMap = function(parent) {
 	};
 
 	this.build = function(name) {
-		name = 'standard';
+		name = 'small';
 		layout = maps[name];
 
 		var mapWidth = layout.width;

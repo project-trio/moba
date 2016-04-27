@@ -123,7 +123,7 @@ const Game = function(gid, size) {
 		ticksPerUpdate = updateDuration / tickDuration;
 		console.log('STARTED ' + updateDuration + ' ' + tickDuration + ' ' + ticksPerUpdate);
 
-		const mapType = teamSize <= 1 ? 'small' : 'standard';
+		const mapType = teamSize <= 1 ? 'tiny' : (teamSize <= 3 ? 'small' : ('standard'));
 		map.build(mapType);
 
 		for (let pid in players) {
