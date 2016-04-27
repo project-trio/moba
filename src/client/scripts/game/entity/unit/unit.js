@@ -420,7 +420,7 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 				const updatedVisibility = unit.isRendering() !== showing;
 				if (updatedVisibility) {
 					unit.setRendering(showing);
-					unit.container.visible = showing || unit.renderInBackground;
+					unit.container.visible = showing || unit.renderInBackground || false;
 					unit.healthContainer.visible = showing;
 					unit.sightCircle.visible = showing;
 				}
