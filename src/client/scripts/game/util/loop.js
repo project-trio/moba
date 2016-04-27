@@ -25,9 +25,6 @@ const animate = function() {
 	if (game) {
 		if (game.running) {
 			if (game.performTicks(currentTime)) {
-				const tickDelta = currentTime - lastTick;
-				const fps = Math.min(Math.round(1000 * 3 / tickDelta), 60);
-				// game.fpsText.text = fps + ' fps';
 				lastTick = currentTime;
 			} else {
 				const timeDelta = currentTime - lastUpdate;

@@ -31,8 +31,6 @@ const Game = function(gid, size) {
 	const map = new GameMap(gameContainer);
 	this.map = map;
 
-	this.fpsText = Render.text('240fps', 10, 10, {font: '24px Arial', fill: 0xff1010}, gameContainer);
-
 	let localUnit;
 
 	Render.add(gameContainer);
