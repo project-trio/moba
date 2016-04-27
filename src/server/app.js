@@ -34,4 +34,4 @@ const port = process.env.PORT || CommonConsts.PORT;
 
 http.listen(port);
 
-console.log(`moba v0 running on port ${port}`, '\n');
+console.log(`moba v${CommonConsts.VERSION} running on port ${port}`, '\n');
