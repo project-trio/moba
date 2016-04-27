@@ -75,7 +75,7 @@ module.exports = function(team, towerType, parent, x, y) {
 		this.sightCircle.visible = false;
 		this.healthContainer.parent.remove(this.healthContainer);
 		this.setBlocking(false);
-		this.container.position.z = -40;
+		this.container.position.z = -44;
 		this.container.remove(this.top);
 
 
