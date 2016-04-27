@@ -184,9 +184,9 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 		} else {
 			newHealth = this.stats.health;
 		}
-		// const healthScale = newHealth / this.stats.maxHealth;
-		// this.healthBar.scale.setX(healthScale);
-		// this.healthBar.position.setX(healthOrigin * (1 - healthScale));
+		const healthScale = newHealth / this.stats.maxHealth;
+		this.healthBar.scale.x = healthScale;
+		this.healthBar.position.x = -32 * healthScale + 32;
 	};
 
 	this.destroy = function() {
