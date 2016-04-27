@@ -5,6 +5,8 @@ const Render = require('game/util/render');
 
 const GameMap = require('game/entity/game/map');
 const Player = require('game/entity/game/player');
+const Wave = require('game/entity/game/wave');
+
 const Unit = require('game/entity/unit/unit');
 
 const Game = function(gid, size) {
@@ -56,6 +58,11 @@ const Game = function(gid, size) {
 			}
 			const renderTime = ticksRendered * tickDuration;
 			Unit.update(renderTime, tickDuration, false);
+
+			if (renderTime % 45000 == 5000) {
+				console.log('Spawn wave', ticksRendered, renderTime);
+				Wave.spawn(map.minionData());
+			}
 
 			++ticksRendered;
 			--ticksToRender;
@@ -144,14 +151,8 @@ const Game = function(gid, size) {
 	this.end = function(losingTeam) {
 		this.running = false;
 
-		const centerX = window.innerWidth * 0.5;
-		const centerY = window.innerHeight * 0.5;
-
-		const overText = Render.text('GAME OVER', centerX, centerY, {font: '64px Arial', fill: 0xff1010}, gameContainer);
-		const winnerText = Render.text('Team ' + (2-losingTeam) + ' won!', centerX, centerY + 88, {font: '44px Arial', fill: 0xff1010}, gameContainer);
-
-		// overText.anchor.set(0.5);
-		// winnerText.anchor.set(0.5);
+		// const overText = Render.text('GAME OVER', centerX, centerY, {font: '64px Arial', fill: 0xff1010}, gameContainer);
+		// const winnerText = Render.text('Team ' + (2-losingTeam) + ' won!', centerX, centerY + 88, {font: '44px Arial', fill: 0xff1010}, gameContainer);
 	};
 
 	// Players

@@ -86,6 +86,19 @@ maps.standard = {
 			mirror: true,
 		},
 	],
+
+	minions: [
+		{
+			type: 'mini',
+			path: [[520, 60], [120, 100], [120, 400], [300, 900]],
+			mirror: true,
+		},
+		{
+			type: 'center',
+			path: [[600, 80], [600, 900]],
+			mirror: false,
+		},
+	],
 };
 
 //CONSTRUCTOR
@@ -281,6 +294,10 @@ const GameMap = function(parent) {
 				previousCameraY = cameraY;
 			}
 		}
+	};
+
+	this.minionData = function() {
+		return layout.minions;
 	};
 
 //DIMENSIONS

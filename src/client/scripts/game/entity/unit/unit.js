@@ -2,6 +2,7 @@
 
 const Local = require('local');
 
+const Util = require('game/util/util');
 const Render = require('game/util/render');
 
 //LOCAL
@@ -168,7 +169,7 @@ const Unit = function(team, statBase, x, y, angle) {
 		return Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2);
 	};
 
-	this.distanceTo = function(enemy) {
+	const distanceTo = function(enemy) {
 		return pointDistance(px, py, enemy.px(), enemy.py());
 	};
 
@@ -220,11 +221,11 @@ const Unit = function(team, statBase, x, y, angle) {
 	};
 
 	this.canSee = function(enemy) {
-		return enemy.isDead() || enemy.activeFire() || this.distanceTo(enemy) < this.stats.sightRangeCheck;
+		return enemy.isDead() || enemy.activeFire() || distanceTo(enemy) < this.stats.sightRangeCheck;
 	};
 
-	this.attackable = function(enemy) {
-		return !enemy.hasDied() && !this.alliedTo(enemy) && this.distanceTo(enemy) < this.stats.attackRangeCheck;
+	this.canAttack = function(enemy) {
+		return !enemy.hasDied() && !this.alliedTo(enemy) && distanceTo(enemy) < this.stats.attackRangeCheck;
 	};
 
 	this.die = function(time) {
@@ -233,9 +234,6 @@ const Unit = function(team, statBase, x, y, angle) {
 		isMoving = false;
 		this.healthBar.visible = false;
 		this.setTarget(null);
-
-		this.container.cacheAsBitmap = true;
-		this.container.alpha = 0.333;
 	};
 
 	this.addHealth = function(addedHealth) {
@@ -267,7 +265,7 @@ const Unit = function(team, statBase, x, y, angle) {
 		if (renderTime - lastAttack > this.stats.attackCooldown * 100) {
 			let attackForTick;
 			if (attackTarget) {
-				if (this.attackable(attackTarget)) {
+				if (this.canAttack(attackTarget)) {
 					attackForTick = attackTarget;
 				} else {
 					this.setTarget(null);
@@ -276,7 +274,7 @@ const Unit = function(team, statBase, x, y, angle) {
 			if (!attackForTick) {
 				for (let unitIdx in allUnits) {
 					const enemy = allUnits[unitIdx];
-					if (this.attackable(enemy)) {
+					if (this.canAttack(enemy)) {
 						attackForTick = enemy;
 						if (!attackTarget) {
 							this.setTarget(attackForTick);
@@ -403,12 +401,38 @@ const Unit = function(team, statBase, x, y, angle) {
 		}
 	};
 
+	// Move
+
 	this.setMovePoint = function(_destX, _destY, _moveX, _moveY) {
 		isMoving = true;
 		destX = _destX;
 		destY = _destY;
 		moveX = _moveX;
 		moveY = _moveY;
+	};
+
+	this.setDestination = function(x, y, moveX, moveY) {
+		if (this.isDead()) {
+			return false;
+		}
+
+		this.top.rotation.z = Util.atan(moveX, moveY);
+		this.setMovePoint(x, y, moveX, moveY);
+	};
+
+	this.requestedDestination = function(x, y) {
+		x = Math.round(x * 1000);
+		y = Math.round(y * 1000);
+		const dx = x - this.px();
+		const dy = y - this.py();
+		if (dx == 0 && dy == 0) {
+			return null;
+		}
+
+		const moveAngle = Util.atan(dx, dy);
+		const moveX = Math.round(Math.cos(moveAngle) * 1000);
+		const moveY = Math.round(Math.sin(moveAngle) * 1000);
+		return [x, y, moveX, moveY];
 	};
 
 	this.updateVisibility = function() {
@@ -438,6 +462,10 @@ const Unit = function(team, statBase, x, y, angle) {
 
 Unit.addBase = function(unit) {
 	allUnits.push(unit);
+};
+
+Unit.remove = function(unit) {
+	allUnits.splice(allUnits.indexOf(unit));
 };
 
 Unit.update = function(renderTime, timeDelta, tweening) {

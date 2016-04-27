@@ -2,7 +2,6 @@
 
 const Local = require('local');
 
-const Util = require('game/util/util');
 const Render = require('game/util/render');
 
 const Unit = require('game/entity/unit/unit');
@@ -121,31 +120,6 @@ const Ship = function(name, player, team, x, y, angle) {
 		}
 	};
 
-	// Move
-
-	this.requestedDestination = function(x, y) {
-		x = Math.round(x * 1000);
-		y = Math.round(y * 1000);
-		const dx = x - this.px();
-		const dy = y - this.py();
-		if (dx == 0 && dy == 0) {
-			return;
-		}
-		const moveAngle = Util.atan(dx, dy);
-		const moveX = Math.round(Math.cos(moveAngle) * 1000);
-		const moveY = Math.round(Math.sin(moveAngle) * 1000);
-
-		return [x, y, moveX, moveY];
-	};
-
-	this.setDestination = function(x, y, moveX, moveY) {
-		if (this.isDead()) {
-			return false;
-		}
-
-		this.top.rotation.z = Util.atan(moveX, moveY);
-		this.setMovePoint(x, y, moveX, moveY);
-	};
 
 	// Update
 
