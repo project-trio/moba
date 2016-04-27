@@ -24,20 +24,13 @@ module.exports = {
 			{ test: /\.(json)$/, loader: 'json-loader' },
 
 			{
-				test: /\.jsx?$/,
+				test: /\.js?$/,
 				exclude: /(node_modules)/,
 				loader: 'babel',
 				query: {
 					presets: ['es2015'],
 				},
 			},
-		],
-
-		postLoaders: [
-			{
-				include: path.resolve(__dirname, 'node_modules/pixi.js'),
-				loader: 'transform-loader/cacheable?brfs'
-			}
 		],
 	},
 

@@ -40,10 +40,9 @@ module.exports = {
 		light.shadow = lightShadow;
 		scene.add(light);
 
-
 		renderer = new THREE.WebGLRenderer({antialias: true});
 		// renderer.physicallyCorrectLights = true;
-		renderer.shadowMapEnabled = true;
+		renderer.shadowMap.enabled = true;
 
 		renderer.setSize(width, height);
 
