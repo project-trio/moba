@@ -32,7 +32,7 @@ const units = {
 const Ship = function(name, player, team, x, y, angle) {
 
 	const statBase = units[name] || units['pewpew'];
-	const superUnit = new Unit(team, statBase, Local.game.map.floorContainer, x, y, angle);
+	const superUnit = new Unit(team, statBase, x, y, angle);
 	this.__proto__ = superUnit;
 	Unit.addBase(this);
 	this.id = player.id;

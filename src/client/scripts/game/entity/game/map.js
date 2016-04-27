@@ -237,7 +237,7 @@ const GameMap = function(parent) {
 				for (let team = 0; team < 2; ++team) {
 					const tx = (team == 0) != mirrored ? mapWidth - x : x;
 					const ty = team == 0 ? mapHeight - y : y;
-					new Tower(team, towerType, floorContainer, tx, ty);
+					new Tower(team, towerType, tx, ty);
 				}
 			}
 		}

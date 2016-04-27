@@ -54,10 +54,10 @@ const TOWER_STATS = {
 
 //CONSTRUCTOR
 
-module.exports = function(team, towerType, parent, x, y) {
+module.exports = function(team, towerType, x, y) {
 
 	const towerStats = TOWER_STATS[towerType];
-	const superUnit = new Unit(team, towerStats, parent, x, y);
+	const superUnit = new Unit(team, towerStats, x, y);
 	this.__proto__ = superUnit;
 	Unit.addBase(this);
 

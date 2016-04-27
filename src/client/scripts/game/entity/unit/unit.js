@@ -12,7 +12,7 @@ let map;
 
 //CONSTRUCTOR
 
-const Unit = function(team, statBase, parent, x, y, angle) {
+const Unit = function(team, statBase, x, y, angle) {
 
 	this.container = Render.group();
 	this.base = Render.group();
@@ -20,7 +20,7 @@ const Unit = function(team, statBase, parent, x, y, angle) {
 
 	this.container.add(this.base);
 	this.container.add(this.top);
-	parent.add(this.container);
+	Local.game.map.floorContainer.add(this.container);
 
 	// Stats
 
