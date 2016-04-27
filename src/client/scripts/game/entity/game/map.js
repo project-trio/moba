@@ -18,15 +18,15 @@ maps.tiny = {
 	height: 800,
 	towers: [
 		['base', 400, 44],
-		['turret', 300, 300],
+		['standard', 320, 320],
 	],
 	walls: [
 		{
-			x: 650, y: 240,
+			x: 650, y: 260,
 			w: 300, h: wallR * 2,
 			capStart: true,
-		}
-	]
+		},
+	],
 };
 
 const wallSmallH = 50;
@@ -54,8 +54,8 @@ maps.small = {
 			w: wallR * 2, h: wallSmallH * 2,
 			capStart: true, capEnd: false,
 			mirror: true,
-		}
-	]
+		},
+	],
 };
 
 const wallStandardH = 80;
@@ -84,8 +84,8 @@ maps.standard = {
 			w: wallR * 2, h: wallStandardH * 2,
 			capStart: true, capEnd: false,
 			mirror: true,
-		}
-	]
+		},
+	],
 };
 
 //CONSTRUCTOR
@@ -151,7 +151,7 @@ const GameMap = function(parent) {
 	};
 
 	this.build = function(name) {
-		name = 'small';
+		name = 'standard';
 		layout = maps[name];
 
 		var mapWidth = layout.width;

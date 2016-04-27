@@ -24,25 +24,27 @@ const TOWER_STATS = {
 		z: -5,
 		collision: 35,
 	},
+
 	standard: {
 		maxHealth: [200, 0, 0],
 		regenerate: [0, 0, 0],
 		speed: [0, 0, 0],
 		damage: [8, 0, 0],
-		sightRange: [160, 0, 0],
-		attackRange: [160, 0, 0],
+		sightRange: [190, 0, 0],
+		attackRange: [190, 0, 0],
 		attackCooldown: [6, 0, 0],
 
 		z: -15,
 		collision: 30,
 	},
+
 	turret: {
 		maxHealth: [160, 0, 0],
 		regenerate: [0, 0, 0],
 		speed: [0, 0, 0],
 		damage: [6, 0, 0],
-		sightRange: [160, 0, 0],
-		attackRange: [160, 0, 0],
+		sightRange: [180, 0, 0],
+		attackRange: [180, 0, 0],
 		attackCooldown: [6, 0, 0],
 
 		z: -25,
