@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/server/app.js",
   "scripts": {
-    "postinstall": "node_modules/.bin/webpack -p --config webpack.config.production.js"
+    "postinstall": "node_modules/.bin/webpack -p --config webpack.config.production.js",
+    "start": "node src/server/app.js"
   },
   "author": "Kyle Coburn",
   "license": "ISC",
