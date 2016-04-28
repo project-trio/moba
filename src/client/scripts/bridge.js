@@ -9,7 +9,7 @@ const Local = require('local');
 //LOCAL
 
 console.log('CONNECTING', Local.TESTING);
-const socketUrl = Local.TESTING ? `http://localhost:${CommonConsts.PORT}` : 'http://three.suzu.online';
+const socketUrl = Local.TESTING ? `http://localhost:${CommonConsts.PORT}` : 'https://moba.suzu.online';
 const uid = localStorage.getItem('uid');
 const uauth = localStorage.getItem('auth');
 let params;
