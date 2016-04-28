@@ -2,7 +2,7 @@
 
 module.exports = {
 
-	TESTING: process.env.DATABASE_URL == null,
+	TESTING: process.env.NODE_ENV != 'production',
 
 	seconds: function() {
 		return Math.round(Date.now() * 0.001);
