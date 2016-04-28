@@ -71,7 +71,7 @@ const Game = function(gid, size) {
 
 		if (localUnit) {
 			localUnit.updateVisibility();
-			map.track(localUnit.px() * 0.001, localUnit.py() * 0.001);
+			map.track(localUnit.px * 0.001, localUnit.py * 0.001);
 		}
 		// map.updateFog();
 		return true;

@@ -1,7 +1,5 @@
 'use strict';
 
-const Local = require('local');
-
 const Render = require('game/util/render');
 
 const Unit = require('game/entity/unit/unit');
@@ -11,7 +9,7 @@ const Unit = require('game/entity/unit/unit');
 const waitToRespawn = 1990;
 const expPerLevel = 600;
 
-const units = {
+const SHIP_STATS = {
 	// [start, levelup, max]
 	pewpew: {
 		maxHealth: [60, 10, 0],
@@ -26,112 +24,114 @@ const units = {
 	}
 };
 
-//CONSTRUCTOR
+//CLASS
 
-const Ship = function(name, player, team, x, y, angle) {
+class Ship extends Unit {
+	constructor(name, player, team, x, y, angle) {
+		const statBase = SHIP_STATS[name] || SHIP_STATS['pewpew'];
+		super(team, statBase, x, y, angle);
 
-	const statBase = units[name] || units['pewpew'];
-	const superUnit = new Unit(team, statBase, x, y, angle);
-	this.__proto__ = superUnit;
-	Unit.addBase(this);
-	this.id = player.id;
-	// this.name = player.name;
+		Unit.addBase(this);
 
-	// Vars
+		this.statBase = statBase;
+		this.id = player.id;
+		this.player = player;
+		// this.name = player.name;
 
-	let level = 1;
-	let levelExp = 0;
-	let respawned = false;
+		this.level = 1;
+		this.levelExp = 0;
+		this.respawned = false;
 
-	// Unit
+		// Unit
 
-	const offset = name == 'roller' ? -19 : 0;
+		const offset = name == 'roller' ? -19 : 0;
 
-	Render.voxel(name, {parent: this.top, z: offset});
+		Render.voxel(name, {parent: this.top, z: offset});
 
-	// const base = Render.sprite('ship');
-	// this.base.add(base);
+		// const base = Render.sprite('ship');
+		// this.base.add(base);
 
-	// const nameText = Render.text(player.name + ' [1]', 0, -Local.shipSize, {font: '13px Arial', fill: 0xff1010}, this.container);
+		// const nameText = Render.text(player.name + ' [1]', 0, -Local.shipSize, {font: '13px Arial', fill: 0xff1010}, this.container);
+
+	}
 
 	// Health
 
-	this.doRegenerate = function() {
+	doRegenerate() {
 		this.addHealth(this.stats.regenerate);
-	};
+	}
 
-	this.die = function(time) {
-		respawned = false;
-		this.sightCircle.radius = Local.shipSize;
+	die(time) {
+		this.respawned = false;
+		// this.sightCircle.radius = Local.shipSize;
 
-		superUnit.die(time);
-	};
+		super.die(time);
+	}
 
-	this.respawn = function() {
-		respawned = true;
+	respawn() {
+		this.respawned = true;
 		this.container.cacheAsBitmap = false;
 		this.healthContainer.visible = false;
 		this.healthBar.visible = true;
-		this.setBlocking(false);
+		this.isBlocking = false;
 
-		const spawnAt = player.spawnLocation();
+		const spawnAt = this.player.spawnLocation();
 		this.setLocation(spawnAt[0], spawnAt[1]);
-	};
+	}
 
-	this.reemerge = function() {
+	reemerge() {
 		this.updateHealth(this.stats.maxHealth);
-		this.sightCircle.radius = this.sightSize;
+		// this.sightCircle.radius = this.sightSize;
 		this.container.alpha = 1.0;
 		this.healthContainer.visible = true;
 
 		this.setAlive();
-	};
+	}
 
 	// Experience
 
-	this.levelUp = function(over) {
-		levelExp = over;
-		++level;
+	levelUp(over) {
+		this.levelExp = over;
+		++this.level;
 		// nameText.text = player.name + ' [' + level+ ']'; //TODO
 
-		const healthIncrease = statBase.maxHealth[1] * 1000;
+		const healthIncrease = this.statBase.maxHealth[1] * 1000;
 		this.stats.maxHealth += healthIncrease;
 		this.addHealth(healthIncrease);
 
-		this.stats.regenerate += statBase.regenerate[1];
-		this.stats.speed += statBase.speed[1];
-		this.stats.damage += statBase.damage[1] * 1000;
-		this.stats.sightRange += statBase.sightRange[1];
-		this.stats.attackRange += statBase.attackRange[1];
-		this.stats.attackCooldown += statBase.attackCooldown[1];
+		this.stats.regenerate += this.statBase.regenerate[1];
+		this.stats.speed += this.statBase.speed[1];
+		this.stats.damage += this.statBase.damage[1] * 1000;
+		this.stats.sightRange += this.statBase.sightRange[1];
+		this.stats.attackRange += this.statBase.attackRange[1];
+		this.stats.attackCooldown += this.statBase.attackCooldown[1];
 
 		this.stats.sightRangeCheck = Math.pow(this.stats.sightRange, 2);
 		this.stats.attackRangeCheck = Math.pow(this.stats.attackRange, 2);
 
 		this.updateHealth();
-	};
+	}
 
-	this.updateExperience = function() {
-		const increment = this.isFiring() ? 3 : 2;
-		levelExp += increment;
-		const leveledOver = levelExp - expPerLevel;
+	updateExperience() {
+		const increment = this.isFiring ? 3 : 2;
+		this.levelExp += increment;
+		const leveledOver = this.levelExp - expPerLevel;
 		if (leveledOver >= 0) {
 			this.levelUp(leveledOver);
 		}
-	};
-
+	}
 
 	// Update
 
-	this.update = function(renderTime, timeDelta, tweening) {
+	update(renderTime, timeDelta, tweening) {
 		if (!tweening) {
-			if (this.isDead()) {
-				if (this.timeOfDeath()) {
-					const deathDuration = renderTime - this.timeOfDeath();
+			if (this.isDead) {
+				if (this.timeOfDeath) {
+					const deathDuration = renderTime - this.timeOfDeath;
 					if (deathDuration > waitToRespawn) {
-						if (!respawned) {
+						if (!this.respawned) {
 							this.respawn();
-						} else if (deathDuration > waitToRespawn + 1000 * level) {
+						} else if (deathDuration > waitToRespawn + 1000 * this.level) {
 							this.reemerge();
 						}
 					}
@@ -141,8 +141,8 @@ const Ship = function(name, player, team, x, y, angle) {
 				this.doRegenerate();
 			}
 		}
-	};
+	}
 
-};
+}
 
 module.exports = Ship;

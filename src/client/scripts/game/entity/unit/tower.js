@@ -9,8 +9,6 @@ const Unit = require('game/entity/unit/unit');
 
 //LOCAL
 
-const TOWER_SIZE = 88;
-
 const TOWER_STATS = {
 	base: {
 		maxHealth: [300, 0, 0],
@@ -52,31 +50,36 @@ const TOWER_STATS = {
 	},
 };
 
-//CONSTRUCTOR
+//CLASS
 
-module.exports = function(team, towerType, x, y) {
+class Tower extends Unit {
 
-	const towerStats = TOWER_STATS[towerType];
-	const superUnit = new Unit(team, towerStats, x, y);
-	this.__proto__ = superUnit;
-	Unit.addBase(this);
+	constructor(team, towerType, x, y) {
+		const stats = TOWER_STATS[towerType];
 
-	Render.voxel('turret-base', {parent: this.base});
+		super(team, stats, x, y);
 
-	Render.voxel('turret-top', {
-		parent: this.top,
-	});
+		Unit.addBase(this);
 
-	this.renderInBackground = true;
+		this.towerType = towerType;
 
-	this.container.position.z = towerStats.z;
+		Render.voxel('turret-base', {parent: this.base});
+
+		Render.voxel('turret-top', {
+			parent: this.top,
+		});
+
+		this.renderInBackground = true;
+
+		this.container.position.z = stats.z;
+	}
 
 	// Damage
 
-	this.die = function(time) {
-		this.sightCircle.visible = false;
+	die(time) {
+		// this.sightCircle.visible = false;
 		this.healthContainer.parent.remove(this.healthContainer);
-		this.setBlocking(false);
+		this.isBlocking = false;
 		this.container.position.z = -44;
 		this.container.remove(this.top);
 
@@ -87,17 +90,19 @@ module.exports = function(team, towerType, x, y) {
 			baseMesh.material.opacity = 0.5;
 		}
 
-		superUnit.die(time);
+		super.die(time);
 
-		if (towerType == 'base') {
-			Local.game.end(team);
+		if (this.towerType == 'base') {
+			Local.game.end(this.team);
 		}
-	};
+	}
 
-	this.attack = function(enemy, renderTime) {
-		superUnit.attack(enemy, renderTime);
+	attack(enemy, renderTime) {
+		super.attack(enemy, renderTime);
 
 		this.top.rotation.z = Util.angleBetween(this, enemy) + Math.PI;
-	};
+	}
 
-};
+}
+
+module.exports = Tower;
