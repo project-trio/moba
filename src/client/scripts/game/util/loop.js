@@ -11,14 +11,21 @@ const Unit = require('game/entity/unit/unit');
 let lastUpdate = 0;
 let lastTick = 0;
 
-var stats = new Stats();
-stats.showPanel(1);
-document.body.appendChild(stats.dom);
+var stats;
+// if (Local.TESTING) {
+	setTimeout(() => {
+		stats = new Stats();
+		stats.showPanel(1);
+		document.body.appendChild(stats.dom);
+	}, 5000);
+// }
 
 //LOOP
 
 const animate = function() {
-	stats.begin();
+	if (stats) {
+		stats.begin();
+	}
 
 	const currentTime = Date.now();
 	const game = Local.game;
@@ -35,7 +42,9 @@ const animate = function() {
 	}
 	lastUpdate = currentTime;
 
-	stats.end();
+	if (stats) {
+		stats.end();
+	}
 	window.requestAnimationFrame(animate);
 };
 
