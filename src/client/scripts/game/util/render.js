@@ -90,8 +90,6 @@ module.exports = {
 		// var material = new THREE.SpriteMaterial({map: map});
 		let material = new THREE.SpriteMaterial({map: map, color: 0xffffff, fog: true});
 		let sprite = new THREE.Sprite(material);
-		let mapImage = material.map.image;
-		console.log(map, material);
 		sprite.scale.set(88, 88, 1);
 		if (options.parent) {
 			options.parent.add(sprite);
@@ -102,7 +100,7 @@ module.exports = {
 	voxel: function(name, options) {
 		var parser = new Vox.Parser();
 		parser.parse(require(`images/${name}.vox`)).then(function(voxelData) {
-			var builder = new Vox.MeshBuilder(voxelData, {voxelSize: 2});
+			var builder = new Vox.MeshBuilder(voxelData, {voxelSize: 2}); //TODO cache
 			var mesh = builder.createMesh();
 			mesh.rotation.x = Math.PI / 2;
 			if (options.z) {

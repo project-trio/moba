@@ -52,7 +52,6 @@ module.exports = function(team, name, path, mirrored, mapWidth, mapHeight) {
 		updateDestination();
 
 		const nextDest = this.requestedDestination(currentDest[0], currentDest[1]);
-		console.log(nextDest);
 		this.setDestination(nextDest[0], nextDest[1], nextDest[2], nextDest[3]);
 	};
 
