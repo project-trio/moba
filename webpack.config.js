@@ -4,6 +4,8 @@ const path = require('path');
 
 module.exports = {
 
+	debug: true,
+
 	entry: './src/client/scripts/main.js',
 
 	output: {
