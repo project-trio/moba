@@ -2,7 +2,7 @@
 
 const Webpack = require('webpack');
 
-var config = require('./webpack.config.base.js');
+var config = require('./webpack.config.js');
 
 config.debug = false;
 
