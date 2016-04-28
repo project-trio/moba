@@ -9,23 +9,11 @@ const Render = require('game/util/render');
 
 const allUnits = [];
 
-let map;
-
-// const manhattanDistance = function(x1, y1, x2, y2) {
-// 	return Math.abs(x2 - x1) + Math.abs(y2 - y1);
-// };
-
-const pointDistance = function(x1, y1, x2, y2) {
-	return Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2);
-};
-
-const within = function(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2) {
-	return ax1 < bx2 && ax2 > bx1 && ay1 < by2 && ay2 > by1;
-};
-
 //CLASS
 
 class Unit {
+
+	// Constructor
 
 	constructor(team, statBase, x, y, startAngle) {
 		this.team = team;
@@ -66,7 +54,7 @@ class Unit {
 		// let sightRadius = allied ? this.stats.sightRange * 0.001 : Local.shipSize;
 		// this.sightCircle = {x: 0, y: 0, radius: sightRadius, visible: allied};
 		// this.sightSize = sightRadius;
-		// map.addSight(this.sightCircle);
+		// Local.game.map.addSight(this.sightCircle);
 
 		// Health Bar
 
@@ -95,27 +83,13 @@ class Unit {
 			parent: this.healthContainer,
 		});
 
-		map = Local.game.map;
-		map.addHealthbar(this.healthContainer);
+		Local.game.map.addHealthbar(this.healthContainer);
 
 		// Start location
 
 		if (x) {
 			this.setLocation(x, y);
 		}
-	}
-
-
-	// Get/Set
-
-	incoming(increment) {
-		this.incomingAttackers += increment;
-	}
-
-	setAlive() {
-		this.isDead = false;
-		this.timeOfDeath = null;
-		this.isBlocking = true;
 	}
 
 	// Geometry
@@ -135,7 +109,7 @@ class Unit {
 	}
 
 	distanceTo(enemy) {
-		return pointDistance(this.px, this.py, enemy.px, enemy.py);
+		return Util.pointDistance(this.px, this.py, enemy.px, enemy.py);
 	}
 
 	// Health
@@ -162,6 +136,10 @@ class Unit {
 	}
 
 	// Attack
+
+	incoming(increment) {
+		this.incomingAttackers += increment;
+	}
 
 	setTarget(target) {
 		if (target) {
@@ -193,9 +171,7 @@ class Unit {
 	die(time) {
 		this.isDead = true;
 		this.timeOfDeath = time;
-		this.isMoving = false;
 		this.healthBar.visible = false;
-		this.setTarget(null);
 	}
 
 	addHealth(addedHealth) {
@@ -252,169 +228,13 @@ class Unit {
 		}
 	}
 
-	// Update
-
-	updatePosition(moveToX, moveToY) {
-		if (!moveToX) {
-			moveToX = Math.round(this.px * 0.001);
-			moveToY = Math.round(this.py * 0.001);
-		} else {
-			moveToX *= 0.001;
-			moveToY *= 0.001;
-		}
-		this.container.position.x = moveToX;
-		this.container.position.y = moveToY;
-		this.healthContainer.position.x = moveToX;
-		this.healthContainer.position.y = moveToY;
-		// this.sightCircle.x = moveToX;
-		// this.sightCircle.y = moveToY;
-	}
-
-	move(timeDelta, tweening) {
-		let cx, cy;
-		if (tweening) {
-			const position = this.container.position;
-			cx = Math.round(position.x * 1000);
-			cy = Math.round(position.y * 1000);
-		} else {
-			cx = this.px;
-			cy = this.py;
-		}
-		const dx = Math.floor(this.moveX * this.stats.speed * timeDelta / 200);
-		const dy = Math.floor(this.moveY * this.stats.speed * timeDelta / 200);
-
-		let movingToX = cx + dx;
-		let movingToY = cy + dy;
-		if (tweening) {
-			this.updatePosition(movingToX, movingToY);
-		} else {
-			const distX = this.destX - cx;
-			const distY = this.destY - cy;
-			let reached = false;
-			if (Math.abs(distX) <= Math.abs(dx) || (distX < 0 ? dx > 0 : dx < 0)) {
-				movingToX = this.destX;
-				reached = true;
-			}
-			if (Math.abs(distY) <= Math.abs(dy) || (distY < 0 ? dy > 0 : dy < 0)) {
-				movingToY = this.destY;
-			} else {
-				reached = false;
-			}
-			if (reached) {
-				this.isMoving = false;
-			}
-
-			// Walls
-			const walls = map.blockCheck(movingToX, movingToY);
-			let willBlock = walls == null;
-			const collisionSize = this.stats.collision;
-			if (!willBlock) {
-				const ux1 = movingToX - collisionSize * 0.5;
-				const uy1 = movingToY - collisionSize * 0.5;
-				const ux2 = ux1 + collisionSize;
-				const uy2 = uy1 + collisionSize;
-				for (let idx in walls) {
-					const wall = walls[idx];
-					const x = wall[0];
-					const y = wall[1];
-					const w = wall[2];
-					const h = wall[3];
-					if (h) {
-						if (within(x, y, x + w, y + h, ux1, uy1, ux2, uy2)) {
-							willBlock = true;
-							break;
-						}
-					} else {
-						const dist = pointDistance(x, y, movingToX, movingToY);
-						if (dist < 4000000000 && dist < Math.pow(collisionSize + w, 2)) {
-							willBlock = true;
-							break;
-						}
-					}
-				}
-			}
-
-			//Units
-			if (!willBlock) {
-				for (let idx in allUnits) {
-					const unit = allUnits[idx];
-					if (unit.isBlocking && this.id != unit.id) {
-						const dist = pointDistance(movingToX, movingToY, unit.px, unit.py);
-						if (dist < 4000000000 && dist < Math.pow(collisionSize + unit.stats.collision, 2)) {
-							willBlock = true;
-							break;
-						}
-					}
-				}
-			}
-
-			// Move
-			this.blocked = willBlock;
-			if (!willBlock) {
-				this.px = movingToX;
-				this.py = movingToY;
-			}
-		}
-	}
-
-	// Move
-
-	setMovePoint(destX, destY, moveX, moveY) {
-		this.isMoving = true;
-		this.destX = destX;
-		this.destY = destY;
-		this.moveX = moveX;
-		this.moveY = moveY;
-	}
-
-	setDestination(x, y, moveX, moveY) {
-		if (this.isDead) {
-			return false;
-		}
-
-		this.top.rotation.z = Util.atan(moveX, moveY);
-		this.setMovePoint(x, y, moveX, moveY);
-	}
-
-	requestedDestination(x, y) {
-		x = Math.round(x * 1000);
-		y = Math.round(y * 1000);
-		const dx = x - this.px;
-		const dy = y - this.py;
-		if (dx == 0 && dy == 0) {
-			return null;
-		}
-
-		const moveAngle = Util.atan(dx, dy);
-		const moveX = Math.round(Math.cos(moveAngle) * 1000);
-		const moveY = Math.round(Math.sin(moveAngle) * 1000);
-		return [x, y, moveX, moveY];
-	}
-
-	updateVisibility() {
-		for (let idx in allUnits) {
-			const unit = allUnits[idx];
-			let updatesPosition = this.alliedTo(unit);
-			if (!updatesPosition) {
-				const showing = this.canSee(unit);
-				const updatedVisibility = unit.isRendering !== showing;
-				if (updatedVisibility) {
-					unit.isRendering = showing;
-					unit.container.visible = showing || unit.renderInBackground || false;
-					unit.healthContainer.visible = showing;
-					// unit.sightCircle.visible = showing;
-				}
-				updatesPosition = showing && (updatedVisibility || unit.isMoving);
-			}
-			if (updatesPosition) {
-				unit.updatePosition();
-			}
-		}
-	}
-
 }
 
 //STATIC
+
+Unit.all = function() {
+	return allUnits;
+};
 
 Unit.addBase = function(unit) {
 	allUnits.push(unit);

@@ -2,6 +2,7 @@
 
 const Render = require('game/util/render');
 
+const Movable = require('game/entity/unit/movable');
 const Unit = require('game/entity/unit/unit');
 
 //LOCAL
@@ -26,7 +27,8 @@ const SHIP_STATS = {
 
 //CLASS
 
-class Ship extends Unit {
+class Ship extends Movable {
+
 	constructor(name, player, team, x, y, angle) {
 		const statBase = SHIP_STATS[name] || SHIP_STATS['pewpew'];
 		super(team, statBase, x, y, angle);
@@ -63,6 +65,7 @@ class Ship extends Unit {
 
 	die(time) {
 		this.respawned = false;
+		this.isMoving = false;
 		// this.sightCircle.radius = Local.shipSize;
 
 		super.die(time);
@@ -77,6 +80,14 @@ class Ship extends Unit {
 
 		const spawnAt = this.player.spawnLocation();
 		this.setLocation(spawnAt[0], spawnAt[1]);
+	}
+
+	setAlive() {
+		this.isDead = false;
+		this.timeOfDeath = null;
+		this.isBlocking = true;
+
+		this.setTarget(null);
 	}
 
 	reemerge() {
@@ -139,6 +150,28 @@ class Ship extends Unit {
 			} else {
 				this.updateExperience();
 				this.doRegenerate();
+			}
+		}
+	}
+
+	updateVisibility() {
+		const units = Unit.all();
+		for (let idx in units) {
+			const unit = units[idx];
+			let revealUnit = this.alliedTo(unit);
+			if (!revealUnit) {
+				const showing = this.canSee(unit);
+				const updatedVisibility = unit.isRendering !== showing;
+				if (updatedVisibility) {
+					unit.isRendering = showing;
+					unit.container.visible = showing || unit.renderInBackground || false;
+					unit.healthContainer.visible = showing;
+					// unit.sightCircle.visible = showing;
+				}
+				revealUnit = showing && (updatedVisibility || unit.isMoving);
+			}
+			if (revealUnit && unit.movable) {
+				unit.updatePosition();
 			}
 		}
 	}

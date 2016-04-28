@@ -83,7 +83,6 @@ class Tower extends Unit {
 		this.container.position.z = -44;
 		this.container.remove(this.top);
 
-
 		const baseMesh = this.base.children[0];
 		if (baseMesh) {
 			baseMesh.material.transparent = true;

@@ -2,6 +2,7 @@
 
 const Render = require('game/util/render');
 
+const Movable = require('game/entity/unit/movable');
 const Unit = require('game/entity/unit/unit');
 
 const MINI_STATS = {
@@ -35,7 +36,7 @@ let mapWidth, mapHeight; //TODO
 
 //CLASS
 
-class Mini extends Unit {
+class Mini extends Movable {
 
 	constructor(team, name, path, mirrored, _mapWidth, _mapHeight) {
 		mapWidth = _mapWidth;
@@ -85,12 +86,8 @@ class Mini extends Unit {
 		this.container.parent.remove(this.container);
 		Unit.remove(this);
 
-		// super.die(time);
+		super.die(time);
 	}
-
-	// update(renderTime, timeDelta, tweening) {
-	// 	super(renderTime, timeDelta, tweening);
-	// }
 
 	move(timeDelta, tweening) {
 		// console.log(this.px, currentDest[0], this.py, currentDest[1]);
