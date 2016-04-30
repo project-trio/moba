@@ -64,10 +64,7 @@ class Tower extends Unit {
 		this.towerType = towerType;
 
 		Render.voxel('turret-base', {parent: this.base});
-
-		Render.voxel('turret-top', {
-			parent: this.top,
-		});
+		Render.voxel('turret-top', {parent: this.top});
 
 		this.renderInBackground = true;
 
@@ -78,10 +75,11 @@ class Tower extends Unit {
 
 	die(time) {
 		// this.sightCircle.visible = false;
-		this.healthContainer.parent.remove(this.healthContainer);
+		Render.remove(this.healthContainer);
+		Render.remove(this.top);
+
 		this.isBlocking = false;
 		this.container.position.z = -44;
-		this.container.remove(this.top);
 
 		const baseMesh = this.base.children[0];
 		if (baseMesh) {

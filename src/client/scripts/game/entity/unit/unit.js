@@ -130,9 +130,10 @@ class Unit {
 	}
 
 	destroy() {
-		parent.remove(this.container);
-		// container.destroy(true);
-		this.container = null;
+		Render.remove(this.healthContainer);
+		Render.remove(this.container);
+		// this.healthContainer = null;
+		// this.container = null;
 	}
 
 	// Attack

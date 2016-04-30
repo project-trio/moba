@@ -64,6 +64,10 @@ module.exports = {
 		return renderer.domElement;
 	},
 
+	remove: function(object) {
+		object.parent.remove(object);
+	},
+
 	on: function(object, listener, callback) {
 		domEvents.addEventListener(object, listener, callback);
 	},
