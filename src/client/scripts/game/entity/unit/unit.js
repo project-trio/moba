@@ -43,9 +43,9 @@ class Unit {
 			collision: statBase.collision * 1000,
 		};
 		this.stats.health = this.stats.healthMax;
-		this.stats.sightRangeCheck = Math.pow(this.stats.sightRange, 2);
-		this.stats.attackRangeCheck = Math.pow(this.stats.attackRange, 2);
-		// this.stats.collisionCheck = Math.pow(this.stats.collision, 2);
+		this.stats.sightRangeCheck = Util.squared(this.stats.sightRange);
+		this.stats.attackRangeCheck = Util.squared(this.stats.attackRange);
+		// this.stats.collisionCheck = Util.squared(this.stats.collision);
 
 		this.incomingAttackers = 0;
 		this.lastAttack = 0;

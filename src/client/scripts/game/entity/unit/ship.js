@@ -1,5 +1,6 @@
 'use strict';
 
+const Util = require('game/util/util');
 const Render = require('game/util/render');
 
 const Movable = require('game/entity/unit/movable');
@@ -119,8 +120,8 @@ class Ship extends Movable {
 		this.stats.attackDamage += this.statBase.attackDamage[1] * 1000;
 		this.stats.attackCooldown += this.statBase.attackCooldown[1];
 
-		this.stats.sightRangeCheck = Math.pow(this.stats.sightRange, 2);
-		this.stats.attackRangeCheck = Math.pow(this.stats.attackRange, 2);
+		this.stats.sightRangeCheck = Util.squared(this.stats.sightRange);
+		this.stats.attackRangeCheck = Util.squared(this.stats.attackRangeCheck);
 
 		this.updateHealth();
 	}

@@ -30,4 +30,12 @@ module.exports = {
 		return Math.abs(x2 - x1) + Math.abs(y2 - y1);
 	},
 
+	withinSquared: function(distance, range) {
+		return distance < range * range;
+	},
+
+	squared: function(distance) {
+		return distance * distance;
+	},
+
 };
