@@ -65,7 +65,6 @@ class Ship extends Movable {
 
 	die(time) {
 		this.respawned = false;
-		this.isMoving = false;
 		// this.sightCircle.radius = Local.shipSize;
 
 		super.die(time);

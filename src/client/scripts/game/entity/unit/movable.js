@@ -68,6 +68,10 @@ class Movable extends Unit {
 
 	// Move
 
+	nextDestination() {
+		return false;
+	}
+
 	move(timeDelta, tweening) {
 		let cx, cy;
 		if (tweening) {
@@ -88,17 +92,18 @@ class Movable extends Unit {
 		} else {
 			const distX = this.destX - cx;
 			const distY = this.destY - cy;
-			let reached = false;
+			let reached = true;
 			if (Math.abs(distX) <= Math.abs(dx) || (distX < 0 ? dx > 0 : dx < 0)) {
 				movingToX = this.destX;
-				reached = true;
+			} else {
+				reached = false;
 			}
 			if (Math.abs(distY) <= Math.abs(dy) || (distY < 0 ? dy > 0 : dy < 0)) {
 				movingToY = this.destY;
 			} else {
 				reached = false;
 			}
-			if (reached) {
+			if (reached && !this.nextDestination()) {
 				this.isMoving = false;
 			}
 
@@ -154,6 +159,12 @@ class Movable extends Unit {
 				this.py = movingToY;
 			}
 		}
+	}
+
+	die(time) {
+		this.isMoving = false;
+
+		super.die(time);
 	}
 
 }
