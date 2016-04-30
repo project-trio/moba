@@ -138,7 +138,7 @@ module.exports = vox;
         for (var i = 0; i < 4; i++) {
             ver += dataHolder.next() * Math.pow(256, i);
         }
-        console.info(".vox format version " + ver);
+        // console.info(".vox format version " + ver);
     };
     
     var chunk = function(dataHolder) {

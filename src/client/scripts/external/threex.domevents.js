@@ -95,6 +95,7 @@ THREEx.DomEvents    = function(camera, domElement)
     this._domElement.addEventListener( 'dblclick'   , this._$onDblClick , false );
     this._domElement.addEventListener( 'mousemove'  , this._$onMouseMove    , false );
     this._domElement.addEventListener( 'mousedown'  , this._$onMouseDown    , false );
+    this._domElement.addEventListener( 'touchstart'  , this._$onMouseDown    , false );
     this._domElement.addEventListener( 'mouseup'    , this._$onMouseUp  , false );
     this._domElement.addEventListener( 'touchmove'  , this._$onTouchMove    , false );
     this._domElement.addEventListener( 'touchstart' , this._$onTouchStart   , false );
@@ -111,6 +112,7 @@ THREEx.DomEvents.prototype.destroy  = function()
     this._domElement.removeEventListener( 'dblclick'    , this._$onDblClick , false );
     this._domElement.removeEventListener( 'mousemove'   , this._$onMouseMove    , false );
     this._domElement.removeEventListener( 'mousedown'   , this._$onMouseDown    , false );
+    this._domElement.removeEventListener( 'touchstart'   , this._$onMouseDown    , false );
     this._domElement.removeEventListener( 'mouseup'     , this._$onMouseUp  , false );
     this._domElement.removeEventListener( 'touchmove'   , this._$onTouchMove    , false );
     this._domElement.removeEventListener( 'touchstart'  , this._$onTouchStart   , false );
@@ -391,6 +393,7 @@ THREEx.DomEvents.prototype._onMouseUp   = function(event){ return this._onMouseE
 
 THREEx.DomEvents.prototype._onMouseEvent    = function(eventName, domEvent)
 {
+    domEvent.preventDefault();
     var mouseCoords = this._getRelativeMouseXY(domEvent);
     this._onEvent(eventName, mouseCoords.x, mouseCoords.y, domEvent);
 }

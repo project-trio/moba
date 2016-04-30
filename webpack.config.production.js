@@ -17,11 +17,6 @@ config.plugins = [
 			screw_ie8: true,
 		},
 	}),
-	new Webpack.DefinePlugin({
-		'process.env': {
-			NODE_ENV: JSON.stringify('production'),
-		},
-	}),
 ];
 
 module.exports = config;

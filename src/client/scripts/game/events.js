@@ -6,8 +6,6 @@ const Local = require('local');
 
 //SOCKET
 
-console.log('ee');
-
 Bridge.on('update', (data) => {
 	const update = data.update;
 	if (data.lag) {
