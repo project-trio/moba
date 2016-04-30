@@ -30,17 +30,19 @@ class Unit {
 		// Stats
 
 		this.stats = {
-			level: 1,
-			maxHealth: statBase.maxHealth[0] * 1000,
-			regenerate: statBase.regenerate[0],
-			speed: statBase.speed[0],
-			damage: statBase.damage[0] * 1000,
+			healthMax: statBase.healthMax[0] * 1000,
+			healthRegen: statBase.healthRegen[0],
+
 			sightRange: statBase.sightRange[0] * 1000,
 			attackRange: statBase.attackRange[0] * 1000,
+
+			attackDamage: statBase.attackDamage[0] * 1000,
 			attackCooldown: statBase.attackCooldown[0],
-			collision: statBase.collision * 1000
+
+			moveSpeed: statBase.moveSpeed[0],
+			collision: statBase.collision * 1000,
 		};
-		this.stats.health = this.stats.maxHealth;
+		this.stats.health = this.stats.healthMax;
 		this.stats.sightRangeCheck = Math.pow(this.stats.sightRange, 2);
 		this.stats.attackRangeCheck = Math.pow(this.stats.attackRange, 2);
 		// this.stats.collisionCheck = Math.pow(this.stats.collision, 2);
@@ -124,17 +126,17 @@ class Unit {
 		} else {
 			newHealth = this.stats.health;
 		}
-		const healthScale = newHealth / this.stats.maxHealth;
+		const healthScale = newHealth / this.stats.healthMax;
 		this.healthBar.scale.x = healthScale;
 		this.healthBar.position.x = -32 * healthScale + 32;
 	}
 
 	addHealth(addedHealth) {
-		if (this.stats.health == this.stats.maxHealth) {
+		if (this.stats.health == this.stats.healthMax) {
 			return;
 		}
 
-		const newHealth = Math.min(this.stats.health + addedHealth, this.stats.maxHealth);
+		const newHealth = Math.min(this.stats.health + addedHealth, this.stats.healthMax);
 		this.updateHealth(newHealth);
 	}
 
@@ -190,7 +192,7 @@ class Unit {
 
 	attack(enemy, renderTime) {
 		this.lastAttack = renderTime;
-		enemy.doDamage(this.stats.damage);
+		enemy.doDamage(this.stats.attackDamage);
 	}
 
 	readyToAttack(renderTime) {
@@ -236,7 +238,7 @@ Unit.addBase = function(unit) {
 };
 
 Unit.update = function(renderTime, timeDelta, tweening) {
-	for (let idx in allUnits) {
+	for (let idx = 0; idx < allUnits.length; idx += 1) {
 		const unit = allUnits[idx];
 		if (tweening && (!unit.isRendering || unit.blocked)) {
 			continue;

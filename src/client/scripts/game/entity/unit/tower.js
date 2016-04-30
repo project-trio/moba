@@ -10,43 +10,50 @@ const Unit = require('game/entity/unit/unit');
 //LOCAL
 
 const TOWER_STATS = {
+	// [start, levelup, max]
 	base: {
-		maxHealth: [300, 0, 0],
-		regenerate: [0, 0, 0],
-		speed: [0, 0, 0],
-		damage: [5, 0, 0],
+		healthMax: [300, 0, 0],
+		healthRegen: [0, 0, 0],
+
 		sightRange: [200, 0, 0],
 		attackRange: [200, 0, 0],
+
+		attackDamage: [5, 0, 0],
 		attackCooldown: [1, 0, 0],
 
-		z: -5,
+		moveSpeed: [0, 0, 0],
 		collision: 35,
+		z: -5,
 	},
 
 	standard: {
-		maxHealth: [200, 0, 0],
-		regenerate: [0, 0, 0],
-		speed: [0, 0, 0],
-		damage: [8, 0, 0],
+		healthMax: [200, 0, 0],
+		healthRegen: [0, 0, 0],
+
 		sightRange: [190, 0, 0],
 		attackRange: [190, 0, 0],
+
+		attackDamage: [8, 0, 0],
 		attackCooldown: [6, 0, 0],
 
-		z: -15,
+		moveSpeed: [0, 0, 0],
 		collision: 30,
+		z: -15,
 	},
 
 	turret: {
-		maxHealth: [160, 0, 0],
-		regenerate: [0, 0, 0],
-		speed: [0, 0, 0],
-		damage: [6, 0, 0],
+		healthMax: [160, 0, 0],
+		healthRegen: [0, 0, 0],
+
 		sightRange: [180, 0, 0],
 		attackRange: [180, 0, 0],
+
+		attackDamage: [6, 0, 0],
 		attackCooldown: [6, 0, 0],
 
-		z: -25,
+		moveSpeed: [0, 0, 0],
 		collision: 30,
+		z: -25,
 	},
 };
 

@@ -8,26 +8,30 @@ const Unit = require('game/entity/unit/unit');
 const MINI_STATS = {
 	// [start, levelup, max]
 	mini: {
-		maxHealth: [30, 0, 0],
-		regenerate: [0, 0, 0],
-		speed: [12, 0, 0],
-		damage: [1, 0, 0],
+		healthMax: [60, 0, 0],
+		healthRegen: [0, 0, 0],
+
 		sightRange: [100, 0, 0],
 		attackRange: [15, 0, 0],
+
+		attackDamage: [1, 0, 0],
 		attackCooldown: [1, 0, 0],
 
+		moveSpeed: [12, 0, 0],
 		collision: 10,
 	},
 
 	center: {
-		maxHealth: [50, 0, 0],
-		regenerate: [0, 0, 0],
-		speed: [12, 0, 0],
-		damage: [8, 0, 0],
+		healthMax: [50, 0, 0],
+		healthRegen: [0, 0, 0],
+
 		sightRange: [100, 0, 0],
 		attackRange: [100, 0, 0],
+
+		attackDamage: [8, 0, 0],
 		attackCooldown: [5, 0, 0],
 
+		moveSpeed: [12, 0, 0],
 		collision: 10,
 	}
 };

@@ -82,8 +82,8 @@ class Movable extends Unit {
 			cx = this.px;
 			cy = this.py;
 		}
-		const dx = Math.floor(this.moveX * this.stats.speed * timeDelta / 200);
-		const dy = Math.floor(this.moveY * this.stats.speed * timeDelta / 200);
+		const dx = Math.floor(this.moveX * this.stats.moveSpeed * timeDelta / 200);
+		const dy = Math.floor(this.moveY * this.stats.moveSpeed * timeDelta / 200);
 
 		let movingToX = cx + dx;
 		let movingToY = cy + dy;

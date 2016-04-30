@@ -13,14 +13,16 @@ const expPerLevel = 600;
 const SHIP_STATS = {
 	// [start, levelup, max]
 	pewpew: {
-		maxHealth: [60, 10, 0],
-		regenerate: [40, 4, 0],
-		speed: [14 * 2, 0, 0], //TODO
-		damage: [8, 1, 0],
+		healthMax: [60, 10, 0],
+		healthRegen: [40, 4, 0],
+
 		sightRange: [160, 1, 0],
 		attackRange: [140, 1, 0],
+
+		attackDamage: [8, 1, 0],
 		attackCooldown: [5, 0, 0],
 
+		moveSpeed: [14 * 2, 0, 0], //TODO
 		collision: 20
 	}
 };
@@ -60,7 +62,7 @@ class Ship extends Movable {
 	// Health
 
 	doRegenerate() {
-		this.addHealth(this.stats.regenerate);
+		this.addHealth(this.stats.healthRegen);
 	}
 
 	die(time) {
@@ -90,7 +92,7 @@ class Ship extends Movable {
 	}
 
 	reemerge() {
-		this.updateHealth(this.stats.maxHealth);
+		this.updateHealth(this.stats.healthMax);
 		// this.sightCircle.radius = this.sightSize;
 		this.container.alpha = 1.0;
 		this.healthContainer.visible = true;
@@ -105,15 +107,15 @@ class Ship extends Movable {
 		++this.level;
 		// nameText.text = player.name + ' [' + level+ ']'; //TODO
 
-		const healthIncrease = this.statBase.maxHealth[1] * 1000;
-		this.stats.maxHealth += healthIncrease;
+		const healthIncrease = this.statBase.healthMax[1] * 1000;
+		this.stats.healthMax += healthIncrease;
 		this.addHealth(healthIncrease);
 
-		this.stats.regenerate += this.statBase.regenerate[1];
-		this.stats.speed += this.statBase.speed[1];
-		this.stats.damage += this.statBase.damage[1] * 1000;
+		this.stats.healthRegen += this.statBase.healthRegen[1];
+		this.stats.moveSpeed += this.statBase.moveSpeed[1];
 		this.stats.sightRange += this.statBase.sightRange[1];
 		this.stats.attackRange += this.statBase.attackRange[1];
+		this.stats.attackDamage += this.statBase.attackDamage[1] * 1000;
 		this.stats.attackCooldown += this.statBase.attackCooldown[1];
 
 		this.stats.sightRangeCheck = Math.pow(this.stats.sightRange, 2);
