@@ -132,8 +132,9 @@ class Unit {
 	destroy() {
 		Render.remove(this.healthContainer);
 		Render.remove(this.container);
-		// this.healthContainer = null;
-		// this.container = null;
+		this.healthContainer = null;
+		this.container = null;
+		this.remove = true;
 	}
 
 	// Attack
@@ -241,10 +242,6 @@ Unit.addBase = function(unit) {
 	allUnits.push(unit);
 };
 
-Unit.remove = function(unit) {
-	allUnits.splice(allUnits.indexOf(unit));
-};
-
 Unit.update = function(renderTime, timeDelta, tweening) {
 	for (let idx in allUnits) {
 		const unit = allUnits[idx];
@@ -257,24 +254,27 @@ Unit.update = function(renderTime, timeDelta, tweening) {
 	}
 	if (!tweening) {
 		// Move
-		for (let idx in allUnits) {
+		for (let idx = 0; idx < allUnits.length; idx += 1) {
 			const unit = allUnits[idx];
 			if (unit.update) {
 				unit.update(renderTime, timeDelta, tweening);
 			}
 		}
 		// Attack
-		for (let idx in allUnits) {
+		for (let idx = 0; idx < allUnits.length; idx += 1) {
 			const unit = allUnits[idx];
 			if (!unit.isDead) {
 				unit.checkAttack(renderTime);
 			}
 		}
 		// Die
-		for (let idx in allUnits) {
+		for (let idx = allUnits.length - 1; idx >= 0; idx -= 1) {
 			const unit = allUnits[idx];
 			if (unit.hasDied() && !unit.isDead) {
 				unit.die(renderTime);
+				if (unit.remove) {
+					allUnits.splice(idx, 1);
+				}
 			}
 		}
 	}

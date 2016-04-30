@@ -95,8 +95,6 @@ class Mini extends Movable {
 		this.destroy();
 
 		super.die(time);
-
-		Unit.remove(this);
 	}
 
 }
