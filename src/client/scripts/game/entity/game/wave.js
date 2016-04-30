@@ -15,9 +15,9 @@ module.exports = {
 			for (let team = 0; team < 2; ++team) {
 				for (let mirror = 0; mirror < (minionData.mirror ? 2 : 1); ++mirror) {
 					let mirrored = mirror == 1;
-					for (let mi = 0; mi < 3; ++mi) {
+					// for (let mi = 0; mi < 3; ++mi) {
 						const minion = new Mini(team, name, path, mirrored, mapWidth, mapHeight);
-					}
+					// }
 				}
 			}
 		});
