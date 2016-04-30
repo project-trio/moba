@@ -47,9 +47,6 @@ const Game = function(gid, size) {
 		if (ticksToRender <= 0) {
 			return false;
 		}
-		if (ticksToRender > 1) {
-			console.log(ticksToRender);
-		}
 
 		while (ticksToRender > 0) {
 			if (ticksRendered % ticksPerUpdate == 1) {
