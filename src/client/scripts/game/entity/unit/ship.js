@@ -45,6 +45,7 @@ class Ship extends Movable {
 		this.level = 1;
 		this.levelExp = 0;
 		this.respawned = false;
+		this.isBlocking = true;
 
 		// Unit
 

@@ -74,6 +74,7 @@ class Tower extends Unit {
 		Render.voxel('turret-top', {parent: this.top});
 
 		this.renderInBackground = true;
+		this.isBlocking = true;
 
 		this.container.position.z = stats.z;
 	}
