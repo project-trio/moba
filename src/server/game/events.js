@@ -27,7 +27,9 @@ const quickJoin = function(player) {
 
 //UPDATE
 
-setInterval(function() {
+let loopTime = Date.now();
+
+const loop = function() {
 	for (let gidx in games) {
 		const game = games[gidx];
 		if (game.checkStart()) {
@@ -63,7 +65,13 @@ setInterval(function() {
 			game.broadcast('update', {update: gameUpdate, lag: lagged, moves: moveData});
 		}
 	}
-}, Config.updateDuration);
+
+	loopTime += Config.updateDuration;
+	const currentTime = Date.now();
+	setTimeout(loop, loopTime - currentTime);
+};
+
+loop();
 
 //PUBLIC
 
