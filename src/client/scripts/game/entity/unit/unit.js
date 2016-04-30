@@ -103,7 +103,7 @@ class Unit {
 		this.healthContainer.position.x = x;
 		this.healthContainer.position.y = y;
 
-		const angle = this.startAngle || -Math.PI * 1.5 * (this.team == 0 ? -1 : 1);
+		const angle = this.startAngle || (-Math.PI * 1.5 * (this.team == 0 ? -1 : 1));
 		this.base.rotation.z = angle;
 		this.top.rotation.z = angle;
 	}
@@ -129,11 +129,29 @@ class Unit {
 		this.healthBar.position.x = -32 * healthScale + 32;
 	}
 
+	addHealth(addedHealth) {
+		if (this.stats.health == this.stats.maxHealth) {
+			return;
+		}
+
+		const newHealth = Math.min(this.stats.health + addedHealth, this.stats.maxHealth);
+		this.updateHealth(newHealth);
+	}
+
+	doDamage(amount) {
+		const newHealth = Math.max(this.stats.health - amount, 0);
+		this.updateHealth(newHealth);
+	}
+
+	die(time) {
+		this.isDead = true;
+		this.timeOfDeath = time;
+		this.healthBar.visible = false;
+	}
+
 	destroy() {
 		Render.remove(this.healthContainer);
 		Render.remove(this.container);
-		this.healthContainer = null;
-		this.container = null;
 		this.remove = true;
 	}
 
@@ -154,7 +172,7 @@ class Unit {
 		this.attackTarget = target;
 	}
 
-	activeFire() {
+	hasActiveFire() {
 		return this.isFiring || this.incomingAttackers > 0;
 	}
 
@@ -163,37 +181,11 @@ class Unit {
 	}
 
 	canSee(enemy) {
-		return enemy.isDead || enemy.activeFire() || this.distanceTo(enemy) < this.stats.sightRangeCheck;
+		return enemy.isDead || enemy.hasActiveFire() || this.distanceTo(enemy) < this.stats.sightRangeCheck;
 	}
 
 	canAttack(enemy) {
 		return !enemy.hasDied() && !this.alliedTo(enemy) && this.distanceTo(enemy) < this.stats.attackRangeCheck;
-	}
-
-	die(time) {
-		this.isDead = true;
-		this.timeOfDeath = time;
-		this.healthBar.visible = false;
-	}
-
-	addHealth(addedHealth) {
-		if (this.stats.health == this.stats.maxHealth) {
-			return;
-		}
-
-		let newHealth = this.stats.health + addedHealth;
-		if (newHealth > this.stats.maxHealth) {
-			newHealth = this.stats.maxHealth;
-		}
-		this.updateHealth(newHealth);
-	}
-
-	doDamage(amount) {
-		let newHealth = this.stats.health - amount;
-		if (newHealth < 0) {
-			newHealth = 0;
-		}
-		this.updateHealth(newHealth);
 	}
 
 	attack(enemy, renderTime) {
@@ -201,32 +193,33 @@ class Unit {
 		enemy.doDamage(this.stats.damage);
 	}
 
+	readyToAttack(renderTime) {
+		return renderTime - this.lastAttack > this.stats.attackCooldown * 100;
+	}
+
+	getAttackTarget() {
+		if (this.attackTarget) {
+			if (this.canAttack(this.attackTarget)) {
+				return this.attackTarget;
+			}
+			this.setTarget(null);
+		}
+		for (let idx = 0; idx < allUnits.length; idx += 1) {
+			const enemy = allUnits[idx];
+			if (this.canAttack(enemy)) {
+				if (!this.attackTarget) {
+					this.setTarget(enemy);
+				}
+				return enemy;
+			}
+		}
+	}
+
 	checkAttack(renderTime) {
-		if (renderTime - this.lastAttack > this.stats.attackCooldown * 100) {
-			let attackForTick;
-			if (this.attackTarget) {
-				if (this.canAttack(this.attackTarget)) {
-					attackForTick = this.attackTarget;
-				} else {
-					this.setTarget(null);
-				}
-			}
-			if (!attackForTick) {
-				for (let unitIdx in allUnits) {
-					const enemy = allUnits[unitIdx];
-					if (this.canAttack(enemy)) {
-						attackForTick = enemy;
-						if (!this.attackTarget) {
-							this.setTarget(attackForTick);
-						}
-						break;
-					}
-				}
-			}
-			this.isFiring = attackForTick != null;
-			if (attackForTick) {
-				this.attack(attackForTick, renderTime);
-			}
+		let attackForTick = this.getAttackTarget();
+		this.isFiring = attackForTick != null;
+		if (attackForTick) {
+			this.attack(attackForTick, renderTime);
 		}
 	}
 
@@ -263,7 +256,7 @@ Unit.update = function(renderTime, timeDelta, tweening) {
 		// Attack
 		for (let idx = 0; idx < allUnits.length; idx += 1) {
 			const unit = allUnits[idx];
-			if (!unit.isDead) {
+			if (!unit.isDead && unit.readyToAttack(renderTime)) {
 				unit.checkAttack(renderTime);
 			}
 		}
