@@ -121,7 +121,7 @@ class Ship extends Movable {
 		this.stats.attackCooldown += this.statBase.attackCooldown[1];
 
 		this.stats.sightRangeCheck = Util.squared(this.stats.sightRange);
-		this.stats.attackRangeCheck = Util.squared(this.stats.attackRangeCheck);
+		this.stats.attackRangeCheck = Util.squared(this.stats.attackRange);
 
 		this.updateHealth();
 	}

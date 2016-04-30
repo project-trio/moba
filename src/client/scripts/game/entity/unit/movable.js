@@ -22,6 +22,11 @@ class Movable extends Unit {
 
 	// Position
 
+	processDestination(x, y) {
+		const dest = this.requestedDestination(x, y);
+		this.setDestination(dest[0], dest[1], dest[2], dest[3]);
+	}
+
 	requestedDestination(x, y) {
 		x = Math.round(x * 1000);
 		y = Math.round(y * 1000);
@@ -68,8 +73,8 @@ class Movable extends Unit {
 
 	// Move
 
-	nextDestination() {
-		return false;
+	reachedDestination() {
+
 	}
 
 	move(timeDelta, tweening) {
@@ -81,6 +86,18 @@ class Movable extends Unit {
 		} else {
 			cx = this.px;
 			cy = this.py;
+			if (this.moveToTarget && this.attackTarget) {
+				if (this.canSee(this.attackTarget)) {
+					if (this.inAttackRange(this.attackTarget)) {
+						return true;
+					}
+					this.processDestination(this.attackTarget.px * 0.001, this.attackTarget.py * 0.001);
+				} else {
+					this.attackTarget = null;
+					this.isMoving = false;
+					return false;
+				}
+			}
 		}
 		const dx = Math.floor(this.moveX * this.stats.moveSpeed * timeDelta / 200);
 		const dy = Math.floor(this.moveY * this.stats.moveSpeed * timeDelta / 200);
@@ -103,8 +120,9 @@ class Movable extends Unit {
 			} else {
 				reached = false;
 			}
-			if (reached && !this.nextDestination()) {
+			if (reached) {
 				this.isMoving = false;
+				this.reachedDestination();
 			}
 
 			// Walls
@@ -139,9 +157,9 @@ class Movable extends Unit {
 
 			//Units
 			if (!willBlock) {
-				const units = Unit.all();
-				for (let idx in units) {
-					const unit = units[idx];
+				const allUnits = Unit.all();
+				for (let idx = 0; idx < allUnits.length; idx += 1) {
+					const unit = allUnits[idx];
 					if (unit.isBlocking && this.id != unit.id) {
 						const dist = Util.pointDistance(movingToX, movingToY, unit.px, unit.py);
 						if (dist < 4000000000 && Util.withinSquared(dist, collisionSize + unit.stats.collision)) {
@@ -159,6 +177,7 @@ class Movable extends Unit {
 				this.py = movingToY;
 			}
 		}
+		return this.isMoving;
 	}
 
 	die(time) {

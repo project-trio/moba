@@ -110,8 +110,8 @@ class Unit {
 		this.top.rotation.z = angle;
 	}
 
-	distanceTo(enemy) {
-		return Util.pointDistance(this.px, this.py, enemy.px, enemy.py);
+	distanceTo(unit) {
+		return Util.pointDistance(this.px, this.py, unit.px, unit.py);
 	}
 
 	// Health
@@ -192,8 +192,12 @@ class Unit {
 		return enemy.isDead || enemy.hasActiveFire() || this.distanceTo(enemy) < this.stats.sightRangeCheck;
 	}
 
-	canAttack(enemy) {
-		return !enemy.hasDied() && !this.alliedTo(enemy) && this.distanceTo(enemy) < this.stats.attackRangeCheck;
+	inAttackRange(enemy) {
+		return this.distanceTo(enemy) < this.stats.attackRangeCheck;
+	}
+
+	canAttack(unit) {
+		return !unit.hasDied() && !this.alliedTo(unit) && this.inAttackRange(unit);
 	}
 
 	attack(enemy, renderTime) {
@@ -205,28 +209,33 @@ class Unit {
 		return renderTime - this.lastAttack > this.stats.attackCooldown * 100;
 	}
 
+	shouldTarget(unit) {
+		return this.canAttack(unit);
+	}
+
 	getAttackTarget() {
 		if (this.attackTarget) {
-			if (this.canAttack(this.attackTarget)) {
+			if (this.shouldTarget(this.attackTarget)) {
 				return this.attackTarget;
 			}
 			this.setTarget(null);
 		}
 		for (let idx = 0; idx < allUnits.length; idx += 1) {
-			const enemy = allUnits[idx];
-			if (this.canAttack(enemy)) {
+			const unit = allUnits[idx];
+			if (this.shouldTarget(unit)) {
 				if (!this.attackTarget) {
-					this.setTarget(enemy);
+					this.setTarget(unit);
 				}
-				return enemy;
+				return unit;
 			}
 		}
+		return null;
 	}
 
 	checkAttack(renderTime) {
 		let attackForTick = this.getAttackTarget();
-		this.isFiring = attackForTick != null;
-		if (attackForTick) {
+		this.isFiring = attackForTick && this.inAttackRange(attackForTick);
+		if (this.isFiring) {
 			this.attack(attackForTick, renderTime);
 		}
 	}
