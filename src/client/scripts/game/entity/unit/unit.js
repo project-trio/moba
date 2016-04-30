@@ -159,6 +159,12 @@ class Unit {
 
 	// Attack
 
+	updateAim() {
+		if (this.attackTarget) {
+			this.top.rotation.z = Util.angleBetween(this, this.attackTarget) + Math.PI;
+		}
+	}
+
 	incoming(increment) {
 		this.incomingAttackers += increment;
 	}
@@ -238,15 +244,20 @@ Unit.addBase = function(unit) {
 };
 
 Unit.update = function(renderTime, timeDelta, tweening) {
+	// Tween
 	for (let idx = 0; idx < allUnits.length; idx += 1) {
 		const unit = allUnits[idx];
-		if (tweening && (!unit.isRendering || unit.blocked)) {
+		if (unit.isDead || (tweening && (!unit.isRendering || unit.blocked))) {
 			continue;
 		}
+
+		unit.updateAim();
+
 		if (unit.isMoving) {
 			unit.move(timeDelta, tweening);
 		}
 	}
+
 	if (!tweening) {
 		// Move
 		for (let idx = 0; idx < allUnits.length; idx += 1) {

@@ -2,7 +2,6 @@
 
 const Local = require('local');
 
-const Util = require('game/util/util');
 const Render = require('game/util/render');
 
 const Unit = require('game/entity/unit/unit');
@@ -100,12 +99,6 @@ class Tower extends Unit {
 		if (this.towerType == 'base') {
 			Local.game.end(this.team);
 		}
-	}
-
-	attack(enemy, renderTime) {
-		super.attack(enemy, renderTime);
-
-		this.top.rotation.z = Util.angleBetween(this, enemy) + Math.PI;
 	}
 
 }
