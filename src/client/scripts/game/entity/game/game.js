@@ -18,7 +18,6 @@ const Game = function(gid, size) {
 	let players = {};
 	let teamSize = size;
 	let startTime;
-	let serverUpdateTime;
 
 	let updateCount = 0;
 	let updateQueue = {};
@@ -48,6 +47,9 @@ const Game = function(gid, size) {
 		if (ticksToRender <= 0) {
 			return false;
 		}
+		if (ticksToRender > 1) {
+			console.log(ticksToRender);
+		}
 
 		while (ticksToRender > 0) {
 			if (ticksRendered % ticksPerUpdate == 1) {
@@ -60,7 +62,6 @@ const Game = function(gid, size) {
 			Unit.update(renderTime, tickDuration, false);
 
 			if (renderTime % 45000 == 5000) {
-				console.log('Spawn wave', ticksRendered, renderTime);
 				Wave.spawn(map.minionData());
 			}
 
@@ -110,23 +111,16 @@ const Game = function(gid, size) {
 	this.enqueueUpdate = function(update, moves) {
 		this.serverUpdate = update;
 		updateQueue[update] = moves;
-
-		const currentTime = Date.now();
-		const updateDiff = currentTime - serverUpdateTime;
-		if (updateDiff > 0) {
-			lastTickTime += updateDiff - updateDuration;
-			serverUpdateTime = currentTime;
-		}
 	};
 
 	this.start = function(_updateDuration, _tickDuration) {
-		console.log(Local.playerId, players);
 		Local.player = players[Local.playerId];
 
 		updateDuration = _updateDuration;
 		tickDuration = _tickDuration;
 		ticksPerUpdate = updateDuration / tickDuration;
 		console.log('STARTED ' + updateDuration + ' ' + tickDuration + ' ' + ticksPerUpdate);
+		console.log(Local.playerId, players);
 
 		const mapType = teamSize <= 1 ? 'tiny' : (teamSize <= 3 ? 'small' : ('standard'));
 		map.build(mapType);
@@ -141,7 +135,6 @@ const Game = function(gid, size) {
 
 		status = 'STARTED';
 		startTime = Date.now();
-		serverUpdateTime = startTime;
 		lastTickTime = startTime;
 		this.enqueueUpdate(0, {});
 
