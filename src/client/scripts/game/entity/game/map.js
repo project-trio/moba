@@ -178,14 +178,16 @@ const GameMap = function(parent) {
 
 		let automateTimer;
 		Render.on(ground, 'mousedown', (event) => {
-			const clickPoint = event.intersect.point;
-			const diffX = Math.round(clickPoint.x) - previousCameraX;
-			const diffY = Math.round(clickPoint.y) - previousCameraY;
-			const dest = Local.player.unit.requestedDestination(diffX, diffY);
-			Bridge.emit('update', {dest: dest});
-			if (automateTimer) {
-				clearInterval(automateTimer);
-				automateTimer = null;
+			if (Local.player.unit.canMove()) {
+				const clickPoint = event.intersect.point;
+				const diffX = Math.round(clickPoint.x) - previousCameraX;
+				const diffY = Math.round(clickPoint.y) - previousCameraY;
+				const dest = Local.player.unit.requestedDestination(diffX, diffY);
+				Bridge.emit('update', {dest: dest});
+				if (automateTimer) {
+					clearInterval(automateTimer);
+					automateTimer = null;
+				}
 			}
 		});
 

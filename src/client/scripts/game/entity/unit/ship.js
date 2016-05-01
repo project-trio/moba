@@ -61,6 +61,10 @@ class Ship extends Movable {
 
 	}
 
+	canMove() {
+		return !this.isDying;
+	}
+
 	// Health
 
 	doRegenerate() {
