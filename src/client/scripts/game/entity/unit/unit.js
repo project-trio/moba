@@ -170,14 +170,15 @@ class Unit {
 	}
 
 	setTarget(target) {
-		if (target) {
-			if (this.attackTarget != target) {
-				target.incoming(1);
+		if (target != this.attackTarget) {
+			if (this.attackTarget) {
+				this.attackTarget.incoming(-1);
 			}
-		} else if (this.attackTarget) {
-			this.attackTarget.incoming(-1);
+			if (target) {
+				target.incoming(1);
+			} 
+			this.attackTarget = target;
 		}
-		this.attackTarget = target;
 	}
 
 	hasActiveFire() {
