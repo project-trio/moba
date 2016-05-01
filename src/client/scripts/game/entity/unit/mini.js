@@ -33,7 +33,7 @@ const MINI_STATS = {
 
 		moveSpeed: [12, 0, 0],
 		collision: 10,
-	}
+	},
 };
 
 let mapWidth, mapHeight; //TODO

@@ -25,7 +25,7 @@ const SHIP_STATS = {
 
 		moveSpeed: [14 * 2, 0, 0], //TODO
 		collision: 20
-	}
+	},
 };
 
 //CLASS
