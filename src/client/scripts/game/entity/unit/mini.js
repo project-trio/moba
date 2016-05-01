@@ -109,7 +109,7 @@ class Mini extends Movable {
 	}
 
 	shouldTarget(unit) {
-		return !this.alliedTo(unit) && this.canSee(unit);
+		return !this.hasDied() && !this.alliedTo(unit) && this.inSightRange(unit);
 	}
 
 	move(timeDelta, tweening) {

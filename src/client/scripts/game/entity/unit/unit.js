@@ -188,8 +188,12 @@ class Unit {
 		return this.team == target.team;
 	}
 
+	inSightRange(enemy) {
+		return this.distanceTo(enemy) < this.stats.sightRangeCheck;
+	}
+
 	canSee(enemy) {
-		return enemy.isDead || enemy.hasActiveFire() || this.distanceTo(enemy) < this.stats.sightRangeCheck;
+		return enemy.isDead || enemy.hasActiveFire() || this.inSightRange(enemy);
 	}
 
 	inAttackRange(enemy) {
