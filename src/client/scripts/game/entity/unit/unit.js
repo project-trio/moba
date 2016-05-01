@@ -52,7 +52,7 @@ class Unit {
 			moveSpeed: statBase.moveSpeed[0],
 			collision: statBase.collision * 1000,
 		};
-		this.stats.health = this.stats.healthMax;
+		this.healthRemaining = this.stats.healthMax;
 		this.stats.sightRangeCheck = Util.squared(this.stats.sightRange);
 		this.stats.attackRangeCheck = Util.squared(this.stats.attackRange);
 		// this.stats.collisionCheck = Util.squared(this.stats.collision);
@@ -135,14 +135,14 @@ class Unit {
 	// Health
 
 	hasDied() {
-		return this.stats.health <= 0;
+		return this.healthRemaining <= 0;
 	}
 
 	updateHealth(newHealth) {
 		if (newHealth != null) {
-			this.stats.health = newHealth;
+			this.healthRemaining = newHealth;
 		} else {
-			newHealth = this.stats.health;
+			newHealth = this.healthRemaining;
 		}
 		const healthScale = newHealth / this.stats.healthMax;
 		this.healthBar.scale.x = healthScale;
@@ -150,16 +150,16 @@ class Unit {
 	}
 
 	addHealth(addedHealth) {
-		if (this.stats.health == this.stats.healthMax) {
+		if (this.healthRemaining == this.stats.healthMax) {
 			return;
 		}
 
-		const newHealth = Math.min(this.stats.health + addedHealth, this.stats.healthMax);
+		const newHealth = Math.min(this.healthRemaining + addedHealth, this.stats.healthMax);
 		this.updateHealth(newHealth);
 	}
 
 	doDamage(amount) {
-		const newHealth = Math.max(this.stats.health - amount, 0);
+		const newHealth = Math.max(this.healthRemaining - amount, 0);
 		this.updateHealth(newHealth);
 	}
 
