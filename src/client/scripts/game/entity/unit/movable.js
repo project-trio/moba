@@ -147,7 +147,7 @@ class Movable extends Unit {
 						}
 					} else {
 						const dist = Util.pointDistance(x, y, movingToX, movingToY);
-						if (dist < 4000000000 && Util.withinSquared(dist, collisionSize + w)) {
+						if (Util.withinSquared(dist, collisionSize + w)) {
 							willBlock = true;
 							break;
 						}
@@ -162,7 +162,7 @@ class Movable extends Unit {
 					const unit = allUnits[idx];
 					if (unit.isBlocking && this.id != unit.id) {
 						const dist = Util.pointDistance(movingToX, movingToY, unit.px, unit.py);
-						if (dist < 4000000000 && Util.withinSquared(dist, collisionSize + unit.stats.collision)) {
+						if (Util.withinSquared(dist, collisionSize + unit.stats.collision)) {
 							willBlock = true;
 							break;
 						}
