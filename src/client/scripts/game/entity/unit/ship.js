@@ -68,7 +68,9 @@ class Ship extends Movable {
 	}
 
 	die(time) {
+		this.opacity(0.5);
 		this.respawned = false;
+		this.setTarget(null);
 		// this.sightCircle.radius = Local.shipSize;
 
 		super.die(time);
@@ -76,10 +78,8 @@ class Ship extends Movable {
 
 	respawn() {
 		this.respawned = true;
-		this.container.cacheAsBitmap = false;
-		this.healthContainer.visible = false;
-		this.healthBar.visible = true;
 		this.isBlocking = false;
+		this.isDying = false;
 
 		const spawnAt = this.player.spawnLocation();
 		this.setLocation(spawnAt[0], spawnAt[1]);
@@ -90,7 +90,8 @@ class Ship extends Movable {
 		this.timeOfDeath = null;
 		this.isBlocking = true;
 
-		this.setTarget(null);
+		this.opacity(1.0);
+		this.healthContainer.visible = true;
 	}
 
 	reemerge() {
@@ -146,7 +147,9 @@ class Ship extends Movable {
 						if (!this.respawned) {
 							this.respawn();
 						} else if (deathDuration > waitToRespawn + 1000 * this.level) {
-							this.reemerge();
+							if (!this.blocked()) {
+								this.reemerge();
+							}
 						}
 					}
 				}

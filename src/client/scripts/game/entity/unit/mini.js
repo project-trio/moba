@@ -82,8 +82,11 @@ class Mini extends Movable {
 		this.currentDest = null;
 	}
 
-	setCurrentDestination() {
-		this.processDestination(this.currentDest[0], this.currentDest[1]);
+	applyCurrentDestination() {
+		if (this.currentDest) {
+			this.processDestination(this.currentDest[0], this.currentDest[1]);
+			return true;
+		}
 	}
 
 	reachedDestination() {
@@ -97,7 +100,7 @@ class Mini extends Movable {
 			this.pathProgress += 1;
 		}
 		if (this.updateDestination()) {
-			this.setCurrentDestination();
+			this.applyCurrentDestination();
 			return true;
 		}
 	}
@@ -109,12 +112,14 @@ class Mini extends Movable {
 	}
 
 	shouldTarget(unit) {
-		return !this.hasDied() && !this.alliedTo(unit) && this.inSightRange(unit);
+		return !this.isDead && !this.alliedTo(unit) && this.inSightRange(unit);
 	}
 
 	move(timeDelta, tweening) {
 		if (!super.move(timeDelta, tweening)) {
-			this.setCurrentDestination();
+			if (this.applyCurrentDestination()) {
+				this.isMoving = true;
+			}
 		}
 	}
 

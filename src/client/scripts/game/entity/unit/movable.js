@@ -43,10 +43,6 @@ class Movable extends Unit {
 	}
 
 	setDestination(x, y, moveX, moveY) {
-		if (this.isDead) {
-			return false;
-		}
-
 		this.top.rotation.z = Util.atan(moveX, moveY);
 		this.isMoving = true;
 		this.destX = x;
@@ -145,8 +141,13 @@ class Movable extends Unit {
 				}
 			}
 		}
-		const dx = Math.floor(this.moveX * this.stats.moveSpeed * timeDelta / 200);
-		const dy = Math.floor(this.moveY * this.stats.moveSpeed * timeDelta / 200);
+
+		let moveSpeed = this.stats.moveSpeed * timeDelta / 200;
+		if (this.isDead) {
+			moveSpeed *= 0.5;
+		}
+		const dx = Math.floor(this.moveX * moveSpeed);
+		const dy = Math.floor(this.moveY * moveSpeed);
 
 		let movingToX = cx + dx;
 		let movingToY = cy + dy;

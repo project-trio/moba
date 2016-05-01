@@ -160,13 +160,16 @@ class Unit {
 
 	doDamage(amount) {
 		const newHealth = Math.max(this.healthRemaining - amount, 0);
+		if (newHealth == 0) {
+			this.isDying = true;
+		}
 		this.updateHealth(newHealth);
 	}
 
 	die(time) {
 		this.isDead = true;
 		this.timeOfDeath = time;
-		this.healthBar.visible = false;
+		this.healthContainer.visible = false;
 	}
 
 	destroy() {
@@ -212,7 +215,7 @@ class Unit {
 	}
 
 	canSee(enemy) {
-		return enemy.isDead || enemy.hasActiveFire() || this.inSightRange(enemy);
+		return enemy.isDying || enemy.hasActiveFire() || this.inSightRange(enemy);
 	}
 
 	inAttackRange(enemy) {
@@ -279,12 +282,14 @@ Unit.update = function(renderTime, timeDelta, tweening) {
 	// Tween
 	for (let idx = 0; idx < allUnits.length; idx += 1) {
 		const unit = allUnits[idx];
-		if (unit.isDead || (tweening && (!unit.isRendering || unit.blocked))) {
+		if (unit.isDying) {
 			continue;
 		}
-
 		unit.updateAim();
 
+		if (tweening && (!unit.isRendering || unit.isBlocked)) {
+			continue;
+		}
 		if (unit.isMoving) {
 			unit.move(timeDelta, tweening);
 		}
@@ -308,7 +313,7 @@ Unit.update = function(renderTime, timeDelta, tweening) {
 		// Die
 		for (let idx = allUnits.length - 1; idx >= 0; idx -= 1) {
 			const unit = allUnits[idx];
-			if (unit.hasDied() && !unit.isDead) {
+			if (unit.isDying && !unit.isDead) {
 				unit.die(renderTime);
 				if (unit.remove) {
 					allUnits.splice(idx, 1);
