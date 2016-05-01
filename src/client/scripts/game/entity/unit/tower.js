@@ -88,11 +88,7 @@ class Tower extends Unit {
 		this.isBlocking = false;
 		this.container.position.z = -44;
 
-		const baseMesh = this.base.children[0];
-		if (baseMesh) {
-			baseMesh.material.transparent = true;
-			baseMesh.material.opacity = 0.5;
-		}
+		this.opacity(0.5);
 
 		super.die(time);
 

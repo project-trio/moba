@@ -11,6 +11,16 @@ const allUnits = [];
 
 //CLASS
 
+const applyOpacity = function(container, isTransluscent, opacity) {
+	const mesh = container.children[0];
+	if (mesh) {
+		mesh.material.transparent = isTransluscent;
+		if (isTransluscent) {
+			mesh.material.opacity = opacity;
+		}
+	}
+};
+
 class Unit {
 
 	// Constructor
@@ -92,6 +102,14 @@ class Unit {
 		if (x) {
 			this.setLocation(x, y);
 		}
+	}
+
+	// Render
+
+	opacity(opacity) {
+		const isTransluscent = opacity < 1;
+		applyOpacity(this.base, isTransluscent, opacity);
+		applyOpacity(this.top, isTransluscent, opacity);
 	}
 
 	// Geometry
