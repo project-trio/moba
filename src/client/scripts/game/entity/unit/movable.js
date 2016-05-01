@@ -77,6 +77,52 @@ class Movable extends Unit {
 
 	}
 
+	blocked(bx, by) {
+		if (!bx) {
+			bx = this.px;
+			by = this.py;
+		}
+
+		// Walls
+		const walls = Local.game.map.blockCheck(bx, by);
+		const collisionSize = this.stats.collision;
+		if (walls) {
+			const ux1 = bx - collisionSize * 0.5;
+			const uy1 = by - collisionSize * 0.5;
+			const ux2 = ux1 + collisionSize;
+			const uy2 = uy1 + collisionSize;
+			for (let idx in walls) {
+				const wall = walls[idx];
+				const x = wall[0];
+				const y = wall[1];
+				const w = wall[2];
+				const h = wall[3];
+				if (h) {
+					if (rectanglesIntersecting(x, y, x + w, y + h, ux1, uy1, ux2, uy2)) {
+						return true;
+					}
+				} else {
+					const dist = Util.pointDistance(x, y, bx, by);
+					if (Util.withinSquared(dist, collisionSize + w)) {
+						return true;
+					}
+				}
+			}
+		}
+
+		// Units
+		const allUnits = Unit.all();
+		for (let idx = 0; idx < allUnits.length; idx += 1) {
+			const unit = allUnits[idx];
+			if (unit.isBlocking && this.id != unit.id) {
+				const dist = Util.pointDistance(bx, by, unit.px, unit.py);
+				if (Util.withinSquared(dist, collisionSize + unit.stats.collision)) {
+					return true;
+				}
+			}
+		}
+	}
+
 	move(timeDelta, tweening) {
 		let cx, cy;
 		if (tweening) {
@@ -126,53 +172,10 @@ class Movable extends Unit {
 			}
 
 			// Walls
-			const walls = Local.game.map.blockCheck(movingToX, movingToY);
-			let willBlock = walls == null;
-			const collisionSize = this.stats.collision;
-			if (!willBlock) {
-				const ux1 = movingToX - collisionSize * 0.5;
-				const uy1 = movingToY - collisionSize * 0.5;
-				const ux2 = ux1 + collisionSize;
-				const uy2 = uy1 + collisionSize;
-				for (let idx in walls) {
-					const wall = walls[idx];
-					const x = wall[0];
-					const y = wall[1];
-					const w = wall[2];
-					const h = wall[3];
-					if (h) {
-						if (rectanglesIntersecting(x, y, x + w, y + h, ux1, uy1, ux2, uy2)) {
-							willBlock = true;
-							break;
-						}
-					} else {
-						const dist = Util.pointDistance(x, y, movingToX, movingToY);
-						if (Util.withinSquared(dist, collisionSize + w)) {
-							willBlock = true;
-							break;
-						}
-					}
-				}
-			}
-
-			//Units
-			if (!willBlock) {
-				const allUnits = Unit.all();
-				for (let idx = 0; idx < allUnits.length; idx += 1) {
-					const unit = allUnits[idx];
-					if (unit.isBlocking && this.id != unit.id) {
-						const dist = Util.pointDistance(movingToX, movingToY, unit.px, unit.py);
-						if (Util.withinSquared(dist, collisionSize + unit.stats.collision)) {
-							willBlock = true;
-							break;
-						}
-					}
-				}
-			}
 
 			// Move
-			this.blocked = willBlock;
-			if (!willBlock) {
+			this.isBlocked = this.blocked(movingToX, movingToY);
+			if (!this.isBlocked) {
 				this.px = movingToX;
 				this.py = movingToY;
 			}
