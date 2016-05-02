@@ -42,6 +42,10 @@ const Game = function(gid, size) {
 	let ticksRenderedLastUpdate = 0;
 	let lastTickTime;
 
+	this.logTicksRendered = function() {
+		console.log(ticksRendered);
+	};
+
 	this.ticksToRender = function(currentTime) {
 		return Math.floor((currentTime - lastTickTime) / tickDuration);
 	};
@@ -83,7 +87,7 @@ const Game = function(gid, size) {
 
 		const ticksToRender = ticksRendered - ticksRenderedLastUpdate;
 		ticksRenderedLastUpdate = ticksRendered;
-		if (ticksToRender != ticksPerUpdate) {
+		if (updateCount > 0 && ticksToRender != ticksPerUpdate) {
 			console.log('Dequeue update', updateCount, ticksToRender);
 		}
 		++updateCount;
