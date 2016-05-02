@@ -104,7 +104,7 @@ class Mini extends Movable {
 	}
 
 	shouldMove() {
-		return this.currentDest != null && (!this.attackTarget || this.attackTarget.isDead);
+		return this.currentDest != null;
 	}
 
 	die(time) {

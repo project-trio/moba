@@ -28,7 +28,9 @@ class Unit {
 	constructor(team, statBase, x, y, startAngle) {
 		this.team = team;
 		this.startAngle = startAngle;
+
 		this.movable = false;
+		this.attackTarget = null;
 
 		this.container = Render.group();
 		this.base = Render.group();
