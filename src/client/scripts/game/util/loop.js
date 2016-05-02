@@ -12,15 +12,14 @@ let lastUpdate = 0;
 
 var updatePanel, framePanel;
 // if (Local.TESTING) {
-	setTimeout(() => {
-		updatePanel = new Stats();
-		updatePanel.showPanel(1);
-		document.body.appendChild(updatePanel.dom);
-
-		// framePanel = new Stats();
-		// framePanel.showPanel(0);
-		// document.body.appendChild(framePanel.dom);
-	}, 5000);
+	updatePanel = new Stats();
+	updatePanel.showPanel(1);
+	document.body.appendChild(updatePanel.dom);
+	// setTimeout(() => {
+	// 	framePanel = new Stats();
+	// 	framePanel.showPanel(0);
+	// 	document.body.appendChild(framePanel.dom);
+	// }, 5000);
 // }
 
 //LOOP
@@ -35,11 +34,12 @@ const animate = function() {
 		if (game.running) {
 			const ticksToRender = game.ticksToRender(currentTime);
 			if (ticksToRender > 0) {
-				if (updatePanel && ticksToRender == 1) {
+				const processUpdate = updatePanel && ticksToRender == 1;
+				if (processUpdate) {
 					updatePanel.begin();
 				}
 				game.performTicks(ticksToRender, currentTime);
-				if (updatePanel) {
+				if (processUpdate) {
 					updatePanel.end();
 				}
 			} else {
