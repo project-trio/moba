@@ -106,10 +106,12 @@ class Movable extends Unit {
 
 	move(timeDelta, tweening) {
 		let cx, cy;
+		let movingX, movingY;
 		if (tweening) {
-			const position = this.container.position;
-			cx = position.x;
-			cy = position.y;
+			cx = this.container.position.x;
+			cy = this.container.position.y;
+			movingX = this.movingX;
+			movingY = this.movingY;
 		} else {
 			cx = this.px;
 			cy = this.py;
@@ -126,27 +128,30 @@ class Movable extends Unit {
 				}
 			}
 
-		let moveSpeed = this.stats.moveSpeed * timeDelta / 200;
-		if (this.isDead) {
-			moveSpeed *= 0.5;
+			let moveSpeed = this.stats.moveSpeed * timeDelta / 200;
+			if (this.isDead) {
+				moveSpeed *= 0.5;
+			}
+			movingX = this.moveX * moveSpeed;
+			movingY = this.moveY * moveSpeed;
+			this.movingX = movingX;
+			this.movingY = movingY;
 		}
-		const dx = Math.floor(this.moveX * moveSpeed);
-		const dy = Math.floor(this.moveY * moveSpeed);
 
-		let movingToX = cx + dx;
-		let movingToY = cy + dy;
+		let movingToX = cx + movingX;
+		let movingToY = cy + movingY;
 		if (tweening) {
 			this.updatePosition(movingToX, movingToY);
 		} else {
 			const distX = this.destX - cx;
 			const distY = this.destY - cy;
 			let reached = true;
-			if (Math.abs(distX) <= Math.abs(dx) || (distX < 0 ? dx > 0 : dx < 0)) {
+			if (Math.abs(distX) <= Math.abs(movingX) || (distX < 0 ? movingX > 0 : movingX < 0)) {
 				movingToX = this.destX;
 			} else {
 				reached = false;
 			}
-			if (Math.abs(distY) <= Math.abs(dy) || (distY < 0 ? dy > 0 : dy < 0)) {
+			if (Math.abs(distY) <= Math.abs(movingY) || (distY < 0 ? movingY > 0 : movingY < 0)) {
 				movingToY = this.destY;
 			} else {
 				reached = false;
@@ -159,6 +164,7 @@ class Movable extends Unit {
 			if (!this.isBlocked) {
 				this.px = movingToX;
 				this.py = movingToY;
+				this.updatePosition(movingToX, movingToY);
 			}
 		}
 	}

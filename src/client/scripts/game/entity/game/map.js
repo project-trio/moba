@@ -154,7 +154,7 @@ const GameMap = function(parent) {
 	};
 
 	const createWallCap = function(vertical, x, y, radius) {
-		radius = Math.round(radius / 2);
+		radius = radius / 2;
 		walls.push([x, y, radius]);
 
 		Render.wallCap(x, y, radius, {
