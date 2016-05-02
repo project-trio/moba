@@ -9,30 +9,39 @@ const Render = require('game/util/render');
 const Unit = require('game/entity/unit/unit');
 
 let lastUpdate = 0;
-let lastTick = 0;
 
-var stats;
+var updatePanel, framePanel;
 // if (Local.TESTING) {
 	setTimeout(() => {
-		stats = new Stats();
-		stats.showPanel(1);
-		document.body.appendChild(stats.dom);
+		updatePanel = new Stats();
+		updatePanel.showPanel(1);
+		document.body.appendChild(updatePanel.dom);
+
+		// framePanel = new Stats();
+		// framePanel.showPanel(0);
+		// document.body.appendChild(framePanel.dom);
 	}, 5000);
 // }
 
 //LOOP
 
 const animate = function() {
-	if (stats) {
-		stats.begin();
+	if (framePanel) {
+		framePanel.begin();
 	}
-
 	const currentTime = Date.now();
 	const game = Local.game;
 	if (game) {
 		if (game.running) {
-			if (game.performTicks(currentTime)) {
-				lastTick = currentTime;
+			const ticksToRender = game.ticksToRender(currentTime);
+			if (ticksToRender > 0) {
+				if (updatePanel && ticksToRender == 1) {
+					updatePanel.begin();
+				}
+				game.performTicks(ticksToRender, currentTime);
+				if (updatePanel) {
+					updatePanel.end();
+				}
 			} else {
 				const timeDelta = currentTime - lastUpdate;
 				Unit.update(currentTime, timeDelta, true);
@@ -42,8 +51,8 @@ const animate = function() {
 	}
 	lastUpdate = currentTime;
 
-	if (stats) {
-		stats.end();
+	if (framePanel) {
+		framePanel.end();
 	}
 	window.requestAnimationFrame(animate);
 };
@@ -53,7 +62,7 @@ const animate = function() {
 module.exports = {
 
 	start: function() {
-		animate();
+		window.requestAnimationFrame(animate);
 	},
 
 };

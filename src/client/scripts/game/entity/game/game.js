@@ -42,12 +42,11 @@ const Game = function(gid, size) {
 	let ticksRenderedLastUpdate = 0;
 	let lastTickTime;
 
-	this.performTicks = function(currentTime) {
-		let ticksToRender = Math.floor((currentTime - lastTickTime) / tickDuration);
-		if (ticksToRender <= 0) {
-			return false;
-		}
+	this.ticksToRender = function(currentTime) {
+		return Math.floor((currentTime - lastTickTime) / tickDuration);
+	};
 
+	this.performTicks = function(ticksToRender, currentTime) {
 		while (ticksToRender > 0) {
 			if (ticksRendered % ticksPerUpdate == 0) {
 				if (!dequeueUpdate()) {
