@@ -106,13 +106,27 @@ class Movable extends Unit {
 		this.isMoving = false;
 	}
 
+	updateMoveTarget() {
+		if (this.attackTarget && this.moveToTarget) {
+			if (this.canSee(this.attackTarget)) {
+				this.isAttackingTarget = this.inAttackRange(this.attackTarget);
+				if (!this.isAttackingTarget) {
+					this.setDestination(this.attackTarget.px, this.attackTarget.py);
+				}
+			} else {
+				this.setTarget(null);
+				this.reachedDestination(false);
+			}
+		}
+	}
+
 	move(timeDelta, tweening) {
+		if (this.isAttackingTarget) {
+			return;
+		}
 		let cx, cy;
 		let movingX, movingY;
 		if (tweening) {
-			if (this.isAttackingTarget) {
-				return;
-			}
 			cx = this.container.position.x;
 			cy = this.container.position.y;
 			movingX = this.movingX;
@@ -120,19 +134,6 @@ class Movable extends Unit {
 		} else {
 			cx = this.px;
 			cy = this.py;
-			if (this.attackTarget && this.moveToTarget) {
-				if (this.canSee(this.attackTarget)) {
-					this.isAttackingTarget = this.inAttackRange(this.attackTarget);
-					if (this.isAttackingTarget) {
-						return;
-					}
-					this.setDestination(this.attackTarget.px, this.attackTarget.py);
-				} else {
-					this.setTarget(null);
-					this.reachedDestination(false);
-					return;
-				}
-			}
 
 			let moveSpeed = this.stats.moveSpeed * timeDelta / 200;
 			if (this.isDead) {

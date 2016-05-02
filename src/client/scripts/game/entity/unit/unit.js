@@ -286,7 +286,7 @@ Unit.addBase = function(unit) {
 };
 
 Unit.update = function(renderTime, timeDelta, tweening) {
-	// Tween
+	// Move
 	for (let idx = 0; idx < allUnits.length; idx += 1) {
 		const unit = allUnits[idx];
 		if (unit.isDying) {
@@ -303,7 +303,7 @@ Unit.update = function(renderTime, timeDelta, tweening) {
 	}
 
 	if (!tweening) {
-		// Move
+		// Update
 		for (let idx = 0; idx < allUnits.length; idx += 1) {
 			const unit = allUnits[idx];
 			if (unit.update) {
@@ -325,6 +325,13 @@ Unit.update = function(renderTime, timeDelta, tweening) {
 				if (unit.remove) {
 					allUnits.splice(idx, 1);
 				}
+			}
+		}
+		// Target
+		for (let idx = 0; idx < allUnits.length; idx += 1) {
+			const unit = allUnits[idx];
+			if (!unit.isDead && unit.movable) {
+				unit.updateMoveTarget();
 			}
 		}
 	}
