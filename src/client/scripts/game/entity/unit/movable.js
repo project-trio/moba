@@ -18,7 +18,7 @@ class Movable extends Unit {
 		super(team, statBase, x, y, startAngle);
 
 		this.movable = true;
-		this.attackingTarget = false;
+		this.moveToTarget = false;
 	}
 
 	// Position
@@ -34,7 +34,7 @@ class Movable extends Unit {
 		this.moveX =  Math.cos(moveAngle);
 		this.moveY = Math.sin(moveAngle);
 		this.isMoving = true;
-		this.cancelTarget();
+		this.setTarget(null);
 	}
 
 	updatePosition(moveToX, moveToY) {
@@ -106,16 +106,11 @@ class Movable extends Unit {
 		this.isMoving = false;
 	}
 
-	cancelTarget() {
-		this.attackTarget = null;
-		this.attackingTarget = false;
-	}
-
 	move(timeDelta, tweening) {
 		let cx, cy;
 		let movingX, movingY;
 		if (tweening) {
-			if (this.attackingTarget) {
+			if (this.isAttackingTarget) {
 				return;
 			}
 			cx = this.container.position.x;
@@ -127,13 +122,13 @@ class Movable extends Unit {
 			cy = this.py;
 			if (this.attackTarget && this.moveToTarget) {
 				if (this.canSee(this.attackTarget)) {
-					this.attackingTarget = this.inAttackRange(this.attackTarget);
-					if (this.attackingTarget) {
+					this.isAttackingTarget = this.inAttackRange(this.attackTarget);
+					if (this.isAttackingTarget) {
 						return;
 					}
 					this.setDestination(this.attackTarget.px, this.attackTarget.py);
 				} else {
-					this.cancelTarget();
+					this.setTarget(null);
 					this.reachedDestination(false);
 					return;
 				}

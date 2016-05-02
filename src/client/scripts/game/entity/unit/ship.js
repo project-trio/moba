@@ -65,6 +65,12 @@ class Ship extends Movable {
 		return !this.isDying;
 	}
 
+	setDestination(x, y) {
+		super.setDestination(x, y);
+
+		this.moveToTarget = false;
+	}
+
 	// Health
 
 	doRegenerate() {

@@ -31,6 +31,7 @@ class Unit {
 
 		this.movable = false;
 		this.attackTarget = null;
+		this.isAttackingTarget = false;
 
 		this.container = Render.group();
 		this.base = Render.group();
@@ -197,7 +198,9 @@ class Unit {
 			}
 			if (target) {
 				target.incoming(1);
-			} 
+			} else {
+				this.isAttackingTarget = false;
+			}
 			this.attackTarget = target;
 		}
 	}
