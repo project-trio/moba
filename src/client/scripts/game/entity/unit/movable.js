@@ -50,10 +50,6 @@ class Movable extends Unit {
 
 	// Move
 
-	reachedDestination() {
-
-	}
-
 	blocked(bx, by) {
 		if (!bx) {
 			bx = this.px;
@@ -100,6 +96,14 @@ class Movable extends Unit {
 		}
 	}
 
+	shouldMove() {
+		return this.isMoving;
+	}
+
+	reachedDestination(needsNewDestination) {
+		this.isMoving = false;
+	}
+
 	move(timeDelta, tweening) {
 		let cx, cy;
 		if (tweening) {
@@ -109,19 +113,18 @@ class Movable extends Unit {
 		} else {
 			cx = this.px;
 			cy = this.py;
-			if (this.moveToTarget && this.attackTarget) {
+			if (this.attackTarget && this.moveToTarget) {
 				if (this.canSee(this.attackTarget)) {
 					if (this.inAttackRange(this.attackTarget)) {
-						return true;
+						return;
 					}
 					this.setDestination(this.attackTarget.px, this.attackTarget.py);
 				} else {
 					this.attackTarget = null;
-					this.isMoving = false;
-					return false;
+					this.reachedDestination(false);
+					return;
 				}
 			}
-		}
 
 		let moveSpeed = this.stats.moveSpeed * timeDelta / 200;
 		if (this.isDead) {
@@ -149,20 +152,15 @@ class Movable extends Unit {
 				reached = false;
 			}
 			if (reached) {
-				this.isMoving = false;
-				this.reachedDestination();
+				this.reachedDestination(true);
 			}
 
-			// Walls
-
-			// Move
 			this.isBlocked = this.blocked(movingToX, movingToY);
 			if (!this.isBlocked) {
 				this.px = movingToX;
 				this.py = movingToY;
 			}
 		}
-		return this.isMoving;
 	}
 
 	die(time) {

@@ -28,6 +28,7 @@ class Unit {
 	constructor(team, statBase, x, y, startAngle) {
 		this.team = team;
 		this.startAngle = startAngle;
+		this.movable = false;
 
 		this.container = Render.group();
 		this.base = Render.group();
@@ -44,7 +45,7 @@ class Unit {
 			healthRegen: statBase.healthRegen[0],
 			sightRange: statBase.sightRange[0],
 			attackRange: statBase.attackRange[0],
-			attackDamage: statBase.attackDamage[0],
+			attackDamage: statBase.attackDamage[0] * 1000,
 			attackCooldown: statBase.attackCooldown[0],
 			moveSpeed: statBase.moveSpeed[0],
 			collision: statBase.collision,
@@ -263,6 +264,10 @@ class Unit {
 		}
 	}
 
+	shouldMove() {
+		return false;
+	}
+
 }
 
 //STATIC
@@ -287,7 +292,7 @@ Unit.update = function(renderTime, timeDelta, tweening) {
 		if (tweening && (!unit.isRendering || unit.isBlocked)) {
 			continue;
 		}
-		if (unit.isMoving) {
+		if (unit.shouldMove()) {
 			unit.move(timeDelta, tweening);
 		}
 	}

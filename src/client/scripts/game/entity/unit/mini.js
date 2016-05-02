@@ -59,7 +59,7 @@ class Mini extends Movable {
 		this.updateDestination();
 		this.setLocation(this.currentDest[0], this.currentDest[1]);
 
-		this.reachedDestination();
+		this.reachedDestination(true);
 
 		Unit.addBase(this);
 
@@ -76,33 +76,35 @@ class Mini extends Movable {
 			if ((this.team == 0) != this.pathFlip) {
 				nextDest[1] = mapHeight - nextDest[1];
 			}
-			this.currentDest = nextDest;
-			return true;
 		}
-		this.currentDest = null;
+		this.currentDest = nextDest;
 	}
 
-	applyCurrentDestination() {
+	reachedDestination(needsNewDestination) {
+		if (needsNewDestination) {
+			if (this.pathFlip || this.pathProgress == this.path.length - 1) {
+				this.pathProgress -= 1;
+				if (this.pathProgress < 0) {
+					return false;
+				}
+				this.pathFlip = true;
+			} else {
+				this.pathProgress += 1;
+			}
+			this.updateDestination();
+		}
 		if (this.currentDest) {
 			this.setDestination(this.currentDest[0], this.currentDest[1]);
 			return true;
 		}
 	}
 
-	reachedDestination() {
-		if (this.pathFlip || this.pathProgress == this.path.length - 1) {
-			this.pathProgress -= 1;
-			if (this.pathProgress < 0) {
-				return false;
-			}
-			this.pathFlip = true;
-		} else {
-			this.pathProgress += 1;
-		}
-		if (this.updateDestination()) {
-			this.applyCurrentDestination();
-			return true;
-		}
+	blocked(bx, by) {
+		return false;
+	}
+
+	shouldMove() {
+		return this.currentDest != null && (!this.attackTarget || this.attackTarget.isDead);
 	}
 
 	die(time) {
@@ -112,15 +114,7 @@ class Mini extends Movable {
 	}
 
 	shouldTarget(unit) {
-		return !this.isDead && !this.alliedTo(unit) && this.inSightRange(unit);
-	}
-
-	move(timeDelta, tweening) {
-		if (!super.move(timeDelta, tweening)) {
-			if (this.applyCurrentDestination()) {
-				this.isMoving = true;
-			}
-		}
+		return !unit.isDead && !this.alliedTo(unit) && this.inSightRange(unit);
 	}
 
 }
