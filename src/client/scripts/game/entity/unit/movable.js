@@ -22,42 +22,23 @@ class Movable extends Unit {
 
 	// Position
 
-	processDestination(x, y) {
-		const dest = this.requestedDestination(x, y);
-		this.setDestination(dest[0], dest[1], dest[2], dest[3]);
-	}
-
-	requestedDestination(x, y) {
-		x = Math.round(x * 1000);
-		y = Math.round(y * 1000);
+	setDestination(x, y) {
 		const dx = x - this.px;
 		const dy = y - this.py;
-		if (dx == 0 && dy == 0) {
-			return null;
-		}
-
 		const moveAngle = Util.atan(dx, dy);
-		const moveX = Math.round(Math.cos(moveAngle) * 1000);
-		const moveY = Math.round(Math.sin(moveAngle) * 1000);
-		return [x, y, moveX, moveY];
-	}
+		this.top.rotation.z = moveAngle;
 
-	setDestination(x, y, moveX, moveY) {
-		this.top.rotation.z = Util.atan(moveX, moveY);
-		this.isMoving = true;
 		this.destX = x;
 		this.destY = y;
-		this.moveX = moveX;
-		this.moveY = moveY;
+		this.moveX =  Math.cos(moveAngle);
+		this.moveY = Math.sin(moveAngle);
+		this.isMoving = true;
 	}
 
 	updatePosition(moveToX, moveToY) {
 		if (!moveToX) {
-			moveToX = Math.round(this.px * 0.001);
-			moveToY = Math.round(this.py * 0.001);
-		} else {
-			moveToX *= 0.001;
-			moveToY *= 0.001;
+			moveToX = this.px;
+			moveToY = this.py;
 		}
 		this.container.position.x = moveToX;
 		this.container.position.y = moveToY;
@@ -123,8 +104,8 @@ class Movable extends Unit {
 		let cx, cy;
 		if (tweening) {
 			const position = this.container.position;
-			cx = Math.round(position.x * 1000);
-			cy = Math.round(position.y * 1000);
+			cx = position.x;
+			cy = position.y;
 		} else {
 			cx = this.px;
 			cy = this.py;
@@ -133,7 +114,7 @@ class Movable extends Unit {
 					if (this.inAttackRange(this.attackTarget)) {
 						return true;
 					}
-					this.processDestination(this.attackTarget.px * 0.001, this.attackTarget.py * 0.001);
+					this.setDestination(this.attackTarget.px, this.attackTarget.py);
 				} else {
 					this.attackTarget = null;
 					this.isMoving = false;

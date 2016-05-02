@@ -42,15 +42,12 @@ class Unit {
 		this.stats = {
 			healthMax: statBase.healthMax[0] * 1000,
 			healthRegen: statBase.healthRegen[0],
-
-			sightRange: statBase.sightRange[0] * 1000,
-			attackRange: statBase.attackRange[0] * 1000,
-
-			attackDamage: statBase.attackDamage[0] * 1000,
+			sightRange: statBase.sightRange[0],
+			attackRange: statBase.attackRange[0],
+			attackDamage: statBase.attackDamage[0],
 			attackCooldown: statBase.attackCooldown[0],
-
 			moveSpeed: statBase.moveSpeed[0],
-			collision: statBase.collision * 1000,
+			collision: statBase.collision,
 		};
 		this.healthRemaining = this.stats.healthMax;
 		this.stats.sightRangeCheck = Util.squared(this.stats.sightRange);
@@ -63,7 +60,7 @@ class Unit {
 		// Sight
 
 		// let allied = this.team == Local.player.team;
-		// let sightRadius = allied ? this.stats.sightRange * 0.001 : Local.shipSize;
+		// let sightRadius = allied ? this.stats.sightRange : Local.shipSize;
 		// this.sightCircle = {x: 0, y: 0, radius: sightRadius, visible: allied};
 		// this.sightSize = sightRadius;
 		// Local.game.map.addSight(this.sightCircle);
@@ -115,8 +112,8 @@ class Unit {
 	// Geometry
 
 	setLocation(x, y) {
-		this.px = x * 1000;
-		this.py = y * 1000;
+		this.px = x;
+		this.py = y;
 		this.container.position.set(x, y, 0);
 		// this.sightCircle.x = x;
 		// this.sightCircle.y = y;

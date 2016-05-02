@@ -69,7 +69,7 @@ const Game = function(gid, size) {
 
 		if (localUnit) {
 			localUnit.updateVisibility();
-			map.track(localUnit.px * 0.001, localUnit.py * 0.001);
+			map.track(localUnit.px, localUnit.py);
 		}
 		// map.updateFog();
 		return true;
@@ -96,7 +96,7 @@ const Game = function(gid, size) {
 				const dest = playerData.dest;
 				if (dest) {
 					// console.log(['Dest', dest, pid]);
-					player.unit.setDestination(dest[0], dest[1], dest[2], dest[3]);
+					player.unit.setDestination(dest[0], dest[1]);
 				}
 			}
 		}

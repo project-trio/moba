@@ -138,14 +138,14 @@ const GameMap = function(parent) {
 	};
 
 	this.blockCheck = function(moveX, moveY) {
-		if (moveX < 1 || moveY < 1 || moveX >= layout.width * 1000 || moveY >= layout.height * 1000) {
+		if (moveX < 1 || moveY < 1 || moveX >= layout.width || moveY >= layout.height) {
 			return null;
 		}
 		return walls;
 	};
 
 	const createWallRect = function(x, y, w, h) {
-		walls.push([(x - w/2) * 1000, (y - h/2) * 1000, w * 1000, h * 1000]);
+		walls.push([(x - w/2), (y - h/2), w, h]);
 
 		Render.wall(x, y, w, h, {
 			color: 0xeeeeee,
@@ -155,7 +155,7 @@ const GameMap = function(parent) {
 
 	const createWallCap = function(vertical, x, y, radius) {
 		radius = Math.round(radius / 2);
-		walls.push([x * 1000, y * 1000, radius * 1000]);
+		walls.push([x, y, radius]);
 
 		Render.wallCap(x, y, radius, {
 			color: 0xeeeeee,
@@ -182,8 +182,7 @@ const GameMap = function(parent) {
 				const clickPoint = event.intersect.point;
 				const diffX = Math.round(clickPoint.x) - previousCameraX;
 				const diffY = Math.round(clickPoint.y) - previousCameraY;
-				const dest = Local.player.unit.requestedDestination(diffX, diffY);
-				Bridge.emit('update', {dest: dest});
+				Bridge.emit('update', {dest: [diffX, diffY]});
 				if (automateTimer) {
 					clearInterval(automateTimer);
 					automateTimer = null;
@@ -193,8 +192,9 @@ const GameMap = function(parent) {
 
 		automateTimer = setInterval(function() {
 			if (Local.player) {
-				const dest = Local.player.unit.requestedDestination(Math.random()*layout.width, Math.random()*layout.height);
-				Bridge.emit('update', {dest: dest});
+				const dx = Math.round(Math.random() * layout.width);
+				const dy = Math.round(Math.random() * layout.height);
+				Bridge.emit('update', {dest: [dx, dy]});
 			}
 		}, Math.random()*2000+1000);
 
