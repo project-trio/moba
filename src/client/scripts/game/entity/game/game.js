@@ -49,7 +49,7 @@ const Game = function(gid, size) {
 		}
 
 		while (ticksToRender > 0) {
-			if (ticksRendered % ticksPerUpdate == 1) {
+			if (ticksRendered % ticksPerUpdate == 0) {
 				if (!dequeueUpdate()) {
 					console.log('Missing update', ticksRendered);
 					break;
