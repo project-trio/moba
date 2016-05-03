@@ -11,16 +11,6 @@ const Unit = require('game/entity/unit/unit');
 let lastUpdate = 0;
 
 var updatePanel, framePanel;
-// if (Local.TESTING) {
-	updatePanel = new Stats();
-	updatePanel.showPanel(1);
-	document.body.appendChild(updatePanel.dom);
-	// setTimeout(() => {
-	// 	framePanel = new Stats();
-	// 	framePanel.showPanel(0);
-	// 	document.body.appendChild(framePanel.dom);
-	// }, 5000);
-// }
 
 //LOOP
 
@@ -43,8 +33,8 @@ const animate = function() {
 					updatePanel.end();
 				}
 			} else {
-				const timeDelta = currentTime - lastUpdate;
-				Unit.update(currentTime, timeDelta, true);
+				const tweenTimeDelta = currentTime - lastUpdate;
+				Unit.update(currentTime, tweenTimeDelta, true);
 			}
 		}
 		Render.render();
@@ -63,6 +53,17 @@ module.exports = {
 
 	start: function() {
 		window.requestAnimationFrame(animate);
+
+		// if (Local.TESTING) {
+			updatePanel = new Stats();
+			updatePanel.showPanel(1);
+			document.body.appendChild(updatePanel.dom);
+
+			framePanel = new Stats();
+			framePanel.showPanel(0);
+			framePanel.dom.style.top = '48px';
+			document.body.appendChild(framePanel.dom);
+		// }
 	},
 
 };
