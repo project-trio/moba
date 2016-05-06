@@ -84,8 +84,8 @@ class Tower extends Unit {
 
 	// Aim
 
-	getAttackTarget(allUnits) {
 		let closest = this.stats.attackRangeCheck;
+	getAttackTarget(units) {
 		let target = this.attackTarget;
 		if (target) {
 			if (this.canAttack(target)) {
@@ -96,8 +96,8 @@ class Tower extends Unit {
 				target = null;
 			}
 		}
-		for (let idx = 0; idx < allUnits.length; idx += 1) {
-			const unit = allUnits[idx];
+		for (let idx = 0; idx < units.length; idx += 1) {
+			const unit = units[idx];
 			if (!unit.movable || (target && unit.id == target.id)) {
 				continue;
 			}

@@ -247,7 +247,7 @@ class Unit {
 		return this.canAttack(unit);
 	}
 
-	getAttackTarget(allUnits) {
+	getAttackTarget(units) {
 		return null;
 	}
 

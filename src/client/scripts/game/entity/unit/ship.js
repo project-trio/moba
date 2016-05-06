@@ -148,8 +148,8 @@ class Ship extends Movable {
 
 	// Aim
 
-	getAttackTarget(allUnits) {
 		let closest = this.stats.attackRangeCheck;
+	getAttackTarget(units) {
 		let target = this.attackTarget;
 		if (target) {
 			if (this.canAttack(target)) {
@@ -158,8 +158,8 @@ class Ship extends Movable {
 			this.setTarget(null);
 			target = null;
 		}
-		for (let idx = 0; idx < allUnits.length; idx += 1) {
-			const unit = allUnits[idx];
+		for (let idx = 0; idx < units.length; idx += 1) {
+			const unit = units[idx];
 			if (target && unit.id == target.id) {
 				continue;
 			}

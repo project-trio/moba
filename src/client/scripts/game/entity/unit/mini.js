@@ -121,11 +121,11 @@ class Mini extends Movable {
 		return !unit.isDead && !this.alliedTo(unit) && this.inSightRange(unit);
 	}
 
-	getAttackTarget(allUnits) {
 		let closest = this.stats.sightRangeCheck;
 		let target;
 		for (let idx = 0; idx < allUnits.length; idx += 1) {
 			const unit = allUnits[idx];
+	getAttackTarget(units) {
 			if (this.attackableStatus(unit)) {
 				const dist = this.distanceTo(unit);
 				if (dist < closest) {
