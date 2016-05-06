@@ -11,19 +11,19 @@ const Tower = require('game/entity/unit/tower');
 
 const maps = {};
 
-const wallR = 24;
+const wallRadius = 24;
 
 maps.tiny = {
 	width: 800,
 	height: 800,
 	towers: [
-		['base', 400, 44],
-		['standard', 320, 320],
+		['base', 400, 44, false],
+		['standard', 320, 320, false],
 	],
 	walls: [
 		{
 			x: 650, y: 260,
-			w: 300, h: wallR * 2,
+			w: 300, h: wallRadius * 2,
 			capStart: true,
 		},
 	],
@@ -36,22 +36,21 @@ maps.small = {
 	height: 1400,
 
 	towers: [
-		['base', 400, 44],
-
+		['base', 400, 44, false],
 		['turret', 190, 380, true],
-		['turret', 470, 600],
+		['turret', 470, 600, false],
 	],
 
 	walls: [
 		{
 			x: 240, y: 320,
-			w: wallSmallH * 2, h: wallR * 2,
+			w: wallSmallH * 2, h: wallRadius * 2,
 			capStart: true, capEnd: true,
 			mirror: true,
 		},
 		{
 			x: 240 - wallSmallH, y: 320 - wallSmallH,
-			w: wallR * 2, h: wallSmallH * 2,
+			w: wallRadius * 2, h: wallSmallH * 2,
 			capStart: true, capEnd: false,
 			mirror: true,
 		},
@@ -65,8 +64,7 @@ maps.standard = {
 	height: 1800,
 
 	towers: [
-		['base', 600, 44],
-
+		['base', 600, 44, false],
 		['standard', 435, 360, true],
 		['turret', 44, 420, true],
 		['turret', 300, 760, true],
@@ -75,13 +73,13 @@ maps.standard = {
 	walls: [
 		{
 			x: 300, y: 360,
-			w: wallStandardH * 2, h: wallR * 2,
+			w: wallStandardH * 2, h: wallRadius * 2,
 			capStart: true, capEnd: true,
 			mirror: true,
 		},
 		{
 			x: 300 - wallStandardH, y: 360 - wallStandardH,
-			w: wallR * 2, h: wallStandardH * 2,
+			w: wallRadius * 2, h: wallStandardH * 2,
 			capStart: true, capEnd: false,
 			mirror: true,
 		},
@@ -205,10 +203,10 @@ const GameMap = function(parent) {
 			let vertical = h > w;
 
 			for (let team = 0; team < 2; ++team) {
-				let t0 = team == 0;
-				let tx = t0 ? mapWidth - wall.x : wall.x;
-				let ty = team == 0 ? mapHeight - wall.y : wall.y;
-				const teamMp = team == 0 ? -1 : 1;
+				const firstTeam = team === 0;
+				let tx = firstTeam ? mapWidth - wall.x : wall.x;
+				let ty = firstTeam ? mapHeight - wall.y : wall.y;
+				const teamMp = firstTeam ? -1 : 1;
 
 				for (let mirror = 0; mirror < (wall.mirror ? 2 : 1); ++mirror) {
 					const mirrored = mirror > 0;
@@ -250,8 +248,9 @@ const GameMap = function(parent) {
 			for (let mirror = 0; mirror < (mirroring ? 2 : 1); ++mirror) {
 				mirrored = !mirrored;
 				for (let team = 0; team < 2; ++team) {
-					const tx = (team == 0) != mirrored ? mapWidth - x : x;
-					const ty = team == 0 ? mapHeight - y : y;
+					const firstTeam = team === 0;
+					const tx = firstTeam != mirrored ? mapWidth - x : x;
+					const ty = firstTeam ? mapHeight - y : y;
 					new Tower(team, towerType, tx, ty);
 				}
 			}
