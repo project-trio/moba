@@ -14,11 +14,11 @@ var updatePanel, framePanel;
 
 //LOOP
 
-const animate = function() {
+const animate = function(timestamp) {
 	if (framePanel) {
 		framePanel.begin();
 	}
-	const currentTime = Date.now();
+	const currentTime = Date.now(); //TODO timestamp
 	const game = Local.game;
 	if (game) {
 		if (game.running) {

@@ -30,18 +30,6 @@ module.exports = function(size) {
 		return playerIds[0].length >= size && playerIds[1].length >= size;
 	};
 
-	const getPlayer = function(id) {
-		for (let tidx in playerIds) {
-			const teamPlayers = playerIds[tidx];
-			for (let pidx in teamPlayers) {
-				const pid = teamPlayers[pidx];
-				if (pid == id) {
-					return player;
-				}
-			}
-		}
-	};
-
 	const formattedPlayers = function() {
 		const broadcastPlayers = {};
 		for (let team in playerIds) {

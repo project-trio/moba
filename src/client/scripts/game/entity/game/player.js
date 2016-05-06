@@ -27,7 +27,7 @@ module.exports = function(pid, team, index, name) {
 
 	this.createShip = function() {
 		const position = this.spawnLocation();
-		this.unit = new Ship('roller', this, team, position[0], position[1]);
+		this.unit = new Ship('boxy', this, team, position[0], position[1]);
 	};
 
 	this.destroy = function() {
