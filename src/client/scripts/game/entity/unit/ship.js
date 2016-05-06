@@ -146,6 +146,35 @@ class Ship extends Movable {
 		}
 	}
 
+	// Aim
+
+	getAttackTarget(allUnits) {
+		let closest = this.stats.attackRangeCheck;
+		let target = this.attackTarget;
+		if (target) {
+			if (this.canAttack(target)) {
+				return target;
+			}
+			this.setTarget(null);
+			target = null;
+		}
+		for (let idx = 0; idx < allUnits.length; idx += 1) {
+			const unit = allUnits[idx];
+			if (target && unit.id == target.id) {
+				continue;
+			}
+			if (this.attackableStatus(unit)) {
+				const dist = this.distanceTo(unit);
+				if (dist < closest) {
+					target = unit;
+					closest = dist;
+				}
+			}
+		}
+		this.setTarget(target);
+		return target;
+	}
+
 	// Update
 
 	update(renderTime, timeDelta, tweening) {

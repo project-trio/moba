@@ -56,6 +56,8 @@ const TOWER_STATS = {
 	},
 };
 
+let spawnCount = 0;
+
 //CLASS
 
 class Tower extends Unit {
@@ -67,7 +69,9 @@ class Tower extends Unit {
 
 		Unit.addBase(this);
 
+		this.id = `tower${spawnCount}`;
 		this.towerType = towerType;
+		this.targetedAt = null;
 
 		Render.voxel('turret-base', {parent: this.base});
 		Render.voxel('turret-top', {parent: this.top});
@@ -76,6 +80,39 @@ class Tower extends Unit {
 		this.isBlocking = true;
 
 		this.container.position.z = stats.z;
+	}
+
+	// Aim
+
+	getAttackTarget(allUnits) {
+		let closest = this.stats.attackRangeCheck;
+		let target = this.attackTarget;
+		if (target) {
+			if (this.canAttack(target)) {
+				target = target;
+				closest = this.targetedAt;
+			} else {
+				this.setTarget(null);
+				target = null;
+			}
+		}
+		for (let idx = 0; idx < allUnits.length; idx += 1) {
+			const unit = allUnits[idx];
+			if (!unit.movable || (target && unit.id == target.id)) {
+				continue;
+			}
+			if (this.attackableStatus(unit)) {
+				const dist = this.distanceTo(unit);
+				if (dist < closest) {
+					target = unit;
+					closest = dist;
+				}
+			}
+		}
+		if (this.setTarget(target)) {
+			this.targetedAt = target ? closest : null;
+		}
+		return target;
 	}
 
 	// Damage

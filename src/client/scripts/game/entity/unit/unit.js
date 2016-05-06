@@ -202,6 +202,7 @@ class Unit {
 				this.isAttackingTarget = false;
 			}
 			this.attackTarget = target;
+			return true;
 		}
 	}
 
@@ -221,12 +222,16 @@ class Unit {
 		return enemy.isDying || enemy.hasActiveFire() || this.inSightRange(enemy);
 	}
 
-	inAttackRange(enemy) {
-		return this.distanceTo(enemy) < this.stats.attackRangeCheck;
+	inAttackRange(unit) {
+		return this.distanceTo(unit) < this.stats.attackRangeCheck;
+	}
+
+	attackableStatus(unit) {
+		return !unit.hasDied() && !this.alliedTo(unit);
 	}
 
 	canAttack(unit) {
-		return !unit.hasDied() && !this.alliedTo(unit) && this.inAttackRange(unit);
+		return this.attackableStatus(unit) && this.inAttackRange(unit);
 	}
 
 	attack(enemy, renderTime) {
@@ -242,27 +247,12 @@ class Unit {
 		return this.canAttack(unit);
 	}
 
-	getAttackTarget() {
-		if (this.attackTarget) {
-			if (this.shouldTarget(this.attackTarget)) {
-				return this.attackTarget;
-			}
-			this.setTarget(null);
-		}
-		for (let idx = 0; idx < allUnits.length; idx += 1) {
-			const unit = allUnits[idx];
-			if (this.shouldTarget(unit)) {
-				if (!this.attackTarget) {
-					this.setTarget(unit);
-				}
-				return unit;
-			}
-		}
+	getAttackTarget(allUnits) {
 		return null;
 	}
 
 	checkAttack(renderTime) {
-		let attackForTick = this.getAttackTarget();
+		let attackForTick = this.getAttackTarget(allUnits);
 		this.isFiring = attackForTick && this.inAttackRange(attackForTick);
 		if (this.isFiring) {
 			this.attack(attackForTick, renderTime);

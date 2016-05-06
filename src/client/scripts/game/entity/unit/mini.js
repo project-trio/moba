@@ -12,13 +12,13 @@ const MINI_STATS = {
 		healthRegen: [0, 0, 0],
 
 		sightRange: [100, 0, 0],
-		attackRange: [20, 0, 0],
+		attackRange: [30, 0, 0],
 
 		attackDamage: [1, 0, 0],
 		attackCooldown: [1, 0, 0],
 
 		moveSpeed: [12, 0, 0],
-		collision: 10,
+		collision: 25,
 	},
 
 	center: {
@@ -32,11 +32,12 @@ const MINI_STATS = {
 		attackCooldown: [5, 0, 0],
 
 		moveSpeed: [12, 0, 0],
-		collision: 10,
+		collision: 25,
 	},
 };
 
 let mapWidth, mapHeight; //TODO
+let spawnCount = 0;
 
 //CLASS
 
@@ -50,6 +51,7 @@ class Mini extends Movable {
 
 		super(team, stats);
 
+		this.id = `mini${spawnCount}`;
 		this.moveToTarget = true;
 		this.path = path;
 		this.pathFlip = false;
@@ -113,8 +115,27 @@ class Mini extends Movable {
 		this.destroy();
 	}
 
+	// Aim
+
 	shouldTarget(unit) {
 		return !unit.isDead && !this.alliedTo(unit) && this.inSightRange(unit);
+	}
+
+	getAttackTarget(allUnits) {
+		let closest = this.stats.sightRangeCheck;
+		let target;
+		for (let idx = 0; idx < allUnits.length; idx += 1) {
+			const unit = allUnits[idx];
+			if (this.attackableStatus(unit)) {
+				const dist = this.distanceTo(unit);
+				if (dist < closest) {
+					target = unit;
+					closest = dist;
+				}
+			}
+		}
+		this.setTarget(target);
+		return target;
 	}
 
 }
