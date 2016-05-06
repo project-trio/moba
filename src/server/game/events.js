@@ -13,7 +13,7 @@ const DEFAULT_GAME_SIZE = Util.TESTING ? 0 : 1;
 //LOCAL
 
 const quickJoin = function(player) {
-	for (let idx in games) {
+	for (let idx = 0; idx < games.length; idx += 1) {
 		const g = games[idx];
 		if (g.add(player)) {
 			return true;
@@ -30,8 +30,8 @@ const quickJoin = function(player) {
 let loopTime = Date.now();
 
 const loop = function() {
-	for (let gidx in games) {
-		const game = games[gidx];
+	for (let idx = 0; idx < games.length; idx += 1) {
+		const game = games[idx];
 		if (game.checkStart()) {
 			let lagged = null;
 			let moveData = null;

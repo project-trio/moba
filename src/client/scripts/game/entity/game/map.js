@@ -204,8 +204,8 @@ const GameMap = function(parent) {
 			}
 		}, Math.random()*2000+1000);
 
-		for (let widx in layout.walls) {
-			const wall = layout.walls[widx];
+		for (let idx = 0; idx < layout.walls.length; idx += 1) {
+			const wall = layout.walls[idx];
 			let w = wall.w;
 			let h = wall.h;
 			let vertical = h > w;
@@ -246,8 +246,8 @@ const GameMap = function(parent) {
 				}
 			}
 		}
-		for (let tidx in layout.towers) {
-			const tower = layout.towers[tidx];
+		for (let idx = 0; idx < layout.towers.length; idx += 1) {
+			const tower = layout.towers[idx];
 			const towerType = tower[0];
 			const x = tower[1];
 			const y = tower[2];

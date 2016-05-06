@@ -66,7 +66,7 @@ class Movable extends Unit {
 			const uy1 = by - collisionSize * 0.5;
 			const ux2 = ux1 + collisionSize;
 			const uy2 = uy1 + collisionSize;
-			for (let idx in walls) {
+			for (let idx = 0; idx < walls.length; idx += 1) {
 				const wall = walls[idx];
 				const x = wall[0];
 				const y = wall[1];

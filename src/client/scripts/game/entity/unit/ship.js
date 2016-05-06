@@ -202,7 +202,7 @@ class Ship extends Movable {
 
 	updateVisibility() {
 		const units = Unit.all();
-		for (let idx in units) {
+		for (let idx = 0; idx < units.length; idx += 1) {
 			const unit = units[idx];
 			let revealUnit = this.alliedTo(unit);
 			if (!revealUnit) {
