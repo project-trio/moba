@@ -210,13 +210,13 @@ const GameMap = function(parent) {
 			let h = wall.h;
 			let vertical = h > w;
 
-			for (let team = 0; team < 2; ++team) {
+			for (let team = 0; team < 2; team += 1) {
 				const firstTeam = team === 0;
 				let tx = firstTeam ? mapWidth - wall.x : wall.x;
 				let ty = firstTeam ? mapHeight - wall.y : wall.y;
 				const teamMp = firstTeam ? -1 : 1;
 
-				for (let mirror = 0; mirror < (wall.mirror ? 2 : 1); ++mirror) {
+				for (let mirror = 0; mirror < (wall.mirror ? 2 : 1); mirror += 1) {
 					const mirrored = mirror > 0;
 					const mirroredMp = mirrored ? 1 : -1;
 					if (mirrored) {
@@ -253,9 +253,9 @@ const GameMap = function(parent) {
 			const y = tower[2];
 			const mirroring = tower[3];
 			var mirrored = false;
-			for (let mirror = 0; mirror < (mirroring ? 2 : 1); ++mirror) {
+			for (let mirror = 0; mirror < (mirroring ? 2 : 1); mirror += 1) {
 				mirrored = !mirrored;
-				for (let team = 0; team < 2; ++team) {
+				for (let team = 0; team < 2; team += 1) {
 					const firstTeam = team === 0;
 					const tx = firstTeam != mirrored ? mapWidth - x : x;
 					const ty = firstTeam ? mapHeight - y : y;

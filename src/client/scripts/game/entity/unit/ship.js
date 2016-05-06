@@ -116,8 +116,8 @@ class Ship extends Movable {
 	// Experience
 
 	levelUp(over) {
+		this.level += 1;
 		this.levelExp = over;
-		++this.level;
 		// nameText.text = player.name + ' [' + level+ ']'; //TODO
 
 		const healthIncrease = this.statBase.healthMax[1] * 1000;

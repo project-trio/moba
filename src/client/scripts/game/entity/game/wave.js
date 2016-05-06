@@ -12,10 +12,10 @@ module.exports = {
 		waveData.forEach((minionData) => {
 			const paths = minionData.paths;
 			const name = minionData.type;
-			for (let team = 0; team < 2; ++team) {
-				for (let mirror = 0; mirror < (minionData.mirror ? 2 : 1); ++mirror) {
+			for (let team = 0; team < 2; team += 1) {
+				for (let mirror = 0; mirror < (minionData.mirror ? 2 : 1); mirror += 1) {
 					let mirrored = mirror == 1;
-					for (let pi = 0; pi < paths.length; ++pi) {
+					for (let pi = 0; pi < paths.length; pi += 1) {
 						const path = paths[pi];
 						const minion = new Mini(team, name, path, mirrored, mapWidth, mapHeight);
 					}

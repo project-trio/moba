@@ -65,8 +65,8 @@ const Game = function(gid, size) {
 				Wave.spawn(map.minionData());
 			}
 
-			++ticksRendered;
-			--ticksToRender;
+			ticksRendered += 1;
+			ticksToRender -= 1;
 			lastTickTime += tickDuration;
 		}
 
@@ -90,7 +90,7 @@ const Game = function(gid, size) {
 		if (updateCount > 0 && ticksToRender != ticksPerUpdate) {
 			console.log('Dequeue update', updateCount, ticksToRender);
 		}
-		++updateCount;
+		updateCount += 1;
 
 		for (let pid in queued) {
 			const player = players[pid];

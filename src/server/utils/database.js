@@ -70,7 +70,8 @@ module.exports = {
 		for (let column in columnsValues) {
 			columns.push(column);
 			values.push(columnsValues[column]);
-			placeholders.push('$' + (++index));
+			index += 1;
+			placeholders.push('$' + index);
 		}
 
 		let queryString = 'UPDATE ' + table + ' SET (' + columns.join() + ') = (' + placeholders.join() + ') WHERE ' + where;
@@ -90,7 +91,8 @@ module.exports = {
 		for (let column in columnsValues) {
 			columns.push(column);
 			values.push(columnsValues[column]);
-			placeholders.push('$' + (++index));
+			index += 1;
+			placeholders.push('$' + index);
 		}
 
 		let queryString = 'INSERT INTO ' + table + ' (' + columns.join() + ') VALUES (' + placeholders.join() + ')';
