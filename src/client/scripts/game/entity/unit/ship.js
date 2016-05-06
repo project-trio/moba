@@ -15,7 +15,7 @@ const SHIP_STATS = {
 	// [start, levelup, max]
 	pewpew: {
 		healthMax: [60, 10, 0],
-		healthRegen: [40, 4, 0],
+		healthRegen: [40, 2, 0],
 
 		sightRange: [160, 1, 0],
 		attackRange: [140, 1, 0],
@@ -23,8 +23,8 @@ const SHIP_STATS = {
 		attackDamage: [8, 1, 0],
 		attackCooldown: [5, 0, 0],
 
-		moveSpeed: [14 * 2, 0, 0], //TODO
-		collision: 20
+		moveSpeed: [14, 0, 0],
+		collision: 20,
 	},
 };
 
