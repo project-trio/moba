@@ -121,11 +121,11 @@ class Mini extends Movable {
 		return !unit.isDead && !this.alliedTo(unit) && this.inSightRange(unit);
 	}
 
-		let closest = this.stats.sightRangeCheck;
-		let target;
-		for (let idx = 0; idx < allUnits.length; idx += 1) {
-			const unit = allUnits[idx];
 	getAttackTarget(units) {
+		let closest = this.sightRangeCheck;
+		let target = null;
+		for (let idx = 0; idx < units.length; idx += 1) {
+			const unit = units[idx];
 			if (this.attackableStatus(unit)) {
 				const dist = this.distanceTo(unit);
 				if (dist < closest) {
@@ -134,8 +134,7 @@ class Mini extends Movable {
 				}
 			}
 		}
-		this.setTarget(target);
-		return target;
+		return this.setTarget(target, closest);
 	}
 
 }

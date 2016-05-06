@@ -84,15 +84,20 @@ class Tower extends Unit {
 
 	// Aim
 
-		let closest = this.stats.attackRangeCheck;
 	getAttackTarget(units) {
+		let closest = this.attackRangeCheck;
 		let target = this.attackTarget;
+		let updateTarget = true;
 		if (target) {
-			if (this.canAttack(target)) {
-				target = target;
-				closest = this.targetedAt;
+			if (this.attackableStatus(target)) {
+				const dist = this.distanceTo(target);
+				if (dist < closest) {
+					closest = this.targetedAt;
+					updateTarget = false;
+				} else {
+					target = null;
+				}
 			} else {
-				this.setTarget(null);
 				target = null;
 			}
 		}
@@ -106,10 +111,11 @@ class Tower extends Unit {
 				if (dist < closest) {
 					target = unit;
 					closest = dist;
+					updateTarget = true;
 				}
 			}
 		}
-		if (this.setTarget(target)) {
+		if (this.setTarget(target, closest) && updateTarget) {
 			this.targetedAt = target ? closest : null;
 		}
 		return target;

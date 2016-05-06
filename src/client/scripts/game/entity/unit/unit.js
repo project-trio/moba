@@ -54,8 +54,8 @@ class Unit {
 			collision: statBase.collision,
 		};
 		this.healthRemaining = this.stats.healthMax;
-		this.stats.sightRangeCheck = Util.squared(this.stats.sightRange);
-		this.stats.attackRangeCheck = Util.squared(this.stats.attackRange);
+		this.sightRangeCheck = Util.squared(this.stats.sightRange);
+		this.attackRangeCheck = Util.squared(this.stats.attackRange);
 		// this.stats.collisionCheck = Util.squared(this.stats.collision);
 
 		this.incomingAttackers = 0;
@@ -191,7 +191,7 @@ class Unit {
 		this.incomingAttackers += increment;
 	}
 
-	setTarget(target) {
+	setTarget(target, distance) {
 		if (target != this.attackTarget) {
 			if (this.attackTarget) {
 				this.attackTarget.incoming(-1);
@@ -202,8 +202,11 @@ class Unit {
 				this.isAttackingTarget = false;
 			}
 			this.attackTarget = target;
-			return true;
 		}
+		if (target) {
+			this.cacheAttackCheck = distance < this.attackRangeCheck;
+		}
+		return target;
 	}
 
 	hasActiveFire() {
@@ -215,7 +218,7 @@ class Unit {
 	}
 
 	inSightRange(enemy) {
-		return this.distanceTo(enemy) < this.stats.sightRangeCheck;
+		return this.distanceTo(enemy) < this.sightRangeCheck;
 	}
 
 	canSee(enemy) {
@@ -223,7 +226,7 @@ class Unit {
 	}
 
 	inAttackRange(unit) {
-		return this.distanceTo(unit) < this.stats.attackRangeCheck;
+		return this.distanceTo(unit) < this.attackRangeCheck;
 	}
 
 	attackableStatus(unit) {
@@ -253,7 +256,7 @@ class Unit {
 
 	checkAttack(renderTime) {
 		let attackForTick = this.getAttackTarget(allUnits);
-		this.isFiring = attackForTick && this.inAttackRange(attackForTick);
+		this.isFiring = attackForTick && this.cacheAttackCheck;
 		if (this.isFiring) {
 			this.attack(attackForTick, renderTime);
 		}

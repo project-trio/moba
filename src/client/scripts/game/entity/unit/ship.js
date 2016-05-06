@@ -131,8 +131,8 @@ class Ship extends Movable {
 		this.stats.attackDamage += this.statBase.attackDamage[1] * 1000;
 		this.stats.attackCooldown += this.statBase.attackCooldown[1];
 
-		this.stats.sightRangeCheck = Util.squared(this.stats.sightRange);
-		this.stats.attackRangeCheck = Util.squared(this.stats.attackRange);
+		this.sightRangeCheck = Util.squared(this.stats.sightRange);
+		this.attackRangeCheck = Util.squared(this.stats.attackRange);
 
 		this.updateHealth();
 	}
@@ -148,14 +148,16 @@ class Ship extends Movable {
 
 	// Aim
 
-		let closest = this.stats.attackRangeCheck;
 	getAttackTarget(units) {
+		let closest = this.attackRangeCheck;
 		let target = this.attackTarget;
 		if (target) {
-			if (this.canAttack(target)) {
-				return target;
+			if (this.attackableStatus(target)) {
+				const dist = this.distanceTo(target);
+				if (dist < closest) {
+					return this.setTarget(target, closest);
+				}
 			}
-			this.setTarget(null);
 			target = null;
 		}
 		for (let idx = 0; idx < units.length; idx += 1) {
@@ -171,8 +173,7 @@ class Ship extends Movable {
 				}
 			}
 		}
-		this.setTarget(target);
-		return target;
+		return this.setTarget(target, closest);
 	}
 
 	// Update
