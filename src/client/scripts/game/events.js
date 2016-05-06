@@ -8,13 +8,9 @@ const Local = require('local');
 
 Bridge.on('update', (data) => {
 	const update = data.update;
-	if (data.lag) {
-		console.log('Waiting for ' + data.lag);
-	} else {
-		if (Local.game.serverUpdate != update - 1) {
-			console.error('Invalid update ' + Local.game.serverUpdate + ' ' + update);
-		}
-		Local.game.enqueueUpdate(update, data.moves);
+	if (Local.game.serverUpdate != update - 1) {
+		console.error('Invalid update ' + Local.game.serverUpdate + ' ' + update);
 	}
+	Local.game.enqueueUpdate(update, data.moves);
 	Bridge.emit('updated', {update: update});
 });

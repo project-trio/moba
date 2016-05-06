@@ -33,36 +33,18 @@ const loop = function() {
 	for (let idx = 0; idx < games.length; idx += 1) {
 		const game = games[idx];
 		if (game.checkStart()) {
-			let lagged = null;
-			let moveData = null;
-			let gameUpdate = game.serverUpdate;
+			game.serverUpdate += 1;
 
+			const moveData = {};
 			const gamePlayers = game.players();
 			for (let pid in gamePlayers) {
-				let player = gamePlayers[pid];
-				if (player.isDisconnected() && ++player.lagCount < 30) {
-					lagged = pid;
-					break;
+				const player = gamePlayers[pid];
+				if (player.move) {
+					moveData[pid] = player.move;
+					player.move = null;
 				}
 			}
-			if (lagged) {
-				for (let pid in gamePlayers) {
-					const player = gamePlayers[pid];
-					player.serverUpdate = gameUpdate - 1;
-				}
-			} else {
-				gameUpdate = ++game.serverUpdate;
-
-				moveData = {};
-				for (let pid in gamePlayers) {
-					const player = gamePlayers[pid];
-					if (player.move) {
-						moveData[pid] = player.move;
-						player.move = null;
-					}
-				}
-			}
-			game.broadcast('update', {update: gameUpdate, lag: lagged, moves: moveData});
+			game.broadcast('update', {update: game.serverUpdate, moves: moveData});
 		}
 	}
 
