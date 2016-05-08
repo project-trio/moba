@@ -23,11 +23,15 @@ class Movable extends Unit {
 
 	// Position
 
-	setDestination(x, y) {
 		const dx = x - this.px;
 		const dy = y - this.py;
 		const moveAngle = Util.atan(dx, dy);
 		this.top.rotation.z = moveAngle;
+	setDestination(x, y, preadjusted) {
+		if (!preadjusted) {
+			x *= 100;
+			y *= 100;
+		}
 
 		this.destX = x;
 		this.destY = y;
@@ -42,6 +46,8 @@ class Movable extends Unit {
 			moveToX = this.px;
 			moveToY = this.py;
 		}
+		moveToX /= 100;
+		moveToY /= 100;
 		this.container.position.x = moveToX;
 		this.container.position.y = moveToY;
 		this.healthContainer.position.x = moveToX;
@@ -111,7 +117,7 @@ class Movable extends Unit {
 			if (this.canSee(this.attackTarget)) {
 				this.isAttackingTarget = this.inAttackRange(this.attackTarget);
 				if (!this.isAttackingTarget) {
-					this.setDestination(this.attackTarget.px, this.attackTarget.py);
+					this.setDestination(this.attackTarget.px, this.attackTarget.py, true);
 				}
 			} else {
 				this.setTarget(null);
@@ -124,26 +130,26 @@ class Movable extends Unit {
 		if (this.isAttackingTarget) {
 			return;
 		}
+
 		let cx, cy;
 		let movingX, movingY;
+		let moveSpeed;
 		if (tweening) {
-			cx = this.container.position.x;
-			cy = this.container.position.y;
-			movingX = this.movingX;
-			movingY = this.movingY;
+			cx = this.container.position.x * 100;
+			cy = this.container.position.y * 100;
+			moveSpeed = this.currentSpeed;
 		} else {
 			cx = this.px;
 			cy = this.py;
-
-			let moveSpeed = this.stats.moveSpeed * timeDelta / 200;
+			moveSpeed = this.stats.moveSpeed / 200;
 			if (this.isDead) {
 				moveSpeed *= 0.5;
 			}
-			movingX = this.moveX * moveSpeed;
-			movingY = this.moveY * moveSpeed;
-			this.movingX = movingX;
-			this.movingY = movingY;
+			this.currentSpeed = moveSpeed;
 		}
+		moveSpeed *= timeDelta;
+		movingX = this.moveX * moveSpeed;
+		movingY = this.moveY * moveSpeed;
 
 		let movingToX = cx + movingX;
 		let movingToY = cy + movingY;

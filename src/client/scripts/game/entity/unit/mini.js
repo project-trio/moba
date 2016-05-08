@@ -96,7 +96,7 @@ class Mini extends Movable {
 			this.updateDestination();
 		}
 		if (this.currentDest) {
-			this.setDestination(this.currentDest[0], this.currentDest[1]);
+			this.setDestination(this.currentDest[0], this.currentDest[1], false);
 			return true;
 		}
 	}

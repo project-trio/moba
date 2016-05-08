@@ -65,8 +65,8 @@ class Ship extends Movable {
 		return !this.isDying;
 	}
 
-	setDestination(x, y) {
-		super.setDestination(x, y);
+	setDestination(x, y, preadjusted) {
+		super.setDestination(x, y, preadjusted);
 
 		this.moveToTarget = false;
 	}
@@ -205,16 +205,18 @@ class Ship extends Movable {
 		for (let idx = 0; idx < units.length; idx += 1) {
 			const unit = units[idx];
 			let revealUnit = this.alliedTo(unit);
-			if (!revealUnit) {
-				const showing = this.canSee(unit);
-				const updatedVisibility = unit.isRendering !== showing;
+			if (revealUnit) {
+				unit.isRendering = true;
+			} else {
+				const isInSight = this.canSee(unit);
+				const updatedVisibility = unit.isRendering !== isInSight;
 				if (updatedVisibility) {
-					unit.isRendering = showing;
-					unit.container.visible = showing || unit.renderInBackground || false;
-					unit.healthContainer.visible = showing;
-					// unit.sightCircle.visible = showing;
+					unit.isRendering = isInSight;
+					unit.container.visible = isInSight || unit.renderInBackground || false;
+					unit.healthContainer.visible = isInSight;
+					// unit.sightCircle.visible = isInSight;
 				}
-				revealUnit = showing && (updatedVisibility || unit.isMoving);
+				revealUnit = isInSight && (updatedVisibility || unit.isMoving);
 			}
 			if (revealUnit && unit.movable) {
 				unit.updatePosition();

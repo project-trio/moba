@@ -46,12 +46,12 @@ class Unit {
 		this.stats = {
 			healthMax: statBase.healthMax[0] * 1000,
 			healthRegen: statBase.healthRegen[0],
-			sightRange: statBase.sightRange[0],
-			attackRange: statBase.attackRange[0],
+			sightRange: statBase.sightRange[0] * 100,
+			attackRange: statBase.attackRange[0] * 100,
 			attackDamage: statBase.attackDamage[0] * 1000,
 			attackCooldown: statBase.attackCooldown[0],
 			moveSpeed: statBase.moveSpeed[0],
-			collision: statBase.collision,
+			collision: statBase.collision * 100,
 		};
 		this.healthRemaining = this.stats.healthMax;
 		this.sightRangeCheck = Util.squared(this.stats.sightRange);
@@ -116,8 +116,8 @@ class Unit {
 	// Geometry
 
 	setLocation(x, y) {
-		this.px = x;
-		this.py = y;
+		this.px = x * 100;
+		this.py = y * 100;
 		this.container.position.set(x, y, 0);
 		// this.sightCircle.x = x;
 		// this.sightCircle.y = y;

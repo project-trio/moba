@@ -144,14 +144,14 @@ const GameMap = function(parent) {
 	};
 
 	this.blockCheck = function(moveX, moveY) {
-		if (moveX < 1 || moveY < 1 || moveX >= layout.width || moveY >= layout.height) {
+		if (moveX < 1 || moveY < 1 || moveX >= layout.width * 100 || moveY >= layout.height * 100) {
 			return null;
 		}
 		return walls;
 	};
 
 	const createWallRect = function(x, y, w, h) {
-		walls.push([(x - w/2), (y - h/2), w, h]);
+		walls.push([(x - w/2) * 100, (y - h/2) * 100, w * 100, h * 100]);
 
 		Render.wall(x, y, w, h, {
 			color: 0xeeeeee,
@@ -161,7 +161,7 @@ const GameMap = function(parent) {
 
 	const createWallCap = function(vertical, x, y, radius) {
 		radius = radius / 2;
-		walls.push([x, y, radius]);
+		walls.push([x * 100, y * 100, radius * 100]);
 
 		Render.wallCap(x, y, radius, {
 			color: 0xeeeeee,

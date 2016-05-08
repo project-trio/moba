@@ -29,6 +29,8 @@ const animate = function(timestamp) {
 					updatePanel.begin();
 				}
 				game.performTicks(ticksToRender, currentTime);
+				game.localUnit.updateVisibility();
+				// game.map.updateFog();
 				if (processUpdate) {
 					updatePanel.end();
 				}
@@ -36,6 +38,9 @@ const animate = function(timestamp) {
 				const tweenTimeDelta = currentTime - lastUpdate;
 				Unit.update(currentTime, tweenTimeDelta, true);
 			}
+
+			const position = game.localUnit.container.position;
+			game.map.track(position.x, position.y);
 		}
 		Render.render();
 	}

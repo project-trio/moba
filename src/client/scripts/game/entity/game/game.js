@@ -32,8 +32,6 @@ const Game = function(gid, size) {
 	const map = new GameMap(gameContainer);
 	this.map = map;
 
-	let localUnit;
-
 	Render.add(gameContainer);
 
 	// Update
@@ -69,12 +67,6 @@ const Game = function(gid, size) {
 			ticksToRender -= 1;
 			lastTickTime += tickDuration;
 		}
-
-		if (localUnit) {
-			localUnit.updateVisibility();
-			map.track(localUnit.px, localUnit.py);
-		}
-		// map.updateFog();
 		return true;
 	};
 
@@ -99,7 +91,7 @@ const Game = function(gid, size) {
 				const dest = playerData.dest;
 				if (dest) {
 					// console.log(['Dest', dest, pid]);
-					player.unit.setDestination(dest[0], dest[1]);
+					player.unit.setDestination(dest[0], dest[1], false);
 				}
 			}
 		}
@@ -131,7 +123,7 @@ const Game = function(gid, size) {
 				player.createShip();
 			}
 		}
-		localUnit = Local.player.unit;
+		this.localUnit = Local.player.unit;
 
 		status = 'STARTED';
 		startTime = Date.now();
