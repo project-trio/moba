@@ -183,7 +183,7 @@ class Unit {
 
 	updateAim() {
 		if (this.attackTarget) {
-			this.top.rotation.z = Util.angleBetween(this, this.attackTarget) + Math.PI;
+			this.top.rotation.z = Util.angleBetween(this, this.attackTarget, true) + Math.PI;
 		}
 	}
 

@@ -1,5 +1,7 @@
 'use strict';
 
+const TrigCache = require('external/trigcache');
+
 const Local = require('local');
 const Render = require('game/util/render');
 
@@ -107,6 +109,8 @@ const Game = function(gid, size) {
 
 	this.start = function(_updateDuration, _tickDuration) {
 		Local.player = players[Local.playerId];
+
+		TrigCache.prepare();
 
 		updateDuration = _updateDuration;
 		tickDuration = _tickDuration;

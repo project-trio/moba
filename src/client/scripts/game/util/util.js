@@ -1,21 +1,25 @@
 'use strict';
 
+const TrigCache = require('external/trigcache');
+
+//PUBLIC
+
 module.exports = {
 
 	// Angle
 
-	atan: function(dx, dy) {
-		let angle = Math.atan(dy / dx);
-		if (dx < 0) {
-			angle += Math.PI;
+	angleOf: function(dx, dy, fast) {
+		if (fast) {
+			return Math.atan2(dy, dx); 
 		}
-		return angle;
+
+		return TrigCache.atan(dx, dy);
 	},
 
-	angleBetween: function(a, b) {
+	angleBetween: function(a, b, fast) {
 		const positionA = a.container.position;
 		const positionB = b.container.position;
-		return this.atan(positionA.x - positionB.x, positionA.y - positionB.y);
+		return this.angleOf(positionA.x - positionB.x, positionA.y - positionB.y, fast);
 	},
 
 	// Distance
@@ -25,7 +29,9 @@ module.exports = {
 	},
 
 	pointDistance: function(x1, y1, x2, y2) {
-		return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+		const diffX = x2 - x1;
+		const diffY = y2 - y1;
+		return diffX * diffX + diffY * diffY;
 	},
 
 	manhattanDistance: function(x1, y1, x2, y2) {

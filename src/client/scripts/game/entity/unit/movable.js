@@ -1,5 +1,7 @@
 'use strict';
 
+const TrigCache = require('external/trigcache');
+
 const Local = require('local');
 
 const Util = require('game/util/util');
@@ -9,6 +11,8 @@ const Unit = require('game/entity/unit/unit');
 const rectanglesIntersecting = function(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2) {
 	return ax1 < bx2 && ax2 > bx1 && ay1 < by2 && ay2 > by1;
 };
+
+let avg = 0, attempts = 1;
 
 //CLASS
 
@@ -23,20 +27,25 @@ class Movable extends Unit {
 
 	// Position
 
-		const dx = x - this.px;
-		const dy = y - this.py;
-		const moveAngle = Util.atan(dx, dy);
-		this.top.rotation.z = moveAngle;
 	setDestination(x, y, preadjusted) {
 		if (!preadjusted) {
 			x *= 100;
 			y *= 100;
 		}
+		const moveAngle = Util.angleOf(x - this.px, y - this.py, false);
+		this.top.rotation.z = moveAngle / 100;
+
+			const diff = Math.abs(moveAngle) - Math.abs(Math.atan2(y - this.py, x - this.px));
+			avg += Math.abs(diff);
+			attempts += 1;
+			// console.log(avg / attempts);
 
 		this.destX = x;
 		this.destY = y;
-		this.moveX =  Math.cos(moveAngle);
-		this.moveY = Math.sin(moveAngle);
+		this.moveX = TrigCache.cos(moveAngle);
+		this.moveY = TrigCache.sin(moveAngle);
+		this.moveX = Math.cos(moveAngle / 100) * 100;
+		this.moveY = Math.sin(moveAngle / 100) * 100;
 		this.isMoving = true;
 		this.setTarget(null);
 	}
@@ -158,16 +167,18 @@ class Movable extends Unit {
 		} else {
 			const distX = this.destX - cx;
 			const distY = this.destY - cy;
-			let reached = true;
-			if (Math.abs(distX) <= Math.abs(movingX) || (distX < 0 ? movingX > 0 : movingX < 0)) {
-				movingToX = this.destX;
-			} else {
-				reached = false;
+			let reached = false;
+			const absMovingX = Math.abs(movingX);
+			const absMovingY = Math.abs(movingY);
+			if (Math.abs(distX) <= absMovingX || (distX < 0 ? movingX > 0 : movingX < 0)) {
+				if (absMovingX >= absMovingY) {
+					reached = true;
+				}
 			}
-			if (Math.abs(distY) <= Math.abs(movingY) || (distY < 0 ? movingY > 0 : movingY < 0)) {
-				movingToY = this.destY;
-			} else {
-				reached = false;
+			if (Math.abs(distY) <= absMovingY || (distY < 0 ? movingY > 0 : movingY < 0)) {
+				if (absMovingY >= absMovingX) {
+					reached = true;
+				}
 			}
 			if (reached) {
 				this.reachedDestination(true);
