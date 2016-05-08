@@ -12,7 +12,6 @@ module.exports = {
 		if (fast) {
 			return Math.atan2(dy, dx); 
 		}
-
 		return TrigCache.atan(dx, dy);
 	},
 
