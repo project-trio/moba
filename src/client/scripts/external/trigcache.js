@@ -4,9 +4,10 @@ const Decimal = require('decimal.js');
 
 //CONSTANTS
 
-const PId2 = 157;
-const PI = 314;
-const PIt2 = 628;
+const PRECISION = new Decimal(1000);
+const PIP = Decimal.acos(-1).times(PRECISION);
+const PIPd2 = PIP.dividedBy(2);
+const PIPt2 = PIP.times(2);
 
 //CONFIG
 
@@ -20,8 +21,7 @@ let atanFactor, cosFactor, sinFactor;
 //PREPARE
 
 const prepare = function() {
-	const PRECISION = 100;
-	const PIt2_DEC = new Decimal('6.2831853072');
+	const PIt2_DEC = Decimal.acos(-1).times(2);
 
 	// atan
 	atanTable = new Int32Array(resolutionAtan);
@@ -52,10 +52,9 @@ const prepare = function() {
 
 //HELPERS
 
-const processSinCosAngle = function(angle, factor) {
-	angle %= PIt2;
-	if (angle < 0) {
-		angle += PIt2;
+const indexAngleFactor = function(angle, factor) {
+	if (angle.lessThan(0)) {
+		angle = angle.plus(PIPt2);
 	}
 	return factor.times(angle).floor().toNumber(); // (angle * factor) | 0
 };
@@ -67,12 +66,12 @@ module.exports = {
 	prepare: prepare,
 
 	cos: function(angle) {
-		const index = processSinCosAngle(angle, cosFactor);
+		const index = indexAngleFactor(angle, cosFactor);
 		return cosTable[index];
 	},
 
 	sin: function(angle) {
-		const index = processSinCosAngle(angle, sinFactor);
+		const index = indexAngleFactor(angle, sinFactor);
 		return sinTable[index];
 	},
 
@@ -80,13 +79,13 @@ module.exports = {
 		const index = new Decimal(y).dividedBy(x).plus(rangeAtan).times(atanFactor).floor().toNumber(); // (y / x + rangeAtan) * atanFactor) | 0
 		let angle;
 		if (index < 0) {
-			angle = -PId2;
+			angle = PIPd2.times(-1);
 		} else if (index >= resolutionAtan) {
-			angle = PId2;
+			angle = PIPd2;
 		} else {
-			angle = atanTable[index];
+			angle = new Decimal(atanTable[index]);
 		}
-		return x < 0 ? angle - PI : angle;
+		return x < 0 ? angle.plus(PIP) : angle;
 	},
 
 };
