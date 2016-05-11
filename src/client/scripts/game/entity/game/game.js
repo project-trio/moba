@@ -31,8 +31,7 @@ const Game = function(gid, size) {
 	this.serverUpdate = -1;
 	this.running = false;
 
-	const map = new GameMap(gameContainer);
-	this.map = map;
+	this.map = new GameMap(gameContainer);
 
 	Render.add(gameContainer);
 
@@ -61,8 +60,9 @@ const Game = function(gid, size) {
 			const renderTime = ticksRendered * tickDuration;
 			Unit.update(renderTime, tickDuration, false);
 
-			if (renderTime % 45000 == 5000) {
-				Wave.spawn(map.minionData());
+			// if (renderTime % 45000 == 15000) {
+			if (renderTime % 30000 == 3000) {
+				Wave.spawn(this.map.minionData());
 			}
 
 			ticksRendered += 1;
@@ -119,7 +119,7 @@ const Game = function(gid, size) {
 		console.log(Local.playerId, players);
 
 		const mapType = teamSize <= 1 ? 'tiny' : (teamSize <= 3 ? 'small' : ('standard'));
-		map.build(mapType);
+		this.map.build(mapType);
 
 		for (let pid in players) {
 			const player = players[pid];

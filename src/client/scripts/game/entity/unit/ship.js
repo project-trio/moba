@@ -1,5 +1,7 @@
 'use strict';
 
+const Decimal = require('decimal.js');
+
 const Util = require('game/util/util');
 const Render = require('game/util/render');
 
@@ -47,6 +49,7 @@ class Ship extends Movable {
 		this.levelExp = 0;
 		this.respawned = false;
 		this.isBlocking = true;
+		this.exactDestination = false;
 
 		// Unit
 
@@ -133,6 +136,7 @@ class Ship extends Movable {
 
 		this.sightRangeCheck = Util.squared(this.stats.sightRange);
 		this.attackRangeCheck = Util.squared(this.stats.attackRange);
+		this.moveConstant = new Decimal(this.stats.moveSpeed).dividedBy(2000);
 
 		this.updateHealth();
 	}

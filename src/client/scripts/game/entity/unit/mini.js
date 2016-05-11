@@ -57,6 +57,13 @@ class Mini extends Movable {
 		this.pathFlip = false;
 		this.mirrored = mirrored;
 		this.pathProgress = 0;
+		this.exactDestination = true;
+
+		this.pathing = true;
+		this.returnToPath = false;
+		this.pathStep = 0;
+		this.lastX = null;
+		this.lastY = null;
 
 		this.updateDestination();
 		this.setLocation(this.currentDest[0], this.currentDest[1]);
@@ -68,36 +75,76 @@ class Mini extends Movable {
 		Render.voxel('mini', {parent: this.top});
 	}
 
+	setDestination(x, y, preadjusted, moveX, moveY, fixedMovement) {
+		this.returnToPath = false;
+		super.setDestination(x, y, preadjusted, moveX, moveY);
+
+		// if (fixedMovement) {
+		// 	const moveAngle = Math.atan2(y*100 - this.py, x*100 - this.px);
+		// 	const diffX = Math.round(Math.cos(moveAngle) * 1000);
+		// 	const diffY = Math.round(Math.sin(moveAngle) * 1000);
+		// 	if (diffX != moveX || diffY != moveY) {
+		// 		const sourceDest = this.path[this.pathProgress];
+		// 		console.log('Invalid fixed movement', [sourceDest[0],sourceDest[1]], [moveX,moveY], [diffX,diffY]);
+		// 	}
+		// }
+	}
+
 	updateDestination() {
 		let nextDest = this.path[this.pathProgress];
 		if (nextDest) {
 			nextDest = nextDest.slice();
+			if (this.pathFlip) {
+				const prevDest = this.path[this.pathProgress + 1];
+				nextDest[2] = prevDest[2];
+				nextDest[3] = prevDest[3];
+			}
+
 			if (this.mirrored) {
 				nextDest[0] = mapWidth - nextDest[0];
 			}
+			if (nextDest[2] && this.pathFlip == this.mirrored) {
+				nextDest[2] = -nextDest[2];
+			}
 			if ((this.team == 0) != this.pathFlip) {
 				nextDest[1] = mapHeight - nextDest[1];
+			}
+			if (nextDest[3] && this.team == 1) {
+				nextDest[3] = -nextDest[3];
 			}
 		}
 		this.currentDest = nextDest;
 	}
 
+	reachPrecision(approximate, exact) {
+		return exact;
+	}
+
 	reachedDestination(needsNewDestination) {
-		if (needsNewDestination) {
-			if (this.pathFlip || this.pathProgress == this.path.length - 1) {
-				this.pathProgress -= 1;
-				if (this.pathProgress < 0) {
-					return false;
-				}
-				this.pathFlip = true;
-			} else {
-				this.pathProgress += 1;
-			}
-			this.updateDestination();
+		if (!this.pathing && this.returnToPath) {
+			this.pathing = true;
 		}
-		if (this.currentDest) {
-			this.setDestination(this.currentDest[0], this.currentDest[1], false);
-			return true;
+		if (this.pathing) {
+			if (needsNewDestination) {
+				if (this.pathFlip || this.pathProgress == this.path.length - 1) {
+					this.pathProgress -= 1;
+					if (this.pathProgress < 0) {
+						return false;
+					}
+					this.pathFlip = true;
+				} else {
+					this.pathProgress += 1;
+				}
+				this.updateDestination();
+			}
+			if (this.currentDest) {
+				this.setDestination(this.currentDest[0], this.currentDest[1], false, this.currentDest[2], this.currentDest[3], true);
+				return true;
+			}
+		} else {
+			console.log(this.px+' '+this.py, this.lastX+' '+this.lastY);
+			this.setDestination(this.lastX, this.lastY, true);
+			this.returnToPath = true;
 		}
 	}
 
@@ -135,6 +182,18 @@ class Mini extends Movable {
 			}
 		}
 		return this.setTarget(target, closest);
+	}
+
+	updateMoveTarget() {
+		const hasTarget = super.updateMoveTarget();
+		if (hasTarget) {
+			if (this.pathing) {
+				this.pathing = false;
+			}
+		} else if (this.pathing) {
+			this.lastX = this.px;
+			this.lastY = this.py;
+		}
 	}
 
 }

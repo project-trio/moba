@@ -1,5 +1,7 @@
 'use strict';
 
+const Decimal = require('decimal.js');
+
 const Local = require('local');
 
 const Util = require('game/util/util');
@@ -57,6 +59,7 @@ class Unit {
 		this.sightRangeCheck = Util.squared(this.stats.sightRange);
 		this.attackRangeCheck = Util.squared(this.stats.attackRange);
 		// this.stats.collisionCheck = Util.squared(this.stats.collision);
+		this.moveConstant = new Decimal(this.stats.moveSpeed).dividedBy(2000);
 
 		this.incomingAttackers = 0;
 		this.lastAttack = 0;

@@ -1,5 +1,6 @@
 'use strict';
 
+// const Decimal = require('decimal.js');
 const TrigCache = require('external/trigcache');
 
 const Local = require('local');
@@ -25,20 +26,27 @@ class Movable extends Unit {
 
 	// Position
 
-	setDestination(x, y, preadjusted) {
+	setDestination(x, y, preadjusted, moveX, moveY) {
 		if (!preadjusted) {
 			x *= 100;
 			y *= 100;
 		}
+
 		const dx = x - this.px;
 		const dy = y - this.py;
-		const moveAngle = Util.angleOf(dx, dy, false);
-		this.top.rotation.z = Math.atan2(dy, dx);
-
+		if (moveX === undefined) {
+			const moveAngle = Util.angleOf(dx, dy, false);
+			this.top.rotation.z = moveAngle.toNumber() / 1000;
+			moveX = TrigCache.cos(moveAngle);
+			moveY = TrigCache.sin(moveAngle);
+		} else {
+			this.top.rotation.z = Math.atan2(dy, dx);
+		}
+		this.moveX = moveX;
+		this.moveY = moveY;
 		this.destX = x;
 		this.destY = y;
-		this.moveX = TrigCache.cos(moveAngle);
-		this.moveY = TrigCache.sin(moveAngle);
+
 		this.isMoving = true;
 		this.setTarget(null);
 	}
@@ -125,7 +133,12 @@ class Movable extends Unit {
 				this.setTarget(null);
 				this.reachedDestination(false);
 			}
+			return true;
 		}
+	}
+
+	reachPrecision(approximate, exact) {
+		return approximate;
 	}
 
 	move(timeDelta, tweening) {
@@ -139,49 +152,69 @@ class Movable extends Unit {
 		if (tweening) {
 			cx = this.container.position.x * 100;
 			cy = this.container.position.y * 100;
-			moveSpeed = this.currentSpeed;
+
+			moveSpeed = this.currentSpeed * timeDelta;
+			movingX = moveSpeed * this.moveX;
+			movingY = moveSpeed * this.moveY;
 		} else {
 			cx = this.px;
 			cy = this.py;
-			moveSpeed = this.stats.moveSpeed / 200;
+
+			// Cache
+			moveSpeed = this.moveConstant;
 			if (this.isDead) {
-				moveSpeed *= 0.5;
+				moveSpeed = moveSpeed.dividedBy(2);
 			}
-			this.currentSpeed = moveSpeed;
+			this.currentSpeed = moveSpeed.toNumber();
+
+			moveSpeed = moveSpeed.times(timeDelta);
+			movingX = moveSpeed.times(this.moveX).round().toNumber();
+			movingY = moveSpeed.times(this.moveY).round().toNumber();
 		}
-		moveSpeed *= timeDelta;
-		movingX = this.moveX * moveSpeed;
-		movingY = this.moveY * moveSpeed;
 
 		let movingToX = cx + movingX;
 		let movingToY = cy + movingY;
 		if (tweening) {
 			this.updatePosition(movingToX, movingToY);
 		} else {
+			// Blocked
+			this.isBlocked = this.blocked(movingToX, movingToY);
+			if (this.isBlocked) {
+				return;
+			}
+
+			// Destination
 			const distX = this.destX - cx;
 			const distY = this.destY - cy;
-			let reached = false;
+			let reachedApproximate = false;
+			let reachedExact = true;
 			const absMovingX = Math.abs(movingX);
 			const absMovingY = Math.abs(movingY);
 			if (Math.abs(distX) <= absMovingX || (distX < 0 ? movingX > 0 : movingX < 0)) {
 				if (absMovingX >= absMovingY) {
-					reached = true;
+					reachedApproximate = true;
 				}
+			} else {
+				reachedExact = false;
 			}
 			if (Math.abs(distY) <= absMovingY || (distY < 0 ? movingY > 0 : movingY < 0)) {
 				if (absMovingY >= absMovingX) {
-					reached = true;
+					reachedApproximate = true;
 				}
+			} else {
+				reachedExact = false;
 			}
-			if (reached) {
-				this.reachedDestination(true);
+			if (reachedExact && this.pathing) {
+				movingToX = this.destX;
+				movingToY = this.destY;
 			}
 
-			this.isBlocked = this.blocked(movingToX, movingToY);
-			if (!this.isBlocked) {
-				this.px = movingToX;
-				this.py = movingToY;
-				this.updatePosition(movingToX, movingToY);
+			this.px = movingToX;
+			this.py = movingToY;
+			this.updatePosition(movingToX, movingToY);
+
+			if (this.reachPrecision(reachedApproximate, reachedExact)) {
+				this.reachedDestination(true);
 			}
 		}
 	}
