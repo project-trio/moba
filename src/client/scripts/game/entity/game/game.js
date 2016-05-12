@@ -38,14 +38,13 @@ const Game = function(gid, size) {
 	// Update
 
 	let ticksRendered = 0;
-	let ticksRenderedLastUpdate = 0;
 	let lastTickTime;
 
 	this.logTicksRendered = function() {
 		console.log(ticksRendered);
 	};
 
-	this.ticksToRender = function(currentTime) {
+	this.calculateTicksToRender = function(currentTime) {
 		return Math.floor((currentTime - lastTickTime) / tickDuration);
 	};
 
@@ -74,28 +73,24 @@ const Game = function(gid, size) {
 	};
 
 	const dequeueUpdate = function() {
-		const queued = updateQueue[updateCount];
-		if (!queued) {
+		const nextUpdate = updateQueue[updateCount];
+		if (!nextUpdate) {
 			return false;
 		}
-		delete updateQueue[updateCount];
 
-		const ticksToRender = ticksRendered - ticksRenderedLastUpdate;
-		ticksRenderedLastUpdate = ticksRendered;
-		if (updateCount > 0 && ticksToRender != ticksPerUpdate) {
-			console.log('Dequeue update', updateCount, ticksToRender);
-		}
+		updateQueue[updateCount] = null;
 		updateCount += 1;
 
-		for (let pid in queued) {
+		for (let pid in nextUpdate) {
 			const player = players[pid];
 			if (player) {
-				const playerData = queued[pid];
+				const playerData = nextUpdate[pid];
 				const dest = playerData.dest;
 				if (dest) {
-					// console.log(['Dest', dest, pid]);
 					player.unit.setDestination(dest[0], dest[1], false);
 				}
+			} else {
+				console.log('Update invalid for player', pid);
 			}
 		}
 		return true;

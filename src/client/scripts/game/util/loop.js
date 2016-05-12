@@ -22,7 +22,7 @@ const animate = function(timestamp) {
 	const game = Local.game;
 	if (game) {
 		if (game.running) {
-			const ticksToRender = game.ticksToRender(currentTime);
+			const ticksToRender = game.calculateTicksToRender(currentTime);
 			if (ticksToRender > 0) {
 				const processUpdate = updatePanel && ticksToRender == 1;
 				if (processUpdate) {

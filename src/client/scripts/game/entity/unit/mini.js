@@ -142,7 +142,6 @@ class Mini extends Movable {
 				return true;
 			}
 		} else {
-			console.log(this.px+' '+this.py, this.lastX+' '+this.lastY);
 			this.setDestination(this.lastX, this.lastY, true);
 			this.returnToPath = true;
 		}
