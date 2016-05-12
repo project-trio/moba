@@ -10,7 +10,7 @@ const Unit = require('game/entity/unit/unit');
 
 let lastUpdate = 0;
 
-var updatePanel, framePanel;
+let updatePanel, framePanel;
 
 //LOOP
 

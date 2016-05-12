@@ -32,8 +32,8 @@ module.exports = {
 		// // light.position.set(0, 0, 10);
 		// camera.add(light);
 		light.castShadow = true;
-		let shadowCamera = new THREE.PerspectiveCamera(50, 1, 1200, 2500);
-		let lightShadow = new THREE.LightShadow(shadowCamera);
+		const shadowCamera = new THREE.PerspectiveCamera(50, 1, 1200, 2500);
+		const lightShadow = new THREE.LightShadow(shadowCamera);
 		lightShadow.bias = 0.0001;
 		lightShadow.mapSize.width = 1024;
 		lightShadow.mapSize.height = 1024;
@@ -81,7 +81,7 @@ module.exports = {
 	},
 
 	text: function(string, x, y, options, parent) {
-		// let text = new PIXI.Text(string, options);
+		// const text = new PIXI.Text(string, options);
 		// text.position.set(x, y);
 		// if (parent) {
 		// 	parent.add(text);
@@ -90,10 +90,10 @@ module.exports = {
 	},
 
 	sprite: function(name, options) {
-		let map = new THREE.TextureLoader().load(require(`images/${name}.png`));
-		// var material = new THREE.SpriteMaterial({map: map});
-		let material = new THREE.SpriteMaterial({map: map, color: 0xffffff, fog: true});
-		let sprite = new THREE.Sprite(material);
+		const map = new THREE.TextureLoader().load(require(`images/${name}.png`));
+		// const material = new THREE.SpriteMaterial({map: map});
+		const material = new THREE.SpriteMaterial({map: map, color: 0xffffff, fog: true});
+		const sprite = new THREE.Sprite(material);
 		sprite.scale.set(88, 88, 1);
 		if (options.parent) {
 			options.parent.add(sprite);
@@ -102,10 +102,10 @@ module.exports = {
 	},
 
 	voxel: function(name, options) {
-		var parser = new Vox.Parser();
+		const parser = new Vox.Parser();
 		parser.parse(require(`images/${name}.vox`)).then(function(voxelData) {
-			var builder = new Vox.MeshBuilder(voxelData, {voxelSize: 2}); //TODO cache
-			var mesh = builder.createMesh();
+			const builder = new Vox.MeshBuilder(voxelData, {voxelSize: 2}); //TODO cache
+			const mesh = builder.createMesh();
 			mesh.rotation.x = Math.PI / 2;
 			if (options.z) {
 				mesh.position.z = options.z;
@@ -120,9 +120,9 @@ module.exports = {
 	// Shapes
 
 	wall: function(x, y, w, h, options) {
-		let geometry = new THREE.BoxGeometry(w, h, WALL_HEIGHT);
-		let material = new THREE.MeshPhongMaterial({color: options.color});
-		let wall = new THREE.Mesh(geometry, material);
+		const geometry = new THREE.BoxGeometry(w, h, WALL_HEIGHT);
+		const material = new THREE.MeshPhongMaterial({color: options.color});
+		const wall = new THREE.Mesh(geometry, material);
 		wall.position.set(x, y, 0);
 		wall.castShadow = true;
 		if (options.parent) {
@@ -132,9 +132,9 @@ module.exports = {
 	},
 
 	wallCap: function(x, y, radius, options) {
-		var geometry = new THREE.CylinderGeometry(radius, radius, WALL_HEIGHT);
-		var material = new THREE.MeshPhongMaterial({color: options.color});
-		var wall = new THREE.Mesh(geometry, material);
+		const geometry = new THREE.CylinderGeometry(radius, radius, WALL_HEIGHT);
+		const material = new THREE.MeshPhongMaterial({color: options.color});
+		const wall = new THREE.Mesh(geometry, material);
 		wall.rotation.set(Math.PI/2, 0, 0);
 		wall.castShadow = true;
 		wall.position.set(x, y, 0);
@@ -145,9 +145,9 @@ module.exports = {
 	},
 
 	ground: function(w, h, options) {
-		let geometry = new THREE.BoxGeometry(w, h, 10);
-		let material = new THREE.MeshBasicMaterial({color: options.color});
-		let rectangle = new THREE.Mesh(geometry, material);
+		const geometry = new THREE.BoxGeometry(w, h, 10);
+		const material = new THREE.MeshBasicMaterial({color: options.color});
+		const rectangle = new THREE.Mesh(geometry, material);
 		rectangle.receiveShadow = true;
 		rectangle.position.set(w / 2, h / 2, -10);
 		if (options.parent) {
@@ -157,9 +157,9 @@ module.exports = {
 	},
 
 	rectangle: function(x, y, w, h, options) {
-		let geometry = new THREE.BoxGeometry(w, h, options.depth || 1);
-		let material = new THREE.MeshBasicMaterial({color: options.color});
-		let rectangle = new THREE.Mesh(geometry, material);
+		const geometry = new THREE.BoxGeometry(w, h, options.depth || 1);
+		const material = new THREE.MeshBasicMaterial({color: options.color});
+		const rectangle = new THREE.Mesh(geometry, material);
 		rectangle.position.set(x, y, options.z || 0);
 		if (options.parent) {
 			options.parent.add(rectangle);

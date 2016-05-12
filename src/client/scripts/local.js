@@ -1,8 +1,8 @@
 'use strict';
 
-var pageLoad = window.location;
+const pageLoad = window.location;
 
-// var pathItems = pageLoad.pathname.split('/');
+// const pathItems = pageLoad.pathname.split('/');
 
 //PUBLIC
 
