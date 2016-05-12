@@ -75,7 +75,7 @@ module.exports = {
 		return sinTable[index];
 	},
 
-	atan: function(x, y) {
+	atan: function(y, x) {
 		const index = new Decimal(y).dividedBy(x).plus(rangeAtan).times(atanFactor).floor().toNumber(); // (y / x + rangeAtan) * atanFactor) | 0
 		let angle;
 		if (index < 0) {

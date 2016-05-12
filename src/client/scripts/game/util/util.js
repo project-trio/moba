@@ -12,7 +12,7 @@ module.exports = {
 		if (fast) {
 			return Math.atan2(dy, dx); 
 		}
-		return TrigCache.atan(dx, dy);
+		return TrigCache.atan(dy, dx);
 	},
 
 	angleBetween: function(a, b, fast) {
@@ -33,16 +33,12 @@ module.exports = {
 		return diffX * diffX + diffY * diffY;
 	},
 
-	manhattanDistance: function(x1, y1, x2, y2) {
-		return Math.abs(x2 - x1) + Math.abs(y2 - y1);
-	},
-
 	withinSquared: function(distance, range) {
-		return distance < range * range;
+		return distance < (range * range);
 	},
 
-	squared: function(distance) {
-		return distance * distance;
+	squared: function(value) {
+		return value * value;
 	},
 
 };
