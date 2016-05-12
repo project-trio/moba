@@ -54,6 +54,7 @@ const Game = function(gid, size) {
 			if (ticksRendered % ticksPerUpdate == 0) {
 				if (!dequeueUpdate()) {
 					console.log('Missing update', ticksRendered);
+					lastTickTime += tickDuration;
 					break;
 				}
 			}
@@ -105,6 +106,12 @@ const Game = function(gid, size) {
 	this.enqueueUpdate = function(update, moves) {
 		this.serverUpdate = update;
 		updateQueue[update] = moves;
+		if (this.serverUpdate > updateCount) {
+			lastTickTime -= tickDuration;
+			if (updateCount > 20) {
+				console.log('Catching up to server update', [this.serverUpdate, updateCount]);
+			}
+		}
 	};
 
 	this.start = function(_updateDuration, _tickDuration) {
