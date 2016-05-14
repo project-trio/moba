@@ -139,10 +139,6 @@ class Movable extends Unit {
 		}
 	}
 
-	reachPrecision(approximate, exact) {
-		return approximate;
-	}
-
 	move(timeDelta, tweening) {
 		if (this.isAttackingTarget) {
 			return;
@@ -189,24 +185,19 @@ class Movable extends Unit {
 			const distX = this.destX - cx;
 			const distY = this.destY - cy;
 			let reachedApproximate = false;
-			let reachedExact = true;
 			const absMovingX = Math.abs(movingX);
 			const absMovingY = Math.abs(movingY);
 			if (Math.abs(distX) <= absMovingX || (distX < 0 ? movingX > 0 : movingX < 0)) {
 				if (absMovingX >= absMovingY) {
 					reachedApproximate = true;
 				}
-			} else {
-				reachedExact = false;
 			}
 			if (Math.abs(distY) <= absMovingY || (distY < 0 ? movingY > 0 : movingY < 0)) {
 				if (absMovingY >= absMovingX) {
 					reachedApproximate = true;
 				}
-			} else {
-				reachedExact = false;
 			}
-			if (reachedExact && this.pathing) {
+			if (reachedApproximate) {
 				movingToX = this.destX;
 				movingToY = this.destY;
 			}
@@ -215,7 +206,7 @@ class Movable extends Unit {
 			this.py = movingToY;
 			this.updatePosition(movingToX, movingToY);
 
-			if (this.reachPrecision(reachedApproximate, reachedExact)) {
+			if (reachedApproximate) {
 				this.reachedDestination(true);
 			}
 		}

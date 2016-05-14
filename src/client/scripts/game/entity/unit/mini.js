@@ -116,10 +116,6 @@ class Mini extends Movable {
 		this.currentDest = nextDest;
 	}
 
-	reachPrecision(approximate, exact) {
-		return exact;
-	}
-
 	reachedDestination(needsNewDestination) {
 		if (!this.pathing && this.returnToPath) {
 			this.pathing = true;
