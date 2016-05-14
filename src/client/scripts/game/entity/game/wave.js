@@ -9,7 +9,7 @@ module.exports = {
 	spawn: function(waveData) {
 		const mapWidth = Local.game.map.width();
 		const mapHeight = Local.game.map.height();
-		waveData.forEach((minionData) => {
+		waveData.forEach((minionData)=>{
 			const paths = minionData.paths;
 			const name = minionData.type;
 			for (let team = 0; team < 2; team += 1) {

@@ -183,7 +183,7 @@ const GameMap = function(parent) {
 		});
 
 		let automateTimer;
-		Render.on(ground, 'mousedown', (event) => {
+		Render.on(ground, 'mousedown', (event)=>{
 			if (Local.player.unit.canMove()) {
 				const clickPoint = event.intersect.point;
 				const diffX = Math.round(clickPoint.x) - previousCameraX;
@@ -196,7 +196,7 @@ const GameMap = function(parent) {
 			}
 		});
 
-		automateTimer = setInterval(function() {
+		automateTimer = setInterval(()=>{
 			if (Local.player) {
 				const dx = Math.round(Math.random() * layout.width);
 				const dy = Math.round(Math.random() * layout.height);

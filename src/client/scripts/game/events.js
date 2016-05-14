@@ -6,7 +6,7 @@ const Local = require('local');
 
 //SOCKET
 
-Bridge.on('update', (data) => {
+Bridge.on('update', (data)=>{
 	const update = data.update;
 	if (Local.game.serverUpdate != update - 1) {
 		console.error('Invalid update ' + Local.game.serverUpdate + ' ' + update);

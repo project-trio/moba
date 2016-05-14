@@ -20,7 +20,7 @@ SocketIO.io = io;
 
 app.use(express.static('public'));
 
-app.get('*', (request, response, next) => {
+app.get('*', (request, response, next)=>{
 	response.sendFile(path.resolve(__dirname, '/public/index.html'));
 });
 
