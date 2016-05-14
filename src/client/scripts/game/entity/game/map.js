@@ -57,7 +57,7 @@ maps.small = {
 	],
 };
 
-const wallStandardH = 80;
+const wallStandardH = 60;
 
 maps.standard = {
 	width: 1200,
@@ -72,13 +72,13 @@ maps.standard = {
 
 	walls: [
 		{
-			x: 300, y: 360,
+			x: 320, y: 360,
 			w: wallStandardH * 2, h: wallRadius * 2,
 			capStart: true, capEnd: true,
 			mirror: true,
 		},
 		{
-			x: 300 - wallStandardH, y: 360 - wallStandardH,
+			x: 320 - wallStandardH, y: 360 - wallStandardH,
 			w: wallRadius * 2, h: wallStandardH * 2,
 			capStart: true, capEnd: false,
 			mirror: true,
