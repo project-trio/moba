@@ -121,7 +121,7 @@ module.exports = {
 
 	wall: function(x, y, w, h, options) {
 		const geometry = new THREE.BoxGeometry(w, h, WALL_HEIGHT);
-		const material = new THREE.MeshPhongMaterial({color: options.color});
+		const material = new THREE.MeshLambertMaterial({color: options.color});
 		const wall = new THREE.Mesh(geometry, material);
 		wall.position.set(x, y, 0);
 		wall.castShadow = true;
@@ -133,7 +133,7 @@ module.exports = {
 
 	wallCap: function(x, y, radius, options) {
 		const geometry = new THREE.CylinderGeometry(radius, radius, WALL_HEIGHT);
-		const material = new THREE.MeshPhongMaterial({color: options.color});
+		const material = new THREE.MeshLambertMaterial({color: options.color});
 		const wall = new THREE.Mesh(geometry, material);
 		wall.rotation.set(Math.PI/2, 0, 0);
 		wall.castShadow = true;
