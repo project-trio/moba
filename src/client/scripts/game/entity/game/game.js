@@ -38,22 +38,22 @@ const Game = function(gid, size) {
 	// Update
 
 	let ticksRendered = 0;
-	let lastTickTime;
+	let lastTickTime, tickOffsetTime = 0;
 
 	this.logTicksRendered = function() {
 		console.log(ticksRendered);
 	};
 
 	this.calculateTicksToRender = function(currentTime) {
-		return Math.floor((currentTime - lastTickTime) / tickDuration);
+		return Math.floor((currentTime - lastTickTime - tickOffsetTime) / tickDuration);
 	};
 
 	this.performTicks = function(ticksToRender, currentTime) {
 		while (ticksToRender > 0) {
 			if (ticksRendered % ticksPerUpdate == 0) {
 				if (!dequeueUpdate()) {
-					console.log('Missing update', ticksRendered);
-					lastTickTime += tickDuration;
+					tickOffsetTime += ticksToRender * tickDuration;
+					console.log('Missing update', [ticksToRender, tickOffsetTime]);
 					break;
 				}
 			}
@@ -101,10 +101,11 @@ const Game = function(gid, size) {
 	this.enqueueUpdate = function(update, moves) {
 		this.serverUpdate = update;
 		updateQueue[update] = moves;
-		if (this.serverUpdate > updateCount) {
-			lastTickTime -= tickDuration;
+		const behindUpdates = update - updateCount;
+		if (behindUpdates > 0) {
+			tickOffsetTime -= behindUpdates * ticksPerUpdate * tickDuration;
 			if (updateCount > 20) {
-				console.log('Catching up to server update', [this.serverUpdate, updateCount]);
+				console.log('Catching up to server update', [behindUpdates, tickOffsetTime]);
 			}
 		}
 	};
