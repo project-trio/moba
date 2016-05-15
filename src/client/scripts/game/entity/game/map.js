@@ -173,8 +173,8 @@ const GameMap = function(parent) {
 		name = 'standard';
 		layout = maps[name];
 
-		var mapWidth = layout.width;
-		var mapHeight = layout.height;
+		const mapWidth = layout.width;
+		const mapHeight = layout.height;
 		Render.positionCamera(mapWidth / 2, mapHeight / 2);
 
 		const ground = Render.ground(mapWidth, mapHeight, {
@@ -249,16 +249,16 @@ const GameMap = function(parent) {
 		for (let idx = 0; idx < layout.towers.length; idx += 1) {
 			const tower = layout.towers[idx];
 			const towerType = tower[0];
-			const x = tower[1];
-			const y = tower[2];
+			const ox = tower[1];
+			const oy = tower[2];
 			const mirroring = tower[3];
-			var mirrored = false;
+			let mirrored = false;
 			for (let mirror = 0; mirror < (mirroring ? 2 : 1); mirror += 1) {
 				mirrored = !mirrored;
 				for (let team = 0; team < 2; team += 1) {
 					const firstTeam = team === 0;
-					const tx = firstTeam != mirrored ? mapWidth - x : x;
-					const ty = firstTeam ? mapHeight - y : y;
+					const tx = firstTeam != mirrored ? mapWidth - ox : ox;
+					const ty = firstTeam ? mapHeight - oy : oy;
 					new Tower(team, towerType, tx, ty);
 				}
 			}

@@ -86,17 +86,17 @@ class Movable extends Unit {
 			const uy2 = uy1 + collisionSize;
 			for (let idx = 0; idx < walls.length; idx += 1) {
 				const wall = walls[idx];
-				const x = wall[0];
-				const y = wall[1];
-				const w = wall[2];
-				const h = wall[3];
-				if (h) {
-					if (rectanglesIntersecting(x, y, x + w, y + h, ux1, uy1, ux2, uy2)) {
+				const wx = wall[0];
+				const wy = wall[1];
+				const ww = wall[2];
+				const wh = wall[3];
+				if (wh) {
+					if (rectanglesIntersecting(wx, wy, wx + ww, wy + wh, ux1, uy1, ux2, uy2)) {
 						return true;
 					}
 				} else {
-					const dist = Util.pointDistance(x, y, bx, by);
-					if (Util.withinSquared(dist, collisionSize + w)) {
+					const dist = Util.pointDistance(wx, wy, bx, by);
+					if (Util.withinSquared(dist, collisionSize + ww)) {
 						return true;
 					}
 				}

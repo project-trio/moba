@@ -20,9 +20,9 @@ module.exports = function(pid, team, index, name) {
 
 		const mapWidthHalf = Local.game.map.centerX();
 		const mapHeightHalf = Local.game.map.centerY();
-		const x = mapWidthHalf + Local.shipSize * 2 * (Math.floor(index / 2) + 1) * indexMp * teamMp;
-		const y = (mapHeightHalf - PLAYER_INSET) * teamMp + mapHeightHalf;
-		return [x, y];
+		const sx = mapWidthHalf + Local.shipSize * 2 * (Math.floor(index / 2) + 1) * indexMp * teamMp;
+		const sy = (mapHeightHalf - PLAYER_INSET) * teamMp + mapHeightHalf;
+		return [sx, sy];
 	};
 
 	this.createShip = function() {

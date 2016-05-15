@@ -53,7 +53,9 @@ const Game = function(gid, size) {
 			if (ticksRendered % ticksPerUpdate == 0) {
 				if (!dequeueUpdate()) {
 					tickOffsetTime += ticksToRender * tickDuration;
-					console.log('Missing update', [ticksToRender, tickOffsetTime]);
+					if (this.serverUpdate > 20) {
+						console.log('Missing update', [ticksToRender, tickOffsetTime]);
+					}
 					break;
 				}
 			}
