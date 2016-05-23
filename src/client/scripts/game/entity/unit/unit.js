@@ -11,8 +11,6 @@ const Render = require('game/util/render');
 
 const allUnits = [];
 
-//CLASS
-
 const applyOpacity = function(container, isTransluscent, opacity) {
 	const mesh = container.children[0];
 	if (mesh) {
@@ -22,6 +20,8 @@ const applyOpacity = function(container, isTransluscent, opacity) {
 		}
 	}
 };
+
+//CLASS
 
 class Unit {
 

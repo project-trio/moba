@@ -1,5 +1,7 @@
 'use strict';
 
+//CONSTRUCTOR
+
 module.exports = function(client) {
 
 	this.id = client.pid;

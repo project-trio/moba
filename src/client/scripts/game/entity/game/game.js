@@ -11,6 +11,8 @@ const Wave = require('game/entity/game/wave');
 
 const Unit = require('game/entity/unit/unit');
 
+//CONSTRUCTOR
+
 const Game = function(gid, size) {
 
 	const gameContainer = Render.group();

@@ -6,6 +6,8 @@ const Config = require('./config');
 
 const Util = require.main.require('./utils/util');
 
+//CONSTRUCTOR
+
 module.exports = function(size) {
 
 	const playerIds = [[], []];

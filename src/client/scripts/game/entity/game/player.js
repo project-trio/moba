@@ -5,6 +5,8 @@ const Ship = require('game/entity/unit/ship');
 
 const PLAYER_INSET = 64;
 
+//CONSTRUCTOR
+
 module.exports = function(pid, team, index, name) {
 
 	this.id = pid;
