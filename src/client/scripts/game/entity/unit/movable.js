@@ -139,39 +139,43 @@ class Movable extends Unit {
 		}
 	}
 
+	calculateMoveSpeed() {
+		let moveSpeed = this.moveConstant;
+		if (this.isDead) {
+			return moveSpeed.dividedBy(2);
+		}
+		return moveSpeed;
+	}
+
 	move(timeDelta, tweening) {
 		if (this.isAttackingTarget) {
 			return;
 		}
 
 		let cx, cy;
-		let movingX, movingY;
-		let moveSpeed;
+		let moveByX, moveByY;
 		if (tweening) {
 			cx = this.container.position.x * 100;
 			cy = this.container.position.y * 100;
 
-			moveSpeed = this.currentSpeed * timeDelta;
-			movingX = moveSpeed * this.moveX;
-			movingY = moveSpeed * this.moveY;
+			const tweenScalar = this.currentSpeed * timeDelta;
+			moveByX = tweenScalar * this.moveX;
+			moveByY = tweenScalar * this.moveY;
 		} else {
 			cx = this.px;
 			cy = this.py;
 
 			// Cache
-			moveSpeed = this.moveConstant;
-			if (this.isDead) {
-				moveSpeed = moveSpeed.dividedBy(2);
-			}
+			const moveSpeed = this.calculateMoveSpeed();
 			this.currentSpeed = moveSpeed.toNumber();
 
-			moveSpeed = moveSpeed.times(timeDelta);
-			movingX = moveSpeed.times(this.moveX).round().toNumber();
-			movingY = moveSpeed.times(this.moveY).round().toNumber();
+			const moveScalar = moveSpeed.times(timeDelta);
+			moveByX = moveScalar.times(this.moveX).round().toNumber();
+			moveByY = moveScalar.times(this.moveY).round().toNumber();
 		}
 
-		let movingToX = cx + movingX;
-		let movingToY = cy + movingY;
+		let movingToX = cx + moveByX;
+		let movingToY = cy + moveByY;
 		if (tweening) {
 			this.updatePosition(movingToX, movingToY);
 		} else {
@@ -185,14 +189,14 @@ class Movable extends Unit {
 			const distX = this.destX - cx;
 			const distY = this.destY - cy;
 			let reachedApproximate = false;
-			const absMovingX = Math.abs(movingX);
-			const absMovingY = Math.abs(movingY);
-			if (Math.abs(distX) <= absMovingX || (distX < 0 ? movingX > 0 : movingX < 0)) {
+			const absMovingX = Math.abs(moveByX);
+			const absMovingY = Math.abs(moveByY);
+			if (Math.abs(distX) <= absMovingX || (distX < 0 ? moveByX > 0 : moveByX < 0)) {
 				if (absMovingX >= absMovingY) {
 					reachedApproximate = true;
 				}
 			}
-			if (Math.abs(distY) <= absMovingY || (distY < 0 ? movingY > 0 : movingY < 0)) {
+			if (Math.abs(distY) <= absMovingY || (distY < 0 ? moveByY > 0 : moveByY < 0)) {
 				if (absMovingY >= absMovingX) {
 					reachedApproximate = true;
 				}
