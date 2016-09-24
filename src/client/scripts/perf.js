@@ -1,6 +1,6 @@
 'use strict';
 
-const Decimal = require('decimal.js');
+// const Decimal = require('decimal.js');
 const TrigCache = require('external/trigcache');
 
 const Util = require('game/util/util');
@@ -104,14 +104,14 @@ console.log(value / 1000);
 //SIN
 
 
-console.log('\nSIN', angleApprox);
+console.log('\nSIN');
 
 console.time('Math.sin');
 for (let i = 0; i < iterations; i += 1) {
 	value = Math.sin(anglePrecise);
 }
 console.timeEnd('Math.sin');
-console.log(Math.sin(anglePrecise));
+console.log(value);
 
 
 // console.time('Decimal.sin');

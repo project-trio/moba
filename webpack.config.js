@@ -7,6 +7,7 @@ module.exports = {
 	debug: true,
 
 	entry: './src/client/scripts/main.js',
+	// entry: './src/client/scripts/perf.js',
 
 	output: {
 		filename: 'bundle.js',
