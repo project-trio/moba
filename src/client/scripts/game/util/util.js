@@ -2,6 +2,9 @@
 
 const TrigCache = require('external/trigcache');
 
+const PI = Math.PI;
+const PIt2 = PI * 2;
+
 //PUBLIC
 
 module.exports = {
@@ -18,7 +21,12 @@ module.exports = {
 	angleBetween: function(a, b, fast) {
 		const positionA = a.container.position;
 		const positionB = b.container.position;
-		return this.angleOf(positionA.x - positionB.x, positionA.y - positionB.y, fast);
+		return this.angleOf(positionA.x - positionB.x, positionA.y - positionB.y, fast) + PI;
+	},
+
+	distanceBetweenAngles: function(a, b) {
+		let diff = ((b - a + PI) % PIt2) - PI;
+		return (diff < -PI ? diff + PIt2 : diff);
 	},
 
 	// Distance

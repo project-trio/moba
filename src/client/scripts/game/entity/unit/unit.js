@@ -53,6 +53,7 @@ class Unit {
 			attackDamage: statBase.attackDamage[0] * 1000,
 			attackCooldown: statBase.attackCooldown[0],
 			moveSpeed: statBase.moveSpeed[0],
+			turnSpeed: statBase.turnSpeed || 5,
 			collision: statBase.collision * 100,
 		};
 		this.healthRemaining = this.stats.healthMax;
@@ -186,7 +187,22 @@ class Unit {
 
 	updateAim() {
 		if (this.attackTarget) {
-			this.top.rotation.z = Util.angleBetween(this, this.attackTarget, true) + Math.PI;
+			this.aimTargetAngle = Util.angleBetween(this, this.attackTarget, true);
+		}
+		if (this.aimTargetAngle) {
+			let currAngle = this.top.rotation.z;
+			let destAngle = this.aimTargetAngle;
+			let newAngle;
+			let angleDiff = Util.distanceBetweenAngles(currAngle, destAngle);
+			let turnSpeed = this.stats.turnSpeed / 100;
+			if (Math.abs(angleDiff) < turnSpeed) {
+				newAngle = destAngle;
+				this.aimTargetAngle = null;
+			} else {
+				let spinDirection = angleDiff < 0 ? -1 : 1;
+				newAngle = currAngle + turnSpeed * spinDirection;
+			}
+			this.top.rotation.z = newAngle;
 		}
 	}
 

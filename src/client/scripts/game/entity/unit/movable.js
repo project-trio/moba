@@ -38,11 +38,11 @@ class Movable extends Unit {
 		const dy = y - this.py;
 		if (moveX === undefined) {
 			const moveAngle = Util.angleOf(dx, dy, false);
-			this.top.rotation.z = moveAngle.toNumber() / 1000;
+			this.aimTargetAngle = moveAngle.toNumber() / 1000;
 			moveX = TrigCache.cos(moveAngle);
 			moveY = TrigCache.sin(moveAngle);
 		} else {
-			this.top.rotation.z = Math.atan2(dy, dx);
+			this.aimTargetAngle = Math.atan2(dy, dx);
 		}
 		this.moveX = moveX;
 		this.moveY = moveY;
