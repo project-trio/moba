@@ -40,13 +40,11 @@ module.exports = {
 		light.shadow = lightShadow;
 		scene.add(light);
 
-		renderer = new THREE.WebGLRenderer({antialias: true});
+		renderer = new THREE.WebGLRenderer({antialias: true, canvas: document.getElementById('canvas')});
 		// renderer.physicallyCorrectLights = true;
 		renderer.shadowMap.enabled = true;
-
 		renderer.setSize(width, height);
 
-		document.getElementById('game-viewport').appendChild(renderer.domElement);
 		domEvents = new DomEvents(camera, renderer.domElement);
 		return renderer;
 	},

@@ -20,7 +20,7 @@ const connectLobby = function(action) {
 
 const toggleLobby = function(visible) {
 	$('#game-lobby').toggle(visible);
-	$('#game-viewport').toggle(!visible);
+	$('#canvas').toggle(!visible);
 };
 
 //EVENTS
