@@ -3,7 +3,7 @@
 // const Decimal = require('decimal.js');
 const TrigCache = require('external/trigcache');
 
-const Util = require('game/util/util');
+const Util = require('game/util');
 
 const iterations = 9999;
 

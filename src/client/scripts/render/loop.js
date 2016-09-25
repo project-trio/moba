@@ -4,7 +4,7 @@ const Stats = require('stats.js');
 
 const Local = require('local');
 
-const Render = require('game/util/render');
+const Render = require('render/render');
 
 const Unit = require('game/entity/unit/unit');
 

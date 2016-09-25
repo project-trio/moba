@@ -2,8 +2,9 @@
 
 const Decimal = require('decimal.js');
 
-const Util = require('game/util/util');
-const Render = require('game/util/render');
+const Render = require('render/render');
+
+const Util = require('game/util');
 
 const Movable = require('game/entity/unit/movable');
 const Unit = require('game/entity/unit/unit');

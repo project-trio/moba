@@ -5,7 +5,7 @@ const TrigCache = require('external/trigcache');
 
 const Local = require('local');
 
-const Util = require('game/util/util');
+const Util = require('game/util');
 
 const Unit = require('game/entity/unit/unit');
 

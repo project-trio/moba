@@ -3,7 +3,7 @@
 const TrigCache = require('external/trigcache');
 
 const Local = require('local');
-const Render = require('game/util/render');
+const Render = require('render/render');
 
 const GameMap = require('game/entity/game/map');
 const Player = require('game/entity/game/player');

@@ -3,7 +3,7 @@
 const Bridge = require('bridge');
 const Local = require('local');
 
-const Render = require('game/util/render');
+const Render = require('render/render');
 
 const Tower = require('game/entity/unit/tower');
 

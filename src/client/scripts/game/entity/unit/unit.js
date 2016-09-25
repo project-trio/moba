@@ -4,8 +4,9 @@ const Decimal = require('decimal.js');
 
 const Local = require('local');
 
-const Util = require('game/util/util');
-const Render = require('game/util/render');
+const Render = require('render/render');
+
+const Util = require('game/util');
 
 //LOCAL
 

@@ -1,6 +1,6 @@
 'use strict';
 
-const Render = require('game/util/render');
+const Render = require('render/render');
 
 const Movable = require('game/entity/unit/movable');
 const Unit = require('game/entity/unit/unit');

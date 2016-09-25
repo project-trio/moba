@@ -11,7 +11,7 @@ require('bridge');
 $(function() {
 
 	const Lobby = require('game/lobby');
-	const Loop = require('game/util/loop');
+	const Loop = require('render/loop');
 
 	Lobby.toggle(true);
 	Lobby.displaySection('start');
