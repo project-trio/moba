@@ -196,13 +196,15 @@ const GameMap = function(parent) {
 			}
 		});
 
-		automateTimer = setInterval(()=>{
-			if (Local.player) {
-				const dx = Math.round(Math.random() * layout.width);
-				const dy = Math.round(Math.random() * layout.height);
-				Bridge.emit('update', {dest: [dx, dy]});
-			}
-		}, Math.random()*2000+1000);
+		if (Local.TESTING) {
+			automateTimer = setInterval(()=>{ //SAMPLE
+				if (Local.player) {
+					const dx = Math.round(Math.random() * layout.width);
+					const dy = Math.round(Math.random() * layout.height);
+					Bridge.emit('update', {dest: [dx, dy]});
+				}
+			}, Math.random()*2000+1000);
+		}
 
 		for (let idx = 0; idx < layout.walls.length; idx += 1) {
 			const wall = layout.walls[idx];
