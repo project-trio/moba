@@ -64,8 +64,6 @@ class Movable extends Unit {
 		this.container.position.y = moveToY;
 		this.healthContainer.position.x = moveToX;
 		this.healthContainer.position.y = moveToY;
-		// this.sightCircle.x = moveToX;
-		// this.sightCircle.y = moveToY;
 	}
 
 	// Move

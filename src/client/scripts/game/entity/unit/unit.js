@@ -66,14 +66,6 @@ class Unit {
 		this.incomingAttackers = 0;
 		this.lastAttack = 0;
 
-		// Sight
-
-		// let allied = this.team == Local.player.team;
-		// let sightRadius = allied ? this.stats.sightRange : Local.shipSize;
-		// this.sightCircle = {x: 0, y: 0, radius: sightRadius, visible: allied};
-		// this.sightSize = sightRadius;
-		// Local.game.map.addSight(this.sightCircle);
-
 		// Health Bar
 
 		const hpOffsetY = -40;
@@ -124,8 +116,6 @@ class Unit {
 		this.px = x * 100;
 		this.py = y * 100;
 		this.container.position.set(x, y, 0);
-		// this.sightCircle.x = x;
-		// this.sightCircle.y = y;
 		this.healthContainer.position.x = x;
 		this.healthContainer.position.y = y;
 

@@ -5,6 +5,8 @@ const THREE = require('three');
 const Vox = require('external/vox');
 const DomEvents = require('external/threex.domevents');
 
+const RenderFog = require('render/fog');
+
 let gameScene, gameCamera, renderer, domEvents;
 let hudScene, hudCamera, hudTexture, hudBitmap;
 
@@ -199,15 +201,17 @@ module.exports = {
 		return wall;
 	},
 
-	ground: function(w, h, options) {
-		const geometry = new THREE.BoxGeometry(w, h, 10);
+	ground: function(width, height, options) {
+		const geometry = new THREE.BoxGeometry(width, height, 10);
 		const material = new THREE.MeshBasicMaterial({color: options.color});
 		const rectangle = new THREE.Mesh(geometry, material);
 		rectangle.receiveShadow = true;
-		rectangle.position.set(w / 2, h / 2, -10);
-		if (options.parent) {
-			options.parent.add(rectangle);
-		}
+		rectangle.position.set(width / 2, height / 2, -10);
+
+		options.floor.add(rectangle);
+
+		RenderFog.create(width, height, options.ceiling);
+
 		return rectangle;
 	},
 

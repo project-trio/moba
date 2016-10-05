@@ -124,7 +124,6 @@ class Tower extends Unit {
 	// Damage
 
 	die(time) {
-		// this.sightCircle.visible = false;
 		Render.remove(this.healthContainer);
 		Render.remove(this.top);
 

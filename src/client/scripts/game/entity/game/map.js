@@ -118,8 +118,10 @@ const GameMap = function(parent) {
 	let container = Render.group();
 	const floorContainer = Render.group();
 	const healthContainer = Render.group();
+	const fogContainer = Render.group();
 	container.add(floorContainer);
 	container.add(healthContainer);
+	container.add(fogContainer);
 	parent.add(container);
 	this.floorContainer = floorContainer;
 
@@ -179,7 +181,8 @@ const GameMap = function(parent) {
 
 		const ground = Render.ground(mapWidth, mapHeight, {
 			color: 0x00440a,
-			parent: floorContainer,
+			floor: floorContainer,
+			ceiling: fogContainer,
 		});
 
 		let automateTimer;

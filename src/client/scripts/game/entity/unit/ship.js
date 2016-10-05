@@ -86,7 +86,6 @@ class Ship extends Movable {
 		this.opacity(0.5);
 		this.respawned = false;
 		this.setTarget(null);
-		// this.sightCircle.radius = Local.shipSize;
 
 		super.die(time);
 	}
@@ -111,7 +110,6 @@ class Ship extends Movable {
 
 	reemerge() {
 		this.updateHealth(this.stats.healthMax);
-		// this.sightCircle.radius = this.sightSize;
 		this.container.alpha = 1.0;
 		this.healthContainer.visible = true;
 
@@ -215,12 +213,12 @@ class Ship extends Movable {
 				unit.isRendering = true;
 			} else {
 				const isInSight = this.canSee(unit);
+				unit.visibleForFrame = isInSight;
 				const updatedVisibility = unit.isRendering !== isInSight;
 				if (updatedVisibility) {
 					unit.isRendering = isInSight;
 					unit.container.visible = isInSight || unit.renderInBackground || false;
 					unit.healthContainer.visible = isInSight;
-					// unit.sightCircle.visible = isInSight;
 				}
 				revealUnit = isInSight && (updatedVisibility || unit.isMoving);
 			}
