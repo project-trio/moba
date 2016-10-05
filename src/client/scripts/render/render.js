@@ -5,61 +5,118 @@ const THREE = require('three');
 const Vox = require('external/vox');
 const DomEvents = require('external/threex.domevents');
 
-let scene, camera, renderer, domEvents;
+let gameScene, gameCamera, renderer, domEvents;
+let hudScene, hudCamera, hudTexture, hudBitmap;
 
 const WALL_HEIGHT = 60;
 
+let windowWidth, windowHeight;
+
+//LOCAL
+
+const resize = function() {
+	windowWidth = window.innerWidth;
+	windowHeight = window.innerHeight;
+	renderer.setSize(windowWidth, windowHeight);
+
+	gameCamera.aspect = windowWidth / windowHeight;
+	gameCamera.updateProjectionMatrix();
+
+	const halfWidth = 0.5 * windowWidth;
+	const halfHeight = 0.5 * windowHeight;
+	hudCamera.left = -halfWidth;
+	hudCamera.right = halfWidth;
+	hudCamera.top = halfHeight;
+	hudCamera.bottom = -halfHeight;
+	hudCamera.updateProjectionMatrix();
+};
+
 //PUBLIC
+
+let counter = 0;
 
 module.exports = {
 
 	create: function() {
-		const width = window.innerWidth;
-		const height = window.innerHeight;
-		scene = new THREE.Scene();
-		camera = new THREE.PerspectiveCamera(90, width / height, 1, 1024);
-		camera.up.set(0, -1, 0);
-		camera.lookAt(scene);
-		camera.position.z = 512;
+		windowWidth = window.innerWidth;
+		windowHeight = window.innerHeight;
+		gameScene = new THREE.Scene();
+		gameCamera = new THREE.PerspectiveCamera(90, windowWidth / windowHeight, 1, 1024);
+		gameCamera.up.set(0, -1, 0);
+		gameCamera.lookAt(gameScene);
+		gameCamera.position.z = 512;
 
-		const ambient = new THREE.AmbientLight(0x333333);
-		scene.add(ambient);
+		const ambient = new THREE.AmbientLight(0x444444);
+		gameScene.add(ambient);
 
 		// const light = new THREE.DirectionalLight(0xffffff, 0.5);
-		// light.position.set(width / 2, height / 2, 512);
-		const light = new THREE.PointLight(0xffffff, 0.9, 0);
-		light.position.set(width / 2, height / 2, 100);
+		// light.position.set(windowWidth / 2, windowHeight / 2, 512);
+		const light = new THREE.PointLight(0xffffff, 0.99, 0);
+		light.position.set(windowWidth / 2, windowHeight / 2, 100);
 		// // light.position.set(0, 0, 10);
 		// camera.add(light);
 		light.castShadow = true;
 		const shadowCamera = new THREE.PerspectiveCamera(50, 1, 1200, 2500);
 		const lightShadow = new THREE.LightShadow(shadowCamera);
-		lightShadow.bias = 0.0001;
+		lightShadow.bias = 0.001;
 		lightShadow.mapSize.width = 1024;
 		lightShadow.mapSize.height = 1024;
 		light.shadow = lightShadow;
-		scene.add(light);
+		gameScene.add(light);
 
-		renderer = new THREE.WebGLRenderer({antialias: true, canvas: document.getElementById('canvas')});
+		renderer = new THREE.WebGLRenderer({
+			// alpha: true,
+			antialias: true,
+			canvas: document.getElementById('canvas'),
+		});
+		// renderer.setClearColor(0x000000);
+		renderer.autoClear = false;
 		// renderer.physicallyCorrectLights = true;
-		renderer.shadowMap.enabled = true;
-		renderer.setSize(width, height);
+		// renderer.shadowMap.enabled = true;
+		// renderer.shadowMap.type = THREE.PCFShadowMap;
 
-		domEvents = new DomEvents(camera, renderer.domElement);
+		domEvents = new DomEvents(gameCamera, renderer.domElement);
+
+		// HUD
+
+		hudScene = new THREE.Scene();
+		hudCamera = new THREE.OrthographicCamera(-windowWidth/2, windowWidth/2, windowHeight/2, -windowHeight/2, 0, 30);
+
+		const hudCanvas = document.createElement('canvas');
+		hudCanvas.width = windowWidth;
+		hudCanvas.height = windowHeight;
+
+		hudBitmap = hudCanvas.getContext('2d');
+		hudBitmap.clearRect(0, 0, window.innerWidth, window.innerHeight);
+		hudBitmap.font = "Normal 100px Arial";
+		hudBitmap.textAlign = 'center';
+		hudBitmap.fillStyle = "rgba(245,245,245,0.75)";
+
+		hudTexture = new THREE.Texture(hudCanvas);
+		hudTexture.minFilter = THREE.LinearFilter;
+		let hudGeometry = new THREE.PlaneGeometry(windowWidth, windowHeight);
+		let hudMaterial = new THREE.MeshBasicMaterial({map: hudTexture});
+		hudMaterial.transparent = true;
+		let hudPlane = new THREE.Mesh(hudGeometry, hudMaterial);
+		hudScene.add(hudPlane);
+
+		resize();
+
 		return renderer;
 	},
 
 	positionCamera: function(x, y) {
-		camera.position.x = x;
-		camera.position.y = y;
+		gameCamera.position.x = x;
+		gameCamera.position.y = y;
 	},
 
 	render: function() {
-		renderer.render(scene, camera);
-	},
+		hudBitmap.clearRect(0, 0, window.innerWidth, window.innerHeight);
+		hudBitmap.fillText(++counter, windowWidth / 2, windowHeight / 2);
+		hudTexture.needsUpdate = true;
 
-	get: function() {
-		return renderer.domElement;
+		renderer.render(gameScene, gameCamera);
+		renderer.render(hudScene, hudCamera);
 	},
 
 	remove: function(object) {
@@ -71,7 +128,7 @@ module.exports = {
 	},
 
 	add: function(object) {
-		scene.add(object);
+		gameScene.add(object);
 	},
 
 	group: function() {
