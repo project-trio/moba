@@ -26,7 +26,7 @@ module.exports = {
 		let fogMaterial = new THREE.MeshBasicMaterial({map: fogTexture});
 		fogMaterial.transparent = true;
 		let fogPlane = new THREE.Mesh(fogGeometry, fogMaterial);
-		fogPlane.position.set(mapWidth / 2, mapHeight / 2, 40);
+		fogPlane.position.set(mapWidth / 2, mapHeight / 2, -5);
 
 		parent.add(fogPlane);
 	},
@@ -37,7 +37,7 @@ module.exports = {
 		}
 		const localTeam = Local.player.team;
 		fogBitmap.clearRect(0, 0, mapWidth, mapHeight);
-		fogBitmap.fillStyle = "rgba(128,128,128,0.75)";
+		fogBitmap.fillStyle = "rgba(128,128,128,0.5)";
 		fogBitmap.fillRect(0, 0, mapWidth, mapHeight);
 		fogTexture.needsUpdate = true;
 
