@@ -56,7 +56,7 @@ const Game = function(gid, size) {
 				if (!dequeueUpdate()) {
 					tickOffsetTime += ticksToRender * tickDuration;
 					if (this.serverUpdate > 20) {
-						console.log('Missing update', [ticksToRender, tickOffsetTime]);
+						console.error('Missing update', [ticksToRender, tickOffsetTime]);
 					}
 					break;
 				}
