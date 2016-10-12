@@ -33,6 +33,8 @@ const resize = function() {
 	hudCamera.updateProjectionMatrix();
 };
 
+window.addEventListener('resize', resize);
+
 //PUBLIC
 
 let counter = 0;
@@ -89,7 +91,7 @@ module.exports = {
 		hudCanvas.height = windowHeight;
 
 		hudBitmap = hudCanvas.getContext('2d');
-		hudBitmap.clearRect(0, 0, window.innerWidth, window.innerHeight);
+		hudBitmap.clearRect(0, 0, windowWidth, windowHeight);
 		hudBitmap.font = "Normal 100px Arial";
 		hudBitmap.textAlign = 'center';
 		hudBitmap.fillStyle = "rgba(245,245,245,0.75)";
@@ -113,7 +115,7 @@ module.exports = {
 	},
 
 	render: function() {
-		hudBitmap.clearRect(0, 0, window.innerWidth, window.innerHeight);
+		hudBitmap.clearRect(0, 0, windowWidth, windowHeight);
 		hudBitmap.fillText(++counter, windowWidth / 2, windowHeight / 2);
 		hudTexture.needsUpdate = true;
 
