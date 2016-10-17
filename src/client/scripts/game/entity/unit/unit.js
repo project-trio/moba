@@ -128,6 +128,10 @@ class Unit {
 		return Util.pointDistance(this.px, this.py, unit.px, unit.py);
 	}
 
+	shouldMove() {
+		return false;
+	}
+
 	// Health
 
 	hasDied() {
@@ -175,7 +179,27 @@ class Unit {
 		this.remove = true;
 	}
 
-	// Attack
+	// Target
+
+	setTarget(target, distance) {
+		if (target != this.attackTarget) {
+			if (this.attackTarget) {
+				this.attackTarget.incoming(-1);
+			}
+			if (target) {
+				target.incoming(1);
+			} else {
+				this.isAttackingTarget = false;
+			}
+			this.attackTarget = target;
+		}
+		if (target) {
+			this.cacheAttackCheck = distance < this.attackRangeCheck;
+		}
+		return target;
+	}
+
+	// Aim
 
 	updateAim() {
 		if (this.attackTarget) {
@@ -198,42 +222,36 @@ class Unit {
 		}
 	}
 
-	incoming(increment) {
-		this.incomingAttackers += increment;
+	// Visibility
+
+	inSightRange(unit) {
+		return this.distanceTo(unit) < this.sightRangeCheck;
 	}
 
-	setTarget(target, distance) {
-		if (target != this.attackTarget) {
-			if (this.attackTarget) {
-				this.attackTarget.incoming(-1);
-			}
-			if (target) {
-				target.incoming(1);
-			} else {
-				this.isAttackingTarget = false;
-			}
-			this.attackTarget = target;
-		}
-		if (target) {
-			this.cacheAttackCheck = distance < this.attackRangeCheck;
-		}
-		return target;
+	isGloballyVisible() {
+		return this.isDying || this.hasActiveFire();
 	}
 
-	hasActiveFire() {
-		return this.isFiring || this.incomingAttackers > 0;
+	hasSightOf(unit) {
+		return !this.isDead && this.inSightRange(unit);
 	}
+
+	canSee(enemy) {
+		return enemy.isGloballyVisible() || this.hasSightOf(enemy);
+	}
+
+	// Attack
 
 	alliedTo(target) {
 		return this.team == target.team;
 	}
 
-	inSightRange(enemy) {
-		return this.distanceTo(enemy) < this.sightRangeCheck;
+	incoming(increment) {
+		this.incomingAttackers += increment;
 	}
 
-	canSee(enemy) {
-		return enemy.isDying || enemy.hasActiveFire() || this.inSightRange(enemy);
+	hasActiveFire() {
+		return this.isFiring || this.incomingAttackers > 0;
 	}
 
 	inAttackRange(unit) {
@@ -271,10 +289,6 @@ class Unit {
 		if (this.isFiring) {
 			this.attack(attackForTick, renderTime);
 		}
-	}
-
-	shouldMove() {
-		return false;
 	}
 
 }
