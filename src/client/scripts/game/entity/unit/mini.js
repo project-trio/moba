@@ -70,8 +70,6 @@ class Mini extends Movable {
 
 		this.reachedDestination(true);
 
-		Unit.addBase(this);
-
 		Render.voxel('mini', {parent: this.top});
 	}
 

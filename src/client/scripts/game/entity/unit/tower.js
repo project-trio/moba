@@ -67,8 +67,6 @@ class Tower extends Unit {
 
 		super(team, stats, x, y);
 
-		Unit.addBase(this);
-
 		this.id = `tower${spawnCount}`;
 		this.towerType = towerType;
 		this.targetedAt = null;

@@ -40,8 +40,6 @@ class Ship extends Movable {
 		const statBase = SHIP_STATS[name] || SHIP_STATS['pewpew'];
 		super(team, statBase, x, y, angle);
 
-		Unit.addBase(this);
-
 		this.statBase = statBase;
 		this.id = player.id;
 		this.player = player;

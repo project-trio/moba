@@ -100,6 +100,8 @@ class Unit {
 		if (x) {
 			this.setLocation(x, y);
 		}
+
+		allUnits.push(this);
 	}
 
 	// Render
@@ -297,10 +299,6 @@ class Unit {
 
 Unit.all = function() {
 	return allUnits;
-};
-
-Unit.addBase = function(unit) {
-	allUnits.push(unit);
 };
 
 Unit.update = function(renderTime, timeDelta, tweening) {
