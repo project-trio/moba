@@ -26,7 +26,7 @@ const SHIP_STATS = {
 		attackDamage: [8, 1, 0],
 		attackCooldown: [5, 0, 0],
 
-		moveSpeed: [14, 0, 0],
+		moveSpeed: [12, 0, 0],
 		turnSpeed: 10,
 		collision: 20,
 	},

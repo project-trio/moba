@@ -17,7 +17,7 @@ const MINI_STATS = {
 		attackDamage: [1, 0, 0],
 		attackCooldown: [1, 0, 0],
 
-		moveSpeed: [12, 0, 0],
+		moveSpeed: [10, 0, 0],
 		collision: 25,
 	},
 
@@ -31,7 +31,7 @@ const MINI_STATS = {
 		attackDamage: [8, 0, 0],
 		attackCooldown: [5, 0, 0],
 
-		moveSpeed: [12, 0, 0],
+		moveSpeed: [10, 0, 0],
 		collision: 25,
 	},
 };
