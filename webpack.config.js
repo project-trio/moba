@@ -6,8 +6,11 @@ module.exports = {
 
 	debug: true,
 
-	entry: './src/client/scripts/main.js',
-	// entry: './src/client/scripts/perf.js',
+	entry: [
+		'babel-polyfill',
+		// './src/client/scripts/perf.js', //SAMPLE
+		'./src/client/scripts/main.js',
+	],
 
 	output: {
 		filename: 'bundle.js',
@@ -15,7 +18,7 @@ module.exports = {
 	},
 
 	resolve: {
-		root: [path.resolve('./src'), path.resolve('./src/client'), path.resolve('./src/client/scripts')],
+		root: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'src/client'), path.resolve(__dirname, 'src/client/scripts')],
 		extensions: ['', '.js', '.css'],
 	},
 
@@ -27,10 +30,11 @@ module.exports = {
 			{ test: /\.(json)$/, loader: 'json-loader' },
 
 			{
+				include: [path.resolve(__dirname, 'src')],
 				test: /\.js?$/,
-				exclude: /(node_modules)/,
 				loader: 'babel',
 				query: {
+					plugins: ['transform-runtime'],
 					presets: ['es2015'],
 				},
 			},
