@@ -196,7 +196,7 @@ class Unit {
 			this.attackTarget = target;
 		}
 		if (target) {
-			this.cacheAttackCheck = distance < this.attackRangeCheck;
+			this.cacheAttackCheck = distance <= this.attackRangeCheck;
 		}
 		return target;
 	}
@@ -273,7 +273,7 @@ class Unit {
 		enemy.doDamage(this.stats.attackDamage);
 	}
 
-	readyToAttack(renderTime) {
+	isAttackOffCooldown(renderTime) {
 		return renderTime - this.lastAttack > this.stats.attackCooldown * 100;
 	}
 
@@ -329,7 +329,7 @@ Unit.update = function(renderTime, timeDelta, tweening) {
 		// Attack
 		for (let idx = 0; idx < allUnits.length; idx += 1) {
 			const unit = allUnits[idx];
-			if (!unit.isDead && unit.readyToAttack(renderTime)) {
+			if (!unit.isDead && unit.isAttackOffCooldown(renderTime)) {
 				unit.checkAttack(renderTime);
 			}
 		}

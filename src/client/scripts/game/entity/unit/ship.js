@@ -155,7 +155,7 @@ class Ship extends Movable {
 		if (target) {
 			if (this.attackableStatus(target)) {
 				const dist = this.distanceTo(target);
-				if (dist < closest) {
+				if (dist <= closest) {
 					return this.setTarget(target, closest);
 				}
 			}
