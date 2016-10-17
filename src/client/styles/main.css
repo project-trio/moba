@@ -1,11 +1,14 @@
 body {
-	margin: 0;
 	background-color: #000;
 	border-color: #eeeeed;
 	font-family: system-font, -webkit-system-font, -apple-system-font, 'Helvetica Neue', HelveticaNeue, Helvetica, sans-serif;
 	font-size: 1.1em;
 	font-weight: 300;
 	color: #444442;
+
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
 }
 
 input {
