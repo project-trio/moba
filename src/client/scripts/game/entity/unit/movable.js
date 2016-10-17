@@ -11,6 +11,8 @@ const Unit = require('game/entity/unit/unit');
 
 //LOCAL
 
+const POSITION_MAGNITUDE_OFFSET = 100;
+
 const rectanglesIntersecting = function(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2) {
 	return ax1 < bx2 && ax2 > bx1 && ay1 < by2 && ay2 > by1;
 };
@@ -30,8 +32,8 @@ class Movable extends Unit {
 
 	setDestination(x, y, preadjusted, moveX, moveY) {
 		if (!preadjusted) {
-			x *= 100;
-			y *= 100;
+			x *= POSITION_MAGNITUDE_OFFSET;
+			y *= POSITION_MAGNITUDE_OFFSET;
 		}
 
 		const dx = x - this.px;
@@ -58,8 +60,8 @@ class Movable extends Unit {
 			moveToX = this.px;
 			moveToY = this.py;
 		}
-		moveToX /= 100;
-		moveToY /= 100;
+		moveToX /= POSITION_MAGNITUDE_OFFSET;
+		moveToY /= POSITION_MAGNITUDE_OFFSET;
 		this.container.position.x = moveToX;
 		this.container.position.y = moveToY;
 		this.healthContainer.position.x = moveToX;
@@ -153,8 +155,8 @@ class Movable extends Unit {
 		let cx, cy;
 		let moveByX, moveByY;
 		if (tweening) {
-			cx = this.container.position.x * 100;
-			cy = this.container.position.y * 100;
+			cx = this.container.position.x * POSITION_MAGNITUDE_OFFSET;
+			cy = this.container.position.y * POSITION_MAGNITUDE_OFFSET;
 
 			const tweenScalar = this.currentSpeed * timeDelta;
 			moveByX = tweenScalar * this.moveX;
