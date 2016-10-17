@@ -85,7 +85,6 @@ class Ship extends Movable {
 	die(time) {
 		this.opacity(0.5);
 		this.respawned = false;
-		this.setTarget(null);
 
 		super.die(time);
 	}

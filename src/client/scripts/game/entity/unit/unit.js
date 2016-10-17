@@ -166,6 +166,7 @@ class Unit {
 		this.isDead = true;
 		this.timeOfDeath = time;
 		this.healthContainer.visible = false;
+		this.setTarget(null);
 	}
 
 	destroy() {
