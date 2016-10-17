@@ -8,6 +8,8 @@ let fogCanvas, fogBitmap, fogTexture;
 
 let mapWidth, mapHeight;
 
+const MINI_RADIUS = 48;
+
 module.exports = {
 
 	create: function(w, h, parent) {
@@ -47,10 +49,13 @@ module.exports = {
 		let clearRadius = 0;
 		for (let idx = 0; idx < units.length; idx += 1) {
 			const unit = units[idx];
+			if (unit.isDying) {
+				continue;
+			}
 			if (unit.team == localTeam) {
-				clearRadius= unit.stats.sightRange / 100;
+				clearRadius = unit.isDead ? MINI_RADIUS : unit.stats.sightRange / 100;
 			} else if (unit.visibleForFrame) {
-				clearRadius = 50;
+				clearRadius = MINI_RADIUS;
 			} else {
 				continue;
 			}
