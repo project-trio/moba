@@ -1,27 +1,17 @@
 'use strict';
 
-const $ = require('jquery');
-
 require('styles/main');
 require('styles/game');
 
 require('bridge');
 
 //SETUP
-$(function() {
 
-	const Lobby = require('game/lobby');
-	const Loop = require('render/loop');
+const Lobby = require('game/lobby');
+const Loop = require('render/loop');
 
-	Lobby.toggle(true);
-	Lobby.displaySection('start');
-	Loop.start(); //TODO delay
+Lobby.toggle(true);
+Lobby.displaySection('start');
+Loop.start(); //TODO delay
 
-	require('game/events');
-});
-
-//TESTING
-
-window.setTimeout(function() {
-	// $('#s-clubs').show();
-}, 0);
+require('game/events');
