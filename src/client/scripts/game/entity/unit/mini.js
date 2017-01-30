@@ -3,7 +3,6 @@
 const Render = require('render/render');
 
 const Movable = require('game/entity/unit/movable');
-const Unit = require('game/entity/unit/unit');
 
 const MINI_STATS = {
 	// [start, levelup, max]
@@ -12,7 +11,7 @@ const MINI_STATS = {
 		healthRegen: [0, 0, 0],
 
 		sightRange: [100, 0, 0],
-		attackRange: [30, 0, 0],
+		attackRange: [25, 0, 0],
 
 		attackDamage: [1, 0, 0],
 		attackCooldown: [1, 0, 0],
@@ -26,12 +25,12 @@ const MINI_STATS = {
 		healthRegen: [0, 0, 0],
 
 		sightRange: [100, 0, 0],
-		attackRange: [60, 0, 0],
+		attackRange: [100, 0, 0],
 
 		attackDamage: [8, 0, 0],
 		attackCooldown: [5, 0, 0],
 
-		moveSpeed: [10, 0, 0],
+		moveSpeed: [8, 0, 0],
 		collision: 25,
 	},
 };

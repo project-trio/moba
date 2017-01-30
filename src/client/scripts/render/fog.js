@@ -58,7 +58,7 @@ module.exports = {
 				continue;
 			}
 
-			const geometry = new THREE.CircleGeometry(clearRadius, 56);
+			const geometry = new THREE.CircleGeometry(clearRadius, 48);
 			const circle = new THREE.Mesh(geometry, circleMaterial);
 			circle.position.set(unit.px / 100 - mapWidth / 2, unit.py / 100 - mapHeight / 2, 10);
 			fogScene.add(circle);

@@ -98,9 +98,9 @@ maps.standard = {
 		{
 			type: 'center',
 			paths: [
-				[[570, 80, 0, 0], [570, 900, 0, -1000]],
+				[[560, 74, 0, 0], [560, 900, 0, -1000]],
 				[[600, 80, 0, 0], [600, 900, 0, -1000]],
-				[[630, 80, 0, 0], [630, 900, 0, -1000]],
+				[[640, 74, 0, 0], [640, 900, 0, -1000]],
 			],
 			mirror: false,
 		},
@@ -180,7 +180,7 @@ const GameMap = function(parent) {
 		Render.positionCamera(mapWidth / 2, mapHeight / 2);
 
 		const ground = Render.ground(mapWidth, mapHeight, {
-			color: 0x00440a,
+			color: 0x448866,
 			floor: floorContainer,
 			ceiling: fogContainer,
 		});

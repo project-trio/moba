@@ -50,7 +50,7 @@ module.exports = {
 		gameCamera.lookAt(gameScene);
 		gameCamera.position.z = 512;
 
-		const ambient = new THREE.AmbientLight(0x444444);
+		const ambient = new THREE.AmbientLight(0x555555);
 		gameScene.add(ambient);
 
 		// const light = new THREE.DirectionalLight(0xffffff, 0.5);
