@@ -123,6 +123,10 @@ module.exports = {
 		// renderer.render(hudScene, hudCamera);
 	},
 
+	fog: function(units) {
+		RenderFog.update(renderer, units);
+	},
+
 	remove: function(object) {
 		object.parent.remove(object);
 	},

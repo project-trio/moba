@@ -5,7 +5,6 @@ const Stats = require('stats.js');
 const Local = require('local');
 
 const Render = require('render/render');
-const RenderFog = require('render/fog');
 
 const Unit = require('game/entity/unit/unit');
 
@@ -31,7 +30,7 @@ const animate = function(timestamp) {
 				}
 				game.performTicks(ticksToRender, currentTime);
 				game.localUnit.updateVisibility();
-				RenderFog.update(Unit.all());
+				Render.fog(Unit.all());
 				if (processUpdate) {
 					updatePanel.end();
 				}

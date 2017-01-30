@@ -4,7 +4,8 @@ const THREE = require('three');
 
 const Local = require('local');
 
-let fogCanvas, fogBitmap, fogTexture;
+let fogScene, fogCamera, fogTarget;
+let circleMaterial;
 
 let mapWidth, mapHeight;
 
@@ -16,35 +17,30 @@ module.exports = {
 		mapWidth = w;
 		mapHeight = h;
 
-		fogCanvas = document.createElement('canvas');
-		fogCanvas.width = mapWidth;
-		fogCanvas.height = mapHeight;
+		circleMaterial = new THREE.MeshBasicMaterial({color: 0x000000});
 
-		fogBitmap = fogCanvas.getContext('2d');
+		fogScene = new THREE.Scene();
+		fogScene.background = new THREE.Color(0xffffff);
+		fogTarget = new THREE.WebGLRenderTarget(mapWidth, mapHeight, {});
 
-		fogTexture = new THREE.Texture(fogCanvas);
-		fogTexture.minFilter = THREE.LinearFilter;
-		let fogGeometry = new THREE.PlaneGeometry(mapWidth, mapHeight);
-		let fogMaterial = new THREE.MeshBasicMaterial({map: fogTexture});
+		const fogGeometry = new THREE.PlaneBufferGeometry(mapWidth, mapHeight);
+		const fogMaterial = new THREE.MeshBasicMaterial({color: 0x000000, alphaMap: fogTarget.texture});
 		fogMaterial.transparent = true;
-		let fogPlane = new THREE.Mesh(fogGeometry, fogMaterial);
-		fogPlane.position.set(mapWidth / 2, mapHeight / 2, -5);
+		fogMaterial.opacity = 0.3;
 
+		fogCamera = new THREE.OrthographicCamera(mapWidth / -2, mapWidth / 2, mapHeight / 2, mapHeight / -2, -1024, 1024);
+
+		const fogPlane = new THREE.Mesh(fogGeometry, fogMaterial);
+		fogPlane.position.set(mapWidth / 2, mapHeight / 2, -5);
 		parent.add(fogPlane);
 	},
 
-	update: function(units) {
-		if (!fogBitmap) {
-			return;
-		}
+	update: function(renderer, units) {
 		const localTeam = Local.player.team;
-		fogBitmap.clearRect(0, 0, mapWidth, mapHeight);
-		fogBitmap.fillStyle = "rgba(128,128,128,0.5)";
-		fogBitmap.fillRect(0, 0, mapWidth, mapHeight);
-		fogTexture.needsUpdate = true;
 
-		fogBitmap.globalCompositeOperation = 'destination-out';
-		fogBitmap.fillStyle = "#000000";
+		for (let i = fogScene.children.length - 1; i >= 0; i--) {
+			fogScene.remove(fogScene.children[i]);
+		}
 
 		let clearRadius = 0;
 		for (let idx = 0; idx < units.length; idx += 1) {
@@ -59,12 +55,14 @@ module.exports = {
 			} else {
 				continue;
 			}
-			fogBitmap.beginPath();
-			fogBitmap.arc(unit.px / 100, mapHeight - unit.py/ 100, clearRadius, 0, Math.PI*2); 
-			fogBitmap.closePath();
-			fogBitmap.fill();
+
+			const geometry = new THREE.CircleGeometry(clearRadius, 56);
+			const circle = new THREE.Mesh(geometry, circleMaterial);
+			circle.position.set(unit.px / 100 - mapWidth / 2, unit.py / 100 - mapHeight / 2, 10);
+			fogScene.add(circle);
 		}
-		fogBitmap.globalCompositeOperation = 'source-over';
+
+		renderer.render(fogScene, fogCamera, fogTarget);
 	},
 
 };
