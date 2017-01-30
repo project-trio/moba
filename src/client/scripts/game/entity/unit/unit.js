@@ -28,7 +28,7 @@ class Unit {
 
 	// Constructor
 
-	constructor(team, statBase, x, y, startAngle) {
+	constructor(team, statBase, unitScale, x, y, startAngle) {
 		this.team = team;
 		this.startAngle = startAngle;
 
@@ -69,12 +69,25 @@ class Unit {
 		// Health Bar
 
 		const hpOffsetY = -40;
-		const hpOffsetZ = 60;
-		const hpWidth = 64;
-		const hpHeight = 4;
 		const outlineWeight = 1;
 		const hpRadius = 3;
 
+		let hpHeight, hpWidth;
+		let hpOffsetZ;
+		if (unitScale == 1) {
+			hpHeight = 3;
+			hpWidth = 40;
+			hpOffsetZ = 40;
+		} else if (unitScale == 2) {
+			hpHeight = 4;
+			hpWidth = 62;
+			hpOffsetZ = 60;
+		} else {
+			hpHeight = 5;
+			hpWidth = 72;
+			hpOffsetZ = 80;
+		}
+		this.healthWidth = hpWidth;
 		this.healthContainer = Render.group();
 
 		Render.rectangle(0, hpOffsetY, hpWidth, hpHeight, { // HP Backing
@@ -146,9 +159,12 @@ class Unit {
 		} else {
 			newHealth = this.healthRemaining;
 		}
+
 		const healthScale = newHealth / this.stats.healthMax;
 		this.healthBar.scale.x = healthScale;
-		this.healthBar.position.x = -32 * healthScale + 32;
+
+		const hpXOff = this.healthWidth / 2;
+		this.healthBar.position.x = -hpXOff * healthScale + hpXOff;
 	}
 
 	addHealth(addedHealth) {

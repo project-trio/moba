@@ -21,8 +21,8 @@ const rectanglesIntersecting = function(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2) 
 
 class Movable extends Unit {
 
-	constructor(team, statBase, x, y, startAngle) {
-		super(team, statBase, x, y, startAngle);
+	constructor(team, statBase, unitScale, x, y, startAngle) {
+		super(team, statBase, unitScale, x, y, startAngle);
 
 		this.movable = true;
 		this.moveToTarget = false;

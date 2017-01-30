@@ -49,7 +49,7 @@ class Mini extends Movable {
 
 		const stats = MINI_STATS[name];
 
-		super(team, stats);
+		super(team, stats, 1);
 
 		this.id = `mini${spawnCount}`;
 		this.moveToTarget = true;

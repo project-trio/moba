@@ -65,7 +65,7 @@ class Tower extends Unit {
 	constructor(team, towerType, x, y) {
 		const stats = TOWER_STATS[towerType];
 
-		super(team, stats, x, y);
+		super(team, stats, towerType == 'base' ? 3 : 2, x, y);
 
 		this.id = `tower${spawnCount}`;
 		this.towerType = towerType;
