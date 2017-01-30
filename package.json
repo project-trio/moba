@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "",
   "main": "src/server/app.js",
+  "engines": {
+    "node": "7.*",
+    "npm": "4.*"
+  },
   "scripts": {
     "postinstall": "node_modules/.bin/webpack -p --config webpack.config.production.js",
     "start": "node src/server/app.js"
