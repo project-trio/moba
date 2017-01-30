@@ -8,7 +8,7 @@ const DomEvents = require('external/threex.domevents');
 const RenderFog = require('render/fog');
 
 let gameScene, gameCamera, renderer, domEvents;
-let hudScene, hudCamera, hudTexture, hudBitmap;
+// let hudScene, hudCamera, hudTexture, hudBitmap;
 
 const WALL_HEIGHT = 60;
 
@@ -24,20 +24,20 @@ const resize = function() {
 	gameCamera.aspect = windowWidth / windowHeight;
 	gameCamera.updateProjectionMatrix();
 
-	const halfWidth = 0.5 * windowWidth;
-	const halfHeight = 0.5 * windowHeight;
-	hudCamera.left = -halfWidth;
-	hudCamera.right = halfWidth;
-	hudCamera.top = halfHeight;
-	hudCamera.bottom = -halfHeight;
-	hudCamera.updateProjectionMatrix();
+	// const halfWidth = 0.5 * windowWidth;
+	// const halfHeight = 0.5 * windowHeight;
+	// hudCamera.left = -halfWidth;
+	// hudCamera.right = halfWidth;
+	// hudCamera.top = halfHeight;
+	// hudCamera.bottom = -halfHeight;
+	// hudCamera.updateProjectionMatrix();
 };
 
 window.addEventListener('resize', resize);
 
 //PUBLIC
 
-let counter = 0;
+// let counter = 0;
 
 module.exports = {
 
@@ -83,26 +83,26 @@ module.exports = {
 
 		// HUD
 
-		hudScene = new THREE.Scene();
-		hudCamera = new THREE.OrthographicCamera(-windowWidth/2, windowWidth/2, windowHeight/2, -windowHeight/2, 0, 30);
+		// hudScene = new THREE.Scene();
+		// hudCamera = new THREE.OrthographicCamera(-windowWidth/2, windowWidth/2, windowHeight/2, -windowHeight/2, 0, 30);
 
-		const hudCanvas = document.createElement('canvas');
-		hudCanvas.width = windowWidth;
-		hudCanvas.height = windowHeight;
+		// const hudCanvas = document.createElement('canvas');
+		// hudCanvas.width = windowWidth;
+		// hudCanvas.height = windowHeight;
 
-		hudBitmap = hudCanvas.getContext('2d');
-		hudBitmap.clearRect(0, 0, windowWidth, windowHeight);
-		hudBitmap.font = "Normal 100px Arial";
-		hudBitmap.textAlign = 'center';
-		hudBitmap.fillStyle = "rgba(245,245,245,0.75)";
+		// hudBitmap = hudCanvas.getContext('2d');
+		// hudBitmap.clearRect(0, 0, windowWidth, windowHeight);
+		// hudBitmap.font = "Normal 100px Arial";
+		// hudBitmap.textAlign = 'center';
+		// hudBitmap.fillStyle = "rgba(245,245,245,0.75)";
 
-		hudTexture = new THREE.Texture(hudCanvas);
-		hudTexture.minFilter = THREE.LinearFilter;
-		let hudGeometry = new THREE.PlaneGeometry(windowWidth, windowHeight);
-		let hudMaterial = new THREE.MeshBasicMaterial({map: hudTexture});
-		hudMaterial.transparent = true;
-		let hudPlane = new THREE.Mesh(hudGeometry, hudMaterial);
-		hudScene.add(hudPlane);
+		// hudTexture = new THREE.Texture(hudCanvas);
+		// hudTexture.minFilter = THREE.LinearFilter;
+		// let hudGeometry = new THREE.PlaneGeometry(windowWidth, windowHeight);
+		// let hudMaterial = new THREE.MeshBasicMaterial({map: hudTexture});
+		// hudMaterial.transparent = true;
+		// let hudPlane = new THREE.Mesh(hudGeometry, hudMaterial);
+		// hudScene.add(hudPlane);
 
 		resize();
 
@@ -115,12 +115,12 @@ module.exports = {
 	},
 
 	render: function() {
-		hudBitmap.clearRect(0, 0, windowWidth, windowHeight);
-		hudBitmap.fillText(++counter, windowWidth / 2, windowHeight / 2);
-		hudTexture.needsUpdate = true;
+		// hudBitmap.clearRect(0, 0, windowWidth, windowHeight);
+		// hudBitmap.fillText(++counter, windowWidth / 2, windowHeight / 2);
+		// hudTexture.needsUpdate = true;
 
 		renderer.render(gameScene, gameCamera);
-		renderer.render(hudScene, hudCamera);
+		// renderer.render(hudScene, hudCamera);
 	},
 
 	remove: function(object) {
