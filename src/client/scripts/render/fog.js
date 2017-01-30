@@ -39,7 +39,9 @@ module.exports = {
 		const localTeam = Local.player.team;
 
 		for (let i = fogScene.children.length - 1; i >= 0; i--) {
-			fogScene.remove(fogScene.children[i]);
+			const mesh = fogScene.children[i];
+			fogScene.remove(mesh);
+			mesh.geometry.dispose();
 		}
 
 		let clearRadius = 0;
