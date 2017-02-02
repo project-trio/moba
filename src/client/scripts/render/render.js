@@ -19,6 +19,11 @@ let windowWidth, windowHeight;
 const resize = function() {
 	windowWidth = window.innerWidth;
 	windowHeight = window.innerHeight;
+
+	if (!renderer) {
+		return;
+	}
+
 	renderer.setSize(windowWidth, windowHeight);
 
 	gameCamera.aspect = windowWidth / windowHeight;
@@ -73,6 +78,7 @@ module.exports = {
 			antialias: true,
 			canvas: document.getElementById('canvas'),
 		});
+		renderer.setPixelRatio(window.devicePixelRatio);
 		// renderer.setClearColor(0x000000);
 		renderer.autoClear = false;
 		// renderer.physicallyCorrectLights = true;
