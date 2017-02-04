@@ -16,9 +16,7 @@
   "dependencies": {
     "babel-core": "latest",
     "babel-loader": "latest",
-    "babel-plugin-transform-runtime": "latest",
     "babel-polyfill": "latest",
-    "babel-preset-es2015": "latest",
     "brfs": "latest",
     "css-loader": "latest",
     "decimal.js": "latest",

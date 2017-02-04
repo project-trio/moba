@@ -4,8 +4,6 @@ const path = require('path');
 
 module.exports = {
 
-	debug: true,
-
 	entry: [
 		'babel-polyfill',
 		// './src/client/scripts/perf.js', //SAMPLE
@@ -18,25 +16,33 @@ module.exports = {
 	},
 
 	resolve: {
-		root: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'src/client'), path.resolve(__dirname, 'src/client/scripts')],
-		extensions: ['', '.js', '.css'],
+		modules: [
+			path.resolve(__dirname, 'src'),
+			path.resolve(__dirname, 'src/client'),
+			path.resolve(__dirname, 'src/client/scripts'),
+			'node_modules',
+		],
+		extensions: ['.js', '.css'],
 	},
 
 	module: {
 		loaders: [
-			{ test: /\.css$/, loader: 'style-loader!css-loader' },
-			{ test: /\.png$/, loader: 'url-loader?limit=4096' },
-			{ test: /\.vox$/, loader: 'url-loader?limit=1' },
-			{ test: /\.(json)$/, loader: 'json-loader' },
-
 			{
-				include: [path.resolve(__dirname, 'src')],
-				test: /\.js?$/,
-				loader: 'babel',
-				query: {
-					plugins: ['transform-runtime'],
-					presets: ['es2015'],
-				},
+				test: /\.css$/,
+				use: [
+					{loader: 'style-loader'},
+					{loader: 'css-loader'},
+				],
+			},
+			{
+				test: /\.png$/,
+				use: [
+					{loader: 'url-loader?limit=4096'},
+				],
+			},
+			{
+				test: /\.vox$/,
+				use: {loader: 'url-loader?limit=1'},
 			},
 		],
 	},
