@@ -5,7 +5,7 @@
   "main": "src/server/app.js",
   "engines": {
     "node": "7.*",
-    "npm": "4.*"
+    "yarn": "0.*"
   },
   "scripts": {
     "postinstall": "node_modules/.bin/webpack -p --config webpack.config.production.js",
