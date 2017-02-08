@@ -26,7 +26,7 @@ module.exports = {
 	},
 
 	module: {
-		loaders: [
+		rules: [
 			{
 				test: /\.css$/,
 				use: [
@@ -36,14 +36,21 @@ module.exports = {
 			},
 			{
 				test: /\.png$/,
-				use: [
-					{loader: 'url-loader?limit=4096'},
-				],
+				loader: 'url-loader?limit=4096',
 			},
 			{
 				test: /\.vox$/,
-				use: {loader: 'url-loader?limit=1'},
+				loader: 'url-loader?limit=1',
 			},
+			{ 
+				test: /\.js$/,
+				loader: 'babel-loader',
+				include: [path.resolve(__dirname, 'src')],
+				options: {
+					// plugins: ['transform-runtime'],
+					presets: ['es2015'],
+				},
+			}
 		],
 	},
 

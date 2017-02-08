@@ -17,6 +17,7 @@
     "babel-core": "latest",
     "babel-loader": "latest",
     "babel-polyfill": "latest",
+    "babel-preset-es2015": "^6.22.0",
     "brfs": "latest",
     "css-loader": "latest",
     "decimal.js": "latest",
