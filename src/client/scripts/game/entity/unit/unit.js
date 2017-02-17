@@ -8,6 +8,8 @@ const Render = require('render/render');
 
 const Util = require('game/util');
 
+const Bullet = require('game/entity/unit/bullet');
+
 //LOCAL
 
 const allUnits = [];
@@ -53,10 +55,14 @@ class Unit {
 			attackRange: statBase.attackRange[0] * 100,
 			attackDamage: statBase.attackDamage[0] * 1000,
 			attackCooldown: statBase.attackCooldown[0],
-			moveSpeed: statBase.moveSpeed[0],
+			attackMoveSpeed: statBase.attackMoveSpeed[0],
+			moveSpeed: statBase.moveSpeed[0] * 2,
 			turnSpeed: statBase.turnSpeed || 5,
 			collision: statBase.collision * 100,
+			bulletSize: statBase.bulletSize,
+			bulletColor: statBase.bulletColor,
 		};
+
 		this.healthRemaining = this.stats.healthMax;
 		this.sightRangeCheck = Util.squared(this.stats.sightRange);
 		this.attackRangeCheck = Util.squared(this.stats.attackRange);
@@ -155,6 +161,9 @@ class Unit {
 
 	updateHealth(newHealth) {
 		if (newHealth != null) {
+			if (!Number.isInteger(newHealth)) { //TODO debug only
+				console.error('Invalid health amount', newHealth);
+			}
 			this.healthRemaining = newHealth;
 		} else {
 			newHealth = this.healthRemaining;
@@ -286,7 +295,11 @@ class Unit {
 
 	attack(enemy, renderTime) {
 		this.lastAttack = renderTime;
-		enemy.doDamage(this.stats.attackDamage);
+		if (!this.stats.attackMoveSpeed) { //SAMPLE || this.stats.attackMoveSpeed != 11) {
+			enemy.doDamage(this.stats.attackDamage);
+		} else {
+			new Bullet(this, enemy, this.px, this.py, this.top.rotation.z)
+		}
 	}
 
 	isAttackOffCooldown(renderTime) {
@@ -356,6 +369,7 @@ Unit.update = function(renderTime, timeDelta, tweening) {
 				unit.die(renderTime);
 				if (unit.remove) {
 					allUnits.splice(idx, 1);
+					idx -= 1;
 				}
 			}
 		}

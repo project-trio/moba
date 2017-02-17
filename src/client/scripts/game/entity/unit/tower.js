@@ -18,7 +18,10 @@ const TOWER_STATS = {
 		attackRange: [200, 0, 0],
 
 		attackDamage: [5, 0, 0],
-		attackCooldown: [1, 0, 0],
+		attackCooldown: [2, 0, 0],
+		attackMoveSpeed: [10, 0, 0],
+		bulletSize: 6,
+		bulletColor: 0x660000,
 
 		moveSpeed: [0, 0, 0],
 		collision: 35,
@@ -33,7 +36,10 @@ const TOWER_STATS = {
 		attackRange: [190, 0, 0],
 
 		attackDamage: [8, 0, 0],
-		attackCooldown: [6, 0, 0],
+		attackCooldown: [10, 0, 0],
+		attackMoveSpeed: [10, 0, 0],
+		bulletSize: 5,
+		bulletColor: 0x660000,
 
 		moveSpeed: [0, 0, 0],
 		collision: 30,
@@ -48,7 +54,10 @@ const TOWER_STATS = {
 		attackRange: [180, 0, 0],
 
 		attackDamage: [6, 0, 0],
-		attackCooldown: [6, 0, 0],
+		attackCooldown: [10, 0, 0],
+		attackMoveSpeed: [10, 0, 0],
+		bulletSize: 5,
+		bulletColor: 0x770000,
 
 		moveSpeed: [0, 0, 0],
 		collision: 30,

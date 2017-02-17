@@ -238,4 +238,14 @@ module.exports = {
 		return rectangle;
 	},
 
+	sphere: function(radius, options) {
+		const geometry = new THREE.SphereBufferGeometry(radius);
+		const material = new THREE.MeshBasicMaterial({color: options.color});
+		const sphere = new THREE.Mesh(geometry, material);
+		if (options.parent) {
+			options.parent.add(sphere);
+		}
+		return sphere;
+	},
+
 };

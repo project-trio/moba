@@ -24,7 +24,9 @@ const SHIP_STATS = {
 		attackRange: [140, 1, 0],
 
 		attackDamage: [8, 1, 0],
-		attackCooldown: [5, 0, 0],
+		attackCooldown: [15, 0, 0],
+		attackMoveSpeed: [11, 0, 0],
+		bulletSize: 4,
 
 		moveSpeed: [12, 0, 0],
 		turnSpeed: 10,
@@ -130,6 +132,7 @@ class Ship extends Movable {
 		this.stats.attackRange += this.statBase.attackRange[1];
 		this.stats.attackDamage += this.statBase.attackDamage[1] * 1000;
 		this.stats.attackCooldown += this.statBase.attackCooldown[1];
+		this.stats.attackMoveSpeed += this.statBase.attackMoveSpeed[1];
 
 		this.sightRangeCheck = Util.squared(this.stats.sightRange);
 		this.attackRangeCheck = Util.squared(this.stats.attackRange);

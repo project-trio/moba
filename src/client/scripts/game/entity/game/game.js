@@ -9,6 +9,7 @@ const GameMap = require('game/entity/game/map');
 const Player = require('game/entity/game/player');
 const Wave = require('game/entity/game/wave');
 
+const Bullet = require('game/entity/unit/bullet');
 const Unit = require('game/entity/unit/unit');
 
 //CONSTRUCTOR
@@ -62,6 +63,7 @@ const Game = function(gid, size) {
 				}
 			}
 			const renderTime = ticksRendered * tickDuration;
+			Bullet.update(renderTime, tickDuration, false);
 			Unit.update(renderTime, tickDuration, false);
 
 			// if (renderTime % 45000 == 15000) {

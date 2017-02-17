@@ -6,6 +6,7 @@ const Local = require('local');
 
 const Render = require('render/render');
 
+const Bullet = require('game/entity/unit/bullet');
 const Unit = require('game/entity/unit/unit');
 
 let lastUpdate = 0;
@@ -36,6 +37,7 @@ const animate = function(timestamp) {
 				}
 			} else {
 				const tweenTimeDelta = currentTime - lastUpdate;
+				Bullet.update(currentTime, tweenTimeDelta, true);
 				Unit.update(currentTime, tweenTimeDelta, true);
 			}
 
