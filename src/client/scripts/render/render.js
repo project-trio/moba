@@ -104,7 +104,7 @@ module.exports = {
 
 		// hudTexture = new THREE.Texture(hudCanvas);
 		// hudTexture.minFilter = THREE.LinearFilter;
-		// let hudGeometry = new THREE.PlaneGeometry(windowWidth, windowHeight);
+		// let hudGeometry = new THREE.PlaneBufferGeometry(windowWidth, windowHeight);
 		// let hudMaterial = new THREE.MeshBasicMaterial({map: hudTexture});
 		// hudMaterial.transparent = true;
 		// let hudPlane = new THREE.Mesh(hudGeometry, hudMaterial);
@@ -189,7 +189,7 @@ module.exports = {
 	// Shapes
 
 	wall: function(x, y, w, h, options) {
-		const geometry = new THREE.BoxGeometry(w, h, WALL_HEIGHT);
+		const geometry = new THREE.BoxBufferGeometry(w, h, WALL_HEIGHT);
 		const material = new THREE.MeshLambertMaterial({color: options.color});
 		const wall = new THREE.Mesh(geometry, material);
 		wall.position.set(x, y, 0);
@@ -201,7 +201,7 @@ module.exports = {
 	},
 
 	wallCap: function(x, y, radius, options) {
-		const geometry = new THREE.CylinderGeometry(radius, radius, WALL_HEIGHT);
+		const geometry = new THREE.CylinderBufferGeometry(radius, radius, WALL_HEIGHT);
 		const material = new THREE.MeshLambertMaterial({color: options.color});
 		const wall = new THREE.Mesh(geometry, material);
 		wall.rotation.set(Math.PI/2, 0, 0);
@@ -214,7 +214,7 @@ module.exports = {
 	},
 
 	ground: function(width, height, options) {
-		const geometry = new THREE.BoxGeometry(width, height, 10);
+		const geometry = new THREE.BoxBufferGeometry(width, height, 10);
 		const material = new THREE.MeshBasicMaterial({color: options.color});
 		const rectangle = new THREE.Mesh(geometry, material);
 		rectangle.receiveShadow = true;
@@ -228,7 +228,7 @@ module.exports = {
 	},
 
 	rectangle: function(x, y, w, h, options) {
-		const geometry = new THREE.BoxGeometry(w, h, options.depth || 1);
+		const geometry = new THREE.BoxBufferGeometry(w, h, options.depth || 1);
 		const material = new THREE.MeshBasicMaterial({color: options.color});
 		const rectangle = new THREE.Mesh(geometry, material);
 		rectangle.position.set(x, y, options.z || 0);
