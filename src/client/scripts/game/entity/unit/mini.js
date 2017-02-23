@@ -11,7 +11,7 @@ const MINI_STATS = {
 		healthRegen: [0, 0, 0],
 
 		sightRange: [100, 0, 0],
-		attackRange: [25, 0, 0],
+		attackRange: [35, 0, 0],
 
 		attackDamage: [1, 0, 0],
 		attackCooldown: [1, 0, 0],
