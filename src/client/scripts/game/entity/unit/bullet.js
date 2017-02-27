@@ -64,10 +64,16 @@ class Bullet {
 		const dx = x - this.px;
 		const dy = y - this.py;
 		if (moveX === undefined) {
-			const moveAngle = Util.angleOf(dx, dy, false);
-			this.aimTargetAngle = moveAngle.toNumber() / 1000;
-			moveX = TrigCache.cos(moveAngle);
-			moveY = TrigCache.sin(moveAngle);
+			if (dx !== 0 || dy !== 0) {
+				const moveAngle = Util.angleOf(dx, dy, false);
+				this.aimTargetAngle = moveAngle.toNumber() / 1000;
+				moveX = TrigCache.cos(moveAngle);
+				moveY = TrigCache.sin(moveAngle);
+			} else { //TODO workaround
+				moveX = 0;
+				moveY = 0;
+				console.warn('Bullet at destination', this.px, this.py);
+			}
 		} else {
 			this.aimTargetAngle = Math.atan2(dy, dx);
 		}
