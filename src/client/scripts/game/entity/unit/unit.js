@@ -170,10 +170,14 @@ class Unit {
 		}
 
 		const healthScale = newHealth / this.stats.healthMax;
-		this.healthBar.scale.x = healthScale;
-
-		const hpXOff = this.healthWidth / 2;
-		this.healthBar.position.x = -hpXOff * healthScale + hpXOff;
+		if (healthScale > 0) {
+			this.healthBar.scale.x = healthScale;
+			const hpXOff = this.healthWidth / 2;
+			this.healthBar.position.x = -hpXOff * healthScale + hpXOff;
+			this.healthBar.visible = true;
+		} else {
+			this.healthBar.visible = false;
+		}
 	}
 
 	addHealth(addedHealth) {
