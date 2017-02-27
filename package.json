@@ -10,6 +10,7 @@
   },
   "scripts": {
     "deploy": "git push dokku master",
+    "gitlab": "git push gitlab master",
     "postinstall": "node_modules/.bin/webpack -p --config webpack.config.production.js",
     "start": "node src/server/app.js",
     "dev": "webpack --watch"
