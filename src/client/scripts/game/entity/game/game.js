@@ -57,14 +57,14 @@ const Game = function(gid, size) {
 				if (!dequeueUpdate()) {
 					tickOffsetTime += ticksToRender * tickDuration;
 					if (this.serverUpdate > 20) {
-						console.error('Missing update', [ticksToRender, tickOffsetTime]);
+						console.log('Missing update', [ticksToRender, tickOffsetTime]);
 					}
 					break;
 				}
 			}
 			const renderTime = ticksRendered * tickDuration;
-			Bullet.update(renderTime, tickDuration, false);
 			Unit.update(renderTime, tickDuration, false);
+			Bullet.update(renderTime, tickDuration, false);
 
 			// if (renderTime % 45000 == 15000) {
 			if (renderTime % 30000 == 3000) {

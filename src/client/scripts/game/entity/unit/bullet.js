@@ -33,15 +33,7 @@ class Bullet {
 		this.damage = source.stats.attackDamage;
 		this.moveConstant = new Decimal(source.stats.attackMoveSpeed).dividedBy(500);
 
-		this.incomingAttackers = 0;
-		this.lastAttack = 0;
-
-		this.px = x;
-		this.py = y;
-		this.container.position.set(x, y, 0);
-		if (startAngle) {
-			this.container.rotation.z = startAngle;
-		}
+		this.setLocation(x, y, startAngle);
 		this.setDestination(this.target.px, this.target.py, true);
 
 		allBullets.push(this);
@@ -50,7 +42,12 @@ class Bullet {
 	// Geometry
 
 	setLocation(x, y, angle) {
-
+		this.px = x;
+		this.py = y;
+		this.container.position.set(x, y, 0);
+		if (angle) {
+			this.container.rotation.z = angle;
+		}
 	}
 
 	// Move
@@ -141,7 +138,7 @@ class Bullet {
 			const collisionSize = this.target.stats.collision;
 			let reachedApproximate = false;
 			if (Math.abs(distX) < collisionSize && Math.abs(distY) < collisionSize) {
-				reachedApproximate = Util.withinSquared(this.distanceToTarget(), collisionSize)
+				reachedApproximate = Util.withinSquared(this.distanceToTarget(), collisionSize);
 			}
 			if (reachedApproximate) {
 				this.reachedDestination();
@@ -188,11 +185,7 @@ Bullet.update = function(renderTime, timeDelta, tweening) {
 		// Update
 		for (let idx = 0; idx < allBullets.length; idx += 1) {
 			const bullet = allBullets[idx];
-			if (bullet.remove) {
-				allBullets.splice(idx, 1);
-			} else {
-				bullet.setDestination(bullet.target.px, bullet.target.py, true);
-			}
+			bullet.setDestination(bullet.target.px, bullet.target.py, true);
 		}
 	}
 };

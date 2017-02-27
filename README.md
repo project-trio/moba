@@ -6,7 +6,7 @@ A plugin-less, browser-based, multiplayer, webGL 3d moba engine!
 
 ### Setup
 
-First ensure [node.js](https://nodejs.org/en/) and [yarn](https://yarnpkg.com/en/docs/install) are installed, then run the following commands:
+Ensure [node.js](https://nodejs.org/en/) and [yarn](https://yarnpkg.com/en/docs/install) are installed, then run the following commands:
 
 ```
 cd moba
@@ -16,7 +16,7 @@ cd moba
 yarn install
 ```
 
-You should now be ready to run the app. These next commands run continuously, and are ideally placed in two terminal tabs next to each other.
+You should now be ready to run the app. These next commands run continuously, and are ideally placed in two terminal tabs next to each other:
 
 ```
 yarn dev

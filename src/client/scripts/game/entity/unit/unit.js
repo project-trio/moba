@@ -302,7 +302,7 @@ class Unit {
 		if (!this.stats.attackMoveSpeed) { //SAMPLE || this.stats.attackMoveSpeed != 11) {
 			enemy.doDamage(this.stats.attackDamage);
 		} else {
-			new Bullet(this, enemy, this.px, this.py, this.top.rotation.z)
+			new Bullet(this, enemy, this.px, this.py, this.top.rotation.z);
 		}
 	}
 
