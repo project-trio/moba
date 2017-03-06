@@ -1,5 +1,3 @@
-'use strict';
-
 const CommonConsts = require('../common/constants');
 
 //EXPRESS

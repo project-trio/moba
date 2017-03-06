@@ -1,5 +1,3 @@
-'use strict';
-
 const Postgres = require('pg');
 
 const Util = require('./util');
@@ -62,7 +60,7 @@ module.exports = {
 
 	property: property,
 
-	update: function(table, where, columnsValues, returning, callback) {
+	update (table, where, columnsValues, returning, callback) {
 		columnsValues.updated_at = Util.seconds();
 
 		const columns = [], values = [], placeholders = [];
@@ -81,7 +79,7 @@ module.exports = {
 		queryOne(queryString, values, callback);
 	},
 
-	insert: function(table, columnsValues, returning, callback) {
+	insert (table, columnsValues, returning, callback) {
 		const now = Util.seconds();
 		columnsValues.created_at = now;
 		columnsValues.updated_at = now;

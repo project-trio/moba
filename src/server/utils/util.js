@@ -1,18 +1,16 @@
-'use strict';
-
 module.exports = {
 
 	TESTING: process.env.NODE_ENV != 'production',
 
-	seconds: function() {
+	seconds () {
 		return Math.round(Date.now() * 0.001);
 	},
 
-	uid: function() {
+	uid () {
 		return Math.random().toString(36).substr(2, 16);
 	},
 
-	code: function() {
+	code () {
 		return Math.floor(Math.random() * 900000) + 100000;
 	},
 

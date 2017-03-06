@@ -1,7 +1,3 @@
-'use strict';
-
-//CONSTRUCTOR
-
 module.exports = function(client) {
 
 	this.id = client.pid;
@@ -19,7 +15,7 @@ module.exports = function(client) {
 	};
 
 	this.isDisconnected = function() {
-		return false; //TODO
+		return false //TODO
 	};
 
 };

@@ -1,5 +1,3 @@
-'use strict';
-
 const Socket = require('socket.io');
 
 const User = require.main.require('./app/entity/user');

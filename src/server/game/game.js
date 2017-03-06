@@ -1,5 +1,3 @@
-'use strict';
-
 const SocketIO = require('socket.io');
 
 const Config = require('./config');
@@ -83,7 +81,7 @@ module.exports = function(size) {
 
 		if (checkFull()) {
 			this.state = 'FULL';
-			this.state = 'READY'; //TODO temp
+			this.state = 'READY' //TODO temp
 		}
 		return true;
 	};

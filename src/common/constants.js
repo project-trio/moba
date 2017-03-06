@@ -1,8 +1,6 @@
-'use strict';
-
 module.exports = {
 
-	PORT: 8002,
+	PORT: 8091,
 
 	VERSION: '0.0.1',
 

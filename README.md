@@ -1,29 +1,21 @@
 # moba
 
-A plugin-less, browser-based, multiplayer, webGL 3d moba engine!
+> A browser-based, webgl MOBA engine
 
-[https://moba.suzu.online](https://moba.suzu.online)
+## Build Setup
 
-### Setup
-
-Ensure [node.js](https://nodejs.org/en/) and [yarn](https://yarnpkg.com/en/docs/install) are installed, then run the following commands:
-
-```
-cd moba
-```
-
-```
+``` bash
+# install dependencies
 yarn install
+
+# serve with hot reload at localhost:8090
+yarn run dev
+
+# build for production with minification
+yarn run build
+
+# build for production and view the bundle analyzer report
+yarn run build --report
 ```
 
-You should now be ready to run the app. These next commands run continuously, and are ideally placed in two terminal tabs next to each other:
-
-```
-yarn dev
-```
-
-```
-yarn start
-```
-
-Open [localhost:8002](http://localhost:8002)!
+For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).

@@ -1,5 +1,3 @@
-'use strict';
-
 const Database = require.main.require('./utils/database');
 const Util = require.main.require('./utils/util');
 
@@ -7,7 +5,7 @@ const Util = require.main.require('./utils/util');
 
 module.exports = {
 
-	authenticate: function(client, uid, auth, callback) {
+	authenticate (client, uid, auth, callback) {
 		if (client.authed) {
 			if (callback) {
 				callback();
@@ -35,7 +33,7 @@ module.exports = {
 		});
 	},
 
-	disconnect: function(uid) {
+	disconnect (uid) {
 		Database.query('UPDATE users SET online_count = online_count - 1 WHERE id = '+uid+' AND online_count > 0', null);
 	},
 

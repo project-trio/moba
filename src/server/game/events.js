@@ -1,5 +1,3 @@
-'use strict';
-
 const Util = require.main.require('./utils/util');
 
 const Config = require('./config');
@@ -8,7 +6,7 @@ const Player = require('./player');
 
 const games = [];
 
-const DEFAULT_GAME_SIZE = Util.TESTING ? 0 : 1; //TODO size
+const DEFAULT_GAME_SIZE = Util.TESTING ? 1 : 1 //TODO size
 
 //LOCAL
 
@@ -59,7 +57,7 @@ loop();
 
 module.exports = {
 
-	register: function(client) {
+	register (client) {
 		const pid = client.pid;
 		const player = new Player(client);
 
