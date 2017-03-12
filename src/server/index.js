@@ -16,10 +16,10 @@ SocketIO.io = io;
 
 //APP
 
-app.use(express.static('public'));
+app.use(express.static('dist'))
 
-app.get('*', (request, response, next)=>{
-	response.sendFile(path.resolve(__dirname, '/public/index.html'));
+app.get('*', (request, response, next) => {
+	response.sendFile(path.resolve(__dirname, '../../dist/index.html'))
 });
 
 //SETUP
