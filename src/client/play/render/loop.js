@@ -17,26 +17,25 @@ const animate = function (timestamp) {
 	if (framePanel) {
 		framePanel.begin()
 	}
-	const currentTime = Date.now() //TODO timestamp
 	const game = Local.game
 	if (game) {
 		if (game.running) {
-			const ticksToRender = game.calculateTicksToRender(currentTime)
+			const ticksToRender = game.calculateTicksToRender(timestamp)
 			if (ticksToRender > 0) {
 				const processUpdate = updatePanel && ticksToRender == 1
 				if (processUpdate) {
 					updatePanel.begin()
 				}
-				game.performTicks(ticksToRender, currentTime)
+				game.performTicks(ticksToRender, timestamp)
 				game.localUnit.updateVisibility()
 				Render.fog(Unit.all())
 				if (processUpdate) {
 					updatePanel.end()
 				}
 			} else {
-				const tweenTimeDelta = currentTime - lastUpdate
-				Bullet.update(currentTime, tweenTimeDelta, true)
-				Unit.update(currentTime, tweenTimeDelta, true)
+				const tweenTimeDelta = timestamp - lastUpdate
+				Bullet.update(timestamp, tweenTimeDelta, true)
+				Unit.update(timestamp, tweenTimeDelta, true)
 			}
 
 			const position = game.localUnit.container.position
@@ -44,7 +43,7 @@ const animate = function (timestamp) {
 		}
 		Render.render()
 	}
-	lastUpdate = currentTime
+	lastUpdate = timestamp
 
 	if (framePanel) {
 		framePanel.end()

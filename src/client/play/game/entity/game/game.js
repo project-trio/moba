@@ -138,7 +138,7 @@ const Game = function (gid, size) {
 		this.localUnit = Local.player.unit
 
 		// status = 'STARTED'
-		startTime = Date.now()
+		startTime = performance.now()
 		lastTickTime = startTime
 		this.enqueueUpdate(0, {})
 

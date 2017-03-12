@@ -25,7 +25,9 @@ const quickJoin = function(player) {
 
 //UPDATE
 
-let loopTime = Date.now();
+const startTime = process.hrtime();
+const updateDuration = Config.updateDuration;
+let loopCount = 0;
 
 const loop = function() {
 	for (let idx = 0; idx < games.length; idx += 1) {
@@ -46,9 +48,10 @@ const loop = function() {
 		}
 	}
 
-	loopTime += Config.updateDuration;
-	const currentTime = Date.now();
-	setTimeout(loop, loopTime - currentTime);
+	const diff = process.hrtime(startTime);
+	const msSinceStart = diff[0] * 1000 + diff[1] / 1000000;
+	loopCount += 1;
+	setTimeout(loop, updateDuration * loopCount - msSinceStart);
 };
 
 loop();
