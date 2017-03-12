@@ -199,7 +199,7 @@ export default {
 	},
 
 	wallCap (x, y, radius, options) {
-		const geometry = new THREE.CylinderBufferGeometry(radius, radius, WALL_HEIGHT)
+		const geometry = new THREE.CylinderBufferGeometry(radius, radius, WALL_HEIGHT, 16)
 		const material = new THREE.MeshLambertMaterial({color: options.color})
 		const wall = new THREE.Mesh(geometry, material)
 		wall.rotation.set(Math.PI / 2, 0, 0)
