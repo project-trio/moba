@@ -6,7 +6,7 @@ const Player = require('./player');
 
 const games = [];
 
-const DEFAULT_GAME_SIZE = Util.TESTING ? 1 : 1 //TODO size
+const DEFAULT_GAME_SIZE = Util.TESTING ? 0 : 1 //TODO size
 
 //LOCAL
 
