@@ -3,6 +3,7 @@ import Decimal from 'decimal.js'
 import Local from 'local'
 
 import Render from 'render/render'
+import RenderFog from 'render/fog'
 
 import Util from 'game/util'
 
@@ -43,6 +44,8 @@ class Unit {
 		this.container.add(this.base)
 		this.container.add(this.top)
 		Local.game.map.floorContainer.add(this.container)
+
+		RenderFog.add(this)
 
 		// Stats
 
@@ -205,6 +208,9 @@ class Unit {
 	destroy () {
 		Render.remove(this.healthContainer)
 		Render.remove(this.container)
+		if (this.fogCircle) {
+			Render.remove(this.fogCircle)
+		}
 		this.remove = true
 	}
 

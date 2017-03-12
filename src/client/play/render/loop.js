@@ -28,7 +28,6 @@ const animate = function (timestamp) {
 				}
 				game.performTicks(ticksToRender, timestamp)
 				game.localUnit.updateVisibility()
-				Render.fog(Unit.all())
 				if (processUpdate) {
 					updatePanel.end()
 				}
@@ -40,8 +39,9 @@ const animate = function (timestamp) {
 
 			const position = game.localUnit.container.position
 			game.map.track(position.x, position.y)
+			Render.render()
+			Render.fog(Unit.all())
 		}
-		Render.render()
 	}
 	lastUpdate = timestamp
 

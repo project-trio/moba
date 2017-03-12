@@ -160,7 +160,9 @@ const Game = function (gid, size) {
 		players = {}
 		for (let pid in serverPlayers) {
 			const playerInfo = serverPlayers[pid]
-			players[pid] = new Player(pid, playerInfo.team, playerInfo.index, playerInfo.name)
+			const team = parseInt(playerInfo.team, 10)
+			const index = parseInt(playerInfo.index, 10)
+			players[pid] = new Player(pid, team, index, playerInfo.name)
 		}
 	}
 
