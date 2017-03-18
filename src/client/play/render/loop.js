@@ -1,11 +1,11 @@
 import Stats from 'stats.js'
 
-import Local from 'local'
+import Local from '@/play/local'
 
-import Render from 'render/render'
+import Render from '@/play/render/render'
 
-import Bullet from 'game/entity/unit/bullet'
-import Unit from 'game/entity/unit/unit'
+import Bullet from '@/play/game/entity/unit/bullet'
+import Unit from '@/play/game/entity/unit/unit'
 
 let lastUpdate = 0
 

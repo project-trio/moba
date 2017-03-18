@@ -1,9 +1,9 @@
-import Bridge from 'bridge'
-import Local from 'local'
+import Bridge from '@/play/bridge'
+import Local from '@/play/local'
 
-import Render from 'render/render'
+import Render from '@/play/render/render'
 
-import Tower from 'game/entity/unit/tower'
+import Tower from '@/play/game/entity/unit/tower'
 
 //LAYOUTS
 

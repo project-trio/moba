@@ -1,11 +1,11 @@
 import Decimal from 'decimal.js'
-import TrigCache from 'external/trigcache'
+import TrigCache from '@/play/external/trigcache'
 
-import Local from 'local'
+import Local from '@/play/local'
 
-import Render from 'render/render'
+import Render from '@/play/render/render'
 
-import Util from 'game/util'
+import Util from '@/play/game/util'
 
 //LOCAL
 

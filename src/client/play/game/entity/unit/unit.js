@@ -1,13 +1,13 @@
 import Decimal from 'decimal.js'
 
-import Local from 'local'
+import Local from '@/play/local'
 
-import Render from 'render/render'
-import RenderFog from 'render/fog'
+import Render from '@/play/render/render'
+import RenderFog from '@/play/render/fog'
 
-import Util from 'game/util'
+import Util from '@/play/game/util'
 
-import Bullet from 'game/entity/unit/bullet'
+import Bullet from '@/play/game/entity/unit/bullet'
 
 //LOCAL
 

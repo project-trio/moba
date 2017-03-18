@@ -1,5 +1,5 @@
-import Local from 'local'
-import Ship from 'game/entity/unit/ship'
+import Local from '@/play/local'
+import Ship from '@/play/game/entity/unit/ship'
 
 const PLAYER_INSET = 64
 

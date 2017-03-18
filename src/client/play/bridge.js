@@ -4,29 +4,9 @@ import CommonConsts from 'common/constants'
 
 import Local from '@/play/local'
 
-//LOCAL
-
-console.log('CONNECTING', Local.TESTING)
-const socketUrl = Local.TESTING ? `http://localhost:${CommonConsts.PORT}` : window.location.origin
-const uid = localStorage.getItem('uid')
-const uauth = localStorage.getItem('auth')
-let params
-if (uid && uauth) {
-	params = {query: 'id=' + uid + '&auth=' + uauth}
-}
-const socket = SocketIO(socketUrl, params)
-
-socket.on('connect', () => {
-	Local.playerId = socket.id
-	console.log('Connected', Local.playerId)
-
-	socket.on('auth', (data) => {
-		console.log('authed', data)
-		//TODO
-	})
-})
-
 //PUBLIC
+
+let socket
 
 export default {
 
@@ -41,4 +21,25 @@ export default {
 		socket.emit(name, message, callback)
 	},
 
+	init () {
+		console.log('CONNECTING', Local.TESTING)
+		const socketUrl = Local.TESTING ? `http://localhost:${CommonConsts.PORT}` : window.location.origin
+		const uid = localStorage.getItem('uid')
+		const uauth = localStorage.getItem('auth')
+		let params
+		if (uid && uauth) {
+			params = {query: 'id=' + uid + '&auth=' + uauth}
+		}
+		socket = SocketIO(socketUrl, params)
+
+		socket.on('connect', () => {
+			Local.playerId = socket.id
+			console.log('Connected', Local.playerId)
+
+			socket.on('auth', (data) => {
+				console.log('authed', data)
+				//TODO
+			})
+		})
+	}
 }

@@ -1,8 +1,8 @@
-import Local from 'local'
+import Local from '@/play/local'
 
-import Render from 'render/render'
+import Render from '@/play/render/render'
 
-import Unit from 'game/entity/unit/unit'
+import Unit from '@/play/game/entity/unit/unit'
 
 //LOCAL
 

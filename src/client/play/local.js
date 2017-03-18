@@ -1,12 +1,6 @@
-const pageLoad = window.location
-
-// const pathItems = pageLoad.pathname.split('/')
-
-//PUBLIC
-
 export default {
 
-	TESTING: pageLoad.hostname == 'localhost',
+	TESTING: process.env.NODE_ENV !== 'production',
 
 	name: null,
 	email: null,
@@ -16,4 +10,5 @@ export default {
 	game: null,
 
 	shipSize: 44,
+
 }

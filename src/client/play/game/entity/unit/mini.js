@@ -1,6 +1,6 @@
-import Render from 'render/render'
+import Render from '@/play/render/render'
 
-import Movable from 'game/entity/unit/movable'
+import Movable from '@/play/game/entity/unit/movable'
 
 const MINI_STATS = {
 	// [start, levelup, max]

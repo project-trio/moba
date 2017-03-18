@@ -1,14 +1,14 @@
-import TrigCache from 'external/trigcache'
+import TrigCache from '@/play/external/trigcache'
 
-import Local from 'local'
-import Render from 'render/render'
+import Local from '@/play/local'
+import Render from '@/play/render/render'
 
-import GameMap from 'game/entity/game/map'
-import Player from 'game/entity/game/player'
-import Wave from 'game/entity/game/wave'
+import GameMap from '@/play/game/entity/game/map'
+import Player from '@/play/game/entity/game/player'
+import Wave from '@/play/game/entity/game/wave'
 
-import Bullet from 'game/entity/unit/bullet'
-import Unit from 'game/entity/unit/unit'
+import Bullet from '@/play/game/entity/unit/bullet'
+import Unit from '@/play/game/entity/unit/unit'
 
 //CONSTRUCTOR
 

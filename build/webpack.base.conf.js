@@ -24,8 +24,6 @@ module.exports = {
     },
     modules: [
       resolve('src'),
-      resolve('src/client'),
-      resolve('src/client/play'),
       resolve('node_modules'),
 		],
   },

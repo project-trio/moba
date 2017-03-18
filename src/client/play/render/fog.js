@@ -1,6 +1,6 @@
 const THREE = require('three')
 
-import Local from 'local'
+import Local from '@/play/local'
 
 let fogScene, fogCamera, fogTarget
 let circleMaterial

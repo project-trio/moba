@@ -1,11 +1,11 @@
 import Decimal from 'decimal.js'
 
-import Render from 'render/render'
+import Render from '@/play/render/render'
 
-import Util from 'game/util'
+import Util from '@/play/game/util'
 
-import Movable from 'game/entity/unit/movable'
-import Unit from 'game/entity/unit/unit'
+import Movable from '@/play/game/entity/unit/movable'
+import Unit from '@/play/game/entity/unit/unit'
 
 //LOCAL
 

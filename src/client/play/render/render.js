@@ -1,9 +1,9 @@
 const THREE = require('three')
 
-import Vox from 'external/vox'
-import DomEvents from 'external/threex.domevents'
+import Vox from '@/play/external/vox'
+import DomEvents from '@/play/external/threex.domevents'
 
-import RenderFog from 'render/fog'
+import RenderFog from '@/play/render/fog'
 
 let gameScene, gameCamera, renderer, domEvents
 // let hudScene, hudCamera, hudTexture, hudBitmap
@@ -157,7 +157,7 @@ export default {
 	},
 
 	sprite (name, options) {
-		const map = new THREE.TextureLoader().load(require(`assets/${name}.png`))
+		const map = new THREE.TextureLoader().load(require(`@/assets/${name}.png`))
 		// const material = new THREE.SpriteMaterial({map: map})
 		const material = new THREE.SpriteMaterial({map: map, color: 0xffffff, fog: true})
 		const sprite = new THREE.Sprite(material)
@@ -170,7 +170,7 @@ export default {
 
 	voxel (name, options) {
 		const parser = new Vox.Parser()
-		parser.parse(require(`assets/${name}.vox`)).then((voxelData) => {
+		parser.parse(require(`@/assets/${name}.vox`)).then((voxelData) => {
 			const builder = new Vox.MeshBuilder(voxelData, {voxelSize: 2}) //TODO cache
 			const mesh = builder.createMesh()
 			mesh.rotation.x = Math.PI / 2

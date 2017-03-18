@@ -1,6 +1,6 @@
-import Local from 'local'
+import Local from '@/play/local'
 
-import Mini from 'game/entity/unit/mini'
+import Mini from '@/play/game/entity/unit/mini'
 
 export default {
 
