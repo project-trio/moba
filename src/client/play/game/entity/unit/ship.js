@@ -12,7 +12,8 @@ import Unit from '@/play/game/entity/unit/unit'
 //LOCAL
 
 const waitToRespawn = 1990
-const expPerLevel = 600
+const expPerLevel = 1200
+const maxLevel = 30
 
 const SHIP_STATS = {
 	// [start, levelup, max]
@@ -121,6 +122,9 @@ class Ship extends Movable {
 
 	levelUp (over) {
 		this.level += 1
+		if (this.level >= maxLevel) {
+			this.maxLevel = true
+		}
 		this.levelExp = over
 		// nameText.text = player.name + ' [' + level+ ']' //TODO
 
@@ -148,15 +152,14 @@ class Ship extends Movable {
 	}
 
 	updateExperience () {
+		if (this.maxLevel) {
+			return
+		}
 		const increment = this.isFiring ? 3 : 2
 		this.levelExp += increment
 		const leveledOver = this.levelExp - this.expPerLevel
 		if (leveledOver >= 0) {
 			this.levelUp(leveledOver)
-		} else {
-			if (this.selected) {
-				store.everyUpdateStats(this)
-			}
 		}
 	}
 
@@ -193,23 +196,27 @@ class Ship extends Movable {
 	// Update
 
 	update (renderTime, timeDelta, tweening) {
-		if (!tweening) {
-			if (this.isDead) {
-				if (this.timeOfDeath) {
-					const deathDuration = renderTime - this.timeOfDeath
-					if (deathDuration > waitToRespawn) {
-						if (!this.respawned) {
-							this.respawn()
-						} else if (deathDuration > waitToRespawn + 1000 * this.level) {
-							if (!this.blocked()) {
-								this.reemerge()
-							}
+		if (tweening) {
+			return
+		}
+		if (this.isDead) {
+			if (this.timeOfDeath) {
+				const deathDuration = renderTime - this.timeOfDeath
+				if (deathDuration > waitToRespawn) {
+					if (!this.respawned) {
+						this.respawn()
+					} else if (deathDuration > waitToRespawn + 1000 * this.level) {
+						if (!this.blocked()) {
+							this.reemerge()
 						}
 					}
 				}
-			} else {
-				this.updateExperience()
-				this.doRegenerate()
+			}
+		} else {
+			this.updateExperience()
+			this.doRegenerate()
+			if (this.selected) {
+				store.everyUpdateStats(this)
 			}
 		}
 	}

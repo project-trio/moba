@@ -2,7 +2,7 @@
 <div class="player-info">
   <div>{{ stats.name }}</div>
   <div>{{ stats.health }} / {{ stats.healthMax }} hp</div>
-  <div>{{ stats.levelProgress }}% to level {{ stats.level + 1 }}</div>
+  <div>{{ levelProgress }}</div>
   <div>
     <span>{{ stats.dps.toFixed(1) }} dps</span>
     <span>{{ stats.range }} range</span>
@@ -17,8 +17,14 @@
 <script>
 export default {
   computed: {
+    levelProgress () {
+      if (this.stats.levelProgress) {
+        return `${this.stats.levelProgress}% to level ${this.stats.level + 1}`
+      }
+      return `Level ${this.stats.level + 1}`
+    },
+
     stats () {
-      console.log('stat!', this.$root.$data.state.selectedStats)
       return this.$root.$data.state.selectedStats
     },
   },

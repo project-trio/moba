@@ -20,6 +20,7 @@ export default {
     this.state.selectedStats.name = unit.name
     unit.selected = true
     this.levelUpStats(unit)
+    this.everyUpdateStats(unit)
   },
   levelUpStats (unit) {
     const stats = this.state.selectedStats
@@ -28,11 +29,15 @@ export default {
     stats.dps = unit.stats.attackDamage / 1000 * (10 / unit.stats.attackCooldown)
     stats.range = unit.stats.attackRange / 100
     stats.moveSpeed = unit.stats.moveSpeed
-    this.everyUpdateStats(unit)
+    if (unit.maxLevel) {
+      stats.levelProgress = null
+    }
   },
   everyUpdateStats (unit) {
     const stats = this.state.selectedStats
-    stats.levelProgress = Math.round(unit.levelExp * 100 / unit.expPerLevel)
+    if (!unit.maxLevel) {
+      stats.levelProgress = Math.round(unit.levelExp * 100 / unit.expPerLevel)
+    }
     stats.health = Math.ceil(unit.healthRemaining / 1000)
   },
 
