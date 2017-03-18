@@ -36,6 +36,9 @@ body, .inherit
 .interactive, button
   cursor pointer
 
+.bold
+  font-weight 600
+
 button
   border 0
   padding 0

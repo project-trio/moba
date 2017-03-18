@@ -66,7 +66,7 @@ class Ship extends Movable {
 		// this.base.add(base)
 
 		Render.text(player.name, -this.hpWidth / 2, this.hpHeight, {
-			size: 12,
+			size: 11,
 			color: team === 1 ? 0xff1010 : 0x0090ff,
 			parent: this.unitInfo,
 		})
@@ -129,7 +129,7 @@ class Ship extends Movable {
 			Render.remove(this.unitInfo.levelText)
 		}
 		Render.text(this.level, this.hpWidth / 2, this.hpHeight, {
-			size: 13,
+			size: 12,
 			color: 0x666666,
 			parent: this.unitInfo,
 			ref: 'levelText',

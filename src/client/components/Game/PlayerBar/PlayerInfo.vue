@@ -1,6 +1,6 @@
 <template>
 <div class="player-info">
-  <div>{{ stats.name }}</div>
+  <div class="bold">{{ stats.name }}</div>
   <div>{{ stats.health }} / {{ stats.healthMax }} hp</div>
   <div>{{ levelProgress }}</div>
   <div>
