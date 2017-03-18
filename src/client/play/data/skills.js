@@ -1,6 +1,6 @@
 
 export default {
-  pewpew: [
+  boxy: [
     {
       name: 'test a',
       description: '',

@@ -1,3 +1,4 @@
+import store from '@/store'
 import Local from '@/play/local'
 import Ship from '@/play/game/entity/unit/ship'
 
@@ -27,7 +28,9 @@ export default function (pid, team, index, name) {
 
 	this.createShip = function () {
 		const position = this.spawnLocation()
-		this.unit = new Ship('boxy', this, team, position[0], position[1])
+		let shipName = 'boxy'
+		store.setShipName(shipName)
+		this.unit = new Ship(shipName, this, team, position[0], position[1])
 	}
 
 	this.destroy = function () {

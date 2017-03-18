@@ -1,13 +1,12 @@
 <template>
 <div class="skills-bar">
-  <skill-item v-for="skill in skills" :name="skill.name" :description="skill.description" :key="skill.name"></skill-item>
+  <skill-item v-for="(skill, index) in skills" :index="index" :name="skill.name" :description="skill.description" :key="skill.name"></skill-item>
 </div>
 </template>
 
 <script>
 import SkillItem from '@/components/Game/PlayerBar/SkillsBar/SkillItem'
 
-// import Local from '@/play/local'
 import skillsData from '@/play/data/skills'
 
 export default {
@@ -16,8 +15,12 @@ export default {
   },
 
   computed: {
+    shipName () {
+      return this.$root.$data.state.shipName
+    },
+
     skills () {
-      return skillsData['pewpew']
+      return this.shipName ? skillsData[this.shipName] : null
     },
   },
 }
