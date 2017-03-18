@@ -1,5 +1,7 @@
 import Decimal from 'decimal.js'
 
+import store from '@/store'
+
 import Render from '@/play/render/render'
 
 import Util from '@/play/game/util'
@@ -14,7 +16,7 @@ const expPerLevel = 600
 
 const SHIP_STATS = {
 	// [start, levelup, max]
-	pewpew: {
+	boxy: {
 		healthMax: [60, 10, 0],
 		healthRegen: [40, 2, 0],
 
@@ -37,19 +39,21 @@ const SHIP_STATS = {
 class Ship extends Movable {
 
 	constructor (name, player, team, x, y, angle) {
-		const statBase = SHIP_STATS[name] || SHIP_STATS['pewpew']
+		const statBase = SHIP_STATS[name]
 		super(team, statBase, 2, x, y, angle)
 
 		this.statBase = statBase
 		this.id = player.id
 		this.player = player
-		// this.name = player.name
+		this.name = name
 
 		this.level = 1
 		this.levelExp = 0
+		this.expPerLevel = expPerLevel
 		this.respawned = false
 		this.isBlocking = true
 		this.exactDestination = false
+		this.selected = false
 
 		// Unit
 
@@ -127,7 +131,7 @@ class Ship extends Movable {
 		this.stats.healthRegen += this.statBase.healthRegen[1]
 		this.stats.moveSpeed += this.statBase.moveSpeed[1]
 		this.stats.sightRange += this.statBase.sightRange[1]
-		this.stats.attackRange += this.statBase.attackRange[1]
+		this.stats.attackRange += this.statBase.attackRange[1] * 100
 		this.stats.attackDamage += this.statBase.attackDamage[1] * 1000
 		this.stats.attackCooldown += this.statBase.attackCooldown[1]
 		this.stats.attackMoveSpeed += this.statBase.attackMoveSpeed[1]
@@ -137,14 +141,22 @@ class Ship extends Movable {
 		this.moveConstant = new Decimal(this.stats.moveSpeed).dividedBy(2000)
 
 		this.updateHealth()
+
+		if (this.selected) {
+			store.levelUpStats(this)
+		}
 	}
 
 	updateExperience () {
 		const increment = this.isFiring ? 3 : 2
 		this.levelExp += increment
-		const leveledOver = this.levelExp - expPerLevel
+		const leveledOver = this.levelExp - this.expPerLevel
 		if (leveledOver >= 0) {
 			this.levelUp(leveledOver)
+		} else {
+			if (this.selected) {
+				store.everyUpdateStats(this)
+			}
 		}
 	}
 

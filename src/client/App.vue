@@ -19,12 +19,13 @@ body
 
 #app
   text-align center
-  color #2c3e50
+  color #fffffe
 
 #app, button
   font-family 'Avenir', Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
+  font-weight 400
 
 body, .inherit
   width inherit
@@ -39,4 +40,5 @@ button
   outline none
   text-align center
   font-size 1.5em
+  color #111110
 </style>

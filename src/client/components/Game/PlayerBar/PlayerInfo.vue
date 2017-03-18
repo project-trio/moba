@@ -1,21 +1,27 @@
 <template>
 <div class="player-info">
-  <div>Health</div>
-  <div>Experience</div>
+  <div>{{ stats.name }}</div>
+  <div>{{ stats.health }} / {{ stats.healthMax }} hp</div>
+  <div>{{ stats.levelProgress }}% to level {{ stats.level + 1 }}</div>
   <div>
-    <span>Damage</span>
-    <span>Range</span>
+    <span>{{ stats.dps.toFixed(1) }} dps</span>
+    <span>{{ stats.range }} range</span>
   </div>
   <div>
-    <span>Armor</span>
-    <span>Speed</span>
+    <span>0 armor</span>
+    <span>{{ stats.moveSpeed }} kph</span>
   </div>
 </div>
 </template>
 
 <script>
 export default {
-
+  computed: {
+    stats () {
+      console.log('stat!', this.$root.$data.state.selectedStats)
+      return this.$root.$data.state.selectedStats
+    },
+  },
 }
 </script>
 

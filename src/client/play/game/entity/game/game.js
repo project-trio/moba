@@ -2,6 +2,7 @@ import TrigCache from '@/play/external/trigcache'
 
 import Local from '@/play/local'
 import Render from '@/play/render/render'
+import store from '@/store'
 
 import GameMap from '@/play/game/entity/game/map'
 import Player from '@/play/game/entity/game/player'
@@ -136,6 +137,8 @@ const Game = function (gid, size) {
 			}
 		}
 		this.localUnit = Local.player.unit
+		store.setShipName(this.localUnit.name)
+		store.setSelectedUnit(this.localUnit)
 
 		// status = 'STARTED'
 		startTime = performance.now()
