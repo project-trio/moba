@@ -25,7 +25,7 @@ module.exports = {
     modules: [
       resolve('src'),
       resolve('node_modules'),
-		],
+    ],
   },
   module: {
     rules: [
@@ -57,9 +57,12 @@ module.exports = {
         }
       },
       {
-				test: /\.vox$/,
-				loader: 'url-loader?limit=1',
-			},
+        test: /\.(vox|json)$/,
+        loader: 'url-loader?limit=1',
+        query: {
+          limit: 1,
+        }
+      },
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url-loader',
