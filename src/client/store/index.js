@@ -25,8 +25,8 @@ export default {
   levelUpStats (unit) {
     const stats = this.state.selectedStats
     stats.level = unit.level
-    stats.healthMax = unit.stats.healthMax / 1000
-    stats.dps = unit.stats.attackDamage / 1000 * (10 / unit.stats.attackCooldown)
+    stats.healthMax = unit.stats.healthMax / 100
+    stats.dps = Math.round(unit.stats.attackDamage / 100 * (10 / unit.stats.attackCooldown))
     stats.range = unit.stats.attackRange / 100
     stats.moveSpeed = unit.stats.moveSpeed
     if (unit.maxLevel) {
@@ -38,7 +38,7 @@ export default {
     if (!unit.maxLevel) {
       stats.levelProgress = Math.round(unit.levelExp * 100 / unit.expPerLevel)
     }
-    stats.health = Math.ceil(unit.healthRemaining / 1000)
+    stats.health = Math.ceil(unit.healthRemaining / 100)
   },
 
   levelSkill () {

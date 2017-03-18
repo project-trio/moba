@@ -4,7 +4,7 @@
   <div>{{ stats.health }} / {{ stats.healthMax }} hp</div>
   <div>{{ levelProgress }}</div>
   <div>
-    <span>{{ stats.dps.toFixed(1) }} dps</span>
+    <span>{{ stats.dps }} dps</span>
     <span>{{ stats.range }} range</span>
   </div>
   <div>
