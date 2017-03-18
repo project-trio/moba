@@ -12,6 +12,8 @@ const WALL_HEIGHT = 60
 
 let windowWidth, windowHeight
 
+let font
+
 //LOCAL
 
 const resize = function () {
@@ -49,7 +51,7 @@ export default {
 		windowHeight = window.innerHeight
 		gameScene = new THREE.Scene()
 		gameCamera = new THREE.PerspectiveCamera(90, windowWidth / windowHeight, 1, 1024)
-		gameCamera.up.set(0, -1, 0)
+		// gameCamera.up.set(0, -1, 0)
 		gameCamera.lookAt(gameScene)
 		gameCamera.position.z = 512
 
@@ -147,13 +149,32 @@ export default {
 		return new THREE.Object3D()
 	},
 
-	text (string, x, y, options, parent) {
-		// const text = new PIXI.Text(string, options)
-		// text.position.set(x, y)
-		// if (parent) {
-		// 	parent.add(text)
-		// }
-		// return text
+	text (string, x, y, options) {
+		const renderText = (newFont) => {
+			font = newFont
+			const geometry = new THREE.TextGeometry(string, {
+				font: font,
+				size: options.size,
+				height: 1,
+				curveSegments: 8,
+				bevelEnabled: false,
+				bevelThickness: 0,
+				bevelSize: 0,
+				bevelSegments: 0,
+			})
+			const material = new THREE.MeshLambertMaterial({color: options.color})
+			const mesh = new THREE.Mesh(geometry, material)
+			options.parent.add(mesh)
+			mesh.position.set(x, y, 0)
+			if (options.ref) {
+				options.parent[options.ref] = mesh
+			}
+		}
+		if (font) {
+			renderText(font)
+		} else {
+			new THREE.FontLoader().load(require('@/assets/font.typeface.json'), renderText)
+		}
 	},
 
 	sprite (name, options) {

@@ -62,8 +62,8 @@ class Movable extends Unit {
 		moveToY /= POSITION_MAGNITUDE_OFFSET
 		this.container.position.x = moveToX
 		this.container.position.y = moveToY
-		this.healthContainer.position.x = moveToX
-		this.healthContainer.position.y = moveToY
+		this.infoContainer.position.x = moveToX
+		this.infoContainer.position.y = moveToY
 	}
 
 	// Move

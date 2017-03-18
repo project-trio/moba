@@ -65,8 +65,12 @@ class Ship extends Movable {
 		// const base = Render.sprite('ship')
 		// this.base.add(base)
 
-		// const nameText = Render.text(player.name + ' [1]', 0, -Local.shipSize, {font: '13px Arial', fill: 0xff1010}, this.container)
-
+		Render.text(player.name, -this.hpWidth / 2, this.hpHeight, {
+			size: 12,
+			color: team === 1 ? 0xff1010 : 0x0090ff,
+			parent: this.unitInfo,
+		})
+		this.renderLevelText()
 	}
 
 	canMove () {
@@ -107,18 +111,30 @@ class Ship extends Movable {
 		this.isBlocking = true
 
 		this.opacity(1.0)
-		this.healthContainer.visible = true
+		this.infoContainer.visible = true
 	}
 
 	reemerge () {
 		this.updateHealth(this.stats.healthMax)
 		this.container.alpha = 1.0
-		this.healthContainer.visible = true
+		this.infoContainer.visible = true
 
 		this.setAlive()
 	}
 
 	// Experience
+
+	renderLevelText () {
+		if (this.unitInfo.levelText) {
+			Render.remove(this.unitInfo.levelText)
+		}
+		Render.text(this.level, this.hpWidth / 2, this.hpHeight, {
+			size: 13,
+			color: 0x666666,
+			parent: this.unitInfo,
+			ref: 'levelText',
+		})
+	}
 
 	levelUp (over) {
 		this.level += 1
@@ -126,7 +142,6 @@ class Ship extends Movable {
 			this.maxLevel = true
 		}
 		this.levelExp = over
-		// nameText.text = player.name + ' [' + level+ ']' //TODO
 
 		const healthIncrease = this.statBase.healthMax[1] * 1000
 		this.stats.healthMax += healthIncrease
@@ -149,6 +164,7 @@ class Ship extends Movable {
 		if (this.selected) {
 			store.levelUpStats(this)
 		}
+		this.renderLevelText()
 	}
 
 	updateExperience () {
@@ -235,7 +251,7 @@ class Ship extends Movable {
 				if (updatedVisibility) {
 					unit.isRendering = isInSight
 					unit.container.visible = isInSight || unit.renderInBackground || false
-					unit.healthContainer.visible = isInSight
+					unit.infoContainer.visible = isInSight
 				}
 				revealUnit = isInSight && (updatedVisibility || unit.isMoving)
 			}

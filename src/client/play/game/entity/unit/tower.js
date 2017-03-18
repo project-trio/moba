@@ -129,7 +129,7 @@ class Tower extends Unit {
 	// Damage
 
 	die (time) {
-		Render.remove(this.healthContainer)
+		Render.remove(this.infoContainer)
 		Render.remove(this.top)
 
 		this.isBlocking = false

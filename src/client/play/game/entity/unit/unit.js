@@ -75,7 +75,6 @@ class Unit {
 
 		// Health Bar
 
-		const hpOffsetY = -40
 		const outlineWeight = 1
 		const hpRadius = 3
 
@@ -95,25 +94,30 @@ class Unit {
 			hpOffsetZ = 80
 		}
 		this.healthWidth = hpWidth
-		this.healthContainer = Render.group()
+		this.infoContainer = Render.group()
+		this.unitInfo = Render.group()
+		this.infoContainer.add(this.unitInfo)
+		this.unitInfo.position.y = 40
+		this.unitInfo.position.z = hpOffsetZ
+		this.hpHeight = hpHeight
+		this.hpWidth = hpWidth
 
-		Render.rectangle(0, hpOffsetY, hpWidth, hpHeight, { // HP Backing
+		Render.rectangle(0, 0, hpWidth, hpHeight, { // HP Backing
 			color: 0xFF3333,
 			strokeWidth: outlineWeight,
 			strokeColor: 0xFFFFFF,
 			radius: hpRadius,
-			z: hpOffsetZ,
-			parent: this.healthContainer,
+			parent: this.unitInfo,
 		})
 
-		this.healthBar = Render.rectangle(0, hpOffsetY, hpWidth, hpHeight, {
+		this.healthBar = Render.rectangle(-hpWidth / 2, 0, hpWidth, hpHeight, {
 			color: 0x33FF99,
 			radius: hpRadius + 2,
-			z: hpOffsetZ,
-			parent: this.healthContainer,
+			parent: this.unitInfo,
 		})
+		this.healthBar.geometry.translate(hpWidth / 2, 0, 0)
 
-		Local.game.map.addHealthbar(this.healthContainer)
+		Local.game.map.addInfo(this.infoContainer)
 
 		// Start location
 
@@ -138,8 +142,7 @@ class Unit {
 		this.px = x * 100
 		this.py = y * 100
 		this.container.position.set(x, y, 0)
-		this.healthContainer.position.x = x
-		this.healthContainer.position.y = y
+		this.infoContainer.position.set(x, y, 0)
 
 		const angle = this.startAngle || (-Math.PI * 1.5 * (this.team == 0 ? -1 : 1))
 		this.base.rotation.z = angle
@@ -173,8 +176,6 @@ class Unit {
 		const healthScale = newHealth / this.stats.healthMax
 		if (healthScale > 0) {
 			this.healthBar.scale.x = healthScale
-			const hpXOff = this.healthWidth / 2
-			this.healthBar.position.x = (-hpXOff * healthScale) + hpXOff
 			this.healthBar.visible = true
 		} else {
 			this.healthBar.visible = false
@@ -201,12 +202,12 @@ class Unit {
 	die (time) {
 		this.isDead = true
 		this.timeOfDeath = time
-		this.healthContainer.visible = false
+		this.infoContainer.visible = false
 		this.setTarget(null)
 	}
 
 	destroy () {
-		Render.remove(this.healthContainer)
+		Render.remove(this.infoContainer)
 		Render.remove(this.container)
 		if (this.fogCircle) {
 			Render.remove(this.fogCircle)

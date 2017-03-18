@@ -115,10 +115,10 @@ const GameMap = function (parent) {
 
 	let container = Render.group()
 	const floorContainer = Render.group()
-	const healthContainer = Render.group()
+	const infoContainer = Render.group()
 	const fogContainer = Render.group()
 	container.add(floorContainer)
-	container.add(healthContainer)
+	container.add(infoContainer)
 	container.add(fogContainer)
 	parent.add(container)
 	this.floorContainer = floorContainer
@@ -139,8 +139,8 @@ const GameMap = function (parent) {
 		sightsArray.push(sight)
 	}
 
-	this.addHealthbar = function (bar) {
-		healthContainer.add(bar)
+	this.addInfo = function (container) {
+		infoContainer.add(container)
 	}
 
 	this.blockCheck = function (moveX, moveY) {
