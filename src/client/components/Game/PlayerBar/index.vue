@@ -27,6 +27,7 @@ export default {
   display flex
   align-items bottom
   justify-content center
+  user-select none
 
 .bar-section
   background rgba(96,96,96,0.9)

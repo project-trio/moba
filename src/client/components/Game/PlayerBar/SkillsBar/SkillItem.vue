@@ -1,5 +1,6 @@
 <template>
 <div class="skill-item" @click="onSkill">
+  <button class="skill-button">{{ index + 1 }}</button>
   <div>{{ name }}</div>
   <div>{{ description }}</div>
 </div>
@@ -8,6 +9,7 @@
 <script>
 export default {
   props: {
+    index: Number,
     name: String,
     description: String,
   },
@@ -22,15 +24,19 @@ export default {
 
 <style lang="stylus" scoped>
 .skill-item
-  box-sizing border-box
+  display inline-block
+  margin 4px
+  // box-sizing border-box
+
+.skill-button
   padding 4px
-  margin 8px
+  margin 4px
   width 80px
   height 80px
-  display inline-block
   background white
   cursor pointer
   transition transform 0.4s ease, opacity 0.4s ease
+  border-radius 50%
 
 .skill-item:hover
   opacity 0.8

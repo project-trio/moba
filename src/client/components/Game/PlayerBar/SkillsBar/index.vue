@@ -27,5 +27,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-// .skills-bar
+.skills-bar
+  padding 4px
 </style>

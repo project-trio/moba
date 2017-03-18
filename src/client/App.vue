@@ -17,7 +17,6 @@ html
 body
   margin 0
 
-
 #app
   text-align center
   color #2c3e50
@@ -30,4 +29,14 @@ body
 body, .inherit
   width inherit
   height inherit
+
+.interactive, button
+  cursor pointer
+
+button
+  border 0
+  padding 0
+  outline none
+  text-align center
+  font-size 1.5em
 </style>
