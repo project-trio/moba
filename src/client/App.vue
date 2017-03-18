@@ -11,11 +11,13 @@ export default {
 </script>
 
 <style lang="stylus">
-html
-  width 100%
-  height 100%
 body
   margin 0
+  overflow hidden
+
+.inherit
+  width inherit
+  height inherit
 
 #app
   text-align center

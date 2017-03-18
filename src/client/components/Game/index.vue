@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="inherit">
   <canvas id="canvas" class="inherit"></canvas>
   <player-bar></player-bar>
 </div>
