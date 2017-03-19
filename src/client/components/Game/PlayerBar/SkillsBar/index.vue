@@ -1,6 +1,6 @@
 <template>
 <div class="skills-bar">
-  <skill-item v-for="(skill, index) in skills" :index="index" :name="skill.name" :description="skill.description" :key="skill.name"></skill-item>
+  <skill-item v-for="(skill, index) in skills" :index="index" :name="skill.name" :description="skill.description" :skill="skill" :level="skillLevels[index]" :key="skill.name"></skill-item>
 </div>
 </template>
 
@@ -17,6 +17,10 @@ export default {
   computed: {
     shipName () {
       return this.$root.$data.state.shipName
+    },
+
+    skillLevels () {
+      return this.$root.$data.state.skills.levels
     },
 
     skills () {

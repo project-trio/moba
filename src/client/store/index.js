@@ -1,6 +1,10 @@
 export default {
   state: {
-    skillsLeveled: 0,
+    skills: {
+      leveled: 0,
+      levels: [0, 0, 0],
+    },
+
     selectedStats: {
       name: null,
       level: 0,
