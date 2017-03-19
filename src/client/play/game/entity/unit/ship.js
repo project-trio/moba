@@ -83,7 +83,14 @@ class Ship extends Movable {
 	// Health
 
 	doRegenerate () {
-		this.addHealth(this.stats.healthRegen)
+		let regen = this.stats.healthRegen
+		if (this.healthRegenModifier) {
+			regen *= this.healthRegenModifier
+			if (!Number.isInteger(regen)) {
+				console.error('regen', regen)
+			}
+		}
+		this.addHealth(regen)
 	}
 
 	endSkill (index) {

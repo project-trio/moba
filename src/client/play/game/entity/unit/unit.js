@@ -167,7 +167,7 @@ class Unit {
 	updateHealth (newHealth) {
 		if (newHealth != null) {
 			if (!Number.isInteger(newHealth)) { //TODO debug only
-				console.error('Invalid health amount', newHealth)
+				console.error('newHealth', newHealth)
 			}
 			this.healthRemaining = newHealth
 		} else {
@@ -193,7 +193,15 @@ class Unit {
 	}
 
 	doDamage (amount) {
-		const newHealth = Math.max(this.healthRemaining - amount, 0)
+		let armor = this.stats.armor
+		if (this.armorModifier) {
+			armor *= this.armorModifier
+			if (!Number.isInteger(armor)) {
+				console.error('armor', armor)
+			}
+		}
+		const damage = amount - armor //TODO percent
+		const newHealth = Math.max(this.healthRemaining - damage, 0)
 		if (newHealth == 0) {
 			this.isDying = true
 		}
@@ -319,7 +327,14 @@ class Unit {
 	}
 
 	isAttackOffCooldown (renderTime) {
-		return renderTime - this.lastAttack > this.stats.attackCooldown * 100
+		let cooldown = this.stats.attackCooldown * 100
+		if (this.attackCooldownModifier) {
+			cooldown *= this.attackCooldownModifier
+			if (!Number.isInteger(cooldown)) {
+				console.error('cooldown', cooldown)
+			}
+		}
+		return renderTime - this.lastAttack > cooldown
 	}
 
 	getAttackTarget (units) {

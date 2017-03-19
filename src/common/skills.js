@@ -15,8 +15,12 @@ module.exports = {
         return this.cooldown
       },
       start (index, level, ship, cancel) {
+        ship.attackCooldownModifier = 0.25
+        ship.armorModifier = 0.5
       },
       end (ship) {
+        ship.attackCooldownModifier = null
+        ship.armorModifier = null
       },
     },
     {
@@ -58,8 +62,12 @@ module.exports = {
         return this.cooldown - level * 5
       },
       start (index, level, ship, cancel) {
+        ship.healthRegenModifier = 2
+        ship.moveSpeedModifier = 0.5
       },
       end (ship) {
+        ship.healthRegenModifier = null
+        ship.moveSpeedModifier = null
       },
     },
   ],

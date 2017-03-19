@@ -142,6 +142,9 @@ class Movable extends Unit {
 		if (this.isDead) {
 			return moveSpeed.dividedBy(2)
 		}
+		if (this.moveSpeedModifier) {
+			return moveSpeed.times(this.moveSpeedModifier)
+		}
 		return moveSpeed
 	}
 
