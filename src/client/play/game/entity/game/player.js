@@ -27,7 +27,7 @@ export default function (pid, team, index, name) {
 
 	this.createShip = function () {
 		const position = this.spawnLocation()
-		let shipName = 'boxy'
+		let shipName = 'glitch'
 		this.unit = new Ship(shipName, this, team, position[0], position[1])
 	}
 

@@ -2,7 +2,7 @@
 <div class="skill-item" @click="onSkill">
   <button class="skill-button">{{ index + 1 }}</button>
   <div>{{ name }}</div>
-  <div>{{ description }}</div>
+  <div class="description-tooltip bar-section">{{ description }}</div>
 </div>
 </template>
 
@@ -28,6 +28,15 @@ export default {
   margin 4px
   // box-sizing border-box
 
+.description-tooltip
+  display none
+  position absolute
+  top -80px
+  left 0
+  right 0
+  height 80px
+  margin 0
+
 .skill-button
   padding 4px
   margin 4px
@@ -38,10 +47,12 @@ export default {
   transition transform 0.4s ease, opacity 0.4s ease
   border-radius 50%
 
-.skill-item:hover
+.skill-item:hover button
   opacity 0.8
+.skill-item:hover .description-tooltip
+  display block
 
-.skill-item:hover:active
+.skill-item:hover:active button
   opacity 0.5
   transform scale(0.9)
 </style>

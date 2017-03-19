@@ -17,7 +17,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 .player-bar
   position absolute
   left 0
@@ -33,4 +33,5 @@ export default {
   background rgba(96,96,96,0.9)
   margin 0 8px
   padding 8px
+  box-sizing border-box
 </style>

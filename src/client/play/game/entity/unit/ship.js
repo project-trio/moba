@@ -2,6 +2,7 @@ import Decimal from 'decimal.js'
 
 import store from '@/store'
 
+import shipStats from '@/play/data/ships'
 import Render from '@/play/render/render'
 
 import Util from '@/play/game/util'
@@ -15,33 +16,12 @@ const waitToRespawn = 1990
 const expPerLevel = 1200
 const maxLevel = 30
 
-const SHIP_STATS = {
-	// [start, levelup, max]
-	boxy: {
-		healthMax: [60, 10, 0],
-		healthRegen: [40, 2, 0],
-		armor: [20, 2, 0],
-
-		sightRange: [160, 1, 0],
-		attackRange: [140, 1, 0],
-
-		attackDamage: [8, 1, 0],
-		attackCooldown: [15, 0, 0],
-		attackMoveSpeed: [11, 0, 0],
-		bulletSize: 4,
-
-		moveSpeed: [12, 0, 0],
-		turnSpeed: 10,
-		collision: 20,
-	},
-}
-
 //CLASS
 
 class Ship extends Movable {
 
 	constructor (name, player, team, x, y, angle) {
-		const statBase = SHIP_STATS[name]
+		const statBase = shipStats[name]
 		super(team, statBase, 2, x, y, angle)
 
 		this.statBase = statBase

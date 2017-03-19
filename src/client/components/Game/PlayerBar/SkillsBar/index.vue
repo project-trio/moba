@@ -28,5 +28,6 @@ export default {
 
 <style lang="stylus" scoped>
 .skills-bar
+  position relative
   padding 4px
 </style>
