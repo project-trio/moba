@@ -14,7 +14,7 @@ module.exports = {
       getCooldown: function (level) {
         return this.cooldown
       },
-      start (level, ship) {
+      start (index, level, ship, cancel) {
       },
       end (ship) {
       },
@@ -31,9 +31,18 @@ module.exports = {
       getCooldown: function (level) {
         return this.cooldown - level * 10
       },
-      start (level, ship) {
+      start (index, level, ship, cancel) {
+        ship.setTarget(null)
+        ship.invisible = true
+        ship.opacity(0.33)
+        ship.endInvisible = () => {
+          cancel(index)
+        }
       },
       end (ship) {
+        ship.invisible = false
+        ship.endInvisible = null
+        ship.opacity(1)
       },
     },
     {
@@ -48,7 +57,7 @@ module.exports = {
       getCooldown: function (level) {
         return this.cooldown - level * 5
       },
-      start (level, ship) {
+      start (index, level, ship, cancel) {
       },
       end (ship) {
       },

@@ -225,6 +225,9 @@ class Unit {
 			}
 			if (target) {
 				target.incoming(1)
+				if (this.endInvisible) {
+					this.endInvisible()
+				}
 			} else {
 				this.isAttackingTarget = false
 			}
@@ -274,7 +277,7 @@ class Unit {
 	}
 
 	canSee (enemy) {
-		return enemy.isGloballyVisible() || this.hasSightOf(enemy)
+		return !enemy.invisible && (enemy.isGloballyVisible() || this.hasSightOf(enemy))
 	}
 
 	// Attack
@@ -295,13 +298,16 @@ class Unit {
 		return this.distanceTo(unit) < this.attackRangeCheck
 	}
 
+	targetableStatus (unit) {
+		return !unit.invisible && !unit.isDead
+	}
 	attackableStatus (unit) {
-		return !unit.hasDied() && !this.alliedTo(unit)
+		return this.targetableStatus(unit) && !unit.hasDied() && !this.alliedTo(unit)
 	}
 
-	canAttack (unit) {
-		return this.attackableStatus(unit) && this.inAttackRange(unit)
-	}
+	// canAttack (unit) {
+	// 	return this.attackableStatus(unit) && this.inAttackRange(unit)
+	// }
 
 	attack (enemy, renderTime) {
 		this.lastAttack = renderTime
@@ -314,10 +320,6 @@ class Unit {
 
 	isAttackOffCooldown (renderTime) {
 		return renderTime - this.lastAttack > this.stats.attackCooldown * 100
-	}
-
-	shouldTarget (unit) {
-		return this.canAttack(unit)
 	}
 
 	getAttackTarget (units) {

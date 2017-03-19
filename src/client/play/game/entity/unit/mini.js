@@ -159,10 +159,6 @@ class Mini extends Movable {
 
 	// Aim
 
-	shouldTarget (unit) {
-		return !unit.isDead && !this.alliedTo(unit) && this.inSightRange(unit)
-	}
-
 	getAttackTarget (units) {
 		let closest = this.sightRangeCheck
 		let target = null

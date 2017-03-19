@@ -77,7 +77,7 @@ class Ship extends Movable {
 		const skill = this.skills[index]
 		const skillLevel = store.state.skills.levels[index]
 		this.activeSkills[index] = renderTime + skill.getDuration(skillLevel) * 100
-		skill.start(skillLevel, this)
+		skill.start(index, skillLevel, this, this.endSkill)
 	}
 
 	// Health
@@ -86,12 +86,16 @@ class Ship extends Movable {
 		this.addHealth(this.stats.healthRegen)
 	}
 
+	endSkill (index) {
+		this.activeSkills[index] = 0
+		this.skills[index].end(this)
+	}
+
 	endSkills (renderTime) {
 		for (let ai = 0; ai < 3; ai += 1) {
 			let durationEnd = this.activeSkills[ai]
 			if (durationEnd !== 0 && (!renderTime || renderTime >= durationEnd)) {
-				this.activeSkills[ai] = 0
-				this.skills[ai].end(this)
+				this.endSkill(ai)
 			}
 		}
 	}
@@ -217,6 +221,13 @@ class Ship extends Movable {
 			}
 		}
 		return this.setTarget(target, closest)
+	}
+
+	checkAttack (renderTime) {
+		if (this.invisible) {
+			return
+		}
+		super.checkAttack(renderTime)
 	}
 
 	// Update
