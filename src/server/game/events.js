@@ -1,3 +1,5 @@
+const CommonConsts = require.main.require('../common/constants');
+
 const Util = require.main.require('./utils/util');
 
 const Config = require('./config');
@@ -5,8 +7,6 @@ const Game = require('./game');
 const Player = require('./player');
 
 const games = [];
-
-const DEFAULT_GAME_SIZE = Util.TESTING ? 0 : 1 //TODO size
 
 //LOCAL
 
@@ -18,7 +18,7 @@ const quickJoin = function(player) {
 		}
 	}
 
-	const game = new Game(DEFAULT_GAME_SIZE);
+	const game = new Game(CommonConsts.DEFAULT_GAME_SIZE);
 	game.add(player);
 	games.push(game);
 };
