@@ -53,8 +53,9 @@ const Game = function (gid, size) {
 
 	this.performTicks = function (ticksToRender, currentTime) {
 		while (ticksToRender > 0) {
+			const renderTime = ticksRendered * tickDuration
 			if (ticksRendered % ticksPerUpdate == 0) {
-				if (!dequeueUpdate()) {
+				if (!dequeueUpdate(renderTime)) {
 					tickOffsetTime += ticksToRender * tickDuration
 					if (this.serverUpdate > 20) {
 						console.log('Missing update', [ticksToRender, tickOffsetTime])
@@ -62,7 +63,6 @@ const Game = function (gid, size) {
 					break
 				}
 			}
-			const renderTime = ticksRendered * tickDuration
 			Unit.update(renderTime, tickDuration, false)
 			Bullet.update(renderTime, tickDuration, false)
 
@@ -78,7 +78,7 @@ const Game = function (gid, size) {
 		return true
 	}
 
-	const dequeueUpdate = function () {
+	const dequeueUpdate = function (renderTime) {
 		const nextUpdate = updateQueue[updateCount]
 		if (!nextUpdate) {
 			return false
@@ -97,7 +97,7 @@ const Game = function (gid, size) {
 					const target = action.target
 					const skillIndex = action.skill
 					if (skillIndex !== undefined) {
-						ship.performSkill(skillIndex, target)
+						ship.performSkill(renderTime, skillIndex, target)
 					} else if (target) {
 						ship.setDestination(target[0], target[1], false)
 					}

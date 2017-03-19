@@ -27,6 +27,7 @@ class Ship extends Movable {
 		super(team, statBase, 2, x, y, angle)
 
 		this.skills = CommonSkills[name]
+		this.activeSkills = [0, 0, 0]
 		this.statBase = statBase
 		this.id = player.id
 		this.player = player
@@ -71,8 +72,12 @@ class Ship extends Movable {
 
 	// Skills
 
-	performSkill (index, target) {
-		console.log('performSkill', index, target)
+	performSkill (renderTime, index, target) {
+		console.log('performSkill', renderTime, index, target)
+		const skill = this.skills[index]
+		const skillLevel = store.state.skills.levels[index]
+		this.activeSkills[index] = renderTime + skill.getDuration(skillLevel) * 100
+		skill.start(skillLevel, this)
 	}
 
 	// Health
@@ -81,7 +86,19 @@ class Ship extends Movable {
 		this.addHealth(this.stats.healthRegen)
 	}
 
+	endSkills (renderTime) {
+		for (let ai = 0; ai < 3; ai += 1) {
+			let durationEnd = this.activeSkills[ai]
+			if (durationEnd !== 0 && (!renderTime || renderTime >= durationEnd)) {
+				this.activeSkills[ai] = 0
+				this.skills[ai].end(this)
+			}
+		}
+	}
+
 	die (time) {
+		this.endSkills(null)
+
 		this.opacity(0.5)
 		this.respawned = false
 
@@ -208,6 +225,8 @@ class Ship extends Movable {
 		if (tweening) {
 			return
 		}
+		this.endSkills(renderTime)
+
 		if (this.isDead) {
 			if (this.timeOfDeath) {
 				const deathDuration = renderTime - this.timeOfDeath

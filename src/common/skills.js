@@ -14,6 +14,10 @@ module.exports = {
       getCooldown: function (level) {
         return this.cooldown
       },
+      start (level, ship) {
+      },
+      end (ship) {
+      },
     },
     {
       name: 'Encrypt',
@@ -27,6 +31,10 @@ module.exports = {
       getCooldown: function (level) {
         return this.cooldown - level * 10
       },
+      start (level, ship) {
+      },
+      end (ship) {
+      },
     },
     {
       name: 'Salvage',
@@ -39,6 +47,10 @@ module.exports = {
       },
       getCooldown: function (level) {
         return this.cooldown - level * 5
+      },
+      start (level, ship) {
+      },
+      end (ship) {
       },
     },
   ],
