@@ -90,10 +90,17 @@ const Game = function (gid, size) {
 		for (let pid in nextUpdate) {
 			const player = players[pid]
 			if (player) {
-				const playerData = nextUpdate[pid]
-				const dest = playerData.dest
-				if (dest) {
-					player.unit.setDestination(dest[0], dest[1], false)
+				const playerActions = nextUpdate[pid]
+				const ship = player.unit
+				for (let ai = playerActions.length - 1; ai >= 0; ai -= 1) {
+					const action = playerActions[ai]
+					const target = action.target
+					const skillIndex = action.skill
+					if (skillIndex !== undefined) {
+						ship.performSkill(skillIndex, target)
+					} else if (target) {
+						ship.setDestination(target[0], target[1], false)
+					}
 				}
 			} else {
 				console.log('Update invalid for player', pid)
@@ -104,9 +111,9 @@ const Game = function (gid, size) {
 
 	// Play
 
-	this.enqueueUpdate = function (update, moves) {
+	this.enqueueUpdate = function (update, actions) {
 		this.serverUpdate = update
-		updateQueue[update] = moves
+		updateQueue[update] = actions
 		const behindUpdates = update - updateCount
 		if (behindUpdates > 0) {
 			tickOffsetTime -= behindUpdates * ticksPerUpdate * tickDuration

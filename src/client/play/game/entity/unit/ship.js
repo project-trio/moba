@@ -1,5 +1,7 @@
 import Decimal from 'decimal.js'
 
+import CommonSkills from 'common/skills'
+
 import store from '@/store'
 
 import shipStats from '@/play/data/ships'
@@ -24,6 +26,7 @@ class Ship extends Movable {
 		const statBase = shipStats[name]
 		super(team, statBase, 2, x, y, angle)
 
+		this.skills = CommonSkills[name]
 		this.statBase = statBase
 		this.id = player.id
 		this.player = player
@@ -54,6 +57,8 @@ class Ship extends Movable {
 		this.renderLevelText()
 	}
 
+	// Move
+
 	canMove () {
 		return !this.isDying
 	}
@@ -62,6 +67,12 @@ class Ship extends Movable {
 		super.setDestination(x, y, preadjusted)
 
 		this.moveToTarget = false
+	}
+
+	// Skills
+
+	performSkill (index, target) {
+		console.log('performSkill', index, target)
 	}
 
 	// Health

@@ -1,4 +1,4 @@
-const CommonConsts = require('../common/constants');
+const CommonConsts = require.main.require('../common/constants');
 
 //EXPRESS
 

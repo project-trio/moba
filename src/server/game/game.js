@@ -116,6 +116,11 @@ module.exports = function(size) {
 //METHODS
 
 	this.start = function() {
+		for (let pid in allPlayers) {
+			const player = allPlayers[pid];
+			player.start();
+		}
+
 		this.broadcast('start game', {updates: Config.updateDuration, ticks: Config.tickDuration, players: formattedPlayers(), teams: playerIds});
 		this.state = 'STARTED';
 		this.started = true;

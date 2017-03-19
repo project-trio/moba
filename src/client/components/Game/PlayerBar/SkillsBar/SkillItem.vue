@@ -1,24 +1,24 @@
 <template>
 <div class="skill-item" @click="onSkill">
   <button class="skill-button">{{ index + 1 }}</button>
-  <div>{{ name }}</div>
+  <div>{{ skill.name }}</div>
   <div class="description-tooltip bar-section" v-html="descriptionHtml"></div>
 </div>
 </template>
 
 <script>
+import Bridge from '@/play/bridge'
+
 export default {
   props: {
     skill: Object,
     index: Number,
     level: Number,
-    name: String,
-    description: String,
   },
 
   computed: {
     descriptionHtml () {
-      const rows = [`<div class="description-text">${this.description}</div>`]
+      const rows = [`<div class="description-text">${this.skill.description}</div>`]
       if (this.skill.duration) {
         rows.push(`<div>Duration: <span class="bold">${this.duration}</span> seconds</div>`)
       }
@@ -38,7 +38,12 @@ export default {
 
   methods: {
     onSkill () {
-      console.log(this.name)
+      if (this.skill.target === 0) {
+        return
+      }
+      if (this.skill.target === 1) {
+        Bridge.emit('action', { skill: this.index, target: null })
+      }
     },
   },
 }

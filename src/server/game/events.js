@@ -35,16 +35,35 @@ const loop = function() {
 		if (game.checkStart()) {
 			game.serverUpdate += 1;
 
-			const moveData = {};
+			const actionData = {};
 			const gamePlayers = game.players();
 			for (let pid in gamePlayers) {
 				const player = gamePlayers[pid];
-				if (player.move) {
-					moveData[pid] = player.move;
-					player.move = null;
+				const playerActions = []
+				const submittingSkills = [false, false, false]
+				let hasTarget = false
+				for (let ai = player.actions.length - 1; ai >= 0; ai -= 1) {
+					const action = player.actions[ai]
+					if (hasTarget && action.target) {
+						continue
+					}
+					const skillIndex = action.skill
+					if (skillIndex !== undefined) {
+						if (submittingSkills[skillIndex]) {
+							continue
+						}
+						submittingSkills[skillIndex] = true
+						const skillData = player.skills[skillIndex]
+						const skillLevel = player.skillLevels[skillIndex]
+						const updatesUntilCooleddown = Math.ceil(skillData.getCooldown(skillLevel) * 100 / updateDuration)
+						player.skillCooldowns[skillIndex] = game.serverUpdate + updatesUntilCooleddown
+					}
+					playerActions.push(action)
 				}
+				actionData[pid] = playerActions;
+				player.actions = [];
 			}
-			game.broadcast('update', {update: game.serverUpdate, moves: moveData});
+			game.broadcast('update', { update: game.serverUpdate, actions: actionData });
 		}
 	}
 
@@ -71,8 +90,19 @@ module.exports = {
 			}
 		});
 
-		client.on('update', (data)=>{
-			player.move = data;
+		client.on('action', (data)=>{
+			if (player.actions.length > 10) {
+				console.log('Action ERR: Too many actions')
+				return
+			}
+			const skillIndex = data.skill
+			if (skillIndex !== undefined) {
+				if (player.skillCooldowns[skillIndex] > player.game.serverUpdate) {
+					console.log('Action ERR: Still on cooldown', skillIndex, player.skillCooldowns[skillIndex] - player.game.serverUpdate)
+					return
+				}
+			}
+			player.actions.push(data)
 		});
 
 		client.on('updated', (data)=>{

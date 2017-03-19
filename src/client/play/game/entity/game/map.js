@@ -183,13 +183,13 @@ const GameMap = function (parent) {
 			ceiling: fogContainer,
 		})
 
-		let automateTimer
+		let automateTimer = null
 		Render.on(ground, 'mousedown', (event) => {
 			if (Local.player.unit.canMove()) {
 				const clickPoint = event.intersect.point
 				const diffX = Math.round(clickPoint.x) - previousCameraX
 				const diffY = Math.round(clickPoint.y) - previousCameraY
-				Bridge.emit('update', {dest: [diffX, diffY]})
+				Bridge.emit('action', { target: [diffX, diffY] })
 				if (automateTimer) {
 					clearInterval(automateTimer)
 					automateTimer = null
@@ -202,7 +202,7 @@ const GameMap = function (parent) {
 				if (Local.player) {
 					const dx = Math.round(Math.random() * layout.width)
 					const dy = Math.round(Math.random() * layout.height)
-					Bridge.emit('update', {dest: [dx, dy]})
+					Bridge.emit('action', { target: [dx, dy] })
 				}
 			}, Math.random() * 2000 + 1000)
 		}

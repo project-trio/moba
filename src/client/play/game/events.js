@@ -16,7 +16,7 @@ export default {
 					console.error('Invalid update ' + Local.game.serverUpdate + ' ' + update)
 				}
 			}
-			Local.game.enqueueUpdate(update, data.moves)
+			Local.game.enqueueUpdate(update, data.actions)
 			Bridge.emit('updated', {update: update})
 		})
 	},
