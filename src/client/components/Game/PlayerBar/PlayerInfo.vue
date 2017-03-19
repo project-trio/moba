@@ -8,7 +8,7 @@
     <span>{{ stats.range }} range</span>
   </div>
   <div>
-    <span>0 armor</span>
+    <span>{{ stats.armor }} armor</span>
     <span>{{ stats.moveSpeed }} kph</span>
   </div>
 </div>

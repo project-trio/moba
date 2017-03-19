@@ -7,6 +7,7 @@ const MINI_STATS = {
 	mini: {
 		healthMax: [90, 0, 0],
 		healthRegen: [0, 0, 0],
+		armor: [0, 0, 0],
 
 		sightRange: [100, 0, 0],
 		attackRange: [35, 0, 0],
@@ -22,6 +23,7 @@ const MINI_STATS = {
 	center: {
 		healthMax: [50, 0, 0],
 		healthRegen: [0, 0, 0],
+		armor: [0, 0, 0],
 
 		sightRange: [100, 0, 0],
 		attackRange: [100, 0, 0],

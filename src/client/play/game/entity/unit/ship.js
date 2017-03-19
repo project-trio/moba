@@ -20,6 +20,7 @@ const SHIP_STATS = {
 	boxy: {
 		healthMax: [60, 10, 0],
 		healthRegen: [40, 2, 0],
+		armor: [20, 2, 0],
 
 		sightRange: [160, 1, 0],
 		attackRange: [140, 1, 0],
@@ -148,6 +149,7 @@ class Ship extends Movable {
 		this.addHealth(healthIncrease)
 
 		this.stats.healthRegen += this.statBase.healthRegen[1]
+		this.stats.armor += this.statBase.armor[1]
 		this.stats.moveSpeed += this.statBase.moveSpeed[1]
 		this.stats.sightRange += this.statBase.sightRange[1]
 		this.stats.attackRange += this.statBase.attackRange[1] * 100
