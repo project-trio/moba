@@ -5,8 +5,41 @@
 </template>
 
 <script>
+import store from '@/store'
+
+const validKeyEvent = (event) => {
+  if (event.key == null || event.repeat || event.altKey || event.shiftKey || event.metaKey || event.ctrlKey) {
+    return false
+  }
+  const name = event.key.toLowerCase()
+  return name !== 'tab'
+}
+
 export default {
-  name: 'app'
+
+  created () {
+    window.addEventListener('keydown', this.keydown)
+    window.addEventListener('keyup', this.keyup)
+  },
+
+  destroyed () {
+    window.removeEventListener('keydown', this.keydown)
+    window.removeEventListener('keyup', this.keyup)
+  },
+
+  methods: {
+    keydown (event) {
+      if (validKeyEvent(event)) {
+        store.setKeyDown(event.key)
+      }
+    },
+
+    keyup (event) {
+      if (validKeyEvent(event)) {
+        store.setKeyUp(event.key)
+      }
+    },
+  },
 }
 </script>
 

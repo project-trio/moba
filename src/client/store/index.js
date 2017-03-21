@@ -19,6 +19,12 @@ export default {
     level: 0,
     shipName: null,
     selectedUnit: null,
+
+    key: {
+      lastPress: null,
+      count: 0,
+      pressed: {},
+    },
   },
 
   setSelectedUnit (unit) {
@@ -53,5 +59,26 @@ export default {
 
   setShipName (name) {
     this.state.shipName = name
+  },
+
+  // Hotkeys
+
+  setKeyDown (key) {
+    const keyState = this.state.key
+    if (keyState.lastPress != key) {
+      keyState.lastPress = key
+      keyState.count += 1
+    }
+  },
+  setKeyUp (key) {
+    const keyState = this.state.key
+    keyState.count -= 1
+    if (keyState.count <= 0) {
+      keyState.count = 0
+      keyState.pressed = { name: keyState.lastPress, at: performance.now() }
+      keyState.lastPress = null
+    } else if (key === keyState.lastPress) {
+      keyState.lastPress = null
+    }
   },
 }
