@@ -205,6 +205,7 @@ class Ship extends Movable {
 		this.stats.sightRange += this.statBase.sightRange[1]
 		this.stats.attackRange += this.statBase.attackRange[1] * 100
 		this.stats.attackDamage += this.statBase.attackDamage[1] * 1000
+		this.stats.attackPierce += this.statBase.attackPierce[1] * 1000
 		this.stats.attackCooldown += this.statBase.attackCooldown[1]
 		this.stats.attackMoveSpeed += this.statBase.attackMoveSpeed[1]
 

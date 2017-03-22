@@ -9,6 +9,7 @@ export default {
 		attackRange: [140, 1, 0],
 
 		attackDamage: [8, 1, 0],
+		attackPierce: [0, 0, 0],
 		attackCooldown: [15, 0, 0],
 		attackMoveSpeed: [11, 0, 0],
 		bulletSize: 4,
@@ -27,6 +28,7 @@ export default {
 		attackRange: [120, 0, 0],
 
 		attackDamage: [8, 1, 0],
+		attackPierce: [0, 0, 0],
 		attackCooldown: [15, 0, 0],
 		attackMoveSpeed: [11, 0, 0],
 		bulletSize: 4,

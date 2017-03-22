@@ -28,7 +28,8 @@ class Bullet {
 		this.container.add(ball)
 		Local.game.map.floorContainer.add(this.container)
 
-		this.damage = source.stats.attackDamage
+		this.attackDamage = source.stats.attackDamage
+		this.attackPierce = source.stats.attackPierce
 		this.moveConstant = new Decimal(source.stats.attackMoveSpeed).dividedBy(500)
 
 		this.setLocation(x, y, startAngle)
@@ -90,7 +91,7 @@ class Bullet {
 	}
 
 	reachedDestination () {
-		this.target.doDamage(this.damage)
+		this.target.doDamage(this.attackDamage, this.attackPierce)
 		this.destroy()
 	}
 

@@ -60,6 +60,7 @@ class Unit {
 			sightRange: statBase.sightRange[0] * 100,
 			attackRange: statBase.attackRange[0] * 100,
 			attackDamage: statBase.attackDamage[0] * 1000,
+			attackPierce: statBase.attackPierce[0] * 1000,
 			attackCooldown: statBase.attackCooldown[0],
 			attackMoveSpeed: statBase.attackMoveSpeed[0],
 			moveSpeed: statBase.moveSpeed[0] * 2,
@@ -220,15 +221,15 @@ class Unit {
 		this.updateHealth(newHealth)
 	}
 
-	doDamage (amount) {
-		let armor = this.stats.armor
+	doDamage (amount, pierce) {
+		let armor = Math.max(0, this.stats.armor - pierce)
 		if (this.armorModifier) {
 			armor *= this.armorModifier
 			if (!Number.isInteger(armor)) {
 				console.error('armor', armor)
 			}
 		}
-		const damage = amount - armor //TODO percent
+		const damage = Math.max(1, amount - armor) //TODO percent
 		const newHealth = Math.max(this.healthRemaining - damage, 0)
 		if (newHealth == 0) {
 			this.isDying = true
@@ -360,7 +361,7 @@ class Unit {
 	attack (enemy, renderTime) {
 		this.lastAttack = renderTime
 		if (!this.stats.attackMoveSpeed) { //SAMPLE || this.stats.attackMoveSpeed != 11) {
-			enemy.doDamage(this.stats.attackDamage)
+			enemy.doDamage(this.stats.attackDamage, this.stats.attackPierce)
 		} else {
 			new Bullet(this, enemy, this.px, this.py, this.top.rotation.z)
 		}

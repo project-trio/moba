@@ -46,6 +46,7 @@ export default {
     stats.healthMax = unit.stats.healthMax / 100
     stats.armor = unit.stats.armor
     stats.dps = Math.round(unit.stats.attackDamage / 100 * (10 / unit.stats.attackCooldown))
+    stats.pierce = unit.stats.attackPierce
     stats.range = unit.stats.attackRange / 100
     stats.moveSpeed = unit.stats.moveSpeed
     if (unit.maxLevel) {

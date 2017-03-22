@@ -13,6 +13,7 @@ const MINI_STATS = {
 		attackRange: [35, 0, 0],
 
 		attackDamage: [1, 0, 0],
+		attackPierce: [0, 0, 0],
 		attackCooldown: [1, 0, 0],
 		attackMoveSpeed: [0, 0, 0],
 
@@ -29,6 +30,7 @@ const MINI_STATS = {
 		attackRange: [100, 0, 0],
 
 		attackDamage: [8, 0, 0],
+		attackPierce: [0, 0, 0],
 		attackCooldown: [15, 0, 0],
 		attackMoveSpeed: [10, 0, 0],
 		bulletSize: 3,
