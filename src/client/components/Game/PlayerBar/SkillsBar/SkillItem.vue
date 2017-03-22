@@ -1,9 +1,12 @@
 <template>
-<div class="skill-item" @click="onSkill" :class="{ selected: pressing, active: activated, cooldown: cooldownTime }">
+<div class="skill-item" :class="{ selected: pressing, active: activated, cooldown: cooldownTime }">
   <div class="button-content">
     <div :class="`item-circle item-circle-${indexName}`"></div>
-    <button class="skill-button">{{ indexName }}</button>
+    <button @click="onSkill" class="skill-button">{{ indexName }}</button>
     <div>{{ skill.name }}</div>
+    <div v-if="levelupReady" @click="onLevelup" class="button-levelup interactive">
+      ⬆︎+1
+    </div>
   </div>
   <div class="description-tooltip bar-section" v-html="descriptionHtml"></div>
 </div>
@@ -45,6 +48,10 @@ export default {
       return rows.join('')
     },
 
+    levelupReady () {
+      return store.state.level > store.state.skills.leveled
+    },
+
     activeDuration () {
       return this.skill.getDuration(this.level) * 100
     },
@@ -83,7 +90,11 @@ export default {
   watch: {
     pressed (key) {
       if (key.name === this.indexName) {
-        this.onSkill()
+        if (key.modifier) {
+          this.onLevelup()
+        } else {
+          this.onSkill()
+        }
       }
     },
 
@@ -110,6 +121,13 @@ export default {
         Bridge.emit('action', { skill: this.index, target: null })
       }
     },
+
+    onLevelup () {
+      if (this.levelupReady) {
+        store.state.skills.leveled += 1
+        store.state.skills.levels.splice(this.index, 1, store.state.skills.levels[this.index] + 1)
+      }
+    },
   },
 
   mounted () {
@@ -133,13 +151,13 @@ export default {
 
 .skill-item .button-content
   position relative
-  // box-sizing border-box
+  z-index 1
 
 .skill-item .Sektor
   position absolute
   top 0
   left 0
-  z-index 1
+  z-index 10
 
 .skill-item .description-tooltip
   display none
@@ -150,6 +168,7 @@ export default {
   right 0
   margin 0
   text-align left
+  z-index 0
 
 .skill-item .description-text
   margin-bottom 2px
@@ -160,10 +179,22 @@ export default {
   width 80px
   height 80px
   background transparent
-  z-index 10
+  z-index 100
   position relative
   cursor pointer
   border-radius 50%
+
+.skill-item .button-levelup
+  position absolute
+  top -24px
+  left 1px
+  right 1px
+  background #d55
+  height 64px
+  z-index 1
+
+.skill-item .button-levelup:hover
+  opacity 0.8
 
 .skill-item.active .Sektor-sector
   stroke #aea
@@ -173,13 +204,13 @@ export default {
 .skill-item .skill-button, .skill-item .item-circle
   transition transform 0.4s ease, opacity 0.4s ease
 
-.skill-item:hover button, .skill-item.selected button, .skill-item:hover .item-circle
-  opacity 0.8
+.skill-item:hover .item-circle, .skill-item.selected item-circle
+  background rgba(170, 170, 170, 0.8)
 .skill-item:hover .description-tooltip, .skill-item.selected .description-tooltip
   display block
 
-.skill-item:hover:active button, .skill-item:hover:active .item-circle
-  opacity 0.5
+.skill-item:hover:active .item-circle, .skill-item:hover:active .item-circle
+  background rgba(170, 170, 170, 0.5)
 .skill-item:hover:active button
   transform scale(0.9)
 </style>

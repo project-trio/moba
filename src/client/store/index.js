@@ -27,6 +27,7 @@ export default {
     key: {
       lastPress: null,
       count: 0,
+      modifier: false,
       pressed: {},
     },
   },
@@ -57,29 +58,31 @@ export default {
     stats.health = Math.ceil(unit.healthRemaining / 100)
   },
 
-  levelSkill () {
-    this.state.skillsLeveled += 1
-  },
-
   setShipName (name) {
     this.state.shipName = name
   },
 
   // Hotkeys
 
-  setKeyDown (key) {
+  setKeyDown (key, modified) {
     const keyState = this.state.key
-    if (keyState.lastPress != key) {
+    if (keyState.lastPress !== key) {
       keyState.lastPress = key
       keyState.count += 1
     }
+    keyState.modifier = modified
   },
-  setKeyUp (key) {
+  setKeyUp (key, modified) {
     const keyState = this.state.key
     keyState.count -= 1
     if (keyState.count <= 0) {
       keyState.count = 0
-      keyState.pressed = { name: keyState.lastPress, at: performance.now() }
+      console.log(modified, keyState.modifier)
+      keyState.pressed = {
+        name: keyState.lastPress,
+        at: performance.now(),
+        modifier: modified,
+      }
       keyState.lastPress = null
     } else if (key === keyState.lastPress) {
       keyState.lastPress = null

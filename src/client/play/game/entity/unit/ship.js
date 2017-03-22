@@ -200,6 +200,10 @@ class Ship extends Movable {
 			store.levelUpStats(this)
 		}
 		this.renderLevelText()
+
+		if (this.isLocal) {
+			store.state.level = this.level
+		}
 	}
 
 	updateExperience () {

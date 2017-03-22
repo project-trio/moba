@@ -8,11 +8,11 @@
 import store from '@/store'
 
 const validKeyEvent = (event) => {
-  if (event.key == null || event.repeat || event.altKey || event.shiftKey || event.metaKey || event.ctrlKey) {
+  const name = event.key.toLowerCase()
+  if (event.repeat || name === 'control' || name === 'alt' || name === 'shift' || name === 'meta' || name === 'tab') {
     return false
   }
-  const name = event.key.toLowerCase()
-  return name !== 'tab'
+  return name
 }
 
 export default {
@@ -29,14 +29,16 @@ export default {
 
   methods: {
     keydown (event) {
-      if (validKeyEvent(event)) {
-        store.setKeyDown(event.key)
+      const name = validKeyEvent(event)
+      if (name) {
+        store.setKeyDown(name, event.altKey || event.shiftKey || event.metaKey || event.ctrlKey)
       }
     },
 
     keyup (event) {
-      if (validKeyEvent(event)) {
-        store.setKeyUp(event.key)
+      const name = validKeyEvent(event)
+      if (name) {
+        store.setKeyUp(name, event.altKey || event.shiftKey || event.metaKey || event.ctrlKey)
       }
     },
   },
@@ -77,6 +79,6 @@ button
   padding 0
   outline none
   text-align center
-  font-size 1.5em
   color #111110
+  font-size 1.5em
 </style>
