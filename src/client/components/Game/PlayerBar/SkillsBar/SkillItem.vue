@@ -1,7 +1,8 @@
 <template>
 <div class="skill-item" :class="{ selected: pressing, active: activated, cooldown: cooldownTime }">
   <div class="button-content">
-    <div :class="`item-circle item-circle-${indexName}`"></div>
+    <div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`"></div>
+    <div :class="`item-circle level-ring-${indexName}`"></div>
     <button @click="onSkill" class="skill-button">{{ indexName }}</button>
     <div>{{ skill.name }}</div>
     <div v-if="levelupReady" @click="onLevelup" class="button-levelup interactive">
@@ -28,7 +29,8 @@ export default {
 
   data () {
     return {
-      sektor: null,
+      cooldownRing: null,
+      levelRing: null,
     }
   },
 
@@ -48,8 +50,15 @@ export default {
       return rows.join('')
     },
 
+    level () {
+      return store.state.skills.levels[this.index]
+    },
+    levelupProgress () {
+      return this.level / 10
+    },
+
     levelupReady () {
-      return store.state.level > store.state.skills.leveled
+      return this.levelupProgress < 1 && store.state.level > store.state.skills.leveled
     },
 
     activeDuration () {
@@ -69,7 +78,6 @@ export default {
       const cooldownAt = this.cooldownTime
       if (cooldownAt > 0) {
         const diff = cooldownAt - store.state.renderTime
-        // console.log(cooldownAt, store.state.renderTime, diff)
         if (diff >= 0) {
           return diff
         }
@@ -100,14 +108,14 @@ export default {
 
     activated (active) {
       if (active) {
-        this.sektor.changeAngle(360)
+        this.cooldownRing.changeAngle(360)
       }
     },
 
     cooldownRemaining (remaining) {
       if (remaining >= 0) {
         const angle = 360 - Math.floor(remaining / this.cooldownDuration * 360)
-        this.sektor.changeAngle(angle >= 360 ? 0 : angle)
+        this.cooldownRing.changeAngle(angle >= 360 ? 0 : angle)
       }
     }
   },
@@ -126,18 +134,28 @@ export default {
       if (this.levelupReady) {
         store.state.skills.leveled += 1
         store.state.skills.levels.splice(this.index, 1, store.state.skills.levels[this.index] + 1)
+        this.levelRing.animateTo(Math.floor(this.levelupProgress * 360))
       }
     },
   },
 
   mounted () {
-    this.sektor = new Sektor(`.item-circle-${this.indexName}`, {
+    this.cooldownRing = new Sektor(`.cooldown-ring-${this.indexName}`, {
       size: 80,
-      stroke: 24,
+      stroke: 40,
       arc: true,
       angle: this.activated ? 360 : 0,
       // sectorColor: '#aaf',
       circleColor: '#aaa',
+      fillCircle: true,
+    })
+    this.levelRing = new Sektor(`.level-ring-${this.indexName}`, {
+      size: 82,
+      stroke: 6,
+      arc: true,
+      angle: Math.floor(this.levelupProgress * 360),
+      sectorColor: '#8e9',
+      circleColor: 'transparent',
       fillCircle: true,
     })
   },
@@ -196,20 +214,20 @@ export default {
 .skill-item .button-levelup:hover
   opacity 0.8
 
-.skill-item.active .Sektor-sector
-  stroke #aea
-.skill-item.cooldown .Sektor-sector
-  stroke #88f
+.skill-item.active .cooldown-ring .Sektor-sector
+  stroke #666
+.skill-item.cooldown .cooldown-ring .Sektor-sector
+  stroke #66a
 
-.skill-item .skill-button, .skill-item .item-circle
+.skill-item .skill-button, .skill-item .cooldown-ring
   transition transform 0.4s ease, opacity 0.4s ease
 
-.skill-item:hover .item-circle, .skill-item.selected item-circle
+.skill-item:hover .cooldown-ring, .skill-item.selected cooldown-ring
   background rgba(170, 170, 170, 0.8)
 .skill-item:hover .description-tooltip, .skill-item.selected .description-tooltip
   display block
 
-.skill-item:hover:active .item-circle, .skill-item:hover:active .item-circle
+.skill-item:hover:active .cooldown-ring, .skill-item:hover:active .cooldown-ring
   background rgba(170, 170, 170, 0.5)
 .skill-item:hover:active button
   transform scale(0.9)
