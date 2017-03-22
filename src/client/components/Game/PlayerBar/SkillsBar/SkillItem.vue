@@ -1,13 +1,18 @@
 <template>
-<div class="skill-item" @click="onSkill" :class="{ selected: pressing }">
-  <button class="skill-button">{{ indexName }}</button>
-  <div>{{ skill.name }}</div>
+<div class="skill-item" @click="onSkill" :class="{ selected: pressing, active: activated, cooldown: cooldownTime }">
+  <div class="button-content">
+    <div :class="`item-circle item-circle-${indexName}`"></div>
+    <button class="skill-button">{{ indexName }}</button>
+    <div>{{ skill.name }}</div>
+  </div>
   <div class="description-tooltip bar-section" v-html="descriptionHtml"></div>
 </div>
 </template>
 
 <script>
 import store from '@/store'
+
+import Sektor from '@/play/external/sektor'
 
 import Bridge from '@/play/bridge'
 
@@ -18,6 +23,12 @@ export default {
     level: Number,
   },
 
+  data () {
+    return {
+      sektor: null,
+    }
+  },
+
   computed: {
     indexName () {
       return `${this.index + 1}`
@@ -26,19 +37,38 @@ export default {
     descriptionHtml () {
       const rows = [`<div class="description-text">${this.skill.description}</div>`]
       if (this.skill.duration) {
-        rows.push(`<div>Duration: <span class="bold">${this.duration}</span> seconds</div>`)
+        rows.push(`<div>Duration: <span class="bold">${this.activeDuration / 1000}</span> seconds</div>`)
       }
       if (this.skill.cooldown) {
-        rows.push(`<div>Cooldown: <span class="bold">${this.cooldown}</span> seconds</div>`)
+        rows.push(`<div>Cooldown: <span class="bold">${this.cooldownDuration / 1000}</span> seconds</div>`)
       }
       return rows.join('')
     },
 
-    duration () {
-      return this.skill.getDuration(this.level) / 10
+    activeDuration () {
+      return this.skill.getDuration(this.level) * 100
     },
-    cooldown () {
-      return this.skill.getCooldown(this.level) / 10
+    cooldownDuration () {
+      return this.skill.getCooldown(this.level) * 100
+    },
+
+    activated () {
+      return store.state.skills.actives[this.index]
+    },
+    cooldownTime () {
+      return this.activated ? 0 : store.state.skills.cooldowns[this.index]
+    },
+    cooldownRemaining () {
+      const cooldownAt = this.cooldownTime
+      if (cooldownAt > 0) {
+        const diff = cooldownAt - store.state.renderTime
+        // console.log(cooldownAt, store.state.renderTime, diff)
+        if (diff >= 0) {
+          return diff
+        }
+        store.state.skills.cooldowns.splice(this.index, 1, 0)
+      }
+      return 0
     },
 
     pressing () {
@@ -56,6 +86,19 @@ export default {
         this.onSkill()
       }
     },
+
+    activated (active) {
+      if (active) {
+        this.sektor.changeAngle(360)
+      }
+    },
+
+    cooldownRemaining (remaining) {
+      if (remaining >= 0) {
+        const angle = 360 - Math.floor(remaining / this.cooldownDuration * 360)
+        this.sektor.changeAngle(angle >= 360 ? 0 : angle)
+      }
+    }
   },
 
   methods: {
@@ -68,6 +111,18 @@ export default {
       }
     },
   },
+
+  mounted () {
+    this.sektor = new Sektor(`.item-circle-${this.indexName}`, {
+      size: 80,
+      stroke: 24,
+      arc: true,
+      angle: this.activated ? 360 : 0,
+      // sectorColor: '#aaf',
+      circleColor: '#aaa',
+      fillCircle: true,
+    })
+  },
 }
 </script>
 
@@ -75,9 +130,18 @@ export default {
 .skill-item
   display inline-block
   margin 4px
+
+.skill-item .button-content
+  position relative
   // box-sizing border-box
 
-.description-tooltip
+.skill-item .Sektor
+  position absolute
+  top 0
+  left 0
+  z-index 1
+
+.skill-item .description-tooltip
   display none
   position absolute
   height 88px
@@ -87,25 +151,35 @@ export default {
   margin 0
   text-align left
 
-.description-text
+.skill-item .description-text
   margin-bottom 2px
 
-.skill-button
+.skill-item .skill-button
   padding 4px
   margin 4px
   width 80px
   height 80px
-  background white
+  background transparent
+  z-index 10
+  position relative
   cursor pointer
-  transition transform 0.4s ease, opacity 0.4s ease
   border-radius 50%
 
-.skill-item:hover button, .skill-item.selected button
+.skill-item.active .Sektor-sector
+  stroke #aea
+.skill-item.cooldown .Sektor-sector
+  stroke #88f
+
+.skill-item .skill-button, .skill-item .item-circle
+  transition transform 0.4s ease, opacity 0.4s ease
+
+.skill-item:hover button, .skill-item.selected button, .skill-item:hover .item-circle
   opacity 0.8
 .skill-item:hover .description-tooltip, .skill-item.selected .description-tooltip
   display block
 
-.skill-item:hover:active button
+.skill-item:hover:active button, .skill-item:hover:active .item-circle
   opacity 0.5
+.skill-item:hover:active button
   transform scale(0.9)
 </style>

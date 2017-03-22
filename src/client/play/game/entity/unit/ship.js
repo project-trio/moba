@@ -26,12 +26,16 @@ class Ship extends Movable {
 		const statBase = shipStats[name]
 		super(team, statBase, 2, x, y, angle)
 
-		this.skills = CommonSkills[name]
-		this.activeSkills = [0, 0, 0]
+		this.skills = {
+			data: CommonSkills[name],
+			actives: [0, 0, 0],
+			levels: [0, 0, 0],
+		}
 		this.statBase = statBase
 		this.id = player.id
 		this.player = player
 		this.name = name
+		this.isLocal = false
 
 		this.level = 1
 		this.levelExp = 0
@@ -73,11 +77,17 @@ class Ship extends Movable {
 	// Skills
 
 	performSkill (renderTime, index, target) {
-		console.log('performSkill', renderTime, index, target)
-		const skill = this.skills[index]
-		const skillLevel = store.state.skills.levels[index]
-		this.activeSkills[index] = renderTime + skill.getDuration(skillLevel) * 100
+		console.log('performSkill', renderTime, index, target, this.isLocal)
+		const skill = this.skills.data[index]
+		const skillLevel = this.skills.levels[index]
+		const endTime = renderTime + skill.getDuration(skillLevel) * 100
+		this.skills.actives[index] = endTime
 		skill.start(index, skillLevel, this, this.endSkill)
+
+		if (this.isLocal) {
+			store.state.skills.actives.splice(index, 1, endTime)
+			store.state.skills.cooldowns.splice(index, 1, renderTime + skill.getCooldown(skillLevel) * 100)
+		}
 	}
 
 	// Health
@@ -94,13 +104,17 @@ class Ship extends Movable {
 	}
 
 	endSkill (index) {
-		this.activeSkills[index] = 0
-		this.skills[index].end(this)
+		this.skills.actives[index] = 0
+		this.skills.data[index].end(this)
+
+		if (this.isLocal) {
+			store.state.skills.actives.splice(index, 1, 0)
+		}
 	}
 
 	endSkills (renderTime) {
 		for (let ai = 0; ai < 3; ai += 1) {
-			let durationEnd = this.activeSkills[ai]
+			let durationEnd = this.skills.actives[ai]
 			if (durationEnd !== 0 && (!renderTime || renderTime >= durationEnd)) {
 				this.endSkill(ai)
 			}

@@ -52,8 +52,9 @@ const Game = function (gid, size) {
 	}
 
 	this.performTicks = function (ticksToRender, currentTime) {
+		let renderTime
 		while (ticksToRender > 0) {
-			const renderTime = ticksRendered * tickDuration
+			renderTime = ticksRendered * tickDuration
 			if (ticksRendered % ticksPerUpdate == 0) {
 				if (!dequeueUpdate(renderTime)) {
 					tickOffsetTime += ticksToRender * tickDuration
@@ -74,6 +75,9 @@ const Game = function (gid, size) {
 			ticksRendered += 1
 			ticksToRender -= 1
 			lastTickTime += tickDuration
+		}
+		if (renderTime) {
+			store.state.renderTime = renderTime
 		}
 		return true
 	}
@@ -144,6 +148,7 @@ const Game = function (gid, size) {
 			}
 		}
 		this.localUnit = Local.player.unit
+		this.localUnit.isLocal = true
 		store.setShipName(this.localUnit.name)
 		store.setSelectedUnit(this.localUnit)
 
