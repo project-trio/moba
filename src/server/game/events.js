@@ -41,6 +41,12 @@ const loop = function() {
 				const player = gamePlayers[pid];
 				const playerActions = []
 				const submittingSkills = [false, false, false]
+				const levelupIndex = player.levelNext
+				if (levelupIndex !== null) {
+					playerActions.push({ skill: levelupIndex, level: true })
+					player.levelNext = null
+					submittingSkills[levelupIndex] = true
+				}
 				let hasTarget = false
 				for (let ai = player.actions.length - 1; ai >= 0; ai -= 1) {
 					const action = player.actions[ai]
@@ -97,7 +103,10 @@ module.exports = {
 			}
 			const skillIndex = data.skill
 			if (skillIndex !== undefined) {
-				if (player.skillCooldowns[skillIndex] > player.game.serverUpdate) {
+				if (data.level) {
+					player.levelNext = skillIndex
+					return
+				} else if (player.skillCooldowns[skillIndex] > player.game.serverUpdate) {
 					console.log('Action ERR: Still on cooldown', skillIndex, player.skillCooldowns[skillIndex] - player.game.serverUpdate)
 					return
 				}

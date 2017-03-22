@@ -12,6 +12,7 @@ module.exports = function(client) {
 	this.skills = null;
 	this.skillLevels = [0, 0, 0];
 	this.skillCooldowns = [0, 0, 0];
+	this.levelNext = null;
 
 	this.emit = function(name, message) {
 		client.emit(name, message);

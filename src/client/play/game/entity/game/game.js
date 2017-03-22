@@ -91,7 +91,7 @@ const Game = function (gid, size) {
 		updateQueue[updateCount] = null
 		updateCount += 1
 
-		for (let pid in nextUpdate) {
+		for (let pid in nextUpdate) { // 'action' response
 			const player = players[pid]
 			if (player) {
 				const playerActions = nextUpdate[pid]
@@ -101,7 +101,11 @@ const Game = function (gid, size) {
 					const target = action.target
 					const skillIndex = action.skill
 					if (skillIndex !== undefined) {
-						ship.performSkill(renderTime, skillIndex, target)
+						if (action.level) {
+							ship.levelup(skillIndex)
+						} else {
+							ship.performSkill(renderTime, skillIndex, target)
+						}
 					} else if (target) {
 						ship.setDestination(target[0], target[1], false)
 					}

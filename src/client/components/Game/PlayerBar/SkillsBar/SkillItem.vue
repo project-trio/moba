@@ -31,6 +31,7 @@ export default {
     return {
       cooldownRing: null,
       levelRing: null,
+      submittedLevelup: true,
     }
   },
 
@@ -51,6 +52,7 @@ export default {
     },
 
     level () {
+      this.submittedLevelup = false
       return store.state.skills.levels[this.index]
     },
     levelupProgress () {
@@ -58,7 +60,7 @@ export default {
     },
 
     levelupReady () {
-      return this.levelupProgress < 1 && store.state.level > store.state.skills.leveled
+      return !this.submittedLevelup && this.levelupProgress < 1 && store.state.level > store.state.skills.leveled
     },
 
     activeDuration () {
@@ -117,6 +119,10 @@ export default {
         const angle = 360 - Math.floor(remaining / this.cooldownDuration * 360)
         this.cooldownRing.changeAngle(angle >= 360 ? 0 : angle)
       }
+    },
+
+    levelupProgress (progress) {
+      this.levelRing.animateTo(Math.floor(progress * 360))
     }
   },
 
@@ -132,9 +138,8 @@ export default {
 
     onLevelup () {
       if (this.levelupReady) {
-        store.state.skills.leveled += 1
-        store.state.skills.levels.splice(this.index, 1, store.state.skills.levels[this.index] + 1)
-        this.levelRing.animateTo(Math.floor(this.levelupProgress * 360))
+        this.submittedLevelup = true
+        Bridge.emit('action', { skill: this.index, level: true })
       }
     },
   },

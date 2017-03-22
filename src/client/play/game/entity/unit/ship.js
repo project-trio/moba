@@ -30,6 +30,7 @@ class Ship extends Movable {
 			data: CommonSkills[name],
 			actives: [0, 0, 0],
 			levels: [0, 0, 0],
+			leveled: 1,
 		}
 		this.statBase = statBase
 		this.id = player.id
@@ -87,6 +88,26 @@ class Ship extends Movable {
 		if (this.isLocal) {
 			store.state.skills.actives.splice(index, 1, endTime)
 			store.state.skills.cooldowns.splice(index, 1, renderTime + skill.getCooldown(skillLevel) * 100)
+		}
+	}
+
+	levelup (index) {
+		if (this.skills.leveled < this.level) {
+			const currentLevel = this.skills.levels[index]
+			if (currentLevel < 10) {
+				this.skills.leveled += 1
+				console.log('levelup', index, this.skills.leveled, currentLevel)
+				this.skills.levels[index] = currentLevel + 1
+
+				if (this.isLocal) {
+					store.state.skills.leveled = this.skills.leveled
+					store.state.skills.levels.splice(index, 1, currentLevel + 1)
+				}
+			} else {
+				console.error('Skill already maxed', index, currentLevel)
+			}
+		} else {
+			console.error('levelup not ready', index)
 		}
 	}
 
