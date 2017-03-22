@@ -54,6 +54,7 @@ class Mini extends Movable {
 		super(team, stats, 1)
 
 		this.id = `mini${spawnCount}`
+		spawnCount += 1
 		this.moveToTarget = true
 		this.path = path
 		this.pathFlip = false
@@ -72,7 +73,7 @@ class Mini extends Movable {
 
 		this.reachedDestination(true)
 
-		Render.voxel('mini', {parent: this.top})
+		Render.voxel('mini', {parent: this.top, owner: this})
 	}
 
 	setDestination (x, y, preadjusted, moveX, moveY, fixedMovement) {

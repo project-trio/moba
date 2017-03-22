@@ -1,8 +1,9 @@
 import TrigCache from '@/play/external/trigcache'
 
+import store from '@/store'
+
 import Local from '@/play/local'
 import Render from '@/play/render/render'
-import store from '@/store'
 
 import GameMap from '@/play/game/entity/game/map'
 import Player from '@/play/game/entity/game/player'
@@ -107,7 +108,11 @@ const Game = function (gid, size) {
 							ship.performSkill(renderTime, skillIndex, target)
 						}
 					} else if (target) {
-						ship.setDestination(target[0], target[1], false)
+						if (typeof target === 'string') {
+							ship.setTargetId(target)
+						} else {
+							ship.targetDestination(target[0], target[1], false)
+						}
 					}
 				}
 			} else {

@@ -1,5 +1,8 @@
 import Decimal from 'decimal.js'
 
+import store from '@/store'
+
+import Bridge from '@/play/bridge'
 import Local from '@/play/local'
 
 import Render from '@/play/render/render'
@@ -31,6 +34,7 @@ class Unit {
 
 	constructor (team, statBase, unitScale, x, y, startAngle) {
 		this.team = team
+		this.ally = team === Local.player.team
 		this.startAngle = startAngle
 
 		this.movable = false
@@ -137,6 +141,30 @@ class Unit {
 		applyOpacity(this.top, isTransluscent, opacity)
 	}
 
+	// Pointer
+
+	onHover () {
+		document.body.style.cursor = 'pointer'
+	}
+
+	onBlur () {
+		document.body.style.cursor = null
+	}
+
+	onClick (point, rightClick) {
+		store.setSelectedUnit(this)
+		if (this.isLocal) { //TODO remove
+			console.log('local')
+			return false
+		}
+		if (this.ally) {
+			console.log('ally')
+			return false
+		}
+		Bridge.emit('action', { target: this.id })
+		return true
+	}
+
 	// Geometry
 
 	setLocation (x, y) {
@@ -225,6 +253,18 @@ class Unit {
 	}
 
 	// Target
+
+	setTargetId (id) {
+		for (let idx = 0; idx < allUnits.length; idx += 1) {
+			const unit = allUnits[idx]
+			if (unit.id === id) {
+				const dist = this.distanceTo(unit)
+				this.moveToTarget = true
+				return this.setTarget(unit, dist)
+			}
+		}
+		console.error('Target id not found', id)
+	}
 
 	setTarget (target, distance) {
 		if (target != this.attackTarget) {

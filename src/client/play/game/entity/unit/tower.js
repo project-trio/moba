@@ -78,11 +78,12 @@ class Tower extends Unit {
 		super(team, stats, towerType == 'base' ? 3 : 2, x, y)
 
 		this.id = `tower${spawnCount}`
+		spawnCount += 1
 		this.towerType = towerType
 		this.targetedAt = null
 
-		Render.voxel('turret-base', {parent: this.base})
-		Render.voxel('turret-top', {parent: this.top})
+		Render.voxel('turret-base', {parent: this.base, owner: this})
+		Render.voxel('turret-top', {parent: this.top, owner: this})
 
 		this.renderInBackground = true
 		this.isBlocking = true

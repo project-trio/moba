@@ -50,7 +50,7 @@ class Ship extends Movable {
 
 		const offset = name == 'roller' ? -19 : 0
 
-		Render.voxel(name, {parent: this.top, z: offset})
+		Render.voxel(name, {parent: this.top, z: offset, owner: this})
 
 		// const base = Render.sprite('ship')
 		// this.base.add(base)
@@ -69,16 +69,13 @@ class Ship extends Movable {
 		return !this.isDying
 	}
 
-	setDestination (x, y, preadjusted) {
-		super.setDestination(x, y, preadjusted)
-
-		this.moveToTarget = false
+	shouldMove () {
+		return this.isMoving// && (!this.moveToTarget || !this.attackTarget || !this.inAttackRange(this.attackTarget))
 	}
 
 	// Skills
 
 	performSkill (renderTime, index, target) {
-		console.log('performSkill', renderTime, index, target, this.isLocal)
 		const skill = this.skills.data[index]
 		const skillLevel = this.skills.levels[index]
 		const endTime = renderTime + skill.getDuration(skillLevel) * 100
@@ -241,14 +238,30 @@ class Ship extends Movable {
 
 	// Aim
 
+	setTarget (target, distance) {
+		if (!target) {
+			if (this.isLocal && this.moveToTarget) {
+				console.log('target canceled')
+			}
+			this.moveToTarget = false
+		}
+		return super.setTarget(target, distance)
+	}
+
 	getAttackTarget (units) {
 		let closest = this.attackRangeCheck
 		let target = this.attackTarget
+		if (target && this.moveToTarget) {
+			if (this.attackableStatus(target)) {
+				const dist = this.distanceTo(target)
+				return this.setTarget(target, dist)
+			}
+		}
 		if (target) {
 			if (this.attackableStatus(target)) {
 				const dist = this.distanceTo(target)
 				if (dist <= closest) {
-					return this.setTarget(target, closest)
+					return this.setTarget(target, dist)
 				}
 			}
 			target = null

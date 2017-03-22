@@ -52,8 +52,12 @@ const loop = function() {
 				let hasTarget = false
 				for (let ai = player.actions.length - 1; ai >= 0; ai -= 1) {
 					const action = player.actions[ai]
-					if (hasTarget && action.target) {
-						continue
+					const target = action.target
+					if (target) {
+						if (hasTarget) {
+							continue
+						}
+						hasTarget = true
 					}
 					const skillIndex = action.skill
 					if (skillIndex !== undefined) {

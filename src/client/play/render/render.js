@@ -47,6 +47,8 @@ window.addEventListener('resize', resize)
 export default {
 
 	create () {
+		pointer.bind()
+
 		windowWidth = window.innerWidth
 		windowHeight = window.innerHeight
 		gameScene = new THREE.Scene()
@@ -198,6 +200,7 @@ export default {
 				options.parent.add(mesh)
 			}
 			mesh.castShadow = true
+			mesh.owner = options.owner
 		})
 	},
 

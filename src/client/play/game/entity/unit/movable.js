@@ -28,6 +28,11 @@ class Movable extends Unit {
 
 	// Position
 
+	targetDestination (x, y) {
+		this.setDestination(x, y)
+		this.setTarget(null)
+	}
+
 	setDestination (x, y, preadjusted, moveX, moveY) {
 		if (!preadjusted) {
 			x *= POSITION_MAGNITUDE_OFFSET
@@ -56,7 +61,6 @@ class Movable extends Unit {
 		this.destY = y
 
 		this.isMoving = true
-		this.setTarget(null)
 	}
 
 	updatePosition (moveToX, moveToY) {

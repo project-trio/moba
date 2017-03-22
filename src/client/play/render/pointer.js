@@ -20,19 +20,21 @@ function onClick (event) {
     const intersect = intersecting[i]
     const owner = intersect.object.owner
     if (owner && owner.onClick && owner.onClick(intersect.point, rightClick)) {
-      event.preventDefault()
       return false
     }
   }
 }
 
-window.addEventListener('mousedown', onClick, false)
-window.addEventListener('mousemove', onMouseMove, false)
-window.addEventListener('contextmenu', onClick, false)
-
 //PUBLIC
 
 export default {
+  bind () {
+    const canvas = document.getElementById('canvas')
+    canvas.addEventListener('mousedown', onClick, false)
+    canvas.addEventListener('mousemove', onMouseMove, false)
+    canvas.addEventListener('contextmenu', onClick, false)
+  },
+
   reposition (camera) {
     raycaster.setFromCamera(pointerLocation, camera)
 
