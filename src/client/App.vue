@@ -20,11 +20,13 @@ export default {
   created () {
     window.addEventListener('keydown', this.keydown)
     window.addEventListener('keyup', this.keyup)
+    window.addEventListener('contextmenu', this.onRightClick)
   },
 
   destroyed () {
     window.removeEventListener('keydown', this.keydown)
     window.removeEventListener('keyup', this.keyup)
+    window.removeEventListener('contextmenu', this.onRightClick)
   },
 
   methods: {
@@ -40,6 +42,10 @@ export default {
       if (name) {
         store.setKeyUp(name, event.altKey || event.shiftKey || event.metaKey || event.ctrlKey)
       }
+    },
+
+    onRightClick (event) {
+      event.preventDefault()
     },
   },
 }
