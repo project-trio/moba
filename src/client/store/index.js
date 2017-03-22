@@ -79,7 +79,6 @@ export default {
     keyState.count -= 1
     if (keyState.count <= 0) {
       keyState.count = 0
-      console.log(modified, keyState.modifier)
       keyState.pressed = {
         name: keyState.lastPress,
         at: performance.now(),

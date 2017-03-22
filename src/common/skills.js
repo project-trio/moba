@@ -3,8 +3,8 @@ module.exports = {
   ],
   glitch: [
     {
-      name: 'Disintigrate',
-      description: 'Boost attack speed, but more vulnerable to damage',
+      name: 'Brute force',
+      description: 'Boosts attack speed, while more vulnerable to damage',
       target: 1,
       duration: 60,
       cooldown: 150,
@@ -14,11 +14,11 @@ module.exports = {
       getCooldown: function (level) {
         return this.cooldown
       },
-      start (index, level, ship, cancel) {
+      start: function (index, level, ship, cancel) {
         ship.attackCooldownModifier = 0.25
         ship.armorModifier = 0.5
       },
-      end (ship) {
+      end: function (ship) {
         ship.attackCooldownModifier = null
         ship.armorModifier = null
       },
@@ -35,15 +35,15 @@ module.exports = {
       getCooldown: function (level) {
         return this.cooldown - level * 10
       },
-      start (index, level, ship, cancel) {
+      start: function (index, level, ship, cancel) {
         ship.setTarget(null)
         ship.invisible = true
         ship.opacity(0.33)
-        ship.endInvisible = () => {
+        ship.endInvisible = function () {
           cancel(index)
         }
       },
-      end (ship) {
+      end: function (ship) {
         ship.invisible = false
         ship.endInvisible = null
         ship.opacity(1)
@@ -61,11 +61,11 @@ module.exports = {
       getCooldown: function (level) {
         return this.cooldown - level * 5
       },
-      start (index, level, ship, cancel) {
+      start: function (index, level, ship, cancel) {
         ship.healthRegenModifier = 2
         ship.moveSpeedModifier = 0.5
       },
-      end (ship) {
+      end: function (ship) {
         ship.healthRegenModifier = null
         ship.moveSpeedModifier = null
       },
