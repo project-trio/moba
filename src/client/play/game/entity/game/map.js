@@ -198,6 +198,7 @@ const GameMap = function (parent) {
 				const diffX = Math.round(point.x) - previousCameraX
 				const diffY = Math.round(point.y) - previousCameraY
 				Bridge.emit('action', { target: [diffX, diffY] })
+
 				if (automateTimer) {
 					clearInterval(automateTimer)
 					automateTimer = null

@@ -140,6 +140,9 @@ class Movable extends Unit {
 					this.setDestination(this.attackTarget.px, this.attackTarget.py, true)
 				}
 			} else {
+				if (this.isLocal) {
+					console.log('lost target')
+				}
 				this.setTarget(null)
 				this.reachedDestination(false)
 			}
