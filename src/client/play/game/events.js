@@ -1,3 +1,5 @@
+import store from '@/store'
+
 import Bridge from '@/play/bridge'
 
 import Local from '@/play/local'
@@ -18,6 +20,13 @@ export default {
 			}
 			Local.game.enqueueUpdate(update, data.actions)
 			Bridge.emit('updated', {update: update})
+		})
+
+		Bridge.on('msg', (data) => {
+			const player = Local.game.player(data.id)
+			data.from = player.name
+			data.team = player.team
+			store.state.chatMessages.push(data)
 		})
 	},
 

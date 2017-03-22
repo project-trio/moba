@@ -74,6 +74,7 @@ module.exports = function(size) {
 		const team = playerIds[1].length < playerIds[0].length ? 1 : 0;
 		playerIds[team].push(pid);
 		allPlayers[pid] = player;
+		player.team = team;
 
 		this.broadcast('add player', {players: formattedPlayers(), teams: playerIds});
 		player.join(this);
@@ -125,6 +126,14 @@ module.exports = function(size) {
 		this.state = 'STARTED';
 		this.started = true;
 		console.log('Started game ' + this.id);
+	};
+
+	this.teamBroadcast = function(team, name, message) {
+		const teamPlayers = playerIds[team];
+		for (let pidx in teamPlayers) {
+			const player = allPlayers[teamPlayers[pidx]]
+			player.emit(name, message);
+		}
 	};
 
 	this.broadcast = function(name, message) {

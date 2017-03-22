@@ -4,10 +4,12 @@ module.exports = function(client) {
 
 	this.id = client.pid;
 	this.game = null;
+	this.team = 0;
 	this.serverUpdate = 0;
 	this.name = client.name;
 	this.ship = 'glitch';
 	this.actions = [];
+	this.message = null,
 
 	this.skills = null;
 	this.skillLevels = [0, 0, 0];

@@ -81,4 +81,12 @@ button
   text-align center
   color #111110
   font-size 1.5em
+
+input
+  padding 0 6px
+  margin 0
+  border 0
+  box-sizing border-box
+  font-size 1.25em
+  font-weight 400
 </style>

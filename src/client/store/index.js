@@ -2,6 +2,8 @@ export default {
   state: {
     renderTime: 0,
 
+    chatMessages: [],
+
     skills: {
       leveled: 0,
       levels: [0, 0, 0],

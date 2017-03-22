@@ -173,6 +173,10 @@ const Game = function (gid, size) {
 
 	// Players
 
+	this.player = function (id) {
+		return players[id]
+	}
+
 	this.updatePlayers = function (playerData) {
 		// teamSize = ? //TODO
 		const serverPlayers = playerData.players
