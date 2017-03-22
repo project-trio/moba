@@ -1,11 +1,11 @@
 const THREE = require('three')
 
 import Vox from '@/play/external/vox'
-import DomEvents from '@/play/external/threex.domevents'
 
+import pointer from '@/play/render/pointer'
 import RenderFog from '@/play/render/fog'
 
-let gameScene, gameCamera, renderer, domEvents
+let gameScene, gameCamera, renderer
 // let hudScene, hudCamera, hudTexture, hudBitmap
 
 const WALL_HEIGHT = 60
@@ -85,8 +85,6 @@ export default {
 		// renderer.shadowMap.enabled = true
 		// renderer.shadowMap.type = THREE.PCFShadowMap
 
-		domEvents = new DomEvents(gameCamera, renderer.domElement)
-
 		// HUD
 
 		// hudScene = new THREE.Scene()
@@ -125,6 +123,8 @@ export default {
 		// hudBitmap.fillText(++counter, windowWidth / 2, windowHeight / 2)
 		// hudTexture.needsUpdate = true
 
+		pointer.reposition(gameCamera)
+
 		renderer.render(gameScene, gameCamera)
 		// renderer.render(hudScene, hudCamera)
 	},
@@ -135,10 +135,6 @@ export default {
 
 	remove (object) {
 		object.parent.remove(object)
-	},
-
-	on (object, listener, callback) {
-		domEvents.addEventListener(object, listener, callback)
 	},
 
 	add (object) {

@@ -1,6 +1,9 @@
+import store from '@/store'
+
 import Bridge from '@/play/bridge'
 import Local from '@/play/local'
 
+import pointer from '@/play/render/pointer'
 import Render from '@/play/render/render'
 
 import Tower from '@/play/game/entity/unit/tower'
@@ -115,13 +118,17 @@ const GameMap = function (parent) {
 
 	let container = Render.group()
 	const floorContainer = Render.group()
+	const wallContainer = Render.group()
 	const infoContainer = Render.group()
 	const fogContainer = Render.group()
+	floorContainer.add(wallContainer)
 	container.add(floorContainer)
 	container.add(infoContainer)
 	container.add(fogContainer)
 	parent.add(container)
 	this.floorContainer = floorContainer
+
+	pointer.setParent(floorContainer)
 
 	const walls = []
 
@@ -155,7 +162,7 @@ const GameMap = function (parent) {
 
 		Render.wall(x, y, w, h, {
 			color: 0xeeeeee,
-			parent: floorContainer,
+			parent: wallContainer,
 		})
 	}
 
@@ -165,7 +172,7 @@ const GameMap = function (parent) {
 
 		Render.wallCap(x, y, radius, {
 			color: 0xeeeeee,
-			parent: floorContainer,
+			parent: wallContainer,
 		})
 	}
 
@@ -182,20 +189,23 @@ const GameMap = function (parent) {
 			floor: floorContainer,
 			ceiling: fogContainer,
 		})
+		ground.owner = ground
 
 		let automateTimer = null
-		Render.on(ground, 'mousedown', (event) => {
-			if (Local.player.unit.canMove()) {
-				const clickPoint = event.intersect.point
-				const diffX = Math.round(clickPoint.x) - previousCameraX
-				const diffY = Math.round(clickPoint.y) - previousCameraY
+		ground.onClick = (point) => {
+			const localUnit = Local.player.unit
+			if (localUnit.canMove()) {
+				const diffX = Math.round(point.x) - previousCameraX
+				const diffY = Math.round(point.y) - previousCameraY
 				Bridge.emit('action', { target: [diffX, diffY] })
 				if (automateTimer) {
 					clearInterval(automateTimer)
 					automateTimer = null
 				}
 			}
-		})
+			store.setSelectedUnit(localUnit)
+			return true
+		}
 
 		if (Local.TESTING) {
 			automateTimer = setInterval(() => { //SAMPLE
