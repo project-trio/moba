@@ -18,6 +18,10 @@ SocketIO.io = io;
 
 app.use(express.static('dist'))
 
+app.get('admin', (request, response, next) => {
+	response.sendFile(path.resolve(__dirname, '../../dist/admin.html'))
+});
+
 app.get('*', (request, response, next) => {
 	response.sendFile(path.resolve(__dirname, '../../dist/index.html'))
 });

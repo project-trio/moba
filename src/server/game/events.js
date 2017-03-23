@@ -7,6 +7,7 @@ const Game = require('./game');
 const Player = require('./player');
 
 const games = [];
+const clients = [];
 
 //LOCAL
 
@@ -90,6 +91,13 @@ module.exports = {
 	register (client) {
 		const pid = client.pid;
 		const player = new Player(client);
+		clients.push(player)
+
+		client.on('admin', (data, callback)=>{ //TODO protect
+			console.log('Admin', pid);
+			callback({games: games, players: clients})
+			clients.splice(clients.indexOf(player), 1)
+		});
 
 		client.on('disconnect', ()=>{
 			console.log('Disconnected', pid);
