@@ -77,6 +77,10 @@ class Ship extends Movable {
 	// Skills
 
 	performSkill (renderTime, index, target) {
+		if (this.isDead) {
+			console.log('Skill disabled during death', this.id, index)
+			return
+		}
 		if (renderTime < this.skills.cooldowns[index]) {
 			console.log('Skill still on cooldown', this.id, index)
 			return
@@ -166,10 +170,6 @@ class Ship extends Movable {
 
 		const spawnAt = this.player.spawnLocation()
 		this.setLocation(spawnAt[0], spawnAt[1])
-
-		if (this.isLocal) {
-			store.state.dead = false
-		}
 	}
 
 	setAlive () {
@@ -179,6 +179,10 @@ class Ship extends Movable {
 
 		this.opacity(1.0)
 		this.infoContainer.visible = true
+
+		if (this.isLocal) {
+			store.state.dead = false
+		}
 	}
 
 	reemerge () {
