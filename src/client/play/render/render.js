@@ -5,7 +5,7 @@ import Vox from '@/play/external/vox'
 import pointer from '@/play/render/pointer'
 import RenderFog from '@/play/render/fog'
 
-let gameScene, gameCamera, renderer
+let gameScene, gameCamera, renderer, gameLight
 
 const WALL_HEIGHT = 60
 
@@ -51,29 +51,41 @@ export default {
 		})
 		renderer.setPixelRatio(window.devicePixelRatio)
 		renderer.shadowMap.enabled = true
+		renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
 		// Scene
 
 		gameScene = new THREE.Scene()
-		gameCamera = new THREE.PerspectiveCamera(90, windowWidth / windowHeight, 1, 1024)
+		gameCamera = new THREE.PerspectiveCamera(90, windowWidth / windowHeight)
 		gameCamera.lookAt(gameScene)
 		gameCamera.position.z = 512
 
-		const ambient = new THREE.AmbientLight(0x555555, 1)
-		gameScene.add(ambient)
+		const ambientLight = new THREE.AmbientLight(0x666666, 1)
+		gameScene.add(ambientLight)
 
-		// const light = new THREE.DirectionalLight(0xffffff, 1)
-		// light.position.set(512, 512, 512)
-		// light.position.set(1, 1, 1)
-		// light.target.position.set(0, 0, 1)
-		// gameScene.add(light.target)
+		// Shadow
 
-		const light = new THREE.PointLight(0xffffff, 1, 0)
-		light.position.set(windowWidth / 2, windowHeight / 2, 400)
+		const light = new THREE.DirectionalLight(0xeeeeee, 1)
+		gameScene.add(light)
+		light.position.set(10, -50, 10)
+		gameLight = light
+		light.target.position.set(15, -40, 0)
+		gameScene.add(light.target)
 
 		light.castShadow = true
-		light.receiveShadow = false
-		gameScene.add(light)
+		light.shadow.enabled = true
+		const projectionSize = 1000
+		light.shadow.camera.left = -projectionSize
+		light.shadow.camera.right = projectionSize
+		light.shadow.camera.top = projectionSize
+		light.shadow.camera.bottom = -projectionSize
+		light.shadow.camera.near = 1
+		light.shadow.camera.far = 10000000
+		light.shadow.mapSize.width = 1024
+		light.shadow.mapSize.height = 1024
+
+		// const helper = new THREE.CameraHelper(light.shadow.camera)
+		// gameScene.add(helper)
 
 		resize()
 
@@ -184,7 +196,7 @@ export default {
 		const wall = new THREE.Mesh(geometry, material)
 		wall.rotation.set(Math.PI / 2, 0, 0)
 		wall.castShadow = true
-		wall.receiveShadow = true
+		wall.receiveShadow = false
 		wall.position.set(x, y, 0)
 		if (options.parent) {
 			options.parent.add(wall)
@@ -194,9 +206,9 @@ export default {
 
 	ground (width, height, options) {
 		const geometry = new THREE.BoxBufferGeometry(width, height, 10)
-		const material = new THREE.MeshBasicMaterial({color: options.color})
+		const material = new THREE.MeshLambertMaterial({color: options.color})
 		const rectangle = new THREE.Mesh(geometry, material)
-		rectangle.castShadow = true
+		rectangle.castShadow = false
 		rectangle.receiveShadow = true
 		rectangle.position.set(width / 2, height / 2, -10)
 
