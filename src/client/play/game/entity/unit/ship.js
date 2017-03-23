@@ -71,7 +71,7 @@ class Ship extends Movable {
 	}
 
 	shouldMove () {
-		return this.isMoving// && (!this.moveToTarget || !this.attackTarget || !this.inAttackRange(this.attackTarget))
+		return this.isMoving
 	}
 
 	// Skills

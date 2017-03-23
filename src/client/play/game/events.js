@@ -19,7 +19,7 @@ export default {
 				}
 			}
 			Local.game.enqueueUpdate(update, data.actions)
-			Bridge.emit('updated', {update: update})
+			Bridge.emit('updated', { update: update })
 		})
 
 		Bridge.on('msg', (data) => {

@@ -221,6 +221,10 @@ class Unit {
 		this.updateHealth(newHealth)
 	}
 
+	startDying () {
+		this.isDying = true
+	}
+
 	doDamage (amount, pierce) {
 		let armor = Math.max(0, this.stats.armor - pierce)
 		if (this.armorModifier) {
@@ -232,7 +236,7 @@ class Unit {
 		const damage = Math.max(1, amount - armor) //TODO percent
 		const newHealth = Math.max(this.healthRemaining - damage, 0)
 		if (newHealth == 0) {
-			this.isDying = true
+			this.startDying()
 		}
 		this.updateHealth(newHealth)
 	}
