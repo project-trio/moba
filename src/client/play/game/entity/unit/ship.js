@@ -29,6 +29,7 @@ class Ship extends Movable {
 		this.skills = {
 			data: CommonSkills[name],
 			actives: [0, 0, 0],
+			cooldowns: [0, 0, 0],
 			levels: [0, 0, 0],
 			leveled: 1,
 		}
@@ -76,15 +77,21 @@ class Ship extends Movable {
 	// Skills
 
 	performSkill (renderTime, index, target) {
+		if (renderTime < this.skills.cooldowns[index]) {
+			console.log('Skill still on cooldown', this.id, index)
+			return
+		}
 		const skill = this.skills.data[index]
 		const skillLevel = this.skills.levels[index]
-		const endTime = renderTime + skill.getDuration(skillLevel) * 100
-		this.skills.actives[index] = endTime
+		const durationEndTime = renderTime + skill.getDuration(skillLevel) * 100
+		const cooldownEndTime = renderTime + skill.getCooldown(skillLevel) * 100
+		this.skills.actives[index] = durationEndTime
+		this.skills.cooldowns[index] = cooldownEndTime
 		skill.start(index, skillLevel, this, this.endSkill)
 
 		if (this.isLocal) {
-			store.state.skills.actives.splice(index, 1, endTime)
-			store.state.skills.cooldowns.splice(index, 1, renderTime + skill.getCooldown(skillLevel) * 100)
+			store.state.skills.actives.splice(index, 1, durationEndTime)
+			store.state.skills.cooldowns.splice(index, 1, cooldownEndTime)
 		}
 	}
 

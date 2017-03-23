@@ -65,10 +65,6 @@ const loop = function() {
 							continue
 						}
 						submittingSkills[skillIndex] = true
-						const skillData = player.skills[skillIndex]
-						const skillLevel = player.skillLevels[skillIndex]
-						const updatesUntilCooleddown = Math.ceil(skillData.getCooldown(skillLevel) * 100 / updateDuration)
-						player.skillCooldowns[skillIndex] = game.serverUpdate + updatesUntilCooleddown
 					}
 					playerActions.push(action)
 				}
@@ -112,9 +108,6 @@ module.exports = {
 				if (data.level) {
 					player.levelNext = skillIndex
 					return
-				} else if (player.skillCooldowns[skillIndex] > player.game.serverUpdate) {
-					console.log('Action ERR: Still on cooldown', skillIndex, player.skillCooldowns[skillIndex] - player.game.serverUpdate)
-					return
 				}
 			}
 			player.actions.push(data)
@@ -126,7 +119,7 @@ module.exports = {
 		});
 
 		client.on('updated', (data)=>{
-			player.serverUpdate = data.serverUpdate;
+			player.serverUpdate = data.update;
 		});
 
 		client.on('lobby action', (data)=>{

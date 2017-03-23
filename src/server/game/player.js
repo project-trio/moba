@@ -1,5 +1,3 @@
-const CommonSkills = require.main.require('../common/skills');
-
 module.exports = function(client) {
 
 	this.id = client.pid;
@@ -9,11 +7,8 @@ module.exports = function(client) {
 	this.name = client.name;
 	this.ship = 'glitch';
 	this.actions = [];
-	this.message = null,
+	this.message = null;
 
-	this.skills = null;
-	this.skillLevels = [0, 0, 0];
-	this.skillCooldowns = [0, 0, 0];
 	this.levelNext = null;
 
 	this.emit = function(name, message) {
@@ -23,10 +18,6 @@ module.exports = function(client) {
 	this.join = function(game) {
 		this.game = game;
 		client.join(game.id);
-	};
-
-	this.start = function () {
-		this.skills = CommonSkills[this.ship]
 	};
 
 	this.isDisconnected = function() {
