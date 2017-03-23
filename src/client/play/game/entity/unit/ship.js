@@ -153,6 +153,10 @@ class Ship extends Movable {
 		this.respawned = false
 
 		super.die(time)
+
+		if (this.isLocal) {
+			store.state.dead = true
+		}
 	}
 
 	respawn () {
@@ -162,6 +166,10 @@ class Ship extends Movable {
 
 		const spawnAt = this.player.spawnLocation()
 		this.setLocation(spawnAt[0], spawnAt[1])
+
+		if (this.isLocal) {
+			store.state.dead = false
+		}
 	}
 
 	setAlive () {

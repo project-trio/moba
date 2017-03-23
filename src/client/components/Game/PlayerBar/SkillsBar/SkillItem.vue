@@ -1,5 +1,5 @@
 <template>
-<div class="skill-item" :class="{ selected: pressing, active: activated, cooldown: cooldownTime }">
+<div class="skill-item" :class="{ selected: pressing, disabled: disabled, cooldown: cooldownTime }">
   <div class="button-content">
     <div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`"></div>
     <div :class="`item-circle level-ring-${indexName}`"></div>
@@ -36,6 +36,10 @@ export default {
   },
 
   computed: {
+    disabled () {
+      return this.activated || store.state.dead
+    },
+
     indexName () {
       return `${this.index + 1}`
     },
@@ -108,12 +112,6 @@ export default {
       }
     },
 
-    activated (active) {
-      if (active) {
-        this.cooldownRing.changeAngle(360)
-      }
-    },
-
     cooldownRemaining (remaining) {
       if (remaining >= 0) {
         const angle = 360 - Math.floor(remaining / this.cooldownDuration * 360)
@@ -129,6 +127,9 @@ export default {
   methods: {
     onSkill () {
       if (this.skill.target === 0) {
+        return
+      }
+      if (this.disabled || this.cooldownRemaining > 200) {
         return
       }
       if (this.skill.target === 1) {
@@ -150,7 +151,7 @@ export default {
       stroke: 40,
       arc: true,
       angle: this.activated ? 360 : 0,
-      // sectorColor: '#aaf',
+      sectorColor: '#66a',
       circleColor: '#aaa',
       fillCircle: true,
     })
@@ -219,10 +220,8 @@ export default {
 .skill-item .button-levelup:hover
   opacity 0.8
 
-.skill-item.active .cooldown-ring .Sektor-sector
+.skill-item.disabled .cooldown-ring .Sektor-circle
   stroke #666
-.skill-item.cooldown .cooldown-ring .Sektor-sector
-  stroke #66a
 
 .skill-item .skill-button, .skill-item .cooldown-ring
   transition transform 0.4s ease, opacity 0.4s ease

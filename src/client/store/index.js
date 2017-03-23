@@ -22,6 +22,7 @@ export default {
       range: 0,
       moveSpeed: 0,
     },
+    dead: false,
     level: 0,
     shipName: null,
     selectedUnit: null,
