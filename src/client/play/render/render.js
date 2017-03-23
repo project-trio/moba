@@ -6,7 +6,6 @@ import pointer from '@/play/render/pointer'
 import RenderFog from '@/play/render/fog'
 
 let gameScene, gameCamera, renderer
-// let hudScene, hudCamera, hudTexture, hudBitmap
 
 const WALL_HEIGHT = 60
 
@@ -28,14 +27,6 @@ const resize = function () {
 
 	gameCamera.aspect = windowWidth / windowHeight
 	gameCamera.updateProjectionMatrix()
-
-	// const halfWidth = 0.5 * windowWidth
-	// const halfHeight = 0.5 * windowHeight
-	// hudCamera.left = -halfWidth
-	// hudCamera.right = halfWidth
-	// hudCamera.top = halfHeight
-	// hudCamera.bottom = -halfHeight
-	// hudCamera.updateProjectionMatrix()
 }
 
 window.addEventListener('resize', resize)
@@ -51,64 +42,38 @@ export default {
 
 		windowWidth = window.innerWidth
 		windowHeight = window.innerHeight
-		gameScene = new THREE.Scene()
-		gameCamera = new THREE.PerspectiveCamera(90, windowWidth / windowHeight, 1, 1024)
-		// gameCamera.up.set(0, -1, 0)
-		gameCamera.lookAt(gameScene)
-		gameCamera.position.z = 512
 
-		const ambient = new THREE.AmbientLight(0x555555)
-		gameScene.add(ambient)
-
-		// const light = new THREE.DirectionalLight(0xffffff, 0.5)
-		// light.position.set(windowWidth / 2, windowHeight / 2, 512)
-		const light = new THREE.PointLight(0xffffff, 0.99, 0)
-		light.position.set(windowWidth / 2, windowHeight / 2, 100)
-		// // light.position.set(0, 0, 10)
-		// camera.add(light)
-		light.castShadow = true
-		const shadowCamera = new THREE.PerspectiveCamera(50, 1, 1200, 2500)
-		const lightShadow = new THREE.LightShadow(shadowCamera)
-		lightShadow.bias = 0.001
-		lightShadow.mapSize.width = 1024
-		lightShadow.mapSize.height = 1024
-		light.shadow = lightShadow
-		gameScene.add(light)
+		// Renderer
 
 		renderer = new THREE.WebGLRenderer({
-			// alpha: true,
-			// antialias: true,
+			antialias: true,
 			canvas: document.getElementById('canvas'),
 		})
 		renderer.setPixelRatio(window.devicePixelRatio)
-		// renderer.setClearColor(0x000000)
-		renderer.autoClear = false
-		// renderer.physicallyCorrectLights = true
-		// renderer.shadowMap.enabled = true
-		// renderer.shadowMap.type = THREE.PCFShadowMap
+		renderer.shadowMap.enabled = true
 
-		// HUD
+		// Scene
 
-		// hudScene = new THREE.Scene()
-		// hudCamera = new THREE.OrthographicCamera(-windowWidth / 2, windowWidth / 2, windowHeight / 2, -windowHeight / 2, 0, 30)
+		gameScene = new THREE.Scene()
+		gameCamera = new THREE.PerspectiveCamera(90, windowWidth / windowHeight, 1, 1024)
+		gameCamera.lookAt(gameScene)
+		gameCamera.position.z = 512
 
-		// const hudCanvas = document.createElement('canvas')
-		// hudCanvas.width = windowWidth
-		// hudCanvas.height = windowHeight
+		const ambient = new THREE.AmbientLight(0x555555, 1)
+		gameScene.add(ambient)
 
-		// hudBitmap = hudCanvas.getContext('2d')
-		// hudBitmap.clearRect(0, 0, windowWidth, windowHeight)
-		// hudBitmap.font = "Normal 100px Arial"
-		// hudBitmap.textAlign = 'center'
-		// hudBitmap.fillStyle = "rgba(245,245,245,0.75)"
+		// const light = new THREE.DirectionalLight(0xffffff, 1)
+		// light.position.set(512, 512, 512)
+		// light.position.set(1, 1, 1)
+		// light.target.position.set(0, 0, 1)
+		// gameScene.add(light.target)
 
-		// hudTexture = new THREE.Texture(hudCanvas)
-		// hudTexture.minFilter = THREE.LinearFilter
-		// let hudGeometry = new THREE.PlaneBufferGeometry(windowWidth, windowHeight)
-		// let hudMaterial = new THREE.MeshBasicMaterial({map: hudTexture})
-		// hudMaterial.transparent = true
-		// let hudPlane = new THREE.Mesh(hudGeometry, hudMaterial)
-		// hudScene.add(hudPlane)
+		const light = new THREE.PointLight(0xffffff, 1, 0)
+		light.position.set(windowWidth / 2, windowHeight / 2, 400)
+
+		light.castShadow = true
+		light.receiveShadow = false
+		gameScene.add(light)
 
 		resize()
 
@@ -121,14 +86,9 @@ export default {
 	},
 
 	render () {
-		// hudBitmap.clearRect(0, 0, windowWidth, windowHeight)
-		// hudBitmap.fillText(++counter, windowWidth / 2, windowHeight / 2)
-		// hudTexture.needsUpdate = true
-
 		pointer.reposition(gameCamera)
 
 		renderer.render(gameScene, gameCamera)
-		// renderer.render(hudScene, hudCamera)
 	},
 
 	fog (units) {
@@ -144,7 +104,7 @@ export default {
 	},
 
 	group () {
-		return new THREE.Object3D()
+		return new THREE.Group()
 	},
 
 	text (string, x, y, options) {
@@ -177,7 +137,6 @@ export default {
 
 	sprite (name, options) {
 		const map = new THREE.TextureLoader().load(require(`@/assets/${name}.png`))
-		// const material = new THREE.SpriteMaterial({map: map})
 		const material = new THREE.SpriteMaterial({map: map, color: 0xffffff, fog: true})
 		const sprite = new THREE.Sprite(material)
 		sprite.scale.set(88, 88, 1)
@@ -190,7 +149,7 @@ export default {
 	voxel (name, options) {
 		const parser = new Vox.Parser()
 		parser.parse(require(`@/assets/${name}.vox`)).then((voxelData) => {
-			const builder = new Vox.MeshBuilder(voxelData, {voxelSize: 2}) //TODO cache
+			const builder = new Vox.MeshBuilder(voxelData, { voxelSize: 2 }) //TODO cache
 			const mesh = builder.createMesh()
 			mesh.rotation.x = Math.PI / 2
 			if (options.z) {
@@ -212,6 +171,7 @@ export default {
 		const wall = new THREE.Mesh(geometry, material)
 		wall.position.set(x, y, 0)
 		wall.castShadow = true
+		wall.receiveShadow = true
 		if (options.parent) {
 			options.parent.add(wall)
 		}
@@ -224,6 +184,7 @@ export default {
 		const wall = new THREE.Mesh(geometry, material)
 		wall.rotation.set(Math.PI / 2, 0, 0)
 		wall.castShadow = true
+		wall.receiveShadow = true
 		wall.position.set(x, y, 0)
 		if (options.parent) {
 			options.parent.add(wall)
@@ -235,6 +196,7 @@ export default {
 		const geometry = new THREE.BoxBufferGeometry(width, height, 10)
 		const material = new THREE.MeshBasicMaterial({color: options.color})
 		const rectangle = new THREE.Mesh(geometry, material)
+		rectangle.castShadow = true
 		rectangle.receiveShadow = true
 		rectangle.position.set(width / 2, height / 2, -10)
 
@@ -258,8 +220,10 @@ export default {
 
 	sphere (radius, options) {
 		const geometry = new THREE.SphereBufferGeometry(radius)
-		const material = new THREE.MeshBasicMaterial({color: options.color})
+		const material = new THREE.MeshStandardMaterial({color: options.color})
 		const sphere = new THREE.Mesh(geometry, material)
+		sphere.castShadow = true
+
 		if (options.parent) {
 			options.parent.add(sphere)
 		}

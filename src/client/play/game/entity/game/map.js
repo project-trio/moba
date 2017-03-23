@@ -42,7 +42,7 @@ maps.small = {
 		['turret', 470, 600, false],
 	],
 
-	walls: [
+	walls: [ //TODO arrays of connection points
 		{
 			x: 240, y: 320,
 			w: wallSmallH * 2, h: wallRadius * 2,
