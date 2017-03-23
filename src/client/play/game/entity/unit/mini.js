@@ -75,7 +75,7 @@ class Mini extends Movable {
 
 		this.reachedDestination(true)
 
-		Render.voxel('mini', {parent: this.top, owner: this})
+		Render.voxel('mini', {z: -7, parent: this.top, owner: this})
 	}
 
 	setDestination (x, y, preadjusted, moveX, moveY, fixedMovement) {

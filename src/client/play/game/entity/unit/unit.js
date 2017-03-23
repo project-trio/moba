@@ -37,6 +37,7 @@ class Unit {
 		this.ally = team === Local.player.team
 		this.startAngle = startAngle
 
+		this.renderInBackground = false
 		this.movable = false
 		this.attackTarget = null
 		this.isAttackingTarget = false

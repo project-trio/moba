@@ -352,7 +352,7 @@ class Ship extends Movable {
 				const updatedVisibility = unit.isRendering !== isInSight
 				if (updatedVisibility) {
 					unit.isRendering = isInSight
-					unit.container.visible = isInSight || unit.renderInBackground || false
+					unit.container.visible = isInSight || unit.renderInBackground
 					unit.infoContainer.visible = isInSight
 				}
 				revealUnit = isInSight && (updatedVisibility || unit.isMoving)

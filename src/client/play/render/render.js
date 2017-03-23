@@ -5,7 +5,7 @@ import Vox from '@/play/external/vox'
 import pointer from '@/play/render/pointer'
 import RenderFog from '@/play/render/fog'
 
-let gameScene, gameCamera, renderer, gameLight
+let gameScene, gameCamera, renderer
 
 const WALL_HEIGHT = 60
 
@@ -68,7 +68,6 @@ export default {
 		const light = new THREE.DirectionalLight(0xeeeeee, 1)
 		gameScene.add(light)
 		light.position.set(10, -50, 10)
-		gameLight = light
 		light.target.position.set(15, -40, 0)
 		gameScene.add(light.target)
 
