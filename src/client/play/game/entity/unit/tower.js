@@ -13,7 +13,7 @@ const TOWER_STATS = {
 	base: {
 		healthMax: [300, 0, 0],
 		healthRegen: [0, 0, 0],
-		armor: [20, 0, 0],
+		armor: [40, 0, 0],
 
 		sightRange: [200, 0, 0],
 		attackRange: [200, 0, 0],
@@ -33,12 +33,12 @@ const TOWER_STATS = {
 	standard: {
 		healthMax: [200, 0, 0],
 		healthRegen: [0, 0, 0],
-		armor: [10, 0, 0],
+		armor: [20, 0, 0],
 
 		sightRange: [190, 0, 0],
 		attackRange: [190, 0, 0],
 
-		attackDamage: [8, 0, 0],
+		attackDamage: [14, 0, 0],
 		attackPierce: [2, 0, 0],
 		attackCooldown: [10, 0, 0],
 		attackMoveSpeed: [10, 0, 0],
@@ -53,12 +53,12 @@ const TOWER_STATS = {
 	turret: {
 		healthMax: [160, 0, 0],
 		healthRegen: [0, 0, 0],
-		armor: [0, 0, 0],
+		armor: [10, 0, 0],
 
-		sightRange: [180, 0, 0],
-		attackRange: [180, 0, 0],
+		sightRange: [190, 0, 0],
+		attackRange: [190, 0, 0],
 
-		attackDamage: [6, 0, 0],
+		attackDamage: [10, 0, 0],
 		attackPierce: [6, 0, 0],
 		attackCooldown: [10, 0, 0],
 		attackMoveSpeed: [10, 0, 0],

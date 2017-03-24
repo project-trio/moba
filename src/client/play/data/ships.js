@@ -1,7 +1,7 @@
 export default {
 	// [start, levelup, max]
 	boxy: {
-		healthMax: [60, 10, 0],
+		healthMax: [100, 10, 0],
 		healthRegen: [40, 2, 0],
 		armor: [20, 2, 0],
 
@@ -20,7 +20,7 @@ export default {
 	},
 
 	glitch: {
-		healthMax: [60, 10, 0],
+		healthMax: [80, 10, 0],
 		healthRegen: [40, 2, 0],
 		armor: [10, 0, 0],
 
@@ -33,7 +33,7 @@ export default {
 		attackMoveSpeed: [11, 0, 0],
 		bulletSize: 4,
 
-		moveSpeed: [12, 0, 0],
+		moveSpeed: [14, 0, 0],
 		turnSpeed: 10,
 		collision: 20,
 	},
