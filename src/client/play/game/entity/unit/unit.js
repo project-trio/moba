@@ -279,9 +279,6 @@ class Unit {
 			}
 			if (target) {
 				target.incoming(1)
-				if (this.endInvisible) {
-					this.endInvisible()
-				}
 			} else {
 				this.isAttackingTarget = false
 			}

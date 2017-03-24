@@ -14,7 +14,7 @@ module.exports = {
       getCooldown: function (level) {
         return this.cooldown
       },
-      start: function (index, level, ship, cancel) {
+      start: function (index, level, ship) {
         ship.attackCooldownModifier = 0.25
         ship.armorModifier = 0.5
       },
@@ -35,12 +35,13 @@ module.exports = {
       getCooldown: function (level) {
         return this.cooldown - level * 10
       },
-      start: function (index, level, ship, cancel) {
+      start: function (index, level, ship) {
         ship.setTarget(null)
         ship.invisible = true
         ship.opacity(0.33)
         ship.endInvisible = function () {
-          cancel(index)
+          console.log('cancel invisibility')
+          ship.endSkill(index)
         }
       },
       end: function (ship) {
@@ -61,7 +62,7 @@ module.exports = {
       getCooldown: function (level) {
         return this.cooldown - level * 5
       },
-      start: function (index, level, ship, cancel) {
+      start: function (index, level, ship) {
         ship.healthRegenModifier = 2
         ship.moveSpeedModifier = 0.5
       },

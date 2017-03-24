@@ -274,8 +274,15 @@ class Ship extends Movable {
 		if (target && this.moveToTarget) {
 			if (this.attackableStatus(target)) {
 				const dist = this.distanceTo(target)
-				return this.setTarget(target, dist)
+				this.setTarget(target, dist)
+				if (this.cacheAttackCheck && this.endInvisible) {
+					this.endInvisible()
+				}
+				return target
 			}
+		}
+		if (this.invisible) {
+			return null
 		}
 		if (target) {
 			if (this.attackableStatus(target)) {
@@ -300,13 +307,6 @@ class Ship extends Movable {
 			}
 		}
 		return this.setTarget(target, closest)
-	}
-
-	checkAttack (renderTime) {
-		if (this.invisible) {
-			return
-		}
-		super.checkAttack(renderTime)
 	}
 
 	// Update
