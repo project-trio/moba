@@ -31,7 +31,7 @@ const animate = function (timestamp) {
 				if (processUpdate) {
 					updatePanel.end()
 				}
-			} else {
+			} else { // Tween
 				const tweenTimeDelta = timestamp - lastUpdate
 				Bullet.update(timestamp, tweenTimeDelta, true)
 				Unit.update(timestamp, tweenTimeDelta, true)
