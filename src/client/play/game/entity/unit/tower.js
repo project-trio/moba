@@ -88,7 +88,7 @@ class Tower extends Unit {
 		this.targetedAt = null
 
 		const teamColor = dataConstants.teamColors[team]
-		Render.voxel('turret-base', {teamColor: teamColor, parent: this.base, owner: this})
+		Render.voxel('turret-base', {teamColor: teamColor, receiveShadow: true, parent: this.base, owner: this})
 		Render.voxel('turret-top', {teamColor: teamColor, parent: this.top, owner: this})
 
 		this.renderInBackground = true
