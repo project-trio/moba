@@ -23,7 +23,7 @@ export default {
 		fogTarget = new THREE.WebGLRenderTarget(mapWidth, mapHeight, {})
 
 		const fogGeometry = new THREE.PlaneBufferGeometry(mapWidth, mapHeight)
-		const fogMaterial = new THREE.MeshBasicMaterial({color: 0x000000, alphaMap: fogTarget.texture, depthTest: false, depthWrite: false})
+		const fogMaterial = new THREE.MeshBasicMaterial({color: 0x000000, alphaMap: fogTarget.texture, depthTest: true, depthWrite: false})
 		fogMaterial.transparent = true
 		fogMaterial.opacity = 0.3
 
