@@ -62,13 +62,13 @@ const wallStandardH = 60
 
 maps.standard = {
 	width: 1200,
-	height: 1800,
+	height: 2000,
 
 	towers: [
 		['base', 600, 44, false],
 		['standard', 435, 360, true],
-		['turret', 44, 420, true],
-		['turret', 300, 760, true],
+		['turret', 44, 440, true],
+		['turret', 300, 840, true],
 	],
 
 	walls: [
