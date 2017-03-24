@@ -4,7 +4,9 @@ import CommonSkills from 'common/skills'
 
 import store from '@/store'
 
+import dataConstants from '@/play/data/constants'
 import shipStats from '@/play/data/ships'
+
 import Render from '@/play/render/render'
 
 import Util from '@/play/game/util'
@@ -49,16 +51,16 @@ class Ship extends Movable {
 
 		// Unit
 
-		const offset = name == 'roller' ? -19 : 0
-
-		Render.voxel(name, {parent: this.top, z: offset, owner: this})
+		const offset = name === 'roller' ? -19 : 0
+		const teamColor = dataConstants.teamColors[team]
+		Render.voxel(name, {teamColor: teamColor, parent: this.top, z: offset, owner: this})
 
 		// const base = Render.sprite('ship')
 		// this.base.add(base)
 
 		Render.text(player.name, -this.hpWidth / 2, this.hpHeight, {
 			size: 11,
-			color: team === 1 ? 0xff1010 : 0x0090ff,
+			color: 0xaaaaaa,
 			parent: this.unitInfo,
 		})
 		this.renderLevelText()

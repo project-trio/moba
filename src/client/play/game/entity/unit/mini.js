@@ -1,3 +1,5 @@
+import dataConstants from '@/play/data/constants'
+
 import Render from '@/play/render/render'
 
 import Movable from '@/play/game/entity/unit/movable'
@@ -75,7 +77,7 @@ class Mini extends Movable {
 
 		this.reachedDestination(true)
 
-		Render.voxel('mini', {z: -7, parent: this.top, owner: this})
+		Render.voxel('mini', {z: -7, teamColor: dataConstants.teamColors[team], parent: this.top, owner: this})
 	}
 
 	setDestination (x, y, preadjusted, moveX, moveY, fixedMovement) {

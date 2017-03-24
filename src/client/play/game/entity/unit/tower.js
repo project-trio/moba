@@ -1,3 +1,5 @@
+import dataConstants from '@/play/data/constants'
+
 import Local from '@/play/local'
 
 import Render from '@/play/render/render'
@@ -85,8 +87,9 @@ class Tower extends Unit {
 		this.towerType = towerType
 		this.targetedAt = null
 
-		Render.voxel('turret-base', {parent: this.base, owner: this})
-		Render.voxel('turret-top', {parent: this.top, owner: this})
+		const teamColor = dataConstants.teamColors[team]
+		Render.voxel('turret-base', {teamColor: teamColor, parent: this.base, owner: this})
+		Render.voxel('turret-top', {teamColor: teamColor, parent: this.top, owner: this})
 
 		this.renderInBackground = true
 		this.isBlocking = true

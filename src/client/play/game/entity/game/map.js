@@ -161,7 +161,6 @@ const GameMap = function (parent) {
 		walls.push([(x - w / 2) * 100, (y - h / 2) * 100, w * 100, h * 100])
 
 		Render.wall(x, y, w, h, {
-			color: 0xeeeeee,
 			parent: wallContainer,
 		})
 	}
@@ -171,7 +170,6 @@ const GameMap = function (parent) {
 		walls.push([x * 100, y * 100, radius * 100])
 
 		Render.wallCap(x, y, radius, {
-			color: 0xeeeeee,
 			parent: wallContainer,
 		})
 	}

@@ -169,6 +169,9 @@ export default {
 			if (options.parent) {
 				options.parent.add(mesh)
 			}
+			if (options.teamColor) {
+				mesh.material.color.setHex(options.teamColor)
+			}
 			mesh.castShadow = true
 			mesh.owner = options.owner
 		})
@@ -178,7 +181,7 @@ export default {
 
 	wall (x, y, w, h, options) {
 		const geometry = new THREE.BoxBufferGeometry(w, h, WALL_HEIGHT)
-		const material = new THREE.MeshLambertMaterial({color: options.color})
+		const material = new THREE.MeshLambertMaterial({color: options.color || 0x888888})
 		const wall = new THREE.Mesh(geometry, material)
 		wall.position.set(x, y, 0)
 		wall.castShadow = true
@@ -191,7 +194,7 @@ export default {
 
 	wallCap (x, y, radius, options) {
 		const geometry = new THREE.CylinderBufferGeometry(radius, radius, WALL_HEIGHT, 16)
-		const material = new THREE.MeshLambertMaterial({color: options.color})
+		const material = new THREE.MeshLambertMaterial({color: options.color || 0x888888})
 		const wall = new THREE.Mesh(geometry, material)
 		wall.rotation.set(Math.PI / 2, 0, 0)
 		wall.castShadow = true
