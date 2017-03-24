@@ -169,13 +169,11 @@ export default {
 			if (options.parent) {
 				options.parent.add(mesh)
 			}
-			if (options.receiveShadow) {
-				mesh.receiveShadow = true
-			}
 			if (options.teamColor) {
 				mesh.material.color.setHex(options.teamColor)
 			}
 			mesh.castShadow = true
+			mesh.receiveShadow = true
 			mesh.owner = options.owner
 		})
 	},
