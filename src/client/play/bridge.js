@@ -2,6 +2,8 @@ import SocketIO from 'socket.io-client'
 
 import CommonConsts from 'common/constants'
 
+import store from '@/store'
+
 import Local from '@/play/local'
 
 //PUBLIC
@@ -23,22 +25,19 @@ export default {
 
 	init () {
 		console.log('CONNECTING', Local.TESTING)
+		store.state.signin.loading = true
 		const socketUrl = Local.TESTING ? `http://localhost:${CommonConsts.PORT}` : window.location.origin
-		const uid = localStorage.getItem('uid')
-		const uauth = localStorage.getItem('auth')
-		let params
-		if (uid && uauth) {
-			params = {query: 'id=' + uid + '&auth=' + uauth}
-		}
+		const username = store.state.signin.username || 'test'
+		const params = {query: `name=${username}&v=${CommonConsts.VERSION}`}
 		socket = SocketIO(socketUrl, params)
 
 		socket.on('connect', () => {
 			Local.playerId = socket.id
 			console.log('Connected', Local.playerId)
+			store.state.signin.loading = false
 
 			socket.on('auth', (data) => {
-				console.log('authed', data)
-				//TODO
+				// console.log('authed', data)
 			})
 		})
 	}

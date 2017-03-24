@@ -1,5 +1,12 @@
+import storage from '@/helpers/storage'
+
 export default {
   state: {
+    signin: {
+      username: storage.get('username'),
+      loading: false,
+    },
+
     renderTime: 0,
 
     chatMessages: [],
@@ -34,6 +41,15 @@ export default {
       pressed: {},
     },
   },
+
+  // Signin
+
+  setName (name) {
+    this.state.signin.username = name
+    storage.set('username', name)
+  },
+
+  // Game
 
   setSelectedUnit (unit) {
     this.state.selectedStats.name = unit.name
