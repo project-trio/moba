@@ -55,6 +55,7 @@ const Game = function (gid, size) {
 	this.performTicks = function (ticksToRender, currentTime) {
 		let renderTime
 		let ticksRenderedForFrame = 0
+		const maxTicksToRender = ticksToRender > 9 ? Math.floor(Math.pow(ticksToRender, 0.5)) : 1
 		while (ticksToRender > 0) {
 			renderTime = ticksRendered * tickDuration
 			if (ticksRendered % ticksPerUpdate == 0) {
@@ -78,7 +79,7 @@ const Game = function (gid, size) {
 			ticksToRender -= 1
 			lastTickTime += tickDuration
 
-			if (ticksRenderedForFrame > 9) { // Maximum fast-forward rate
+			if (ticksRenderedForFrame >= maxTicksToRender) {
 				break
 			}
 			ticksRenderedForFrame += 1
