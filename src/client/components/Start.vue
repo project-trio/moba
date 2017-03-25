@@ -11,8 +11,8 @@
     </div>
   </div>
   <div v-else>
-    <router-link :to="{ name: 'Game' }" tag="button" class="big">play now</router-link>
-    <router-link :to="{ name: 'Lobby' }" tag="button" class="big">enter lobby</router-link>
+    <router-link :to="{ name: 'Game' }" tag="button" class="interactive">play now</router-link>
+    <router-link :to="{ name: 'Lobby' }" tag="button" class="interactive">enter lobby</router-link>
   </div>
 </div>
 </template>

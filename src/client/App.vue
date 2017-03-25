@@ -88,12 +88,12 @@ button
   color #111110
   font-size 1.5em
 
-button.big:hover
+button.interactive:hover
   opacity 0.8
-button.big:hover:active
+button.interactive:hover:active
   opacity 0.5
 
-.animated, button.big
+.animated, button.interactive
   transition 0.3s ease
 
 input
