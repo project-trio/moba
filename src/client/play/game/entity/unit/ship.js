@@ -33,7 +33,7 @@ class Ship extends Movable {
 			actives: [0, 0, 0],
 			cooldowns: [0, 0, 0],
 			levels: [0, 0, 0],
-			leveled: 1,
+			leveled: 0,
 		}
 		this.statBase = statBase
 		this.id = player.id
@@ -109,7 +109,7 @@ class Ship extends Movable {
 			const currentLevel = this.skills.levels[index]
 			if (currentLevel < 10) {
 				this.skills.leveled += 1
-				console.log('levelup', index, this.skills.leveled, currentLevel)
+				console.log('levelup', index, this.skills.leveled, this.level, currentLevel)
 				this.skills.levels[index] = currentLevel + 1
 
 				if (this.isLocal) {
@@ -120,7 +120,7 @@ class Ship extends Movable {
 				console.error('Skill already maxed', index, currentLevel)
 			}
 		} else {
-			console.error('levelup not ready', index)
+			console.error('levelup not ready', index, this.skills.leveled, this.level)
 		}
 	}
 

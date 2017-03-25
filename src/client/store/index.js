@@ -30,7 +30,7 @@ export default {
       moveSpeed: 0,
     },
     dead: false,
-    level: 0,
+    level: 1,
     shipName: null,
     selectedUnit: null,
 

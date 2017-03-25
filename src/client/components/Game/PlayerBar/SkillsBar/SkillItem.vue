@@ -37,7 +37,7 @@ export default {
 
   computed: {
     disabled () {
-      return this.activated || store.state.dead
+      return this.level === 0 || this.activated || store.state.dead
     },
 
     indexName () {
