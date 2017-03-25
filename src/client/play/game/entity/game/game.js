@@ -113,7 +113,7 @@ const Game = function (gid, size) {
 						} else {
 							ship.performSkill(renderTime, skillIndex, target)
 						}
-					} else if (target) {
+					} else if (target && !ship.isDying) {
 						if (typeof target === 'string') {
 							ship.setTargetId(target)
 						} else {
