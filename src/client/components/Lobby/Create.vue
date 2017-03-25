@@ -30,9 +30,7 @@ export default {
     },
 
     onSubmit () {
-      LobbyEvents.connect('create', { size: this.selectedIndex }, (id) => {
-        console.log(id)
-      })
+      LobbyEvents.connect('create', { size: this.selectedIndex })
     },
   },
 }

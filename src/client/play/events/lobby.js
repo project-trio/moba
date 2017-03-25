@@ -17,12 +17,12 @@ export default {
 
 	init () {
 		Bridge.on('join game', (data) => {
-			console.log('Joined', data, router.currentRoute)
-			const url = `/lobby/join/${data.gid}`
+			console.log('join game', data)
+			const routeObject = { name: 'Join', params: { gid: data.gid } }
 			if (router.currentRoute.name === 'Create') {
-				router.replace(url)
+				router.replace(routeObject)
 			} else {
-				router.push(url)
+				router.push(routeObject)
 			}
 		})
 

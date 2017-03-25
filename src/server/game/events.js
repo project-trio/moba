@@ -140,8 +140,7 @@ module.exports = {
 			if (data.action === 'quick') {
 				quickJoin(player);
 			} else if (data.action === 'create') {
-				const game = createGame(player, data.size);
-				callback(game.id)
+				createGame(player, data.size);
 			} else {
 				client.join('lobby');
 			}
