@@ -11,6 +11,13 @@ const clients = [];
 
 //LOCAL
 
+const createGame = function(player, size) {
+	const game = new Game(size);
+	game.add(player);
+	games.push(game);
+	return game;
+}
+
 const quickJoin = function(player) {
 	for (let idx = 0; idx < games.length; idx += 1) {
 		const g = games[idx];
@@ -19,9 +26,7 @@ const quickJoin = function(player) {
 		}
 	}
 
-	const game = new Game(CommonConsts.DEFAULT_GAME_SIZE);
-	game.add(player);
-	games.push(game);
+	createGame(player, CommonConsts.DEFAULT_GAME_SIZE)
 };
 
 //UPDATE
@@ -130,10 +135,13 @@ module.exports = {
 			player.serverUpdate = data.update;
 		});
 
-		client.on('lobby action', (data)=>{
+		client.on('lobby action', (data, callback)=>{
 			console.log('lobby action', data);
-			if (data.action == 'quick') {
+			if (data.action === 'quick') {
 				quickJoin(player);
+			} else if (data.action === 'create') {
+				const game = createGame(player, data.size);
+				callback(game.id)
 			} else {
 				client.join('lobby');
 			}
