@@ -41,6 +41,7 @@ class Unit {
 		this.movable = false
 		this.attackTarget = null
 		this.isAttackingTarget = false
+		this.requiresSightOfTarget = true
 
 		this.container = Render.group()
 		this.base = Render.group()
@@ -77,7 +78,6 @@ class Unit {
 		// this.stats.collisionCheck = Util.squared(this.stats.collision)
 		this.moveConstant = new Decimal(this.stats.moveSpeed).dividedBy(2000)
 
-		this.incomingAttackers = 0
 		this.lastAttack = 0
 
 		// Health Bar
@@ -264,6 +264,9 @@ class Unit {
 		for (let idx = 0; idx < allUnits.length; idx += 1) {
 			const unit = allUnits[idx]
 			if (unit.id === id) {
+				if (unit.isDead) {
+					return false
+				}
 				const dist = this.distanceTo(unit)
 				this.moveToTarget = true
 				return this.setTarget(unit, dist)
@@ -274,12 +277,7 @@ class Unit {
 
 	setTarget (target, distance) {
 		if (target != this.attackTarget) {
-			if (this.attackTarget) {
-				this.attackTarget.incoming(-1)
-			}
-			if (target) {
-				target.incoming(1)
-			} else {
+			if (!target) {
 				this.isAttackingTarget = false
 			}
 			this.attackTarget = target
@@ -320,7 +318,7 @@ class Unit {
 	}
 
 	isGloballyVisible () {
-		return this.isDying || this.hasActiveFire()
+		return this.isDying || this.isFiring || this.renderInBackground
 	}
 
 	hasSightOf (unit) {
@@ -335,14 +333,6 @@ class Unit {
 
 	alliedTo (target) {
 		return this.team == target.team
-	}
-
-	incoming (increment) {
-		this.incomingAttackers += increment
-	}
-
-	hasActiveFire () {
-		return this.isFiring || this.incomingAttackers > 0
 	}
 
 	inAttackRange (unit) {

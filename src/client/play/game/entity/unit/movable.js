@@ -139,7 +139,7 @@ class Movable extends Unit {
 				if (!this.isAttackingTarget) {
 					this.setDestination(this.attackTarget.px, this.attackTarget.py, true)
 				}
-			} else {
+			} else if (this.requiresSightOfTarget) {
 				if (this.isLocal) {
 					console.log('lost target')
 				}

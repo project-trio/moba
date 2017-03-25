@@ -48,6 +48,7 @@ class Ship extends Movable {
 		this.isBlocking = true
 		this.exactDestination = false
 		this.selected = false
+		this.requiresSightOfTarget = false
 
 		// Unit
 
