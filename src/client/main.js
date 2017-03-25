@@ -10,6 +10,9 @@ import Events from '@/play/events'
 
 if (store.state.signin.username) {
   Events.init()
+  if (router.currentRoute.name === 'Start') {
+    router.replace({ name: 'Lobby' })
+  }
 } else {
   router.replace({ name: 'Start' })
 }
@@ -25,4 +28,19 @@ new Vue({
   data: store,
   template: '<App/>',
   components: { App }
+})
+
+// Guard routes
+
+router.beforeEach((to, from, next) => {
+  if (to.name === 'Start') {
+    if (store.state.signin.username) {
+      return next({name: 'Lobby'})
+    }
+  } else if (!store.state.signin.username && to.name !== 'Start') {
+    if (!store.state.signin.email) {
+      return next({name: 'Start'})
+    }
+  }
+  next()
 })
