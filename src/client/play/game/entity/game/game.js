@@ -66,8 +66,8 @@ const Game = function (gid, size) {
 			Unit.update(renderTime, tickDuration, false)
 			Bullet.update(renderTime, tickDuration, false)
 
-			// if (renderTime % 45000 == 15000) {
-			if (renderTime % 30000 == 3000) {
+			const spawnMinionWave = Local.TESTING ? renderTime % 30000 == 5000 : renderTime % 45000 === 15000
+			if (spawnMinionWave) {
 				Wave.spawn(this.map.minionData())
 			}
 
