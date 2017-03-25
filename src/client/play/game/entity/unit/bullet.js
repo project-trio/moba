@@ -22,6 +22,7 @@ class Bullet {
 	constructor (source, target, x, y, startAngle) {
 		this.source = source
 		this.target = target
+		source.bulletCount += 1
 
 		this.container = Render.group()
 		const ball = Render.sphere(source.stats.bulletSize, {color: (source.stats.bulletColor || 0x000000)})
@@ -96,6 +97,7 @@ class Bullet {
 	}
 
 	destroy () {
+		this.source.bulletCount -= 1
 		Render.remove(this.container)
 		this.remove = true
 	}

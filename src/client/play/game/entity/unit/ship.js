@@ -183,7 +183,6 @@ class Ship extends Movable {
 		this.isBlocking = true
 
 		this.opacity(1.0)
-		this.infoContainer.visible = true
 
 		if (this.isLocal) {
 			store.state.dead = false
@@ -347,23 +346,35 @@ class Ship extends Movable {
 	updateVisibility () {
 		const units = Unit.all()
 		for (let idx = 0; idx < units.length; idx += 1) {
-			const unit = units[idx]
-			let revealUnit = this.alliedTo(unit)
+			const sightTarget = units[idx]
+			let revealUnit = sightTarget.localAlly
 			if (revealUnit) {
-				unit.isRendering = true
+				sightTarget.isRendering = true
 			} else {
-				const isInSight = this.canSee(unit)
-				unit.visibleForFrame = isInSight
-				const updatedVisibility = unit.isRendering !== isInSight
-				if (updatedVisibility) {
-					unit.isRendering = isInSight
-					unit.container.visible = isInSight || unit.renderInBackground
-					unit.infoContainer.visible = isInSight
+				let isInSight = !sightTarget.invisible
+				if (isInSight && sightTarget.bulletCount <= 0) {
+					isInSight = false
+					for (let sidx = 0; sidx < units.length; sidx += 1) {
+						const checkSightFromUnit = units[sidx]
+						if (checkSightFromUnit.localAlly && checkSightFromUnit.hasSightOf(sightTarget)) {
+							isInSight = true
+							break
+						}
+					}
 				}
-				revealUnit = isInSight && (updatedVisibility || unit.isMoving)
+				sightTarget.visibleForFrame = isInSight
+				const updatedVisibility = sightTarget.isRendering !== isInSight
+				if (updatedVisibility) {
+					sightTarget.isRendering = isInSight
+					if (!sightTarget.renderInBackground) {
+						sightTarget.container.visible = isInSight
+						sightTarget.infoContainer.visible = isInSight
+					}
+				}
+				revealUnit = isInSight && (updatedVisibility || sightTarget.isMoving)
 			}
-			if (revealUnit && unit.movable) {
-				unit.updatePosition()
+			if (revealUnit && sightTarget.movable) {
+				sightTarget.updatePosition()
 			}
 		}
 	}

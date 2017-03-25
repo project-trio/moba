@@ -34,7 +34,7 @@ class Unit {
 
 	constructor (team, statBase, unitScale, x, y, startAngle) {
 		this.team = team
-		this.ally = team === Local.player.team
+		this.localAlly = team === Local.player.team
 		this.startAngle = startAngle
 
 		this.renderInBackground = false
@@ -42,6 +42,7 @@ class Unit {
 		this.attackTarget = null
 		this.isAttackingTarget = false
 		this.requiresSightOfTarget = true
+		this.bulletCount = 0
 
 		this.container = Render.group()
 		this.base = Render.group()
@@ -159,7 +160,7 @@ class Unit {
 			console.log('local')
 			return false
 		}
-		if (this.ally) {
+		if (this.localAlly) {
 			console.log('ally')
 			return false
 		}
