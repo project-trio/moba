@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import Start from '@/components/Start'
 import Lobby from '@/components/Lobby'
+import LobbyCreate from '@/components/Lobby/Create'
 import Game from '@/components/Game'
 
 Vue.use(Router)
@@ -19,6 +20,11 @@ export default new Router({
       path: '/lobby',
       name: 'Lobby',
       component: Lobby,
+    },
+    {
+      path: '/lobby/create',
+      name: 'Create',
+      component: LobbyCreate,
     },
     {
       path: '/play',

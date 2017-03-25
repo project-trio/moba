@@ -88,6 +88,16 @@ button
   color #111110
   font-size 1.5em
 
+button.big
+  width 300px
+  height 64px
+  font-size 28px
+  font-weight 500
+  color #333
+  display block
+  margin 32px auto
+  border-radius 4px
+
 button.interactive:hover
   opacity 0.8
 button.interactive:hover:active

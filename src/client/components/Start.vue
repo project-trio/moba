@@ -1,18 +1,12 @@
 <template>
 <div class="start">
-  <div v-if="username == null">
-    <h1>welcome to moba!</h1>
-    <div v-if="loading">
-      ...
-    </div>
-    <div v-else>
-      <input v-model="enteringName" @keyup.enter="onEnterName" placeholder="enter a username"></input>
-      <p class="note">note: there is no account system yet, just choose a name of your liking.</p>
-    </div>
+  <h1>welcome to moba!</h1>
+  <div v-if="loading">
+    ...
   </div>
   <div v-else>
-    <router-link :to="{ name: 'Game' }" tag="button" class="interactive">play now</router-link>
-    <router-link :to="{ name: 'Lobby' }" tag="button" class="interactive">enter lobby</router-link>
+    <input v-model="enteringName" @keyup.enter="onEnterName" placeholder="enter a username"></input>
+    <p class="note">note: there is no account system yet, just choose a name of your liking.</p>
   </div>
 </div>
 </template>
@@ -59,15 +53,6 @@ input
   font-size 1.9em
   font-weight 300
   border 1px solid #ddd
-
-button
-  width 300px
-  height 64px
-  font-size 28px
-  font-weight 500
-  color #333
-  display block
-  margin 32px auto
 
 .note
   font-style italic
