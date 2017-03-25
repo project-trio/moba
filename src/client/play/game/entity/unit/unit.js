@@ -155,6 +155,9 @@ class Unit {
 	}
 
 	onClick (point, rightClick) {
+		setTimeout(() => {
+			store.setSelectedUnit(this)
+		}, 0)
 		store.setSelectedUnit(this)
 		if (this.isLocal) { //TODO remove
 			console.log('local')
@@ -190,6 +193,12 @@ class Unit {
 	}
 
 	// Health
+
+	update (renderTime, timeDelta) {
+		if (this.selected) {
+			store.everyUpdateStats(this)
+		}
+	}
 
 	hasDied () {
 		return this.healthRemaining <= 0
@@ -408,9 +417,7 @@ Unit.update = function (renderTime, timeDelta, tweening) {
 		// Update
 		for (let idx = 0; idx < allUnits.length; idx += 1) {
 			const unit = allUnits[idx]
-			if (unit.update) {
-				unit.update(renderTime, timeDelta, tweening)
-			}
+			unit.update(renderTime, timeDelta)
 		}
 		// Attack
 		for (let idx = 0; idx < allUnits.length; idx += 1) {

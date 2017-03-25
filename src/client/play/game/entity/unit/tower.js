@@ -82,9 +82,9 @@ class Tower extends Unit {
 
 		super(team, stats, towerType == 'base' ? 3 : 2, x, y)
 
+		this.name = towerType
 		this.id = `tower${spawnCount}`
 		spawnCount += 1
-		this.towerType = towerType
 		this.targetedAt = null
 
 		const teamColor = dataConstants.teamColors[team]
@@ -149,7 +149,7 @@ class Tower extends Unit {
 
 		super.die(time)
 
-		if (this.towerType == 'base') {
+		if (this.name == 'base') {
 			Local.game.end(this.team)
 		}
 	}

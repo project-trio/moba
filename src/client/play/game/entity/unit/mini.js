@@ -6,7 +6,7 @@ import Movable from '@/play/game/entity/unit/movable'
 
 const MINI_STATS = {
 	// [start, levelup, max]
-	mini: {
+	melee: {
 		healthMax: [40, 0, 0],
 		healthRegen: [0, 0, 0],
 		armor: [0, 0, 0],
@@ -23,7 +23,7 @@ const MINI_STATS = {
 		collision: 10,
 	},
 
-	center: {
+	ranged: {
 		healthMax: [50, 0, 0],
 		healthRegen: [0, 0, 0],
 		armor: [0, 0, 0],
@@ -49,14 +49,15 @@ let spawnCount = 0
 
 class Mini extends Movable {
 
-	constructor (team, name, path, mirrored, _mapWidth, _mapHeight) {
+	constructor (team, type, path, mirrored, _mapWidth, _mapHeight) {
 		mapWidth = _mapWidth
 		mapHeight = _mapHeight
 
-		const stats = MINI_STATS[name]
+		const stats = MINI_STATS[type]
 
 		super(team, stats, 1)
 
+		this.name = `${type} mini`
 		this.id = `mini${spawnCount}`
 		spawnCount += 1
 		this.moveToTarget = true

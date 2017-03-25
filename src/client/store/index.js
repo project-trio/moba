@@ -1,5 +1,7 @@
 import storage from '@/helpers/storage'
 
+let selectedUnit = null
+
 export default {
   state: {
     signin: {
@@ -52,6 +54,13 @@ export default {
   // Game
 
   setSelectedUnit (unit) {
+    if (unit === selectedUnit) {
+      return
+    }
+    if (selectedUnit) {
+      selectedUnit.selected = false
+    }
+    selectedUnit = unit
     this.state.selectedStats.name = unit.name
     unit.selected = true
     this.levelUpStats(unit)

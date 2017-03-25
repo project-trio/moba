@@ -2,7 +2,7 @@
 <div class="player-info">
   <div class="bold">{{ stats.name }}</div>
   <div>{{ stats.health }} / {{ stats.healthMax }} hp</div>
-  <div>{{ levelProgress }}</div>
+  <div v-if="this.stats.level">{{ levelProgress }}</div>
   <div>
     <span>{{ stats.dps }} dps</span>
     <span>{{ stats.range }} range</span>

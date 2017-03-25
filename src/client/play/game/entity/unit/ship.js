@@ -309,10 +309,7 @@ class Ship extends Movable {
 
 	// Update
 
-	update (renderTime, timeDelta, tweening) {
-		if (tweening) {
-			return
-		}
+	update (renderTime, timeDelta) {
 		this.endSkills(renderTime)
 
 		if (this.isDead) {
@@ -331,9 +328,7 @@ class Ship extends Movable {
 		} else {
 			this.updateExperience()
 			this.doRegenerate()
-			if (this.selected) {
-				store.everyUpdateStats(this)
-			}
+			super.update(renderTime, timeDelta)
 		}
 	}
 
