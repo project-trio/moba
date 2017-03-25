@@ -4,12 +4,12 @@ import router from './router'
 
 import store from '@/store'
 
-import Bridge from '@/play/bridge'
+import Events from '@/play/events'
 
 // Setup
 
 if (store.state.signin.username) {
-  Bridge.init()
+  Events.init()
 } else {
   router.replace({ name: 'Start' })
 }

@@ -20,7 +20,7 @@
 <script>
 import store from '@/store'
 
-import Bridge from '@/play/bridge'
+import Events from '@/play/events'
 
 export default {
   data () {
@@ -42,7 +42,7 @@ export default {
   methods: {
     onEnterName () {
       store.setName(this.enteringName)
-      Bridge.init()
+      Events.init()
     },
   },
 }

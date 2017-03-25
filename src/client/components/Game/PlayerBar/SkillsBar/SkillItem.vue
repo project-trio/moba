@@ -18,7 +18,7 @@ import store from '@/store'
 
 import Sektor from '@/play/external/sektor'
 
-import Bridge from '@/play/bridge'
+import Bridge from '@/play/events/bridge'
 
 export default {
   props: {

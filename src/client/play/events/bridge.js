@@ -24,6 +24,9 @@ export default {
 	},
 
 	init () {
+		if (socket) {
+			return
+		}
 		console.log('CONNECTING', Local.TESTING)
 		store.state.signin.loading = true
 		const socketUrl = Local.TESTING ? `http://localhost:${CommonConsts.PORT}` : window.location.origin

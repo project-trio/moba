@@ -1,6 +1,6 @@
 import store from '@/store'
 
-import Bridge from '@/play/bridge'
+import Bridge from '@/play/events/bridge'
 import Local from '@/play/local'
 
 import pointer from '@/play/render/pointer'

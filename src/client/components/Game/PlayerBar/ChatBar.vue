@@ -14,7 +14,7 @@
 <script>
 import store from '@/store'
 
-import Bridge from '@/play/bridge'
+import Bridge from '@/play/events/bridge'
 
 export default {
   data () {
