@@ -8,6 +8,8 @@
 <script>
 import store from '@/store'
 
+import fullscreen from '@/play/external/fullscreen.js'
+
 export default {
   computed: {
 
@@ -15,7 +17,7 @@ export default {
 
   methods: {
     onFullscreen () {
-
+      fullscreen.toggle()
     },
 
     onSettings () {
