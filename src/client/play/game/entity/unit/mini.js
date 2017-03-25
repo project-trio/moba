@@ -67,10 +67,8 @@ class Mini extends Movable {
 		this.exactDestination = true
 
 		this.pathing = true
-		this.returnToPath = false
+		this.returningToPath = false
 		this.pathStep = 0
-		this.lastX = null
-		this.lastY = null
 
 		this.updateDestination()
 		this.setLocation(this.currentDest[0], this.currentDest[1])
@@ -81,7 +79,7 @@ class Mini extends Movable {
 	}
 
 	setDestination (x, y, preadjusted, moveX, moveY, fixedMovement) {
-		this.returnToPath = false
+		this.returningToPath = false
 		super.setDestination(x, y, preadjusted, moveX, moveY)
 
 		// if (fixedMovement) {
@@ -122,7 +120,7 @@ class Mini extends Movable {
 	}
 
 	reachedDestination (needsNewDestination) {
-		if (!this.pathing && this.returnToPath) {
+		if (!this.pathing && this.returningToPath) {
 			this.pathing = true
 		}
 		if (this.pathing) {
@@ -143,8 +141,8 @@ class Mini extends Movable {
 				return true
 			}
 		} else {
-			this.setDestination(this.lastX, this.lastY, true)
-			this.returnToPath = true
+			this.setDestination(this.currentDest[0], this.currentDest[1], false)
+			this.returningToPath = true
 		}
 	}
 
@@ -186,9 +184,6 @@ class Mini extends Movable {
 			if (this.pathing) {
 				this.pathing = false
 			}
-		} else if (this.pathing) {
-			this.lastX = this.px
-			this.lastY = this.py
 		}
 	}
 
