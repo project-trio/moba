@@ -157,7 +157,6 @@ class Ship extends Movable {
 
 	die (time) {
 		this.endSkills(null)
-
 		this.opacity(0.5)
 		this.respawned = false
 
@@ -177,24 +176,19 @@ class Ship extends Movable {
 		this.setLocation(spawnAt[0], spawnAt[1])
 	}
 
-	setAlive () {
+	reemerge () {
+		this.updateHealth(this.stats.healthMax)
 		this.isDead = false
 		this.timeOfDeath = null
 		this.isBlocking = true
-
 		this.opacity(1.0)
 
+		if (this.localAlly || this.isRendering) {
+			this.infoContainer.visible = true
+		}
 		if (this.isLocal) {
 			store.state.dead = false
 		}
-	}
-
-	reemerge () {
-		this.updateHealth(this.stats.healthMax)
-		this.container.alpha = 1.0
-		this.infoContainer.visible = true
-
-		this.setAlive()
 	}
 
 	// Experience
