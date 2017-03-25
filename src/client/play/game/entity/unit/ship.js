@@ -59,7 +59,7 @@ class Ship extends Movable {
 		// const base = Render.sprite('ship')
 		// this.base.add(base)
 
-		const displayName = player.name
+		const displayName = player.name //SAMPLE team === 0 ? player.name : 'bot'
 		const displayTextSize = displayName.length < 4 ? 10 : 10 - (displayName.length - 4) / 4
 		Render.text(displayName, -this.hpWidth / 2, this.hpHeight + 1, {
 			size: displayTextSize,

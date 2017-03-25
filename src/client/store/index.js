@@ -1,5 +1,7 @@
 import storage from '@/helpers/storage'
 
+import render from '@/play/render/render'
+
 let selectedUnit = null
 
 export default {
@@ -7,6 +9,10 @@ export default {
     signin: {
       username: storage.get('username'),
       loading: false,
+    },
+
+    settings: {
+      quality: storage.getInt('quality', 1),
     },
 
     renderTime: 0,
@@ -49,6 +55,15 @@ export default {
   setName (name) {
     this.state.signin.username = name
     storage.set('username', name)
+  },
+
+  // Settings
+
+  toggleQualitySetting () {
+    const newQuality = this.state.settings.quality === 1 ? 0 : 1
+    this.state.settings.quality = newQuality
+    render.createRenderer()
+    storage.set('quality', newQuality)
   },
 
   // Game

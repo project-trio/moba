@@ -19,6 +19,7 @@ export default {
     },
 
     onSettings () {
+      store.toggleQualitySetting()
     },
   },
 }

@@ -1,5 +1,7 @@
 const THREE = require('three')
 
+import store from '@/store'
+
 import Vox from '@/play/external/vox'
 
 import pointer from '@/play/render/pointer'
@@ -37,21 +39,24 @@ window.addEventListener('resize', resize)
 
 export default {
 
+	createRenderer () {
+		const quality = store.state.settings.quality
+		renderer = new THREE.WebGLRenderer({
+			antialias: quality > 0,
+			canvas: document.getElementById('canvas'),
+		})
+		renderer.shadowMap.enabled = quality > 0
+		if (quality > 0) {
+			renderer.shadowMap.type = THREE.PCFSoftShadowMap
+		}
+		renderer.setPixelRatio(window.devicePixelRatio)
+		resize()
+	},
+
 	create () {
 		pointer.bind()
 
-		windowWidth = window.innerWidth
-		windowHeight = window.innerHeight
-
-		// Renderer
-
-		renderer = new THREE.WebGLRenderer({
-			antialias: true,
-			canvas: document.getElementById('canvas'),
-		})
-		renderer.setPixelRatio(window.devicePixelRatio)
-		renderer.shadowMap.enabled = true
-		renderer.shadowMap.type = THREE.PCFSoftShadowMap
+		resize()
 
 		// Scene
 
@@ -86,9 +91,7 @@ export default {
 		// const helper = new THREE.CameraHelper(light.shadow.camera)
 		// gameScene.add(helper)
 
-		resize()
-
-		return renderer
+		this.createRenderer()
 	},
 
 	positionCamera (x, y) {
