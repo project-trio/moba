@@ -30,6 +30,7 @@ const Game = function (gid, size) {
 	let updateDuration
 	let tickDuration
 	let ticksPerUpdate
+	let renderedSinceUpdate = false
 
 	this.serverUpdate = -1
 	this.running = false
@@ -42,13 +43,10 @@ const Game = function (gid, size) {
 
 	let ticksRendered = 0
 	let lastTickTime
-	let tickOffsetTime = 0
-
-	this.logTicksRendered = function () {
-		console.log(ticksRendered)
-	}
+	let tickOffsets = -4
 
 	this.calculateTicksToRender = function (currentTime) {
+		const tickOffsetTime = tickOffsets * ticksPerUpdate * tickDuration / 2
 		return Math.floor((currentTime - lastTickTime - tickOffsetTime) / tickDuration)
 	}
 
@@ -58,12 +56,10 @@ const Game = function (gid, size) {
 		const maxTicksToRender = ticksToRender > 9 ? Math.floor(Math.pow(ticksToRender, 0.5)) : 1
 		while (ticksToRender > 0) {
 			renderTime = ticksRendered * tickDuration
-			if (ticksRendered % ticksPerUpdate == 0) {
+			if (ticksRendered % ticksPerUpdate === 0) {
 				if (!dequeueUpdate(renderTime)) {
-					tickOffsetTime += ticksToRender * tickDuration
-					if (this.serverUpdate > 20) {
-						console.log('Missing update', [ticksToRender, tickOffsetTime])
-					}
+					tickOffsets += 1
+					console.log('Missing update', [ticksToRender, tickOffsets])
 					break
 				}
 			}
@@ -83,6 +79,9 @@ const Game = function (gid, size) {
 				break
 			}
 			ticksRenderedForFrame += 1
+		}
+		if (ticksToRender === 0) {
+			renderedSinceUpdate = true
 		}
 		if (renderTime) {
 			store.state.renderTime = renderTime
@@ -134,11 +133,12 @@ const Game = function (gid, size) {
 	this.enqueueUpdate = function (update, actions) {
 		this.serverUpdate = update
 		updateQueue[update] = actions
-		const behindUpdates = update - updateCount
-		if (behindUpdates > 0) {
-			tickOffsetTime -= behindUpdates * ticksPerUpdate * tickDuration
-			if (updateCount > 20) {
-				console.log('Catching up to server update', [behindUpdates, tickOffsetTime])
+		if (renderedSinceUpdate) {
+			const behindUpdates = update - updateCount
+			if (behindUpdates > 0) {
+				tickOffsets -= 1
+				renderedSinceUpdate = false
+				console.log('Catching up to server update', [behindUpdates, tickOffsets])
 			}
 		}
 	}
