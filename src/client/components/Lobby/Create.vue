@@ -16,6 +16,8 @@
 <script>
 import router from '@/router'
 
+import Local from '@/play/local'
+
 import LobbyEvents from '@/play/events/lobby'
 
 export default {
@@ -35,7 +37,12 @@ export default {
       LobbyEvents.connect('create', { size: this.selectedIndex }, (data) => {
         console.log('create', data)
         if (data.error) {
-          window.alert(`Unable to create game: ${data.error}`)
+          const errorMessage = `Unable to create game: ${data.error}`
+          if (Local.TESTING) {
+            console.log(errorMessage)
+          } else {
+            window.alert(errorMessage)
+          }
           router.replace({ name: 'Lobby' })
         } else {
           router.replace({ name: 'Join', params: { gid: data.gid } })

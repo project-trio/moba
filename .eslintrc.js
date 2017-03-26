@@ -26,6 +26,7 @@ module.exports = {
     'no-new': 0,
 
     'no-unused-vars': 1,
+    'no-trailing-spaces': 1,
 
     // allow paren-less arrow functions
     'arrow-parens': 0,
