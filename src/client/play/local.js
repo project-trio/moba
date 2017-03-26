@@ -1,15 +1,15 @@
 export default window.local = {
 
-	TESTING: process.env.NODE_ENV !== 'production',
+  TESTING: process.env.NODE_ENV !== 'production',
 
-	name: null,
-	email: null,
-	username: localStorage.getItem('username'),
+  name: null,
+  email: null,
+  username: localStorage.getItem('username'),
 
-	id: null,
-	game: null,
-	player: null,
+  id: null,
+  game: null,
+  player: null,
 
-	shipSize: 44,
+  shipSize: 44,
 
 }

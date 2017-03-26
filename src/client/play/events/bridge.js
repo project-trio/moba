@@ -12,36 +12,36 @@ let socket
 
 export default {
 
-	on (name, callback) {
-		socket.on(name, callback)
-	},
+  on (name, callback) {
+    socket.on(name, callback)
+  },
 
-	emit (name, message, callback) {
-		if (!socket) {
-			return
-		}
-		socket.emit(name, message, callback)
-	},
+  emit (name, message, callback) {
+    if (!socket) {
+      return
+    }
+    socket.emit(name, message, callback)
+  },
 
-	init () {
-		if (socket) {
-			return
-		}
-		console.log('CONNECTING', Local.TESTING)
-		store.state.signin.loading = true
-		const socketUrl = Local.TESTING ? `http://localhost:${CommonConsts.PORT}` : window.location.origin
-		const username = store.state.signin.username || 'test'
-		const params = {query: `name=${username}&v=${CommonConsts.VERSION}`}
-		socket = SocketIO(socketUrl, params)
+  init () {
+    if (socket) {
+      return
+    }
+    console.log('CONNECTING', Local.TESTING)
+    store.state.signin.loading = true
+    const socketUrl = Local.TESTING ? `http://localhost:${CommonConsts.PORT}` : window.location.origin
+    const username = store.state.signin.username || 'test'
+    const params = {query: `name=${username}&v=${CommonConsts.VERSION}`}
+    socket = SocketIO(socketUrl, params)
 
-		socket.on('connect', () => {
-			Local.playerId = socket.id
-			console.log('Connected', Local.playerId)
-			store.state.signin.loading = false
+    socket.on('connect', () => {
+      Local.playerId = socket.id
+      console.log('Connected', Local.playerId)
+      store.state.signin.loading = false
 
-			socket.on('auth', (data) => {
-				// console.log('authed', data)
-			})
-		})
-	}
+      socket.on('auth', (data) => {
+        // console.log('authed', data)
+      })
+    })
+  }
 }

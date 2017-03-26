@@ -1,6 +1,6 @@
 module.exports = {
 
-	tickDuration: 50,
-	updateDuration: 200,
+  tickDuration: 50,
+  updateDuration: 200,
 
-};
+}
