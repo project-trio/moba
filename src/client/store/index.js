@@ -15,6 +15,10 @@ export default {
       quality: storage.getInt('quality', 1),
     },
 
+    game: {
+      players: null,
+    },
+
     renderTime: 0,
 
     chatMessages: [],

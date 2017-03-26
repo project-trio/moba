@@ -29,6 +29,7 @@ export default new Router({
     },
     {
       path: '/lobby/join/:gid',
+      props: true,
       name: 'Join',
       component: LobbyJoin,
     },
@@ -36,6 +37,6 @@ export default new Router({
       path: '/play',
       name: 'Game',
       component: Game,
-    }
+    },
   ],
 })

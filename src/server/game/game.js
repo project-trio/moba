@@ -67,24 +67,21 @@ module.exports = function(size) {
 			return false;
 		}
 		const pid = player.id;
-		if (allPlayers[pid]) {
-			return true;
+		if (!allPlayers[pid]) {
+			const team = playerIds[1].length < playerIds[0].length ? 1 : 0;
+			playerIds[team].push(pid);
+			allPlayers[pid] = player;
+			player.team = team;
+
+			this.broadcast('add player', {players: formattedPlayers(), teams: playerIds});
+			player.join(this);
+
+			if (checkFull()) {
+				this.state = 'FULL';
+				this.state = 'READY' //TODO temp
+			}
 		}
-
-		const team = playerIds[1].length < playerIds[0].length ? 1 : 0;
-		playerIds[team].push(pid);
-		allPlayers[pid] = player;
-		player.team = team;
-
-		this.broadcast('add player', {players: formattedPlayers(), teams: playerIds});
-		player.join(this);
-		player.emit('join game', {gid: this.id, size: size, players: formattedPlayers(), teams: playerIds});
-
-		if (checkFull()) {
-			this.state = 'FULL';
-			this.state = 'READY' //TODO temp
-		}
-		return true;
+		return {gid: this.id, size: size, players: formattedPlayers(), teams: playerIds, updates: Config.updateDuration, ticks: Config.tickDuration};
 	};
 
 	this.remove = function(player) {
@@ -122,7 +119,7 @@ module.exports = function(size) {
 		// 	player.start();
 		// }
 
-		this.broadcast('start game', {updates: Config.updateDuration, ticks: Config.tickDuration, players: formattedPlayers(), teams: playerIds});
+		this.broadcast('start game', {players: formattedPlayers(), teams: playerIds});
 		this.state = 'STARTED';
 		this.started = true;
 		console.log('Started game ' + this.id);

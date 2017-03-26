@@ -4,9 +4,9 @@
   <div v-if="loading">
   </div>
   <div v-else>
-    <h3>Max players:</h3>
+    <h3>Game size:</h3>
     <div class="game-size-container">
-      <button v-for="index in 5" ref="gameSize" @click="onGameSize(index)" class="game-size interactive" :class="{ selected: index === selectedIndex }">{{ index * 2}}</button>
+      <button v-for="index in 5" ref="gameSize" @click="onGameSize(index)" class="game-size interactive" :class="{ selected: index === selectedIndex }">{{ index }} v {{ index }}</button>
     </div>
     <button @click="onSubmit" class="big interactive">confirm</button>
   </div>
@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import router from '@/router'
+
 import LobbyEvents from '@/play/events/lobby'
 
 export default {
@@ -30,7 +32,15 @@ export default {
     },
 
     onSubmit () {
-      LobbyEvents.connect('create', { size: this.selectedIndex })
+      LobbyEvents.connect('create', { size: this.selectedIndex }, (data) => {
+        console.log('create', data)
+        if (data.error) {
+          window.alert(`Unable to create game: ${data.error}`)
+          router.replace({ name: 'Lobby' })
+        } else {
+          router.replace({ name: 'Join', params: { gid: data.gid } })
+        }
+      })
     },
   },
 }

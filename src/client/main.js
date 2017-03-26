@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import App from './App'
-import router from './router'
+import router from '@/router'
 
 import store from '@/store'
 
 import Events from '@/play/events'
+import Local from '@/play/local'
 
 // App
 
@@ -27,7 +28,11 @@ new Vue({
 // Guard routes
 
 if (hasSignin) {
-  if (router.currentRoute.name === 'Start') {
+  if (router.currentRoute.name === 'Game') {
+    if (!Local.game) {
+      router.replace({ name: 'Lobby' })
+    }
+  } else if (router.currentRoute.name === 'Start') {
     router.replace({ name: 'Lobby' })
   }
 } else {

@@ -8,7 +8,9 @@
 <script>
 import PlayerBar from '@/components/Game/PlayerBar'
 
-import start from '@/play/start'
+import Local from '@/play/local'
+
+import Loop from '@/play/render/loop'
 
 export default {
   components: {
@@ -16,7 +18,8 @@ export default {
   },
 
   mounted () {
-    start.init()
+    Local.game.start()
+    Loop.start()
   },
 }
 </script>

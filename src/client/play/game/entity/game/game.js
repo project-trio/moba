@@ -12,14 +12,7 @@ import Wave from '@/play/game/entity/game/wave'
 import Bullet from '@/play/game/entity/unit/bullet'
 import Unit from '@/play/game/entity/unit/unit'
 
-//CONSTRUCTOR
-
-const Game = function (gid, size) {
-
-	const gameContainer = Render.group()
-	this.container = gameContainer
-
-	// let status
+export default function (gid, size) {
 	let players = {}
 	let teamSize = size
 	let startTime
@@ -31,19 +24,21 @@ const Game = function (gid, size) {
 	let tickDuration
 	let ticksPerUpdate
 	let renderedSinceUpdate = false
-
-	this.serverUpdate = -1
-	this.running = false
-
-	this.map = new GameMap(gameContainer)
-
-	Render.add(gameContainer)
-
-	// Update
-
 	let ticksRendered = 0
 	let lastTickTime
 	let tickOffsets = -4
+
+	this.beginRender = function () {
+		const gameContainer = Render.group()
+		this.container = gameContainer
+
+		this.serverUpdate = -1
+		this.running = false
+
+		this.map = new GameMap(gameContainer)
+
+		Render.add(gameContainer)
+	}
 
 	this.calculateTicksToRender = function (currentTime) {
 		const tickOffsetTime = tickOffsets * ticksPerUpdate * tickDuration / 2
@@ -143,13 +138,12 @@ const Game = function (gid, size) {
 		}
 	}
 
-	this.start = function (_updateDuration, _tickDuration) {
+	this.start = function () {
 		Local.player = players[Local.playerId]
 
 		TrigCache.prepare()
+		this.beginRender()
 
-		updateDuration = _updateDuration
-		tickDuration = _tickDuration
 		ticksPerUpdate = updateDuration / tickDuration
 		console.log('STARTED ' + updateDuration + ' ' + tickDuration + ' ' + ticksPerUpdate)
 		console.log(Local.playerId, players)
@@ -190,7 +184,10 @@ const Game = function (gid, size) {
 	}
 
 	this.updatePlayers = function (playerData) {
-		// teamSize = ? //TODO
+		if (playerData.updates) {
+			updateDuration = playerData.updates
+			tickDuration = playerData.ticks
+		}
 		const serverPlayers = playerData.players
 		players = {}
 		for (let pid in serverPlayers) {
@@ -199,8 +196,7 @@ const Game = function (gid, size) {
 			const index = parseInt(playerInfo.index, 10)
 			players[pid] = new Player(pid, team, index, playerInfo.name)
 		}
+		store.state.game.players = serverPlayers
 	}
 
 }
-
-export default Game

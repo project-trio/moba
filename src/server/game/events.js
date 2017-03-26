@@ -13,10 +13,26 @@ const clients = [];
 
 const createGame = function(player, size) {
 	const game = new Game(size);
-	game.add(player);
-	games.push(game);
-	return game;
+	if (game.add(player)) {
+		games.push(game);
+		return game;
+	}
 }
+
+const join = function(player, gid, callback) {
+	for (let idx = 0; idx < games.length; idx += 1) {
+		const g = games[idx];
+		if (g.id === gid) {
+			const data = g.add(player)
+			if (data) {
+				callback(data)
+				return true;
+			}
+			callback({error: 'Unable to join'})
+		}
+	}
+	callback({error: "Game doesn't exist"})
+};
 
 const quickJoin = function(player) {
 	for (let idx = 0; idx < games.length; idx += 1) {
@@ -140,7 +156,16 @@ module.exports = {
 			if (data.action === 'quick') {
 				quickJoin(player);
 			} else if (data.action === 'create') {
-				createGame(player, data.size);
+				const game = createGame(player, data.size);
+				const result = {}
+				if (game) {
+					result.gid = game.id
+				} else {
+					result.error = 'You may already be in a game'
+				}
+				callback(result)
+			} else if (data.action === 'join') {
+				join(player, data.gid, callback)
 			} else {
 				client.join('lobby');
 			}
