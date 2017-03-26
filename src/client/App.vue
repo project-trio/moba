@@ -55,6 +55,7 @@ export default {
 body
   margin 0
   overflow hidden
+  background-color #fffffe
 
 .inherit
   width inherit
@@ -62,13 +63,13 @@ body
 
 #app
   text-align center
-  color #fffffe
 
 #app, button
   font-family 'Avenir', Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
   font-weight 400
+  color #111110
 
 body, .inherit
   width inherit
@@ -85,7 +86,6 @@ button
   padding 0
   outline none
   text-align center
-  color #111110
   font-size 1.5em
 
 button.big

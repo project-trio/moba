@@ -43,9 +43,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.start
-  color #111
-
 input
   text-align center
   height 64px

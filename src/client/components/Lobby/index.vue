@@ -28,7 +28,6 @@ export default {
 
   computed: {
     games () {
-      console.log('gl', store.state.game.list)
       return store.state.game.list
     },
   },
@@ -36,10 +35,14 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.lobby
-  color #111
-
 .list-game
   background #eee
   padding 16px
+  margin 8px
+
+.list-game:hover
+  background #ddd
+
+.list-game:hover:active
+  background #ccc
 </style>

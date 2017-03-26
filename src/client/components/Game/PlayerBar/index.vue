@@ -34,6 +34,7 @@ export default {
   align-items bottom
   justify-content center
   user-select none
+  color #fffffe
 
 .bar-section
   background rgba(96,96,96,0.9)

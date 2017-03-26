@@ -81,6 +81,5 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.lobby-join
-  color #111
+
 </style>

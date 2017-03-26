@@ -54,9 +54,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.lobby-create
-  color #111
-
 .game-size-container
   margin auto
   width 480px
@@ -70,5 +67,5 @@ export default {
   margin 4px
   flex-grow 1
 .game-size.selected
-  background #0a7
+  background #dd6677
 </style>
