@@ -1,3 +1,5 @@
+const SocketIO = require('socket.io');
+
 const CommonConsts = require.main.require('../common/constants');
 
 const Util = require.main.require('./utils/util');
@@ -11,10 +13,27 @@ const clients = [];
 
 //LOCAL
 
+const lobbyBroadcast = (data) => {
+	SocketIO.io.to('lobby').emit('lobby', data)
+}
+
+const getGameList = function() {
+	const gameList = games.map(game => {
+		return {
+			id: game.id,
+			players: game.formattedPlayers(),
+			state: game.state,
+			size: game.size,
+		}
+	})
+	return gameList
+}
+
 const createGame = function(player, size) {
 	const game = new Game(size);
 	if (game.add(player)) {
 		games.push(game);
+		lobbyBroadcast({games: getGameList()});
 		return game;
 	}
 }
@@ -153,7 +172,13 @@ module.exports = {
 
 		client.on('lobby action', (data, callback)=>{
 			console.log('lobby action', data);
-			if (data.action === 'quick') {
+
+			if (data.action === 'enter') {
+				client.join('lobby')
+				callback({games: getGameList()})
+			} else if (data.action === 'leave') {
+				client.leave('lobby')
+			} else if (data.action === 'quick') {
 				quickJoin(player);
 			} else if (data.action === 'create') {
 				const game = createGame(player, data.size);

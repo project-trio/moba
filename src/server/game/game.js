@@ -30,19 +30,6 @@ module.exports = function(size) {
 		return playerIds[0].length >= size && playerIds[1].length >= size;
 	};
 
-	const formattedPlayers = function() {
-		const broadcastPlayers = {};
-		for (let team in playerIds) {
-			const teamPlayers = playerIds[team];
-			for (let pidx in teamPlayers) {
-				const pid = teamPlayers[pidx];
-				const player = allPlayers[pid];
-				broadcastPlayers[pid] = {id: pid, name: player.name, team: team, index: pidx};
-			}
-		}
-		return broadcastPlayers;
-	};
-
 //STATE
 
 	this.checkStart = function() {
@@ -57,6 +44,19 @@ module.exports = function(size) {
 	};
 
 //JOIN
+
+	this.formattedPlayers = function() {
+		const broadcastPlayers = {};
+		for (let team in playerIds) {
+			const teamPlayers = playerIds[team];
+			for (let pidx in teamPlayers) {
+				const pid = teamPlayers[pidx];
+				const player = allPlayers[pid];
+				broadcastPlayers[pid] = {id: pid, name: player.name, team: team, index: pidx};
+			}
+		}
+		return broadcastPlayers;
+	};
 
 	this.players = function() {
 		return allPlayers;
@@ -73,7 +73,7 @@ module.exports = function(size) {
 			allPlayers[pid] = player;
 			player.team = team;
 
-			this.broadcast('add player', {players: formattedPlayers(), teams: playerIds});
+			this.broadcast('add player', {players: this.formattedPlayers(), teams: playerIds});
 			player.join(this);
 
 			if (checkFull()) {
@@ -81,7 +81,7 @@ module.exports = function(size) {
 				this.state = 'READY' //TODO temp
 			}
 		}
-		return {gid: this.id, size: size, players: formattedPlayers(), teams: playerIds, updates: Config.updateDuration, ticks: Config.tickDuration};
+		return {gid: this.id, size: size, players: this.formattedPlayers(), teams: playerIds, updates: Config.updateDuration, ticks: Config.tickDuration};
 	};
 
 	this.remove = function(player) {
@@ -119,7 +119,7 @@ module.exports = function(size) {
 		// 	player.start();
 		// }
 
-		this.broadcast('start game', {players: formattedPlayers(), teams: playerIds});
+		this.broadcast('start game', {players: this.formattedPlayers(), teams: playerIds});
 		this.state = 'STARTED';
 		this.started = true;
 		console.log('Started game ' + this.id);

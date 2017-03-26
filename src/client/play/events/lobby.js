@@ -1,4 +1,5 @@
 import router from '@/router'
+import store from '@/store'
 
 import Bridge from '@/play/events/bridge'
 
@@ -15,6 +16,11 @@ export default {
 	},
 
 	init () {
+		Bridge.on('lobby', (data) => {
+			console.log('lobby', data)
+			store.state.game.list = data.games
+		})
+
 		Bridge.on('join game', (data) => {
 			console.log('join game', data)
 			const routeObject = { name: 'Join', params: { gid: data.gid } }
