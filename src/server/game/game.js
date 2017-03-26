@@ -81,7 +81,7 @@ module.exports = function(size) {
 				this.state = 'READY' //TODO temp
 			}
 		}
-		return {gid: this.id, size: size, players: this.formattedPlayers(), teams: playerIds, updates: Config.updateDuration, ticks: Config.tickDuration};
+		return {gid: this.id, size: size, players: this.formattedPlayers(), teams: playerIds};
 	};
 
 	this.remove = function(player) {
@@ -119,7 +119,7 @@ module.exports = function(size) {
 		// 	player.start();
 		// }
 
-		this.broadcast('start game', {players: this.formattedPlayers(), teams: playerIds});
+		this.broadcast('start game', {players: this.formattedPlayers(), teams: playerIds, updates: Config.updateDuration, ticks: Config.tickDuration});
 		this.state = 'STARTED';
 		this.started = true;
 		console.log('Started game ' + this.id);

@@ -18,7 +18,7 @@ const lobbyBroadcast = (data) => {
 }
 
 const getGameList = function() {
-	const gameList = games.map(game => {
+	return games.map(game => {
 		return {
 			id: game.id,
 			players: game.formattedPlayers(),
@@ -26,7 +26,6 @@ const getGameList = function() {
 			size: game.size,
 		}
 	})
-	return gameList
 }
 
 const createGame = function(player, size) {
@@ -42,9 +41,9 @@ const join = function(player, gid, callback) {
 	for (let idx = 0; idx < games.length; idx += 1) {
 		const g = games[idx];
 		if (g.id === gid) {
-			const data = g.add(player)
-			if (data) {
-				callback(data)
+			const gameData = g.add(player)
+			if (gameData) {
+				callback(gameData)
 				return true;
 			}
 			callback({error: 'Unable to join'})
@@ -53,15 +52,14 @@ const join = function(player, gid, callback) {
 	callback({error: "Game doesn't exist"})
 };
 
-const quickJoin = function(player) {
+const quickJoin = function(player, size) {
 	for (let idx = 0; idx < games.length; idx += 1) {
-		const g = games[idx];
-		if (g.add(player)) {
-			return true;
+		const game = games[idx];
+		if (game.add(player)) {
+			return game;
 		}
 	}
-
-	createGame(player, CommonConsts.DEFAULT_GAME_SIZE)
+	return createGame(player, size)
 };
 
 //UPDATE
@@ -179,7 +177,8 @@ module.exports = {
 			} else if (data.action === 'leave') {
 				client.leave('lobby')
 			} else if (data.action === 'quick') {
-				quickJoin(player);
+				const game = quickJoin(player, data.size);
+				callback({ gid: game ? game.id : null })
 			} else if (data.action === 'create') {
 				const game = createGame(player, data.size);
 				const result = {}

@@ -18,6 +18,9 @@ export default {
   },
 
   mounted () {
+    if (!Local.game) {
+      return
+    }
     Local.game.start()
     Loop.start()
   },

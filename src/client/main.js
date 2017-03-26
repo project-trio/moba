@@ -4,8 +4,10 @@ import router from '@/router'
 
 import store from '@/store'
 
-import Events from '@/play/events'
 import Local from '@/play/local'
+
+import Events from '@/play/events'
+import LobbyEvents from '@/play/events/lobby'
 
 // App
 
@@ -30,7 +32,13 @@ new Vue({
 if (hasSignin) {
   if (router.currentRoute.name === 'Game') {
     if (!Local.game) {
-      router.replace({ name: 'Lobby' })
+      if (!Local.TESTING) {
+        router.replace({ name: 'Lobby' })
+      } else {
+        LobbyEvents.connect('quick', { size: 0 }, (data) => {
+          router.replace({ name: 'Join', params: { gid: data.gid } })
+        })
+      }
     }
   } else if (router.currentRoute.name === 'Start') {
     router.replace({ name: 'Lobby' })

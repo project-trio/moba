@@ -5,6 +5,8 @@ import Bridge from '@/play/events/bridge'
 
 import Local from '@/play/local'
 
+import Game from '@/play/game/entity/game/game'
+
 export default {
 
 	connect (name, data, callback) {
@@ -42,7 +44,12 @@ export default {
 		})
 
 		Bridge.on('start game', (data) => {
-			console.log('Start game', data)
+			if (!Local.game) {
+				console.log('Backfilling game', data)
+				Local.game = new Game(data.gid, data.size)
+			} else {
+				console.log('Start game', data)
+			}
 			Local.game.updatePlayers(data)
 			router.replace({ name: 'Game' })
 		})

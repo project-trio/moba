@@ -8,6 +8,4 @@ module.exports = {
 
 	TESTING: testing,
 
-	DEFAULT_GAME_SIZE: testing ? 1 : 1,
-
 };
