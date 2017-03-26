@@ -6,20 +6,14 @@ import store from '@/store'
 
 import Events from '@/play/events'
 
-// Setup
-
-if (store.state.signin.username) {
-  Events.init()
-  if (router.currentRoute.name === 'Start') {
-    router.replace({ name: 'Lobby' })
-  }
-} else {
-  router.replace({ name: 'Start' })
-}
-
 // App
 
 Vue.config.productionTip = false
+
+const hasSignin = store.state.signin.username !== null
+if (hasSignin) {
+  Events.init()
+}
 
 /* eslint-disable no-new */
 new Vue({
@@ -31,6 +25,14 @@ new Vue({
 })
 
 // Guard routes
+
+if (hasSignin) {
+  if (router.currentRoute.name === 'Start') {
+    router.replace({ name: 'Lobby' })
+  }
+} else {
+  router.replace({ name: 'Start' })
+}
 
 router.beforeEach((to, from, next) => {
   if (to.name === 'Start') {
