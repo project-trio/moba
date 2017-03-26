@@ -103,7 +103,7 @@ button.interactive:hover
 button.interactive:hover:active
   opacity 0.5
 
-.animated, button.interactive
+.animated, .interactive
   transition 0.3s ease
 
 input

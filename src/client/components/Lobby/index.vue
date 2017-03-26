@@ -1,5 +1,7 @@
 <template>
 <div class="lobby">
+  <h1>moba lobby</h1>
+  <div>{{ playersOnline }} players online</div>
   <router-link :to="{ name: 'Create' }" tag="button" class="big interactive">create game</router-link>
   <div>
     <router-link v-for="game in games" :to="{ name: 'Join', params: { gid: game.id } }" tag="div" class="list-game interactive" :key="game.id">
@@ -18,6 +20,7 @@ import LobbyEvents from '@/play/events/lobby'
 export default {
   created () {
     LobbyEvents.connect('enter', null, (data) => {
+      store.state.game.playersOnline = data.online
       store.state.game.list = data.games
     })
   },
@@ -27,6 +30,10 @@ export default {
   },
 
   computed: {
+    playersOnline () {
+      return store.state.game.playersOnline
+    },
+
     games () {
       return store.state.game.list
     },
@@ -35,6 +42,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.lobby
+  max-width 720px
+  margin auto
+
 .list-game
   background #eee
   padding 16px

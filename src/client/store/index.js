@@ -17,6 +17,7 @@ export default {
 
     game: {
       list: [],
+      playersOnline: 0,
       players: null,
     },
 

@@ -10,6 +10,7 @@ const Player = require('./player')
 
 const games = []
 const clients = []
+let playersOnline = 0
 
 //LOCAL
 
@@ -130,6 +131,8 @@ module.exports = {
     const pid = client.pid
     const player = new Player(client)
     clients.push(player)
+    playersOnline += 1
+    lobbyBroadcast({ online: playersOnline })
 
     client.on('admin', (data, callback) => { //TODO protect
       console.log('Admin', pid)
@@ -142,6 +145,8 @@ module.exports = {
       if (player.game) {
         player.game.remove(player)
       }
+      playersOnline -= 1
+      lobbyBroadcast({ online: playersOnline })
     })
 
     client.on('action', (data) => {
@@ -173,7 +178,7 @@ module.exports = {
 
       if (data.action === 'enter') {
         client.join('lobby')
-        callback({games: getGameList()})
+        callback({ online: playersOnline, games: getGameList() })
       } else if (data.action === 'leave') {
         client.leave('lobby')
       } else if (data.action === 'quick') {

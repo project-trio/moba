@@ -1,10 +1,10 @@
 <template>
 <div class="lobby-create">
-  <h1>Create game</h1>
+  <h1>create game</h1>
   <div v-if="loading">
   </div>
   <div v-else>
-    <h3>Game size:</h3>
+    <h3>game size:</h3>
     <div class="game-size-container">
       <button v-for="index in 5" ref="gameSize" @click="onGameSize(index)" class="game-size interactive" :class="{ selected: index === selectedIndex }">{{ index }} v {{ index }}</button>
     </div>
