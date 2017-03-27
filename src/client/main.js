@@ -29,19 +29,23 @@ new Vue({
 
 // Guard routes
 
+const startupRoute = function () {
+  if (!Local.TESTING) {
+    router.replace({ name: 'Lobby' })
+  } else {
+    LobbyEvents.connect('quick', { size: 0 }, (data) => { //SAMPLE
+      router.push({ name: 'Join', params: { gid: data.gid } })
+    })
+  }
+}
+
 if (hasSignin) {
   if (router.currentRoute.name === 'Game') {
     if (!Local.game) {
-      if (!Local.TESTING) {
-        router.replace({ name: 'Lobby' })
-      } else {
-        LobbyEvents.connect('quick', { size: 0 }, (data) => { //SAMPLE
-          router.push({ name: 'Join', params: { gid: data.gid } })
-        })
-      }
+      startupRoute()
     }
   } else if (router.currentRoute.name === 'Start') {
-    router.replace({ name: 'Lobby' })
+    startupRoute()
   }
 } else {
   router.replace({ name: 'Start' })

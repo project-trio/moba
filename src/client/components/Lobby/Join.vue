@@ -44,7 +44,7 @@ export default {
           console.log(errorMessage)
           setTimeout(() => {
             router.replace({ name: 'Game' })
-          }, 100)
+          }, 500)
         } else {
           window.alert(errorMessage)
           router.replace({ name: 'Lobby' })

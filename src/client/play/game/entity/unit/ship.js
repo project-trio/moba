@@ -122,7 +122,6 @@ class Ship extends Movable {
       const currentLevel = this.skills.levels[index]
       if (currentLevel < 10) {
         this.skills.leveled += 1
-        console.log('levelup', index, this.skills.leveled, this.level, currentLevel)
         this.skills.levels[index] = currentLevel + 1
 
         if (this.isLocal) {
