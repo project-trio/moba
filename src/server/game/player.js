@@ -1,27 +1,36 @@
-module.exports = function(client) {
+module.exports = class Player {
 
-  this.id = client.pid
-  this.game = null
-  this.team = 0
-  this.serverUpdate = 0
-  this.name = client.name
-  this.ship = 'glitch'
-  this.actions = []
-  this.message = null
+  constructor (client) {
+    this.client = client
+    this.id = client.pid
+    this.game = null
+    this.team = null
+    this.teamIndex = null
+    this.serverUpdate = 0
+    this.name = client.name
+    this.shipName = 'glitch'
+    this.actions = []
+    this.message = null
 
-  this.levelNext = null
-
-  this.emit = function(name, message) {
-    client.emit(name, message)
+    this.levelNext = null
   }
 
-  this.join = function(game) {
+  data () {
+    return {
+      name: this.name,
+      shipName: this.shipName,
+      team: this.team,
+      teamIndex: this.teamIndex,
+    }
+  }
+
+  emit (name, message) {
+    this.client.emit(name, message)
+  }
+
+  join (game) {
     this.game = game
-    client.join(game.id)
-  }
-
-  this.isDisconnected = function() {
-    return false //TODO
+    this.client.join(game.id)
   }
 
 }

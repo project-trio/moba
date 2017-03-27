@@ -194,9 +194,7 @@ export default function (gid, size) {
     players = {}
     for (let pid in serverPlayers) {
       const playerInfo = serverPlayers[pid]
-      const team = parseInt(playerInfo.team, 10)
-      const index = parseInt(playerInfo.index, 10)
-      players[pid] = new Player(pid, team, index, playerInfo.name)
+      players[pid] = new Player(pid, playerInfo)
     }
     store.state.game.players = serverPlayers
   }

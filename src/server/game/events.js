@@ -40,9 +40,9 @@ const createGame = function(player, size) {
 
 const join = function(player, gid, callback) {
   for (let idx = 0; idx < games.length; idx += 1) {
-    const g = games[idx]
-    if (g.id === gid) {
-      const gameData = g.add(player)
+    const game = games[idx]
+    if (game.id === gid) {
+      const gameData = game.add(player)
       if (gameData) {
         callback(gameData)
         return true
@@ -76,9 +76,8 @@ const loop = function() {
       game.serverUpdate += 1
 
       const actionData = {}
-      const gamePlayers = game.players()
-      for (let pid in gamePlayers) {
-        const player = gamePlayers[pid]
+      for (let pid in game.players) {
+        const player = game.players[pid]
         const playerActions = []
         const submittingSkills = [false, false, false]
 

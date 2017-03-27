@@ -6,33 +6,33 @@ const Util = require.main.require('./utils/util')
 
 //CONSTRUCTOR
 
-module.exports = function(size) {
+module.exports = class Game {
 
-  const playerIds = [[], []]
-  const allPlayers = {}
-
-  this.id = Util.uid()
-  this.size = size
-  this.game = null
-  this.state = 'OPEN'
-  this.serverUpdate = 0
-  this.started = false
-
-  console.log('Created game', this.id)
+  constructor (size) {
+    this.players = {}
+    this.counts = [0, 0]
+    this.id = Util.uid()
+    this.size = size
+    this.game = null
+    this.state = 'OPEN'
+    this.serverUpdate = 0
+    this.started = false
+    console.log('Created game', this.id)
+  }
 
 //PRIVATE
 
-  const playerCount = function() {
-    return playerIds[0].length + playerIds[1].length
+  playerCount () {
+    return this.counts[0] + this.counts[1]
   }
 
-  const checkFull = function() {
-    return playerIds[0].length >= size && playerIds[1].length >= size
+  checkFull () {
+    return this.playerCount() >= this.size * 2
   }
 
 //STATE
 
-  this.checkStart = function() {
+  checkStart () {
     const state = this.state
     if (state == 'STARTED' || state == 'PLAYING') {
       return true
@@ -45,67 +45,57 @@ module.exports = function(size) {
 
 //JOIN
 
-  this.formattedPlayers = function() {
+  formattedPlayers () {
     const broadcastPlayers = {}
-    for (let team in playerIds) {
-      const teamPlayers = playerIds[team]
-      for (let pidx in teamPlayers) {
-        const pid = teamPlayers[pidx]
-        const player = allPlayers[pid]
-        broadcastPlayers[pid] = {id: pid, name: player.name, team: team, index: pidx}
-      }
+    for (let pid in this.players) {
+      const player = this.players[pid]
+      broadcastPlayers[pid] = player.data()
     }
     return broadcastPlayers
   }
 
-  this.players = function() {
-    return allPlayers
-  }
-
-  this.add = function(player) {
+  add (player) {
     if (this.state != 'OPEN') {
       return false
     }
     const pid = player.id
-    if (!allPlayers[pid]) {
-      const team = playerIds[1].length < playerIds[0].length ? 1 : 0
-      playerIds[team].push(pid)
-      allPlayers[pid] = player
+    if (!this.players[pid]) {
+      const team = this.counts[1] < this.counts[0] ? 1 : 0
+      const teamSize = this.counts[team]
+      this.counts[team] += 1
+      this.players[pid] = player
       player.team = team
+      player.teamIndex = teamSize
 
-      this.broadcast('add player', {players: this.formattedPlayers(), teams: playerIds})
+      this.broadcast('add player', {players: this.formattedPlayers()})
       player.join(this)
 
-      if (checkFull()) {
+      if (this.checkFull()) {
         this.state = 'FULL'
         this.state = 'READY' //TODO temp
       }
     }
-    return {gid: this.id, size: size, players: this.formattedPlayers(), teams: playerIds}
+    return {gid: this.id, size: this.size, players: this.formattedPlayers()}
   }
 
-  this.remove = function(player) {
+  remove (player) {
     if (!this.started) {
-      const pid = player.id
-      for (let tidx in playerIds) {
-        const teamPlayers = playerIds[tidx]
-        for (let pidx in teamPlayers) {
-          if (teamPlayers[pidx] == pid) {
-            console.log(pid)
-            teamPlayers.splice(pidx, 1)
-            delete player.game
-            delete allPlayers[pid]
+      const removePid = player.id
+      for (let pid in this.players) {
+        if (removePid == pid) {
+          const player = this.players[pid]
+          this.counts[player.team] -= 1
+          delete this.players[pid]
 
-            if (playerCount() == 0) {
-              this.state = 'OPEN'
-              this.broadcast('remove player', playerIds)
-            } else {
-              console.log('Game canceled ' + this.id)
-              this.state = 'CLOSED'
-              delete this
-            }
-            return true
+          if (this.playerCount() == 0) {
+            this.state = 'OPEN'
+            this.broadcast('remove player', pid)
+          } else {
+            console.log('Game canceled ' + this.id)
+            this.state = 'CLOSED'
+            delete this
           }
+          return true
         }
       }
     }
@@ -113,27 +103,21 @@ module.exports = function(size) {
 
 //METHODS
 
-  this.start = function() {
-    // for (let pid in allPlayers) {
-    //   const player = allPlayers[pid]
-    //   player.start()
-    // }
-
-    this.broadcast('start game', {players: this.formattedPlayers(), teams: playerIds, updates: Config.updateDuration, ticks: Config.tickDuration})
+  start () {
+    this.broadcast('start game', {players: this.formattedPlayers(), updates: Config.updateDuration, ticks: Config.tickDuration})
     this.state = 'STARTED'
     this.started = true
     console.log('Started game ' + this.id)
   }
 
-  this.teamBroadcast = function(team, name, message) {
-    const teamPlayers = playerIds[team]
-    for (let pidx in teamPlayers) {
-      const player = allPlayers[teamPlayers[pidx]]
+  teamBroadcast (team, name, message) {
+    for (let pid in this.players) {
+      const player = this.players[pid]
       player.emit(name, message)
     }
   }
 
-  this.broadcast = function(name, message) {
+  broadcast (name, message) {
     SocketIO.io.to(this.id).emit(name, message)
   }
 

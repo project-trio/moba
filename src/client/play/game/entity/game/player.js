@@ -5,34 +5,37 @@ const PLAYER_INSET = 64
 
 //CONSTRUCTOR
 
-export default function (pid, team, index, name) {
+export default class Player {
 
-  this.id = pid
-  this.unit = null
-  this.team = team
-  this.name = name
-  this.isLocal = false
+  constructor (pid, data) {
+    this.id = pid
+    this.unit = null
+    this.shipName = data.shipName
+    this.name = data.name
+    this.team = parseInt(data.team, 10)
+    this.teamIndex = parseInt(data.teamIndex, 10)
+    this.isLocal = false
+  }
 
 //MANAGE
 
-  this.spawnLocation = function () {
-    const teamMp = team == 0 ? 1 : -1
-    const indexMp = index % 2 == 0 ? -1 : 1
+  spawnLocation () {
+    const teamMp = this.team == 0 ? 1 : -1
+    const indexMp = this.teamIndex % 2 == 0 ? -1 : 1
 
     const mapWidthHalf = Local.game.map.centerX()
     const mapHeightHalf = Local.game.map.centerY()
-    const sx = mapWidthHalf + Local.shipSize * 2 * (Math.floor(index / 2) + 1) * indexMp * teamMp
+    const sx = mapWidthHalf + Local.shipSize * 2 * (Math.floor(this.teamIndex / 2) + 1) * indexMp * teamMp
     const sy = (mapHeightHalf - PLAYER_INSET) * teamMp + mapHeightHalf
     return [sx, sy]
   }
 
-  this.createShip = function () {
+  createShip () {
     const position = this.spawnLocation()
-    let shipName = 'glitch'
-    this.unit = new Ship(shipName, this, team, position[0], position[1])
+    this.unit = new Ship(this.shipName, this, this.team, position[0], position[1])
   }
 
-  this.destroy = function () {
+  destroy () {
     if (this.unit) {
       this.unit.destroy()
       this.unit = null
