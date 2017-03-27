@@ -35,8 +35,8 @@ if (hasSignin) {
       if (!Local.TESTING) {
         router.replace({ name: 'Lobby' })
       } else {
-        LobbyEvents.connect('quick', { size: 0 }, (data) => {
-          router.replace({ name: 'Join', params: { gid: data.gid } })
+        LobbyEvents.connect('quick', { size: 0 }, (data) => { //SAMPLE
+          router.push({ name: 'Join', params: { gid: data.gid } })
         })
       }
     }

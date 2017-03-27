@@ -34,7 +34,7 @@ export default {
     bulletSize: 4,
 
     moveSpeed: [14, 0, 0],
-    turnSpeed: 10,
+    turnSpeed: 12,
     collision: 20,
   },
 }

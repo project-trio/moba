@@ -42,10 +42,13 @@ export default {
         const errorMessage = `Join error: ${data.error}`
         if (Local.TESTING) {
           console.log(errorMessage)
+          setTimeout(() => {
+            router.replace({ name: 'Game' })
+          }, 100)
         } else {
           window.alert(errorMessage)
+          router.replace({ name: 'Lobby' })
         }
-        router.replace({ name: 'Lobby' })
       } else {
         this.size = data.size
         console.log('join', data)

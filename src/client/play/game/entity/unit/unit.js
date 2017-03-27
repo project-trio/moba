@@ -144,7 +144,6 @@ class Unit {
 
   setSelection (color) {
     const isVisible = color != null
-    console.log(color, isVisible)
     this.selectionIndicator.visible = isVisible
     if (isVisible) {
       this.selectionIndicator.material.color.setHex(color)
@@ -183,11 +182,9 @@ class Unit {
     }, 0)
     store.setSelectedUnit(this)
     if (this.isLocal) { //TODO remove
-      console.log('local')
       return false
     }
     if (this.localAlly) {
-      console.log('ally')
       return false
     }
     Bridge.emit('action', { target: this.id })
