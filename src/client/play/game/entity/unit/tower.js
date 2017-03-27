@@ -96,6 +96,7 @@ class Tower extends Unit {
 
     this.container.position.z = stats.z
     this.floor.position.z = -stats.z
+    this.height = 50 + stats.z
   }
 
   // Aim

@@ -33,7 +33,10 @@ class Bullet {
     this.attackPierce = source.stats.attackPierce
     this.moveConstant = new Decimal(source.stats.attackMoveSpeed).dividedBy(500)
 
-    this.setLocation(x, y, startAngle)
+    if (source.height) {
+      this.dropRate = 1400000 * this.moveConstant.toNumber() / Math.sqrt(source.distanceTo(target))
+    }
+    this.setLocation(x, y, source.height, startAngle)
     this.setDestination(this.target.px, this.target.py, true)
 
     allBullets.push(this)
@@ -41,10 +44,10 @@ class Bullet {
 
   // Geometry
 
-  setLocation (x, y, angle) {
+  setLocation (x, y, z, angle) {
     this.px = x
     this.py = y
-    this.container.position.set(x, y, 0)
+    this.container.position.set(x, y, z)
     if (angle) {
       this.container.rotation.z = angle
     }
@@ -147,6 +150,12 @@ class Bullet {
         this.px = movingToX
         this.py = movingToY
         this.updatePosition(movingToX, movingToY)
+        if (this.target.height) {
+          const zDiff = this.container.position.z - this.target.height
+          if (zDiff > 0) {
+            this.container.position.z -= this.dropRate
+          }
+        }
       }
     }
   }

@@ -33,6 +33,7 @@ class Unit {
     this.isAttackingTarget = false
     this.requiresSightOfTarget = true
     this.bulletCount = 0
+    this.height = 0
 
     this.container = Render.group()
     this.base = Render.group()
