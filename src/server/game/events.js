@@ -185,12 +185,17 @@ module.exports = {
         const game = quickJoin(player, data.size)
         callback({ gid: game ? game.id : null })
       } else if (data.action === 'create') {
-        const game = createGame(player, data.size)
         const result = {}
-        if (game) {
-          result.gid = game.id
+        const gameSize = data.size
+        if (gameSize > 0 && !CommonConsts.TESTING && player.name !== 'kiko ') {
+          result.error = 'You need to register before creating a larger than 1p game'
         } else {
-          result.error = 'You may already be in a game'
+          const game = createGame(player, gameSize)
+          if (game) {
+            result.gid = game.id
+          } else {
+            result.error = 'You may already be in a game'
+          }
         }
         callback(result)
       } else if (data.action === 'join') {
