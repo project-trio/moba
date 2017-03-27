@@ -31,6 +31,9 @@ class Movable extends Unit {
   targetDestination (x, y) {
     this.setDestination(x, y)
     this.setTarget(null)
+    if (this.isLocal) {
+      this.renderTargetRing(x, y)
+    }
   }
 
   setDestination (x, y, preadjusted, moveX, moveY) {

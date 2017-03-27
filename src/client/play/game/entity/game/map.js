@@ -182,6 +182,12 @@ const GameMap = function (parent) {
     const mapHeight = layout.height
     Render.positionCamera(mapWidth / 2, mapHeight / 2)
 
+    this.targetRing = Render.ring(32, 4, 0xff0000)
+    this.targetRing.visible = false
+    this.targetRing.material.transparent = true
+    this.targetRing.material.opacity = 0.5
+    floorContainer.add(this.targetRing)
+
     const ground = Render.ground(mapWidth, mapHeight, {
       color: 0x448866,
       floor: floorContainer,

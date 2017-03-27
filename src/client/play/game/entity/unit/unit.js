@@ -16,6 +16,8 @@ import Bullet from '@/play/game/entity/unit/bullet'
 
 const allUnits = []
 
+let targetingGround = false
+
 //CLASS
 
 class Unit {
@@ -41,7 +43,7 @@ class Unit {
     this.floor = Render.group()
 
     const ringOffset = unitScale > 3 ? 2 : 6
-    const selectionRing = Render.ring(statBase.collision + ringOffset, 4)
+    const selectionRing = Render.ring(statBase.collision + ringOffset, 4, null)
     this.floor.add(selectionRing)
     this.selectionIndicator = selectionRing
     this.applyOpacity(this.floor, true, 0.5)
@@ -141,6 +143,16 @@ class Unit {
   }
 
   // Render
+
+  renderTargetRing (x, y) {
+    const targetRing = Local.game.map.targetRing
+    targetRing.visible = true
+    targetRing.position.x = x
+    targetRing.position.y = y
+    targetRing.scale.x = 1
+    targetRing.scale.y = 1
+    targetingGround = true
+  }
 
   setSelection (color) {
     const isVisible = color != null
@@ -436,6 +448,19 @@ Unit.update = function (renderTime, timeDelta, tweening) {
     }
     if (unit.shouldMove()) {
       unit.move(timeDelta, tweening)
+    }
+  }
+
+  if (targetingGround) {
+    const targetRing = Local.game.map.targetRing
+    const remainingScale = targetRing.scale.x
+    const newScale = remainingScale <= 0.01 ? 0 : Math.pow(remainingScale - 0.007, 1.1)
+    if (newScale <= 0) {
+      targetRing.visible = false
+      targetingGround = false
+    } else {
+      targetRing.scale.x = newScale
+      targetRing.scale.y = newScale
     }
   }
 

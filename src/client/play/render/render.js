@@ -236,9 +236,9 @@ export default {
     return rectangle
   },
 
-  ring (innerRadius, size) {
+  ring (innerRadius, size, color) {
     const geometry = new THREE.RingBufferGeometry(innerRadius, innerRadius + size, 32)
-    const material = new THREE.MeshBasicMaterial()
+    const material = new THREE.MeshBasicMaterial({ color })
     const mesh = new THREE.Mesh(geometry, material)
     return mesh
   },
