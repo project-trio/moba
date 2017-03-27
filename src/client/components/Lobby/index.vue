@@ -1,6 +1,7 @@
 <template>
 <div class="lobby">
   <h1>moba lobby</h1>
+  <h3>hello {{ username }}!</h3>
   <div>{{ playersOnline }} players online</div>
   <router-link :to="{ name: 'Create' }" tag="button" class="big interactive">create game</router-link>
   <div>
@@ -30,6 +31,10 @@ export default {
   },
 
   computed: {
+    username () {
+      return store.state.signin.username
+    },
+
     playersOnline () {
       return store.state.game.playersOnline
     },
