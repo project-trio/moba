@@ -6,7 +6,11 @@
   <div v-else>
     <h3>game size:</h3>
     <div class="game-size-container">
-      <button v-for="index in 5" ref="gameSize" @click="onGameSize(index)" class="game-size interactive" :class="{ selected: index === selectedIndex }">{{ index }} v {{ index }}</button>
+      <button v-for="gs in gameSizes" @click="onGameSize(gs.size)" class="game-size interactive" :class="{ selected: gs.size === selectedSize }">{{ gs.label ? gs.label : `${gs.size} v ${gs.size}` }}</button>
+    </div>
+    <h3>map:</h3>
+    <div class="game-size-container">
+      <button v-for="map in maps" @click="onMap(map.name)" class="game-size interactive" :class="{ selected: map.name === selectedMap }">{{ map.name }}</button>
     </div>
     <button @click="onSubmit" class="big interactive">confirm</button>
   </div>
@@ -24,17 +28,31 @@ export default {
   data () {
     return {
       loading: false,
-      selectedIndex: 1,
+      selectedSize: 0,
+      gameSizes: [
+        { label: '1p', size: 0 }, { size: 1 }, { size: 2 }, { size: 3 }, { size: 4 },
+        { size: 5 }, { size: 6 }, { size: 10 }, { label: '50p', size: 50 },
+      ],
+      selectedMap: 'standard',
+      maps: [
+        { name: 'mini', min: 0, max: 3 },
+        { name: 'standard', min: 2, max: 6 },
+        { name: 'large', min: 5, max: 9001 },
+      ],
     }
   },
 
   methods: {
-    onGameSize (index) {
-      this.selectedIndex = index
+    onGameSize (size) {
+      this.selectedSize = size
+    },
+
+    onMap (name) {
+      this.selectedMap = name
     },
 
     onSubmit () {
-      LobbyEvents.connect('create', { size: this.selectedIndex }, (data) => {
+      LobbyEvents.connect('create', { size: this.selectedSize, map: this.selectedMap }, (data) => {
         console.log('create', data)
         if (data.error) {
           const errorMessage = `Unable to create game: ${data.error}`
@@ -57,15 +75,18 @@ export default {
 .game-size-container
   margin auto
   width 480px
-  height 64px
   max-width 100%
   display flex
-  // align-items center
-  // align-content center
+  flex-wrap wrap
 
 .game-size
   margin 4px
+  height 56px
   flex-grow 1
+  flex-basis 16%
+  box-sizing border-box
+  border-radius 1px
+
 .game-size.selected
   background #dd6677
 </style>
