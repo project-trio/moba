@@ -285,30 +285,41 @@ const GameMap = function (parent) {
   }
 
   this.track = function (cameraX, cameraY) {
-    if (cameraX != previousPositionX) {
+    if (cameraX !== previousPositionX) {
       previousPositionX = cameraX
 
       const lwh = layout.width / 2
       cameraX = -cameraX + lwh
-      if (cameraX < -lwh / 2) {
-        cameraX = -lwh / 2
-      } else if (cameraX > lwh / 2) {
-        cameraX = lwh / 2
+      const minX = -lwh / 2
+      if (cameraX < minX) {
+        cameraX = minX
+      } else {
+        const maxX = lwh / 2
+        if (cameraX > maxX) {
+          cameraX = maxX
+        }
       }
       if (cameraX != previousCameraX) {
         container.position.x = cameraX
         previousCameraX = cameraX
       }
     }
-    if (cameraY != previousPositionY) {
+    const ratio = layout.height / window.innerHeight
+    cameraY -= 32 * ratio
+    if (cameraY !== previousPositionY) {
       previousPositionY = cameraY
 
+      const offset = ratio * 96
       const lhh = layout.height / 2
       cameraY = -cameraY + lhh
-      if (cameraY < -lhh / 2) {
-        cameraY = -lhh / 2
-      } else if (cameraY > lhh / 2) {
-        cameraY = lhh / 2
+      const minY = -lhh / 2 - offset
+      if (cameraY < minY) {
+        cameraY = minY
+      } else {
+        const maxY = lhh / 2 + offset
+        if (cameraY > maxY) {
+          cameraY = maxY
+        }
       }
       if (cameraY != previousCameraY) {
         container.position.y = cameraY
