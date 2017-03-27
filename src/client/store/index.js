@@ -19,6 +19,7 @@ export default {
       list: [],
       playersOnline: 0,
       players: null,
+      running: false,
     },
 
     renderTime: 0,
@@ -45,7 +46,6 @@ export default {
     },
     dead: false,
     level: 1,
-    shipName: null,
     selectedUnit: null,
 
     key: {
@@ -80,8 +80,14 @@ export default {
     }
     if (selectedUnit) {
       selectedUnit.selected = false
+      if (selectedUnit.allyNotLocal()) {
+        selectedUnit.setSelection(null)
+      }
     }
     selectedUnit = unit
+    if (unit.allyNotLocal()) {
+      unit.setSelection(0xffffff)
+    }
     this.state.selectedStats.name = unit.name
     unit.selected = true
     this.levelUpStats(unit)
@@ -106,10 +112,6 @@ export default {
       stats.levelProgress = Math.round(unit.levelExp * 100 / unit.expPerLevel)
     }
     stats.health = Math.ceil(unit.healthRemaining / 100)
-  },
-
-  setShipName (name) {
-    this.state.shipName = name
   },
 
   // Hotkeys

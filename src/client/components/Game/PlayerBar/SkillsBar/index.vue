@@ -5,7 +5,9 @@
 </template>
 
 <script>
-import CommonSkills from 'common/skills'
+import store from '@/store'
+
+import Local from '@/play/local'
 
 import SkillItem from '@/components/Game/PlayerBar/SkillsBar/SkillItem'
 
@@ -15,16 +17,12 @@ export default {
   },
 
   computed: {
-    shipName () {
-      return this.$root.$data.state.shipName
-    },
-
     skillLevels () {
       return this.$root.$data.state.skills.levels
     },
 
     skills () {
-      return this.shipName ? CommonSkills[this.shipName] : null
+      return store.state.game.running ? Local.player.unit.skills.data : null
     },
   },
 }

@@ -39,7 +39,7 @@ class Ship extends Movable {
     this.id = player.id
     this.player = player
     this.name = name
-    this.isLocal = false
+    this.isLocal = player.isLocal
 
     this.level = 1
     this.levelExp = 0
@@ -51,6 +51,10 @@ class Ship extends Movable {
     this.requiresSightOfTarget = false
 
     // Unit
+
+    if (this.isLocal) {
+      this.setSelection(0xffff00)
+    }
 
     const offset = name === 'roller' ? -19 : 0
     const teamColor = dataConstants.teamColors[team]
@@ -67,6 +71,15 @@ class Ship extends Movable {
       parent: this.unitInfo,
     })
     this.renderLevelText()
+  }
+
+  allyNotLocal () {
+    return !this.isLocal && super.localAlly
+  }
+
+  opacity (opacity) {
+    const isTransluscent = opacity < 1
+    this.applyOpacity(this.top, isTransluscent, opacity)
   }
 
   // Move
@@ -256,14 +269,14 @@ class Ship extends Movable {
 
   // Aim
 
-  setTarget (target, distance) {
+  setTarget (target, distance, highlight) {
     if (!target) {
       if (this.isLocal && this.moveToTarget) {
         console.log('target canceled')
       }
       this.moveToTarget = false
     }
-    return super.setTarget(target, distance)
+    return super.setTarget(target, distance, highlight)
   }
 
   getAttackTarget (units) {

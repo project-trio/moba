@@ -236,6 +236,13 @@ export default {
     return rectangle
   },
 
+  ring (innerRadius, size) {
+    const geometry = new THREE.RingBufferGeometry(innerRadius, innerRadius + size, 32)
+    const material = new THREE.MeshBasicMaterial()
+    const mesh = new THREE.Mesh(geometry, material)
+    return mesh
+  },
+
   sphere (radius, options) {
     const geometry = new THREE.SphereBufferGeometry(radius)
     const material = new THREE.MeshStandardMaterial({color: options.color})

@@ -28,6 +28,8 @@ export default function (gid, size) {
   let lastTickTime
   let tickOffsets = -4
 
+  store.state.game.running = false
+
   this.beginRender = function () {
     const gameContainer = Render.group()
     this.container = gameContainer
@@ -140,6 +142,7 @@ export default function (gid, size) {
 
   this.start = function () {
     Local.player = players[Local.playerId]
+    Local.player.isLocal = true
 
     TrigCache.prepare()
     this.beginRender()
@@ -157,10 +160,8 @@ export default function (gid, size) {
         player.createShip()
       }
     }
-    this.localUnit = Local.player.unit
-    this.localUnit.isLocal = true
-    store.setShipName(this.localUnit.name)
-    store.setSelectedUnit(this.localUnit)
+    store.setSelectedUnit(Local.player.unit)
+    store.state.game.running = true
 
     // status = 'STARTED'
     startTime = performance.now()
@@ -172,6 +173,7 @@ export default function (gid, size) {
 
   this.end = function (losingTeam) {
     this.running = false
+    store.state.game.running = false
 
     // const overText = Render.text('GAME OVER', centerX, centerY, {font: '64px Arial', fill: 0xff1010}, gameContainer)
     // const winnerText = Render.text('Team ' + (2-losingTeam) + ' won!', centerX, centerY + 88, {font: '44px Arial', fill: 0xff1010}, gameContainer)

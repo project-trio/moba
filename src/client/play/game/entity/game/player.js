@@ -11,6 +11,7 @@ export default function (pid, team, index, name) {
   this.unit = null
   this.team = team
   this.name = name
+  this.isLocal = false
 
 //MANAGE
 

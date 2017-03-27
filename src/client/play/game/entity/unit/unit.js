@@ -16,16 +16,6 @@ import Bullet from '@/play/game/entity/unit/bullet'
 
 const allUnits = []
 
-const applyOpacity = function (container, isTransluscent, opacity) {
-  const mesh = container.children[0]
-  if (mesh) {
-    mesh.material.transparent = isTransluscent
-    if (isTransluscent) {
-      mesh.material.opacity = opacity
-    }
-  }
-}
-
 //CLASS
 
 class Unit {
@@ -47,7 +37,16 @@ class Unit {
     this.container = Render.group()
     this.base = Render.group()
     this.top = Render.group()
+    this.floor = Render.group()
 
+    const ringOffset = unitScale > 3 ? 2 : 6
+    const selectionRing = Render.ring(statBase.collision + ringOffset, 4)
+    this.floor.add(selectionRing)
+    this.selectionIndicator = selectionRing
+    this.applyOpacity(this.floor, true, 0.5)
+    this.selectionIndicator.visible = false
+
+    this.container.add(this.floor)
     this.container.add(this.base)
     this.container.add(this.top)
     Local.game.map.floorContainer.add(this.container)
@@ -88,11 +87,11 @@ class Unit {
 
     let hpHeight, hpWidth
     let hpOffsetZ
-    if (unitScale == 1) {
+    if (unitScale === 1) {
       hpHeight = 3
       hpWidth = 40
       hpOffsetZ = 40
-    } else if (unitScale == 2) {
+    } else if (unitScale === 2 || unitScale === 3) {
       hpHeight = 4
       hpWidth = 62
       hpOffsetZ = 60
@@ -136,12 +135,35 @@ class Unit {
     allUnits.push(this)
   }
 
+  allyNotLocal () {
+    return this.localAlly
+  }
+
   // Render
+
+  setSelection (color) {
+    const isVisible = color != null
+    console.log(color, isVisible)
+    this.selectionIndicator.visible = isVisible
+    if (isVisible) {
+      this.selectionIndicator.material.color.setHex(color)
+    }
+  }
+
+  applyOpacity (container, isTransluscent, opacity) {
+    const mesh = container.children[0]
+    if (mesh) {
+      mesh.material.transparent = isTransluscent
+      if (isTransluscent) {
+        mesh.material.opacity = opacity
+      }
+    }
+  }
 
   opacity (opacity) {
     const isTransluscent = opacity < 1
-    applyOpacity(this.base, isTransluscent, opacity)
-    applyOpacity(this.top, isTransluscent, opacity)
+    this.applyOpacity(this.base, isTransluscent, opacity)
+    this.applyOpacity(this.top, isTransluscent, opacity)
   }
 
   // Pointer
@@ -275,20 +297,26 @@ class Unit {
         }
         const dist = this.distanceTo(unit)
         this.moveToTarget = true
-        return this.setTarget(unit, dist)
+        return this.setTarget(unit, dist, this.isLocal)
       }
     }
     console.error('Target id not found', id)
   }
 
-  setTarget (target, distance) {
+  setTarget (target, distance, highlight) {
     if (target != this.attackTarget) {
+      if (this.attackTarget && this.isLocal) {
+        this.attackTarget.setSelection(null)
+      }
       if (!target) {
         this.isAttackingTarget = false
       }
       this.attackTarget = target
     }
     if (target) {
+      if (highlight) {
+        target.setSelection(0xff0000)
+      }
       this.cacheAttackCheck = distance <= this.attackRangeCheck
     }
     return target

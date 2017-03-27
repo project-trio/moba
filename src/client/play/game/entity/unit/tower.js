@@ -80,7 +80,7 @@ class Tower extends Unit {
   constructor (team, towerType, x, y) {
     const stats = TOWER_STATS[towerType]
 
-    super(team, stats, towerType == 'base' ? 3 : 2, x, y)
+    super(team, stats, towerType === 'base' ? 4 : 3, x, y)
 
     this.name = towerType
     this.id = `tower${spawnCount}`
@@ -95,6 +95,7 @@ class Tower extends Unit {
     this.isBlocking = true
 
     this.container.position.z = stats.z
+    this.floor.position.z = -stats.z
   }
 
   // Aim
@@ -149,7 +150,7 @@ class Tower extends Unit {
 
     super.die(time)
 
-    if (this.name == 'base') {
+    if (this.name === 'base') {
       Local.game.end(this.team)
     }
   }
