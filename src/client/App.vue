@@ -40,7 +40,8 @@ export default {
     keyup (event) {
       const name = validKeyEvent(event)
       if (name) {
-        store.setKeyUp(name, event.altKey || event.shiftKey || event.metaKey || event.ctrlKey)
+        const keyCode = event.which || event.keyCode
+        store.setKeyUp(name, keyCode, event.altKey || event.shiftKey || event.metaKey || event.ctrlKey)
       }
     },
 

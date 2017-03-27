@@ -124,7 +124,7 @@ export default {
     }
     keyState.modifier = modified
   },
-  setKeyUp (key, modified) {
+  setKeyUp (key, code, modified) {
     const keyState = this.state.key
     keyState.count -= 1
     if (keyState.count <= 0) {
@@ -133,6 +133,7 @@ export default {
         name: keyState.lastPress,
         at: performance.now(),
         modifier: modified,
+        code: code,
       }
       keyState.lastPress = null
     } else if (key === keyState.lastPress) {

@@ -36,6 +36,10 @@ export default {
   },
 
   computed: {
+    keyCode () {
+      return this.index + 49
+    },
+
     disabled () {
       return this.level === 0 || this.activated || store.state.dead
     },
@@ -103,7 +107,7 @@ export default {
 
   watch: {
     pressed (key) {
-      if (key.name === this.indexName) {
+      if (key.code === this.keyCode) {
         if (key.modifier) {
           this.onLevelup()
         } else {
