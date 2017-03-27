@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import router from '@/router'
 import store from '@/store'
 
 import Events from '@/play/events'
@@ -37,6 +38,7 @@ export default {
     onEnterName () {
       store.setName(this.enteringName)
       Events.init()
+      router.replace({ name: 'Lobby' })
     },
   },
 }
