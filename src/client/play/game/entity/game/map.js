@@ -212,7 +212,7 @@ const GameMap = function (parent) {
       return true
     }
 
-    if (Local.TESTING) {
+    if (Local.TESTING || Local.player.name === 'bot') {
       automateTimer = setInterval(() => { //SAMPLE
         if (Local.player) {
           const dx = Math.round(Math.random() * layout.width)
