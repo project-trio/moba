@@ -2,16 +2,16 @@ module.exports = class Player {
 
   constructor (client) {
     this.client = client
+
     this.id = client.pid
     this.game = null
     this.team = null
     this.teamIndex = null
-    this.serverUpdate = 0
     this.name = client.name
     this.shipName = 'glitch'
-    this.actions = []
-    this.message = null
 
+    this.serverUpdate = 0
+    this.actions = []
     this.levelNext = null
   }
 
@@ -31,6 +31,12 @@ module.exports = class Player {
   join (game) {
     this.game = game
     this.client.join(game.id)
+  }
+
+  leave () {
+    if (this.game) {
+      this.game.remove(this)
+    }
   }
 
 }

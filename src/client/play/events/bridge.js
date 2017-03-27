@@ -42,6 +42,10 @@ export default {
       socket.on('auth', (data) => {
         // console.log('authed', data)
       })
+
+      socket.on('disconnect', (data) => {
+        console.log('disconnect', data)
+      })
     })
   }
 }

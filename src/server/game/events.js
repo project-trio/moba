@@ -9,7 +9,7 @@ const Game = require('./game')
 const Player = require('./player')
 
 const games = []
-const clients = []
+const clientPlayers = {}
 let playersOnline = 0
 
 //LOCAL
@@ -128,22 +128,29 @@ module.exports = {
 
   register (client) {
     const pid = client.pid
-    const player = new Player(client)
-    clients.push(player)
-    playersOnline += 1
-    lobbyBroadcast({ online: playersOnline })
+    const name = client.name
+    let player = clientPlayers[name]
+    if (player) {
+      player.client.disconnect()
+      player.client = client
+    } else {
+      player = new Player(client)
+      clientPlayers[name] = player
+      playersOnline += 1
+      lobbyBroadcast({ online: playersOnline })
+    }
 
-    client.on('admin', (data, callback) => { //TODO protect
-      console.log('Admin', pid)
-      callback({games: games, players: clients})
-      clients.splice(clients.indexOf(player), 1)
+    client.on('admin', (data, callback) => {
+      if (CommonConsts.TESTING || name === 'kiko ') {
+        console.log('Admin', pid)
+        callback({games: games, players: clientPlayers})
+      }
     })
 
     client.on('disconnect', () => {
       console.log('Disconnected', pid)
-      if (player.game) {
-        player.game.remove(player)
-      }
+      player.leave()
+      delete clientPlayers[name]
       playersOnline -= 1
       lobbyBroadcast({ online: playersOnline })
     })
