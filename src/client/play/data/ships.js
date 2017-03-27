@@ -20,8 +20,8 @@ export default {
   },
 
   glitch: {
-    healthMax: [80, 10, 0],
-    healthRegen: [40, 2, 0],
+    healthMax: [80, 4, 0],
+    healthRegen: [40, 1, 0],
     armor: [10, 0, 0],
 
     sightRange: [160, 1, 0],
