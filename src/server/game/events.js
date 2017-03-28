@@ -18,14 +18,18 @@ const lobbyBroadcast = (data) => {
 }
 
 const getGameList = function() {
-  return Game.all.map(game => {
-    return {
+  const result = []
+  const games = Game.all
+  for (let idx = games.length - 1; idx >= 0; idx -= 1) {
+    const game = games[idx]
+    result.push({
       id: game.id,
       players: game.formattedPlayers(),
       state: game.state,
       size: game.size,
-    }
-  })
+    })
+  }
+  return result
 }
 
 const createGame = function(player, size, joining) {
