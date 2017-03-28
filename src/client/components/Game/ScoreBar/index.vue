@@ -25,6 +25,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.bar-section
+  border-radius 0 0 4px 4px
+
 .score-bar
   top 0
   font-size 1.2em

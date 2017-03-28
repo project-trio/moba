@@ -23,7 +23,10 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .player-bar
   bottom 0
+
+.bar-section
+  border-radius 4px 4px 0 0
 </style>
