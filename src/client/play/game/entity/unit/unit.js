@@ -28,6 +28,7 @@ class Unit {
     this.team = team
     this.localAlly = team === Local.player.team
     this.startAngle = startAngle
+    this.damagers = {}
 
     this.renderInBackground = false
     this.movable = false
@@ -264,7 +265,7 @@ class Unit {
     this.updateHealth(newHealth)
   }
 
-  doDamage (amount, pierce) {
+  takeDamage (source, renderTime, amount, pierce) {
     let armor = Math.max(0, this.stats.armor - pierce)
     if (this.armorModifier) {
       armor *= this.armorModifier
@@ -278,6 +279,18 @@ class Unit {
       this.isDying = true
     }
     this.updateHealth(newHealth)
+
+    const sid = source.player ? source.id : source.name
+    const damager = this.damagers[sid]
+    if (damager) {
+      damager.at = renderTime
+      damager.total += damage
+    } else {
+      this.damagers[sid] = {
+        at: renderTime,
+        total: damage,
+      }
+    }
   }
 
   die (time) {
@@ -397,7 +410,7 @@ class Unit {
   attack (enemy, renderTime) {
     this.lastAttack = renderTime
     if (!this.stats.attackMoveSpeed) { //SAMPLE || this.stats.attackMoveSpeed != 11) {
-      enemy.doDamage(this.stats.attackDamage, this.stats.attackPierce)
+      enemy.takeDamage(this, renderTime, this.stats.attackDamage, this.stats.attackPierce)
     } else {
       new Bullet(this, enemy, this.px, this.py, this.top.rotation.z)
     }

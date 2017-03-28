@@ -183,6 +183,7 @@ class Ship extends Movable {
   }
 
   respawn () {
+    this.damagers = {}
     this.respawned = true
     this.isBlocking = false
     this.isDying = false

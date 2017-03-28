@@ -94,8 +94,8 @@ class Bullet {
     this.container.position.y = moveToY
   }
 
-  reachedDestination () {
-    this.target.doDamage(this.attackDamage, this.attackPierce)
+  reachedDestination (renderTime) {
+    this.target.takeDamage(this.source, renderTime, this.attackDamage, this.attackPierce)
     this.destroy()
   }
 
@@ -109,7 +109,7 @@ class Bullet {
     return Util.pointDistance(this.px, this.py, this.target.px, this.target.py)
   }
 
-  move (timeDelta, tweening) {
+  move (renderTime, timeDelta, tweening) {
     let cx, cy
     let moveByX, moveByY
     if (tweening) {
@@ -145,7 +145,7 @@ class Bullet {
         reachedApproximate = Util.withinSquared(this.distanceToTarget(), collisionSize)
       }
       if (reachedApproximate) {
-        this.reachedDestination()
+        this.reachedDestination(renderTime)
       } else {
         this.px = movingToX
         this.py = movingToY
@@ -180,7 +180,7 @@ Bullet.update = function (renderTime, timeDelta, tweening) {
   for (let idx = 0; idx < allBullets.length; idx += 1) {
     const bullet = allBullets[idx]
     bullet.updateAim()
-    bullet.move(timeDelta, tweening)
+    bullet.move(renderTime, timeDelta, tweening)
   }
 
   if (!tweening) {
