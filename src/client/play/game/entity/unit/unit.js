@@ -38,8 +38,10 @@ class Unit {
     this.bulletCount = 0
     this.height = 0
     this.angleBase = false
+    this.untargetable = false
 
     this.container = Render.group()
+    this.shipContainer = Render.group()
     this.base = Render.group()
     this.top = Render.group()
     this.floor = Render.group()
@@ -52,8 +54,9 @@ class Unit {
     this.selectionIndicator.visible = false
 
     this.container.add(this.floor)
-    this.container.add(this.base)
-    this.container.add(this.top)
+    this.shipContainer.add(this.base)
+    this.shipContainer.add(this.top)
+    this.container.add(this.shipContainer)
     Local.game.map.floorContainer.add(this.container)
 
     RenderFog.add(this)
