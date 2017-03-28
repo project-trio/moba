@@ -39,6 +39,7 @@ export default {
   justify-content center
   user-select none
   color #fffffe
+  pointer-events none
 
 .bar-section
   background rgba(96,96,96,0.9)
@@ -46,4 +47,5 @@ export default {
   padding 8px
   box-sizing border-box
   border-radius 4px 4px 0 0
+  pointer-events auto
 </style>
