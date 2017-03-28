@@ -1,9 +1,8 @@
 <template>
-<div class="player-bar">
-  <player-info class="bar-section"></player-info>
-  <skills-bar class="bar-section"></skills-bar>
-  <chat-bar></chat-bar>
-  <settings-buttons class="bar-section"></settings-buttons>
+<div class="score-bar">
+  <div class="bar-section">
+    ⚔️
+  </div>
 </div>
 </template>
 
@@ -24,6 +23,6 @@ export default {
 </script>
 
 <style lang="stylus">
-.player-bar
-  bottom 0
+.score-bar
+  top 0
 </style>
