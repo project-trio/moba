@@ -70,7 +70,7 @@ class Unit {
       attackCooldown: statBase.attackCooldown[0],
       attackMoveSpeed: statBase.attackMoveSpeed[0],
       moveSpeed: statBase.moveSpeed[0],
-      turnSpeed: statBase.turnSpeed || 5,
+      turnSpeed: statBase.turnSpeed || 8,
       collision: statBase.collision * 100,
       bulletSize: statBase.bulletSize,
       bulletColor: statBase.bulletColor,

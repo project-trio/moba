@@ -13,7 +13,7 @@ import Unit from '@/play/game/entity/unit/unit'
 const TOWER_STATS = {
   // [start, levelup, max]
   base: {
-    healthMax: [300, 0, 0],
+    healthMax: [1000, 0, 0],
     healthRegen: [0, 0, 0],
     armor: [40, 0, 0],
 
@@ -33,7 +33,7 @@ const TOWER_STATS = {
   },
 
   standard: {
-    healthMax: [200, 0, 0],
+    healthMax: [500, 0, 0],
     healthRegen: [0, 0, 0],
     armor: [20, 0, 0],
 
@@ -53,7 +53,7 @@ const TOWER_STATS = {
   },
 
   turret: {
-    healthMax: [160, 0, 0],
+    healthMax: [300, 0, 0],
     healthRegen: [0, 0, 0],
     armor: [10, 0, 0],
 
