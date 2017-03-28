@@ -306,6 +306,7 @@ class Unit {
     this.timeOfDeath = time
     this.infoContainer.visible = false
     this.setTarget(null)
+    this.attackTarget = null
   }
 
   destroy () {
