@@ -155,8 +155,8 @@ class Mini extends Movable {
     return this.currentDest != null
   }
 
-  die (time) {
-    super.die(time)
+  die (renderTime) {
+    super.die(renderTime)
 
     this.destroy()
   }

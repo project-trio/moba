@@ -87,7 +87,7 @@ export default {
     cooldownRemaining () {
       const cooldownAt = this.cooldownTime
       if (cooldownAt > 0) {
-        const diff = cooldownAt - store.state.renderTime
+        const diff = cooldownAt - store.state.game.renderTime
         if (diff >= 0) {
           return diff
         }

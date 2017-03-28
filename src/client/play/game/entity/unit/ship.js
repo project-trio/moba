@@ -50,6 +50,9 @@ class Ship extends Movable {
     this.selected = false
     this.requiresSightOfTarget = false
 
+    store.state.game.ships[this.id] = { kills: 0, deaths: 0, damage: 0 }
+    this.displayStats = store.state.game.ships[this.id]
+
     // Unit
 
     if (this.isLocal) {
@@ -167,7 +170,7 @@ class Ship extends Movable {
     }
   }
 
-  die (time) {
+  die (renderTime) {
     const killIndex = 1 - this.team
     const oldKills = store.state.game.stats.kills[killIndex]
     store.state.game.stats.kills.splice(killIndex, 1, oldKills + 1)
@@ -175,7 +178,32 @@ class Ship extends Movable {
     this.opacity(0.5)
     this.respawned = false
 
-    super.die(time)
+    super.die(renderTime)
+
+    if (this.player) {
+      this.displayStats.deaths += 1
+    }
+
+    const damagers = []
+    let lastDamager = null
+    let lastDamageAt = 0
+    for (let did in this.damagers) {
+      const enemyDamage = this.damagers[did]
+      const damagedAt = enemyDamage.at
+      if (damagedAt > lastDamageAt) {
+        lastDamageAt = damagedAt
+        lastDamager = did
+      }
+      if (enemyDamage.unit.player && damagedAt > renderTime - 10 * 1000) {
+        this.displayStats.deaths += 1
+        enemyDamage.unit.kills += 1
+        damagers.push(enemyDamage.unit.player.name)
+      }
+    }
+    if (!damagers.length) {
+      damagers.push(lastDamager)
+    }
+    store.state.chatMessages.push({ kill: this.player.name, damagers: damagers, team: this.team })
 
     if (this.isLocal) {
       store.state.dead = true

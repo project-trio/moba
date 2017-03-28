@@ -280,6 +280,9 @@ class Unit {
     }
     this.updateHealth(newHealth)
 
+    if (source.displayStats) {
+      source.displayStats.damage += damage
+    }
     const sid = source.player ? source.id : source.name
     const damager = this.damagers[sid]
     if (damager) {
@@ -289,6 +292,7 @@ class Unit {
       this.damagers[sid] = {
         at: renderTime,
         total: damage,
+        unit: source,
       }
     }
   }

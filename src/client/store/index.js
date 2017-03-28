@@ -24,9 +24,9 @@ export default {
         kills: [0, 0],
         towers: [0, 0],
       },
+      renderTime: 0,
+      ships: {},
     },
-
-    renderTime: 0,
 
     chatMessages: [],
 

@@ -81,7 +81,7 @@ export default function (gid, size) {
       renderedSinceUpdate = true
     }
     if (renderTime) {
-      store.state.renderTime = renderTime
+      store.state.game.renderTime = renderTime
     }
     return true
   }

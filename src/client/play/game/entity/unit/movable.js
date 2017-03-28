@@ -233,10 +233,10 @@ class Movable extends Unit {
     }
   }
 
-  die (time) {
+  die (renderTime) {
     this.isMoving = false
 
-    super.die(time)
+    super.die(renderTime)
   }
 
 }
