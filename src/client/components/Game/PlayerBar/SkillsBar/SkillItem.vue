@@ -1,6 +1,6 @@
 <template>
 <div class="skill-item" :class="{ selected: pressing, disabled: disabled, cooldown: cooldownTime }">
-  <div class="button-content">
+  <div class="button-content" :class="{ active: isActiveSkill }">
     <div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`"></div>
     <div :class="`item-circle level-ring-${indexName}`"></div>
     <button @click="onSkill(false)" class="skill-button">{{ indexName }}</button>
@@ -109,12 +109,11 @@ export default {
       return 0
     },
 
-    pressing () { //TODO code
+    pressing () {
       const currentKey = store.state.key.lastPress
       if (currentKey) {
         if (currentKey.name === 'escape') {
-          store.state.skills.getGroundTarget = false
-          store.state.skills.activateGround = null
+          store.cancelActiveSkill()
         } else if (currentKey.code === this.keyCode) {
           if (this.ready && this.skill.target === 2) {
             store.state.skills.activeSkill = this.index
@@ -123,10 +122,9 @@ export default {
           return true
         }
       }
-      if (this.isActiveSkill) {
-        store.state.skills.getGroundTarget = false
-        store.state.skills.activeSkill = null
-        console.log('Cancel skill', this.indexName)
+      if (currentKey && this.isActiveSkill) {
+        store.cancelActiveSkill()
+        console.log('Cancel skill', this.indexName, currentKey)
       }
       return false
     },
@@ -173,16 +171,21 @@ export default {
         return
       }
       if (this.skill.target === 1) {
+        store.cancelActiveSkill()
         Bridge.emit('action', { skill: this.index, target: null })
       } else if (this.skill.target === 2) {
         const activate = () => {
           Bridge.emit('action', { skill: this.index, target: store.state.skills.groundTarget })
-          store.state.skills.activateGround = null
-          store.state.skills.getGroundTarget = false
+          store.cancelActiveSkill()
         }
-        if (pressed && store.state.skills.groundTarget) {
-          activate()
+        if (pressed) {
+          if (store.state.skills.groundTarget) {
+            activate()
+          } else {
+            store.cancelActiveSkill()
+          }
         } else {
+          store.state.skills.activeSkill = this.index
           store.state.skills.getGroundTarget = true
           store.state.skills.activateGround = activate
         }
@@ -229,6 +232,9 @@ export default {
   position relative
   z-index 1
 
+.skill-item .active .skill-button
+  box-shadow inset 0 0 32px #f0d
+
 .skill-item .Sektor
   position absolute
   top 0
@@ -252,9 +258,9 @@ export default {
 
 .skill-item .skill-button
   padding 4px
-  margin 4px
-  width 80px
-  height 80px
+  margin 6px
+  width 76px
+  height 76px
   background transparent
   z-index 100
   position relative

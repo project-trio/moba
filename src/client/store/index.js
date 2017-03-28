@@ -125,10 +125,17 @@ export default {
 
   // Hotkeys
 
+  cancelActiveSkill () {
+    this.state.skills.getGroundTarget = false
+    this.state.skills.activateGround = null
+    this.state.skills.groundTarget = null
+    this.state.skills.activeSkill = null
+  },
+
   setKeyDown (key, code, modified) {
     const keyState = this.state.key
     if (!keyState.lastPress || keyState.lastPress.code !== code) {
-      keyState.lastPress = { name: key, code: code, modified: modified }
+      keyState.lastPress = { name: key, code: code }
       keyState.count += 1
     }
     keyState.modifier = modified
@@ -139,13 +146,13 @@ export default {
     if (keyState.count <= 0) {
       keyState.count = 0
       keyState.pressed = {
-        name: keyState.lastPress,
+        name: key,
         at: performance.now(),
         modifier: modified,
         code: code,
       }
       keyState.lastPress = null
-    } else if (key === keyState.lastPress) {
+    } else if (keyState.lastPress && code === keyState.lastPress.code) {
       keyState.lastPress = null
     }
   },

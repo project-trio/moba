@@ -188,7 +188,7 @@ const GameMap = function (parent) {
     const mapHeight = layout.height
     Render.positionCamera(mapWidth / 2, mapHeight / 2)
 
-    this.selectionRing = Render.ring(32, 4, 0xff00ff)
+    this.selectionRing = Render.ring(32, 4, 0xff00dd)
     this.selectionRing.visible = false
     this.selectionRing.material.transparent = true
     this.selectionRing.material.opacity = 0.5
@@ -231,8 +231,7 @@ const GameMap = function (parent) {
         store.state.skills.groundTarget = target
         store.state.skills.activateGround()
       } else {
-        store.state.skills.getGroundTarget = false
-        store.state.skills.groundTarget = null
+        store.cancelActiveSkill()
         Bridge.emit('action', { target })
         store.setSelectedUnit(Local.player.unit)
 

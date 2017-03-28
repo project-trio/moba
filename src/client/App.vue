@@ -16,7 +16,6 @@ const validKeyEvent = (event) => {
 }
 
 export default {
-
   created () {
     window.addEventListener('keydown', this.keydown)
     window.addEventListener('keyup', this.keyup)
