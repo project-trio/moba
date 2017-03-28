@@ -142,6 +142,7 @@ module.exports = {
     const name = client.name
     let player = clientPlayers[name]
     if (player) {
+      player.client.replaced = true
       player.client.disconnect()
       player.client = client
     } else {
@@ -164,8 +165,10 @@ module.exports = {
       if (player.leave()) {
         games = getGameList()
       }
-      delete clientPlayers[name]
-      playersOnline -= 1
+      if (clientPlayers[name] && !client.replaced) {
+        delete clientPlayers[name]
+        playersOnline -= 1
+      }
       lobbyBroadcast({ online: playersOnline, games: games })
     })
 
