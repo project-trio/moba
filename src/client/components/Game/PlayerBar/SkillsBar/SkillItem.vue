@@ -32,6 +32,7 @@ export default {
       cooldownRing: null,
       levelRing: null,
       submittedLevelup: true,
+      disabledByOtherSkill: false,
     }
   },
 
@@ -41,7 +42,7 @@ export default {
     },
 
     disabled () {
-      return this.level === 0 || this.activated || store.state.dead
+      return this.level === 0 || this.activated || this.disabledByOtherSkill || store.state.dead
     },
 
     indexName () {
@@ -78,8 +79,12 @@ export default {
       return this.skill.getCooldown(this.level) * 100
     },
 
+    allActives () {
+      return store.state.skills.actives
+    },
+
     activated () {
-      return store.state.skills.actives[this.index]
+      return this.allActives[this.index]
     },
     cooldownTime () {
       return this.activated ? 0 : store.state.skills.cooldowns[this.index]
@@ -113,6 +118,12 @@ export default {
         } else {
           this.onSkill()
         }
+      }
+    },
+
+    allActives (newActives) {
+      if (this.skill.isDisabledBy) {
+        this.disabledByOtherSkill = this.skill.isDisabledBy(newActives)
       }
     },
 

@@ -113,6 +113,11 @@ class Ship extends Movable {
       return
     }
     const skill = this.skills.data[index]
+
+    if (skill.isDisabledBy && skill.isDisabledBy(this.skills.actives)) {
+      console.log('Skill disabled by another active', this.id, index, skill.disabledBy, this.skills.actives)
+      return
+    }
     const skillLevel = this.skills.levels[index]
     const durationEndTime = renderTime + skill.getDuration(skillLevel) * 100
     const cooldownEndTime = renderTime + skill.getCooldown(skillLevel) * 100

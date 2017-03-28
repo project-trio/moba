@@ -1,3 +1,13 @@
+const isDisabledBy = function (actives) {
+  let disabling = false
+  for (let idx = 0; idx < actives.length; idx += 1) {
+    if (actives[idx] > 0 && this.disabledBy[idx]) {
+      return true
+    }
+  }
+  return false
+}
+
 module.exports = {
   boxy: [
   ],
@@ -6,6 +16,8 @@ module.exports = {
       name: 'Torpedo',
       description: 'Fires a torpedo that explodes on the first enemy target',
       target: 2,
+      disabledBy: [null, true, false],
+      isDisabledBy: isDisabledBy,
       duration: 0,
       cooldown: 150,
       getDuration: function (level) {
@@ -24,6 +36,7 @@ module.exports = {
       description: 'Dive down to temporarily escape enemy fire, dealing damage to enemies around you',
       target: 1,
       duration: 30,
+      isDisabledBy: null,
       cooldown: 200,
       getDuration: function (level) {
         return this.duration + (level - 1) * 1
@@ -56,6 +69,8 @@ module.exports = {
       name: 'Effervesce',
       description: 'Encase yourself in a bubble, reducing incoming damage',
       target: 1,
+      disabledBy: [false, true, null],
+      isDisabledBy: isDisabledBy,
       duration: 50,
       cooldown: 150,
       getDuration: function (level) {
@@ -75,6 +90,7 @@ module.exports = {
       name: 'Brute force',
       description: 'Boosts attack speed, while more vulnerable to damage',
       target: 1,
+      isDisabledBy: null,
       duration: 60,
       cooldown: 150,
       getDuration: function (level) {
@@ -96,6 +112,8 @@ module.exports = {
       name: 'Encrypt',
       description: 'Stealth from enemies for a brief time',
       target: 1,
+      disabledBy: [false, null, true],
+      isDisabledBy: isDisabledBy,
       duration: 40,
       cooldown: 200,
       getDuration: function (level) {
@@ -123,6 +141,8 @@ module.exports = {
       name: 'Salvage',
       description: 'Boost health regeneration while lowering movement speed',
       target: 1,
+      disabledBy: [false, true, null],
+      isDisabledBy: isDisabledBy,
       duration: 50,
       cooldown: 150,
       getDuration: function (level) {
