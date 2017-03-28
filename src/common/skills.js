@@ -9,8 +9,14 @@ const isDisabledBy = function (actives) {
 }
 
 module.exports = {
+
+//BOXY
+
   boxy: [
   ],
+
+//SUNKEN
+
   sunken: [
     {
       name: 'Torpedo',
@@ -33,13 +39,13 @@ module.exports = {
     },
     {
       name: 'Dive',
-      description: 'Dive down to temporarily escape enemy fire, dealing damage to enemies around you',
+      description: 'Dive down to safety, dealing damage to enemies around you',
       target: 1,
-      duration: 30,
       isDisabledBy: null,
+      duration: 35,
       cooldown: 200,
       getDuration: function (level) {
-        return this.duration + (level - 1) * 1
+        return this.duration + (level - 1) * 2
       },
       getCooldown: function (level) {
         return this.cooldown - (level - 1) * 10
@@ -67,7 +73,7 @@ module.exports = {
     },
     {
       name: 'Effervesce',
-      description: 'Encase yourself in a bubble, reducing incoming damage',
+      description: 'Causes you to deal damage back to attackers',
       target: 1,
       disabledBy: [false, true, null],
       isDisabledBy: isDisabledBy,
@@ -85,12 +91,16 @@ module.exports = {
       },
     },
   ],
+
+//GLITCH
+
   glitch: [
     {
       name: 'Brute force',
       description: 'Boosts attack speed, while more vulnerable to damage',
       target: 1,
-      isDisabledBy: null,
+      disabledBy: [null, false, true],
+      isDisabledBy: isDisabledBy,
       duration: 60,
       cooldown: 150,
       getDuration: function (level) {
