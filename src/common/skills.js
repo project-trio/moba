@@ -26,10 +26,10 @@ module.exports = {
       duration: 30,
       cooldown: 200,
       getDuration: function (level) {
-        return this.duration + level * 1
+        return this.duration + (level - 1) * 1
       },
       getCooldown: function (level) {
-        return this.cooldown - level * 10
+        return this.cooldown - (level - 1) * 10
       },
       start: function (index, level, ship) {
         this.untargetable = true
@@ -62,7 +62,7 @@ module.exports = {
         return this.duration
       },
       getCooldown: function (level) {
-        return this.cooldown - level * 5
+        return this.cooldown - (level - 1) * 5
       },
       start: function (index, level, ship) {
       },
@@ -78,7 +78,7 @@ module.exports = {
       duration: 60,
       cooldown: 150,
       getDuration: function (level) {
-        return this.duration + level * 10
+        return this.duration + (level - 1) * 10
       },
       getCooldown: function (level) {
         return this.cooldown
@@ -99,10 +99,10 @@ module.exports = {
       duration: 40,
       cooldown: 200,
       getDuration: function (level) {
-        return this.duration + level * 5
+        return this.duration + (level - 1) * 5
       },
       getCooldown: function (level) {
-        return this.cooldown - level * 10
+        return this.cooldown - (level - 1) * 10
       },
       start: function (index, level, ship) {
         ship.setTarget(null)
@@ -129,7 +129,7 @@ module.exports = {
         return this.duration
       },
       getCooldown: function (level) {
-        return this.cooldown - level * 5
+        return this.cooldown - (level - 1) * 5
       },
       start: function (index, level, ship) {
         ship.healthRegenModifier = 2
