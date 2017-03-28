@@ -30,6 +30,7 @@ class Ship extends Movable {
 
     this.skills = {
       data: CommonSkills[name],
+      started: [0, 0, 0],
       actives: [0, 0, 0],
       cooldowns: [0, 0, 0],
       levels: [0, 0, 0],
@@ -115,6 +116,7 @@ class Ship extends Movable {
     const skillLevel = this.skills.levels[index]
     const durationEndTime = renderTime + skill.getDuration(skillLevel) * 100
     const cooldownEndTime = renderTime + skill.getCooldown(skillLevel) * 100
+    this.skills.started[index] = renderTime
     this.skills.actives[index] = durationEndTime
     this.skills.cooldowns[index] = cooldownEndTime
     skill.start(index, skillLevel, this, this.endSkill)
@@ -166,11 +168,19 @@ class Ship extends Movable {
     }
   }
 
-  endSkills (renderTime) {
+  updateSkills (renderTime) {
     for (let ai = 0; ai < 3; ai += 1) {
       let durationEnd = this.skills.actives[ai]
-      if (durationEnd !== 0 && (!renderTime || renderTime >= durationEnd)) {
-        this.endSkill(ai)
+      if (durationEnd !== 0) {
+        if (!renderTime || renderTime >= durationEnd) {
+          this.endSkill(ai)
+        } else {
+          const update = this.skills.data[ai].update
+          if (update) {
+            const startTime = this.skills.started[ai]
+            update(this, startTime, renderTime, durationEnd)
+          }
+        }
       }
     }
   }
@@ -179,7 +189,7 @@ class Ship extends Movable {
     const killIndex = 1 - this.team
     const oldKills = store.state.game.stats.kills[killIndex]
     store.state.game.stats.kills.splice(killIndex, 1, oldKills + 1)
-    this.endSkills(null)
+    this.updateSkills(null)
     this.opacity(0.5)
     this.respawned = false
 
@@ -359,7 +369,7 @@ class Ship extends Movable {
   // Update
 
   update (renderTime, timeDelta) {
-    this.endSkills(renderTime)
+    this.updateSkills(renderTime)
 
     if (this.isDead) {
       if (this.timeOfDeath) {
