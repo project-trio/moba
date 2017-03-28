@@ -8,7 +8,6 @@ const Config = require('./config')
 const Game = require('./game')
 const Player = require('./player')
 
-const games = []
 const clientPlayers = {}
 let playersOnline = 0
 
@@ -19,7 +18,7 @@ const lobbyBroadcast = (data) => {
 }
 
 const getGameList = function() {
-  return games.map(game => {
+  return Game.all.map(game => {
     return {
       id: game.id,
       players: game.formattedPlayers(),
@@ -29,16 +28,17 @@ const getGameList = function() {
   })
 }
 
-const createGame = function(player, size) {
+const createGame = function(player, size, joining) {
   const game = new Game(size)
-  if (game.add(player)) {
-    games.push(game)
-    lobbyBroadcast({games: getGameList()})
-    return game
+  if (joining && !game.add(player)) {
+    return null
   }
+  lobbyBroadcast({games: getGameList()})
+  return game
 }
 
 const join = function(player, gid, callback) {
+  const games = Game.all
   for (let idx = 0; idx < games.length; idx += 1) {
     const game = games[idx]
     if (game.id === gid) {
@@ -54,13 +54,16 @@ const join = function(player, gid, callback) {
 }
 
 const quickJoin = function(player, size) {
-  for (let idx = 0; idx < games.length; idx += 1) {
-    const game = games[idx]
-    if (game.add(player)) {
-      return game
+  if (size > 0) {
+    const games = Game.all
+    for (let idx = 0; idx < games.length; idx += 1) {
+      const game = games[idx]
+      if (game.add(player)) {
+        return game
+      }
     }
   }
-  return createGame(player, size)
+  return createGame(player, size, false)
 }
 
 //UPDATE
@@ -70,9 +73,10 @@ const updateDuration = Config.updateDuration
 let loopCount = 0
 
 const loop = function() {
+  const games = Game.all
   for (let idx = 0; idx < games.length; idx += 1) {
     const game = games[idx]
-    if (game.checkStart()) {
+    if (game.started) {
       game.serverUpdate += 1
 
       const actionData = {}
@@ -111,6 +115,9 @@ const loop = function() {
         player.actions = []
       }
       game.broadcast('update', { update: game.serverUpdate, actions: actionData })
+    } else if (game.readyToStart()) {
+      game.start()
+      lobbyBroadcast({games: getGameList()})
     }
   }
 
@@ -149,10 +156,13 @@ module.exports = {
 
     client.on('disconnect', () => {
       console.log('Disconnected', pid)
-      player.leave()
+      let games = undefined
+      if (player.leave()) {
+        games = getGameList()
+      }
       delete clientPlayers[name]
       playersOnline -= 1
-      lobbyBroadcast({ online: playersOnline })
+      lobbyBroadcast({ online: playersOnline, games: games })
     })
 
     client.on('action', (data) => {
@@ -196,7 +206,7 @@ module.exports = {
         if (gameSize > 0 && !CommonConsts.TESTING && player.name !== 'kiko ') {
           result.error = 'You need to register before creating a larger than 1p game'
         } else {
-          const game = createGame(player, gameSize)
+          const game = createGame(player, gameSize, true)
           if (game) {
             result.gid = game.id
           } else {

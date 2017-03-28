@@ -43,8 +43,8 @@ export default {
       Local.game.updatePlayers(data)
     })
 
-    Bridge.on('remove player', (data) => {
-      console.log('Del ' + data)
+    Bridge.on('player left', (data) => {
+      console.log('Left', data)
       Local.game.updatePlayers(data)
     })
 

@@ -36,6 +36,7 @@ module.exports = class Player {
   leave () {
     if (this.game) {
       this.game.remove(this)
+      this.game = null
     }
   }
 
