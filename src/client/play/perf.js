@@ -22,7 +22,7 @@ function randomizePosition() {
 TrigCache.prepare()
 
 randomizePosition()
-console.log(`${iterations} iterations`, rx + ' ' + ry)
+console.log(`${iterations} iterations`, rx, ry)
 
 
 //ATAN
@@ -133,6 +133,6 @@ console.log(value / 1000)
 
 // let an = 0
 // while (an < Math.PI*8 + 0.1) {
-//   console.log(Math.sin(an) + ' ' + TrigCache.sin(Math.round(an * 1000))/1000)
+//   console.log(Math.sin(an), TrigCache.sin(Math.round(an * 1000))/1000)
 //   an += Math.PI / 4
 // }

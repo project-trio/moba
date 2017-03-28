@@ -148,7 +148,7 @@ export default function (gid, size) {
     this.beginRender()
 
     ticksPerUpdate = updateDuration / tickDuration
-    console.log('STARTED ' + updateDuration + ' ' + tickDuration + ' ' + ticksPerUpdate)
+    console.log('STARTED', updateDuration, tickDuration, ticksPerUpdate)
     console.log(Local.playerId, players)
 
     const mapType = teamSize <= 1 ? 'tiny' : (teamSize <= 3 ? 'small' : ('standard'))

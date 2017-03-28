@@ -5,12 +5,12 @@
   </div>
   <div v-else>
     <h3>game size:</h3>
-    <div class="game-size-container">
-      <button v-for="gs in gameSizes" @click="onGameSize(gs.size)" class="game-size interactive" :class="{ selected: gs.size === selectedSize }">{{ gs.label ? gs.label : `${gs.size} v ${gs.size}` }}</button>
+    <div class="selection-container">
+      <button v-for="gs in gameSizes" @click="onGameSize(gs.size)" class="selection interactive" :class="{ selected: gs.size === selectedSize }">{{ gs.label ? gs.label : `${gs.size} v ${gs.size}` }}</button>
     </div>
     <h3>map:</h3>
-    <div class="game-size-container">
-      <button v-for="map in maps" @click="onMap(map.name)" class="game-size interactive" :class="{ selected: map.name === selectedMap }">{{ map.name }}</button>
+    <div class="selection-container">
+      <button v-for="map in maps" @click="onMap(map.name)" class="selection interactive" :class="{ selected: map.name === selectedMap }">{{ map.name }}</button>
     </div>
     <button @click="onSubmit" class="big interactive">confirm</button>
   </div>
@@ -72,14 +72,14 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.game-size-container
+.selection-container
   margin auto
   width 480px
   max-width 100%
   display flex
   flex-wrap wrap
 
-.game-size
+.selection
   margin 4px
   height 56px
   flex-grow 1
@@ -87,6 +87,9 @@ export default {
   box-sizing border-box
   border-radius 1px
 
-.game-size.selected
+.selection
+  background #ddd
+
+.selection.selected
   background #dd6677
 </style>

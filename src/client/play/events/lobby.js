@@ -39,7 +39,7 @@ export default {
     })
 
     Bridge.on('add player', (data) => {
-      console.log('Add ' + data)
+      console.log('Add', data)
       Local.game.updatePlayers(data)
     })
 
