@@ -19,25 +19,33 @@ class Bullet {
 
   // Constructor
 
-  constructor (source, target, x, y, startAngle) {
+  constructor (source, target, data, x, y, startAngle) {
     this.source = source
     this.target = target
+    this.unitTarget = target.stats !== undefined
     source.bulletCount += 1
 
+    this.maxRange = this.unitTarget ? null : data.maxRange
+    this.collisionSize = this.unitTarget ? target.stats.collision : data.collisionSize
+
     this.container = Render.group()
-    const ball = Render.sphere(source.stats.bulletSize, {color: (source.stats.bulletColor || 0x000000)})
+    const ball = Render.sphere(data.bulletSize, {color: (data.bulletColor || 0x000000)})
     this.container.add(ball)
     Local.game.map.floorContainer.add(this.container)
 
-    this.attackDamage = source.stats.attackDamage
-    this.attackPierce = source.stats.attackPierce
-    this.moveConstant = new Decimal(source.stats.attackMoveSpeed).dividedBy(500)
+    this.attackDamage = data.attackDamage
+    this.attackPierce = data.attackPierce
+    this.moveConstant = new Decimal(data.attackMoveSpeed).dividedBy(500)
 
     if (source.height) {
       this.dropRate = 1400000 * this.moveConstant.toNumber() / Math.sqrt(source.distanceTo(target))
     }
     this.setLocation(x, y, source.height, startAngle)
-    this.setDestination(this.target.px, this.target.py, true)
+    if (this.unitTarget) {
+      this.setDestination(this.target.px, this.target.py, true)
+    } else {
+      this.setDestination(target[0], target[1], true)
+    }
 
     allBullets.push(this)
   }
@@ -45,6 +53,8 @@ class Bullet {
   // Geometry
 
   setLocation (x, y, z, angle) {
+    this.sx = x
+    this.sy = y
     this.px = x
     this.py = y
     this.container.position.set(x, y, z)
@@ -95,7 +105,11 @@ class Bullet {
   }
 
   reachedDestination (renderTime) {
-    this.target.takeDamage(this.source, renderTime, this.attackDamage, this.attackPierce)
+    if (this.unitTarget) {
+      this.target.takeDamage(this.source, renderTime, this.attackDamage, this.attackPierce)
+    } else {
+      //TODO explode
+    }
     this.destroy()
   }
 
@@ -105,8 +119,14 @@ class Bullet {
     this.remove = true
   }
 
+  distanceToStart () {
+    return Util.pointDistance(this.px, this.py, this.sx, this.sy)
+  }
+
   distanceToTarget () {
-    return Util.pointDistance(this.px, this.py, this.target.px, this.target.py)
+    const targetX = this.unitTarget ? this.target.px : this.target[0]
+    const targetY = this.unitTarget ? this.target.py : this.target[1]
+    return Util.pointDistance(this.px, this.py, targetX, targetY)
   }
 
   move (renderTime, timeDelta, tweening) {
@@ -137,12 +157,16 @@ class Bullet {
     if (tweening) {
       this.updatePosition(movingToX, movingToY)
     } else {
-      const distX = this.destX - cx
-      const distY = this.destY - cy
-      const collisionSize = this.target.stats.collision
       let reachedApproximate = false
-      if (Math.abs(distX) < collisionSize && Math.abs(distY) < collisionSize) {
-        reachedApproximate = Util.withinSquared(this.distanceToTarget(), collisionSize)
+      if (this.maxRange && !Util.withinSquared(this.distanceToStart(), this.maxRange)) {
+        reachedApproximate = true
+        console.log('max range', this.distanceToStart(), this.maxRange)
+      } else {
+        const distX = this.destX - cx
+        const distY = this.destY - cy
+        if (Math.abs(distX) < this.collisionSize && Math.abs(distY) < this.collisionSize) {
+          reachedApproximate = Util.withinSquared(this.distanceToTarget(), this.collisionSize)
+        }
       }
       if (reachedApproximate) {
         this.reachedDestination(renderTime)
@@ -179,7 +203,9 @@ Bullet.update = function (renderTime, timeDelta, tweening) {
   // Move
   for (let idx = 0; idx < allBullets.length; idx += 1) {
     const bullet = allBullets[idx]
-    bullet.updateAim()
+    if (bullet.unitTarget) {
+      bullet.updateAim()
+    }
     bullet.move(renderTime, timeDelta, tweening)
   }
 
@@ -195,7 +221,11 @@ Bullet.update = function (renderTime, timeDelta, tweening) {
     // Update
     for (let idx = 0; idx < allBullets.length; idx += 1) {
       const bullet = allBullets[idx]
-      bullet.setDestination(bullet.target.px, bullet.target.py, true)
+      if (bullet.unitTarget) {
+        bullet.setDestination(bullet.target.px, bullet.target.py, true)
+      } else {
+        //TODO Collision check
+      }
     }
   }
 }
