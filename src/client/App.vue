@@ -114,4 +114,9 @@ input
   box-sizing border-box
   font-size 1.25em
   font-weight 400
+
+.team-1
+  color #5599cc
+.team-2
+  color #dd6677
 </style>

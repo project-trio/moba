@@ -20,6 +20,10 @@ export default {
       playersOnline: 0,
       players: null,
       running: false,
+      stats: {
+        kills: [0, 0],
+        towers: [0, 0],
+      },
     },
 
     renderTime: 0,
@@ -66,7 +70,7 @@ export default {
   // Settings
 
   toggleQualitySetting () {
-    const newQuality = this.state.settings.quality === 1 ? 0 : 1
+    const newQuality = 1 - this.state.settings.quality
     this.state.settings.quality = newQuality
     render.createRenderer()
     storage.set('quality', newQuality)

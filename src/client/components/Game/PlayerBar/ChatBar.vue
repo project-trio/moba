@@ -81,8 +81,4 @@ export default {
 
 .msg-from
   font-weight 500
-.team-1
-  color #5599cc
-.team-2
-  color #dd6677
 </style>

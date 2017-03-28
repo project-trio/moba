@@ -168,6 +168,9 @@ class Ship extends Movable {
   }
 
   die (time) {
+    const killIndex = 1 - this.team
+    const oldKills = store.state.game.stats.kills[killIndex]
+    store.state.game.stats.kills.splice(killIndex, 1, oldKills + 1)
     this.endSkills(null)
     this.opacity(0.5)
     this.respawned = false

@@ -311,7 +311,7 @@ const GameMap = function (parent) {
       }
     }
     const ratio = layout.height / window.innerHeight
-    cameraY -= 32 * ratio
+    cameraY -= 16 * ratio
     if (cameraY !== previousPositionY) {
       previousPositionY = cameraY
 

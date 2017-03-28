@@ -1,3 +1,5 @@
+import store from '@/store'
+
 import dataConstants from '@/play/data/constants'
 
 import Local from '@/play/local'
@@ -141,6 +143,10 @@ class Tower extends Unit {
   // Damage
 
   die (time) {
+    const killIndex = 1 - this.team
+    const oldTowers = store.state.game.stats.towers[killIndex]
+    store.state.game.stats.towers.splice(killIndex, 1, oldTowers + 1)
+
     Render.remove(this.infoContainer)
     Render.remove(this.top)
 
