@@ -197,6 +197,7 @@ export default {
   margin 0
   text-align left
   z-index 0
+  pointer-events none
 
 .skill-item .description-text
   margin-bottom 2px
