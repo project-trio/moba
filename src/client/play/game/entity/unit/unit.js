@@ -338,16 +338,13 @@ class Unit {
     console.error('Target id not found', id)
   }
 
-  setTarget (target, distance, highlight) {
+  setTarget (target, distance) {
     if (target != this.attackTarget) {
       if (this.attackTarget && this.isLocal) {
         this.attackTarget.setSelection(null)
       }
       if (target) {
         this.attackTarget = target
-        if (highlight) {
-          target.setSelection(0xff0000)
-        }
       } else {
         this.isAttackingTarget = false
       }

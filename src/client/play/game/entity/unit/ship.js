@@ -321,13 +321,17 @@ class Ship extends Movable {
   // Aim
 
   setTarget (target, distance, highlight) {
-    if (!target) {
+    if (target) {
+      if (highlight) {
+        target.setSelection(0xff0000)
+      }
+    } else {
       if (this.isLocal && this.moveToTarget) {
         console.log('target canceled')
       }
       this.moveToTarget = false
     }
-    return super.setTarget(target, distance, highlight)
+    return super.setTarget(target, distance)
   }
 
   getAttackTarget (units) {
