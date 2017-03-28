@@ -86,6 +86,7 @@ class Ship extends Movable {
 
   opacity (opacity) {
     const isTransluscent = opacity < 1
+    this.applyOpacity(this.base, isTransluscent, opacity)
     this.applyOpacity(this.top, isTransluscent, opacity)
   }
 

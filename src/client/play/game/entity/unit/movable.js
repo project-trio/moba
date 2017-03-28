@@ -24,6 +24,7 @@ class Movable extends Unit {
 
     this.movable = true
     this.moveToTarget = false
+    this.moveTargetAngle = null
   }
 
   // Position
@@ -47,7 +48,7 @@ class Movable extends Unit {
     if (moveX === undefined) {
       if (dx !== 0 || dy !== 0) {
         const moveAngle = Util.angleOf(dx, dy, false)
-        this.aimTargetAngle = moveAngle.toNumber() / 1000
+        this.moveTargetAngle = moveAngle.toNumber() / 1000
         moveX = TrigCache.cos(moveAngle)
         moveY = TrigCache.sin(moveAngle)
       } else {
@@ -56,7 +57,7 @@ class Movable extends Unit {
         console.warn('Moveable at destination', this.px, this.py)
       }
     } else {
-      this.aimTargetAngle = Math.atan2(dy, dx)
+      this.moveTargetAngle = Math.atan2(dy, dx)
     }
     this.moveX = moveX
     this.moveY = moveY

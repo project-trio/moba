@@ -37,6 +37,7 @@ class Unit {
     this.requiresSightOfTarget = true
     this.bulletCount = 0
     this.height = 0
+    this.angleBase = false
 
     this.container = Render.group()
     this.base = Render.group()
@@ -213,8 +214,8 @@ class Unit {
     this.infoContainer.position.set(x, y, 0)
 
     const angle = this.startAngle || (-Math.PI * 1.5 * (this.team == 0 ? -1 : 1))
-    this.base.rotation.z = angle
     this.top.rotation.z = angle
+    this.base.rotation.z = angle
   }
 
   distanceTo (unit) {
@@ -335,40 +336,65 @@ class Unit {
       if (this.attackTarget && this.isLocal) {
         this.attackTarget.setSelection(null)
       }
-      if (!target) {
+      if (target) {
+        this.attackTarget = target
+        if (highlight) {
+          target.setSelection(0xff0000)
+        }
+      } else {
         this.isAttackingTarget = false
       }
-      this.attackTarget = target
     }
     if (target) {
-      if (highlight) {
-        target.setSelection(0xff0000)
-      }
       this.cacheAttackCheck = distance <= this.attackRangeCheck
+    } else if (this.attackTarget) {
+      if (this.attackTarget.isDying || this.distanceTo(this.attackTarget) >= this.attackRangeCheck) {
+        this.attackTarget = null
+      }
     }
     return target
   }
 
   // Aim
 
-  updateAim () {
-    if (this.attackTarget) {
-      this.aimTargetAngle = Util.angleBetween(this, this.attackTarget, true)
+  angleTo (container, destAngle) {
+    let currAngle = container.rotation.z
+    let newAngle
+    let angleDiff = Util.distanceBetweenAngles(currAngle, destAngle)
+    let turnSpeed = this.stats.turnSpeed / 100
+    if (Math.abs(angleDiff) < turnSpeed) {
+      newAngle = destAngle
+    } else {
+      let spinDirection = angleDiff < 0 ? -1 : 1
+      newAngle = currAngle + (turnSpeed * spinDirection)
     }
-    if (this.aimTargetAngle) {
-      let currAngle = this.top.rotation.z
-      let destAngle = this.aimTargetAngle
-      let newAngle
-      let angleDiff = Util.distanceBetweenAngles(currAngle, destAngle)
-      let turnSpeed = this.stats.turnSpeed / 100
-      if (Math.abs(angleDiff) < turnSpeed) {
-        newAngle = destAngle
-        this.aimTargetAngle = null
-      } else {
-        let spinDirection = angleDiff < 0 ? -1 : 1
-        newAngle = currAngle + (turnSpeed * spinDirection)
+    container.rotation.z = newAngle
+    return newAngle
+  }
+
+  updateAim () {
+    let aimTop, aimBase
+    if (this.attackTarget) {
+      aimTop = Util.angleBetween(this, this.attackTarget, true)
+    }
+    if (this.moveTargetAngle) {
+      aimBase = this.moveTargetAngle
+    }
+    if (!aimTop) {
+      aimTop = aimBase
+    }
+    if (this.angleBase) {
+      if (!aimBase) {
+        aimBase = aimTop
       }
-      this.top.rotation.z = newAngle
+    } else {
+      aimBase = null
+    }
+    if (aimTop) {
+      this.angleTo(this.top, aimTop)
+    }
+    if (aimBase) {
+      this.angleTo(this.base, aimBase)
     }
   }
 
@@ -416,7 +442,7 @@ class Unit {
     if (!this.stats.attackMoveSpeed) { //SAMPLE || this.stats.attackMoveSpeed != 11) {
       enemy.takeDamage(this, renderTime, this.stats.attackDamage, this.stats.attackPierce)
     } else {
-      new Bullet(this, enemy, this.px, this.py, this.top.rotation.z)
+      new Bullet(this, enemy, this.px, this.py, this.base.rotation.z)
     }
   }
 
@@ -452,34 +478,6 @@ Unit.all = function () {
 }
 
 Unit.update = function (renderTime, timeDelta, tweening) {
-  // Move
-  for (let idx = 0; idx < allUnits.length; idx += 1) {
-    const unit = allUnits[idx]
-    if (unit.isDying) {
-      continue
-    }
-    unit.updateAim()
-
-    if (tweening && (!unit.isRendering || unit.isBlocked)) {
-      continue
-    }
-    if (unit.shouldMove()) {
-      unit.move(timeDelta, tweening)
-    }
-  }
-
-  if (targetingGround) {
-    const targetRing = Local.game.map.targetRing
-    const remainingScale = targetRing.scale.x
-    const newScale = remainingScale <= 0.01 ? 0 : Math.pow(remainingScale - 0.007, 1.1)
-    if (newScale <= 0) {
-      targetRing.visible = false
-      targetingGround = false
-    } else {
-      targetRing.scale.x = newScale
-      targetRing.scale.y = newScale
-    }
-  }
 
   if (!tweening) {
     // Update
@@ -513,6 +511,37 @@ Unit.update = function (renderTime, timeDelta, tweening) {
       }
     }
   }
+
+  // Move
+
+  for (let idx = 0; idx < allUnits.length; idx += 1) {
+    const unit = allUnits[idx]
+    if (unit.isDying) {
+      continue
+    }
+    unit.updateAim()
+
+    if (tweening && (!unit.isRendering || unit.isBlocked)) {
+      continue
+    }
+    if (unit.shouldMove()) {
+      unit.move(timeDelta, tweening)
+    }
+  }
+
+  if (targetingGround) {
+    const targetRing = Local.game.map.targetRing
+    const remainingScale = targetRing.scale.x
+    const newScale = remainingScale <= 0.01 ? 0 : Math.pow(remainingScale - 0.007, 1.1)
+    if (newScale <= 0) {
+      targetRing.visible = false
+      targetingGround = false
+    } else {
+      targetRing.scale.x = newScale
+      targetRing.scale.y = newScale
+    }
+  }
+
 }
 
 export default Unit
