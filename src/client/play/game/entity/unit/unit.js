@@ -10,7 +10,7 @@ import RenderFog from '@/play/render/fog'
 
 import Util from '@/play/game/util'
 
-import Bullet from '@/play/game/entity/unit/bullet'
+import Bullet from '@/play/game/entity/attack/bullet'
 
 //LOCAL
 

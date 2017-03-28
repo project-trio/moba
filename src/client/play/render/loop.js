@@ -4,7 +4,8 @@ import Local from '@/play/local'
 
 import Render from '@/play/render/render'
 
-import Bullet from '@/play/game/entity/unit/bullet'
+import Bullet from '@/play/game/entity/attack/bullet'
+
 import Unit from '@/play/game/entity/unit/unit'
 
 let lastUpdate = 0

@@ -1,4 +1,4 @@
-import Bullet from '@/play/game/entity/unit/bullet'
+import Bullet from '@/play/game/entity/attack/bullet'
 
 const isDisabledBy = function (actives) {
   let disabling = false

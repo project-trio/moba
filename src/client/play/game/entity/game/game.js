@@ -5,11 +5,12 @@ import store from '@/store'
 import Local from '@/play/local'
 import Render from '@/play/render/render'
 
+import Bullet from '@/play/game/entity/attack/bullet'
+
 import GameMap from '@/play/game/entity/game/map'
 import Player from '@/play/game/entity/game/player'
 import Wave from '@/play/game/entity/game/wave'
 
-import Bullet from '@/play/game/entity/unit/bullet'
 import Unit from '@/play/game/entity/unit/unit'
 
 export default function (gid, size) {
