@@ -39,6 +39,7 @@ class Unit {
     this.height = 0
     this.angleBase = false
     this.untargetable = false
+    this.noTargeting = false
 
     this.container = Render.group()
     this.shipContainer = Render.group()
@@ -308,8 +309,7 @@ class Unit {
     this.isDead = true
     this.timeOfDeath = time
     this.infoContainer.visible = false
-    this.setTarget(null)
-    this.attackTarget = null
+    this.removeTarget()
   }
 
   destroy () {
@@ -322,6 +322,11 @@ class Unit {
   }
 
   // Target
+
+  removeTarget () {
+    this.setTarget(null)
+    this.attackTarget = null
+  }
 
   setTargetId (id) {
     for (let idx = 0; idx < allUnits.length; idx += 1) {
@@ -430,11 +435,11 @@ class Unit {
     return this.distanceTo(unit) < this.attackRangeCheck
   }
 
-  targetableStatus (unit) {
-    return !unit.invisible && !unit.isDead
+  targetableStatus () {
+    return !this.invisible && !this.isDead && !this.untargetable
   }
   attackableStatus (unit) {
-    return this.targetableStatus(unit) && !unit.hasDied() && !this.alliedTo(unit)
+    return unit.targetableStatus() && !unit.hasDied() && !this.alliedTo(unit)
   }
 
   // canAttack (unit) {

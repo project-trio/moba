@@ -335,6 +335,9 @@ class Ship extends Movable {
   }
 
   getAttackTarget (units) {
+    if (this.noTargeting) {
+      return null
+    }
     let closest = this.attackRangeCheck
     let target = this.attackTarget
     if (target && this.moveToTarget) {

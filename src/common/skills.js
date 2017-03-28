@@ -65,7 +65,9 @@ export default {
         return this.cooldown - (level - 1) * 10
       },
       start: function (index, level, ship) {
-        this.untargetable = true
+        ship.removeTarget()
+        ship.untargetable = true
+        ship.noTargeting = true
       },
       update: function (ship, start, current, end) {
         const elapsed = current - start
@@ -82,7 +84,8 @@ export default {
       },
       end: function (ship) {
         ship.shipContainer.z = 0
-        this.untargetable = false
+        ship.untargetable = false
+        ship.noTargeting = false
       },
     },
     {
@@ -147,7 +150,7 @@ export default {
         return this.cooldown - (level - 1) * 10
       },
       start: function (index, level, ship) {
-        ship.setTarget(null)
+        ship.removeTarget()
         ship.invisible = true
         ship.opacity(0.33)
         ship.endInvisible = function () {
