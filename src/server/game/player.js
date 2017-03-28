@@ -8,7 +8,7 @@ module.exports = class Player {
     this.team = null
     this.teamIndex = null
     this.name = client.name
-    this.shipName = 'glitch'
+    this.shipName = 'sunken'
 
     this.serverUpdate = 0
     this.actions = []

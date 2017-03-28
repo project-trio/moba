@@ -62,7 +62,7 @@ class Ship extends Movable {
     const offset = name === 'roller' ? -19 : 0
     const teamColor = dataConstants.teamColors[team]
     Render.voxel(`${name}-top`, {teamColor: teamColor, parent: this.top, z: offset, owner: this})
-    if (name === 'sunken') {
+    if (statBase.split) {
       this.angleBase = true
       Render.voxel(`${name}-base`, {teamColor: teamColor, parent: this.base, z: offset, owner: this})
     }

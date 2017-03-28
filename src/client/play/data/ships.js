@@ -1,6 +1,7 @@
 export default {
   // [start, levelup, max]
   boxy: {
+    split: true,
     healthMax: [100, 10, 0],
     healthRegen: [40, 2, 0],
     armor: [20, 2, 0],
@@ -39,6 +40,7 @@ export default {
   },
 
   sunken: {
+    split: true,
     healthMax: [100, 10, 0],
     healthRegen: [40, 2, 0],
     armor: [20, 2, 0],
