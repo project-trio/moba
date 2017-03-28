@@ -1,3 +1,5 @@
+import Bullet from '@/play/game/entity/unit/bullet'
+
 const isDisabledBy = function (actives) {
   let disabling = false
   for (let idx = 0; idx < actives.length; idx += 1) {
@@ -8,7 +10,7 @@ const isDisabledBy = function (actives) {
   return false
 }
 
-module.exports = {
+export default {
 
 //BOXY
 
@@ -32,7 +34,19 @@ module.exports = {
       getCooldown: function (level) {
         return this.cooldown
       },
-      start: function (index, level, ship) {
+      start: function (index, level, ship, cancel, target) {
+        const bulletData = {
+          bulletSize: 11,
+          bulletColor: 0x00ff00,
+          attackDamage: 100,
+          attackMoveSpeed: 10,
+          attackPierce: 10,
+          maxRange: 250 * 100,
+          explosionRadius: 50 * 100,
+          collisionSize: 10 * 100,
+          firstCollision: true,
+        }
+        new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
       },
       end: function (ship) {
       },

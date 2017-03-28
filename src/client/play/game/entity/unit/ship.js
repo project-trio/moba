@@ -113,18 +113,18 @@ class Ship extends Movable {
       return
     }
     const skill = this.skills.data[index]
-
     if (skill.isDisabledBy && skill.isDisabledBy(this.skills.actives)) {
       console.log('Skill disabled by another active', this.id, index, skill.disabledBy, this.skills.actives)
       return
     }
+
     const skillLevel = this.skills.levels[index]
     const durationEndTime = renderTime + skill.getDuration(skillLevel) * 100
     const cooldownEndTime = renderTime + skill.getCooldown(skillLevel) * 100
     this.skills.started[index] = renderTime
     this.skills.actives[index] = durationEndTime
     this.skills.cooldowns[index] = cooldownEndTime
-    skill.start(index, skillLevel, this, this.endSkill)
+    skill.start(index, skillLevel, this, this.endSkill, target)
 
     if (this.isLocal) {
       store.state.skills.actives.splice(index, 1, durationEndTime)
