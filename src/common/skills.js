@@ -1,6 +1,8 @@
 module.exports = {
   boxy: [
   ],
+  sunken: [
+  ],
   glitch: [
     {
       name: 'Brute force',
