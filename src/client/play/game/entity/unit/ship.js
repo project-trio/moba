@@ -50,6 +50,7 @@ class Ship extends Movable {
     this.exactDestination = false
     this.selected = false
     this.requiresSightOfTarget = false
+    this.reflectDamage = null
 
     store.state.game.ships[this.id] = { kills: 0, deaths: 0, damage: 0 }
     this.displayStats = store.state.game.ships[this.id]

@@ -103,8 +103,10 @@ export default {
         return this.cooldown - (level - 1) * 5
       },
       start: function (index, level, ship) {
+        ship.reflectDamage = (50 + (level - 1) * 5) * 10
       },
       end: function (ship) {
+        ship.reflectDamage = null
       },
     },
   ],

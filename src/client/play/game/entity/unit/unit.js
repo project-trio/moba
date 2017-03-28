@@ -273,7 +273,7 @@ class Unit {
     this.updateHealth(newHealth)
   }
 
-  takeDamage (source, renderTime, amount, pierce) {
+  takeDamage (source, renderTime, amount, pierce, reflected) {
     let armor = Math.max(0, this.stats.armor - pierce)
     if (this.armorModifier) {
       armor *= this.armorModifier
@@ -287,6 +287,12 @@ class Unit {
       this.isDying = true
     }
     this.updateHealth(newHealth)
+
+    if (!reflected && this.reflectDamage) {
+      const reflectedDamage = Math.round(damage / this.reflectDamage) //TODO desyncs?
+      console.log(damage, reflectedDamage)
+      source.takeDamage(this, renderTime, reflectedDamage, 0, true)
+    }
 
     if (source.displayStats) {
       source.displayStats.damage += damage
