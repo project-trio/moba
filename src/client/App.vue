@@ -33,7 +33,8 @@ export default {
     keydown (event) {
       const name = validKeyEvent(event)
       if (name) {
-        store.setKeyDown(name, event.altKey || event.shiftKey || event.metaKey || event.ctrlKey)
+        const keyCode = event.which || event.keyCode
+        store.setKeyDown(name, keyCode, event.altKey || event.shiftKey || event.metaKey || event.ctrlKey)
       }
     },
 

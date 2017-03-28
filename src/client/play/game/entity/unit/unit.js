@@ -203,7 +203,7 @@ class Unit {
     if (this.localAlly) {
       return false
     }
-    if (store.state.skills.activateGround) {
+    if (store.state.skills.getGroundTarget) {
       return false
     }
 

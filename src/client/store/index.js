@@ -36,6 +36,8 @@ export default {
       cooldowns: [0, 0, 0],
       actives: [0, 0, 0],
 
+      activeSkill: null,
+      getGroundTarget: false,
       groundTarget: null,
       activateGround: null,
     },
@@ -123,10 +125,10 @@ export default {
 
   // Hotkeys
 
-  setKeyDown (key, modified) {
+  setKeyDown (key, code, modified) {
     const keyState = this.state.key
-    if (keyState.lastPress !== key) {
-      keyState.lastPress = key
+    if (!keyState.lastPress || keyState.lastPress.code !== code) {
+      keyState.lastPress = { name: key, code: code, modified: modified }
       keyState.count += 1
     }
     keyState.modifier = modified

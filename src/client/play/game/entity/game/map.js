@@ -211,7 +211,7 @@ const GameMap = function (parent) {
     ground.onHover = () => {
     }
     ground.onMove = (point) => {
-      const showActivateGround = store.state.skills.activateGround !== null
+      const showActivateGround = store.state.skills.getGroundTarget
       if (showActivateGround) {
         const target = getTargetFromPoint(point)
         store.state.skills.groundTarget = target
@@ -227,12 +227,12 @@ const GameMap = function (parent) {
     ground.onClick = (point) => {
       const target = getTargetFromPoint(point)
 
-      const activateGround = store.state.skills.activateGround
-      if (activateGround) {
+      if (store.state.skills.getGroundTarget && store.state.skills.activateGround) {
         store.state.skills.groundTarget = target
         store.state.skills.activateGround()
-        store.state.skills.activateGround = null
       } else {
+        store.state.skills.getGroundTarget = false
+        store.state.skills.groundTarget = null
         Bridge.emit('action', { target })
         store.setSelectedUnit(Local.player.unit)
 

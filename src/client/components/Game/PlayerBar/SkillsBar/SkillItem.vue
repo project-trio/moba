@@ -45,6 +45,14 @@ export default {
       return this.level === 0 || this.activated || this.disabledByOtherSkill || store.state.dead
     },
 
+    ready () {
+      return !this.disabled && this.cooldownRemaining === 0
+    },
+
+    isActiveSkill () {
+      return this.index === store.state.skills.activeSkill
+    },
+
     indexName () {
       return `${this.index + 1}`
     },
@@ -103,7 +111,24 @@ export default {
 
     pressing () { //TODO code
       const currentKey = store.state.key.lastPress
-      return currentKey === this.indexName
+      if (currentKey) {
+        if (currentKey.name === 'escape') {
+          store.state.skills.getGroundTarget = false
+          store.state.skills.activateGround = null
+        } else if (currentKey.code === this.keyCode) {
+          if (this.ready && this.skill.target === 2) {
+            store.state.skills.activeSkill = this.index
+            store.state.skills.getGroundTarget = true
+          }
+          return true
+        }
+      }
+      if (this.isActiveSkill) {
+        store.state.skills.getGroundTarget = false
+        store.state.skills.activeSkill = null
+        console.log('Cancel skill', this.indexName)
+      }
+      return false
     },
     pressed () {
       return store.state.key.pressed
@@ -152,10 +177,13 @@ export default {
       } else if (this.skill.target === 2) {
         const activate = () => {
           Bridge.emit('action', { skill: this.index, target: store.state.skills.groundTarget })
+          store.state.skills.activateGround = null
+          store.state.skills.getGroundTarget = false
         }
         if (pressed && store.state.skills.groundTarget) {
           activate()
         } else {
+          store.state.skills.getGroundTarget = true
           store.state.skills.activateGround = activate
         }
       }
