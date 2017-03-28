@@ -35,6 +35,9 @@ export default {
       levels: [0, 0, 0],
       cooldowns: [0, 0, 0],
       actives: [0, 0, 0],
+
+      groundTarget: null,
+      activateGround: null,
     },
 
     selectedStats: {

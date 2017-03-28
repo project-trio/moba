@@ -41,10 +41,13 @@ export default {
     intersecting = raycaster.intersectObjects(intersectContainer.children, true)
     const newHovering = {}
     for (let i = 0; i < intersecting.length; i++) {
-      const owner = intersecting[i].object.owner
+      const intersect = intersecting[i]
+      const owner = intersect.object.owner
       if (owner && owner.onHover) {
         if (!hovering[owner.id]) {
-          owner.onHover()
+          owner.onHover(intersect.point)
+        } else if (owner.onMove) {
+          owner.onMove(intersect.point)
         }
         newHovering[owner.id] = owner
       }

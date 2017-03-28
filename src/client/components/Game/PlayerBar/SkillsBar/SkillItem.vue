@@ -3,7 +3,7 @@
   <div class="button-content">
     <div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`"></div>
     <div :class="`item-circle level-ring-${indexName}`"></div>
-    <button @click="onSkill" class="skill-button">{{ indexName }}</button>
+    <button @click="onSkill(false)" class="skill-button">{{ indexName }}</button>
     <div>{{ skill.name }}</div>
     <div v-if="levelupReady" @click="onLevelup" class="button-levelup interactive">
       ⬆︎+1
@@ -101,7 +101,7 @@ export default {
       return 0
     },
 
-    pressing () {
+    pressing () { //TODO code
       const currentKey = store.state.key.lastPress
       return currentKey === this.indexName
     },
@@ -116,7 +116,7 @@ export default {
         if (key.modifier) {
           this.onLevelup()
         } else {
-          this.onSkill()
+          this.onSkill(true)
         }
       }
     },
@@ -140,7 +140,7 @@ export default {
   },
 
   methods: {
-    onSkill () {
+    onSkill (pressed) {
       if (this.skill.target === 0) {
         return
       }
@@ -149,6 +149,15 @@ export default {
       }
       if (this.skill.target === 1) {
         Bridge.emit('action', { skill: this.index, target: null })
+      } else if (this.skill.target === 2) {
+        const activate = () => {
+          Bridge.emit('action', { skill: this.index, target: store.state.skills.groundTarget })
+        }
+        if (pressed && store.state.skills.groundTarget) {
+          activate()
+        } else {
+          store.state.skills.activateGround = activate
+        }
       }
     },
 

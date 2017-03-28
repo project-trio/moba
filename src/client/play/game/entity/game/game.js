@@ -110,7 +110,7 @@ export default function (gid, size) {
             } else {
               ship.performSkill(renderTime, skillIndex, target)
             }
-          } else if (target && !ship.isDying) {
+          } else if (target && ship.canMove()) {
             if (typeof target === 'string') {
               ship.setTargetId(target)
             } else {

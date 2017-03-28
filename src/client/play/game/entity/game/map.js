@@ -174,6 +174,12 @@ const GameMap = function (parent) {
     })
   }
 
+  const getTargetFromPoint = function (point) {
+    const diffX = Math.round(point.x) - previousCameraX
+    const diffY = Math.round(point.y) - previousCameraY
+    return [diffX, diffY]
+  }
+
   this.build = function (name) {
     name = 'standard'
     layout = maps[name]
@@ -181,6 +187,12 @@ const GameMap = function (parent) {
     const mapWidth = layout.width
     const mapHeight = layout.height
     Render.positionCamera(mapWidth / 2, mapHeight / 2)
+
+    this.selectionRing = Render.ring(32, 4, 0xff00ff)
+    this.selectionRing.visible = false
+    this.selectionRing.material.transparent = true
+    this.selectionRing.material.opacity = 0.5
+    floorContainer.add(this.selectionRing)
 
     this.targetRing = Render.ring(32, 4, 0xff0000)
     this.targetRing.visible = false
@@ -196,19 +208,39 @@ const GameMap = function (parent) {
     ground.owner = ground
 
     let automateTimer = null
+    ground.onHover = () => {
+    }
+    ground.onMove = (point) => {
+      const showActivateGround = store.state.skills.activateGround !== null
+      if (showActivateGround) {
+        const target = getTargetFromPoint(point)
+        store.state.skills.groundTarget = target
+        this.selectionRing.position.x = target[0]
+        this.selectionRing.position.y = target[1]
+      }
+      this.selectionRing.visible = showActivateGround
+    }
+    ground.onBlur = () => {
+      this.selectionRing.visible = false
+    }
+
     ground.onClick = (point) => {
-      const localUnit = Local.player.unit
-      if (localUnit.canMove()) {
-        const diffX = Math.round(point.x) - previousCameraX
-        const diffY = Math.round(point.y) - previousCameraY
-        Bridge.emit('action', { target: [diffX, diffY] })
+      const target = getTargetFromPoint(point)
+
+      const activateGround = store.state.skills.activateGround
+      if (activateGround) {
+        store.state.skills.groundTarget = target
+        store.state.skills.activateGround()
+        store.state.skills.activateGround = null
+      } else {
+        Bridge.emit('action', { target })
+        store.setSelectedUnit(Local.player.unit)
 
         if (automateTimer) {
           clearInterval(automateTimer)
           automateTimer = null
         }
       }
-      store.setSelectedUnit(localUnit)
       return true
     }
 

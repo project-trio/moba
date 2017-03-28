@@ -197,13 +197,16 @@ class Unit {
     setTimeout(() => {
       store.setSelectedUnit(this)
     }, 0)
-    store.setSelectedUnit(this)
     if (this.isLocal) { //TODO remove
       return false
     }
     if (this.localAlly) {
       return false
     }
+    if (store.state.skills.activateGround) {
+      return false
+    }
+
     Bridge.emit('action', { target: this.id })
     return true
   }
