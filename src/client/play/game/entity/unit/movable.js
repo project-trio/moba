@@ -30,10 +30,10 @@ class Movable extends Unit {
   // Position
 
   targetDestination (x, y) {
-    this.setDestination(x, y)
+    this.setDestination(x, y, true)
     this.setTarget(null)
     if (this.isLocal) {
-      this.renderTargetRing(x, y)
+      this.renderTargetRing(x / POSITION_MAGNITUDE_OFFSET, y / POSITION_MAGNITUDE_OFFSET)
     }
   }
 

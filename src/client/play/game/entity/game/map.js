@@ -175,8 +175,8 @@ const GameMap = function (parent) {
   }
 
   const getTargetFromPoint = function (point) {
-    const diffX = Math.round(point.x) - previousCameraX
-    const diffY = Math.round(point.y) - previousCameraY
+    const diffX = Math.round((point.x - previousCameraX) * 100)
+    const diffY = Math.round((point.y - previousCameraY) * 100)
     return [diffX, diffY]
   }
 
@@ -215,8 +215,8 @@ const GameMap = function (parent) {
       if (showActivateGround) {
         const target = getTargetFromPoint(point)
         store.state.skills.groundTarget = target
-        this.selectionRing.position.x = target[0]
-        this.selectionRing.position.y = target[1]
+        this.selectionRing.position.x = target[0] / 100
+        this.selectionRing.position.y = target[1] / 100
       }
       this.selectionRing.visible = showActivateGround
     }

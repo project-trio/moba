@@ -114,7 +114,7 @@ export default function (gid, size) {
             if (typeof target === 'string') {
               ship.setTargetId(target)
             } else {
-              ship.targetDestination(target[0], target[1], false)
+              ship.targetDestination(target[0], target[1])
             }
           }
         }
