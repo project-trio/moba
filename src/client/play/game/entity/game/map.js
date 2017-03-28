@@ -188,17 +188,19 @@ const GameMap = function (parent) {
     const mapHeight = layout.height
     Render.positionCamera(mapWidth / 2, mapHeight / 2)
 
-    this.selectionRing = Render.ring(32, 4, 0xff00dd)
+    this.selectionRing = Render.ring(32, 4, {
+      color: 0xff00dd,
+      opacity: 0.5,
+      parent: floorContainer,
+    })
     this.selectionRing.visible = false
-    this.selectionRing.material.transparent = true
-    this.selectionRing.material.opacity = 0.5
-    floorContainer.add(this.selectionRing)
 
-    this.targetRing = Render.ring(32, 4, 0xff0000)
+    this.targetRing = Render.ring(32, 4, {
+      color: 0xff0000,
+      opacity: 0.5,
+      parent: floorContainer,
+    })
     this.targetRing.visible = false
-    this.targetRing.material.transparent = true
-    this.targetRing.material.opacity = 0.5
-    floorContainer.add(this.targetRing)
 
     const ground = Render.ground(mapWidth, mapHeight, {
       color: 0x448866,

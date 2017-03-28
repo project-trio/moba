@@ -236,10 +236,30 @@ export default {
     return rectangle
   },
 
-  ring (innerRadius, size, color) {
-    const geometry = new THREE.RingBufferGeometry(innerRadius, innerRadius + size, 32)
-    const material = new THREE.MeshBasicMaterial({ color })
+  circle (radius, options) {
+    const geometry = new THREE.CircleBufferGeometry(radius, 32)
+    const material = new THREE.MeshBasicMaterial({ color: options.color })
+    if (options.opacity != null) {
+      material.transparent = true
+      material.opacity = options.opacity
+    }
     const mesh = new THREE.Mesh(geometry, material)
+    if (options.parent) {
+      options.parent.add(mesh)
+    }
+    return mesh
+  },
+  ring (innerRadius, size, options) {
+    const geometry = new THREE.RingBufferGeometry(innerRadius, innerRadius + size, 32)
+    const material = new THREE.MeshBasicMaterial({ color: options.color })
+    if (options.opacity != null) {
+      material.transparent = true
+      material.opacity = options.opacity
+    }
+    const mesh = new THREE.Mesh(geometry, material)
+    if (options.parent) {
+      options.parent.add(mesh)
+    }
     return mesh
   },
 
