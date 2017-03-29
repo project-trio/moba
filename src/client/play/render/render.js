@@ -250,7 +250,7 @@ export default {
     return mesh
   },
   ring (innerRadius, size, options) {
-    const geometry = new THREE.RingBufferGeometry(innerRadius, innerRadius + size, 32)
+    const geometry = new THREE.RingBufferGeometry(innerRadius, innerRadius + size, options.segments || 32)
     const material = new THREE.MeshBasicMaterial({ color: options.color })
     if (options.opacity != null) {
       material.transparent = true

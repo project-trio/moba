@@ -1,6 +1,6 @@
 <template>
-<div class="skill-item" :class="{ selected: isPressing, disabled: disabled, cooldown: cooldownTime }">
-  <div class="button-content" :class="{ active: isActiveSkill }">
+<div class="skill-item" :class="{ selected: ready && isActiveSkill, disabled: disabled, cooldown: cooldownTime }">
+  <div class="button-content">
     <div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`"></div>
     <div :class="`item-circle level-ring-${indexName}`"></div>
     <button @click="onSkill(false)" class="skill-button">{{ indexName }}</button>
@@ -18,6 +18,8 @@ import store from '@/store'
 
 import Sektor from '@/play/external/sektor'
 
+import Local from '@/play/local'
+
 import Bridge from '@/play/events/bridge'
 
 export default {
@@ -33,7 +35,6 @@ export default {
       levelRing: null,
       submittedLevelup: true,
       disabledByOtherSkill: false,
-      isPressing: false,
     }
   },
 
@@ -115,33 +116,32 @@ export default {
       const modifier = store.state.key.lastPress.modifier
       return code !== undefined && modifier !== undefined && store.state.key.lastPress
     },
-    pressed () {
-      return store.state.key.pressed
-    },
   },
 
   watch: {
     currentPress (currentKey) {
-      if (currentKey.code === this.keyCode && !currentKey.modifier) {
-        this.isPressing = true
-        if (this.ready && this.skill.target === 2) {
-          store.state.skills.activeSkill = this.index
-          store.state.skills.getGroundTarget = true
+      if (currentKey.code === this.keyCode) {
+        store.state.skills.activeSkill = this.index
+        if (this.ready && !currentKey.modifier) {
+          if (this.skill.getRange) {
+            Local.player.unit.createIndicator(this.skill.getRange(this.level))
+          }
+          if (this.skill.target === 2) {
+            store.state.skills.getGroundTarget = true
+          }
         }
       } else {
-        this.isPressing = false
-        if (this.isActiveSkill && (currentKey.modifier || !currentKey.released)) {
+        if (this.isActiveSkill) {
+          if (currentKey.released) {
+            if (currentKey.modifier) {
+              this.onLevelup()
+            } else {
+              this.onSkill(true)
+            }
+          } else {
+            console.log('Cancel skill', this.indexName, currentKey)
+          }
           store.cancelActiveSkill()
-          console.log('Cancel skill', this.indexName, currentKey)
-        }
-      }
-    },
-    pressed (key) {
-      if (key.code === this.keyCode) {
-        if (key.modifier) {
-          this.onLevelup()
-        } else {
-          this.onSkill(true)
         }
       }
     },
@@ -234,7 +234,7 @@ export default {
   position relative
   z-index 1
 
-.skill-item .active .skill-button
+.skill-item.selected .skill-button
   box-shadow inset 0 0 32px #f0d
 
 .skill-item .Sektor

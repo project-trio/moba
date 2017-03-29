@@ -5,6 +5,10 @@ import Bullet from '@/play/game/entity/attack/bullet'
 
 //LOCAL
 
+const levelMultiplier = function (base, level, multiplier) {
+  return base + (level - 1) * multiplier
+}
+
 const isDisabledBy = function (actives) {
   for (var idx = 0; idx < actives.length; idx += 1) { //TODO let
     if (actives[idx] > 0 && this.disabledBy[idx]) {
@@ -34,6 +38,10 @@ export default {
       isDisabledBy: isDisabledBy,
       duration: 0,
       cooldown: 150,
+      range: 200,
+      getRange: function (level) {
+        return this.range
+      },
       getDuration: function (level) {
         return 0
       },
@@ -41,8 +49,8 @@ export default {
         return this.cooldown
       },
       start: function (index, level, ship, cancel, target) {
-        const damage = 12 + (level - 1) * 2
-        const maxRange = 200
+        const damage = levelMultiplier(12, level, 2)
+        const maxRange = this.getRange(level)
         const bulletData = {
           bulletSize: 10,
           bulletColor: 0xcc00ff,
@@ -66,18 +74,22 @@ export default {
       isDisabledBy: null,
       duration: 35,
       cooldown: 200,
+      range: 100,
+      getRange: function (level) {
+        return this.range
+      },
       getDuration: function (level) {
-        return this.duration + (level - 1) * 2
+        return levelMultiplier(this.duration, level, 2)
       },
       getCooldown: function (level) {
-        return this.cooldown - (level - 1) * 10
+        return levelMultiplier(this.cooldown, level, -10)
       },
       start: function (index, level, ship) {
         ship.removeTarget()
         ship.untargetable = true
         ship.noTargeting = true
 
-        const radius = 100
+        const radius = this.getRange(level)
         const damage = 100
         ship.diveCircle = new AreaOfEffect(ship, true, {
           dot: true,
@@ -124,10 +136,10 @@ export default {
         return this.duration
       },
       getCooldown: function (level) {
-        return this.cooldown - (level - 1) * 5
+        return levelMultiplier(this.cooldown, level, -5)
       },
       start: function (index, level, ship) {
-        ship.reflectDamageRatio = 50 + (level - 1) * 5
+        ship.reflectDamageRatio = levelMultiplier(50, level, 5)
       },
       end: function (ship) {
         ship.reflectDamageRatio = null
@@ -147,7 +159,7 @@ export default {
       duration: 60,
       cooldown: 150,
       getDuration: function (level) {
-        return this.duration + (level - 1) * 10
+        return levelMultiplier(this.duration, level, 10)
       },
       getCooldown: function (level) {
         return this.cooldown
@@ -170,10 +182,10 @@ export default {
       duration: 40,
       cooldown: 200,
       getDuration: function (level) {
-        return this.duration + (level - 1) * 5
+        return levelMultiplier(this.duration, level, 5)
       },
       getCooldown: function (level) {
-        return this.cooldown - (level - 1) * 10
+        return levelMultiplier(this.cooldown, level, -10)
       },
       start: function (index, level, ship) {
         ship.removeTarget()
@@ -202,7 +214,7 @@ export default {
         return this.duration
       },
       getCooldown: function (level) {
-        return this.cooldown - (level - 1) * 5
+        return levelMultiplier(this.cooldown, level, -5)
       },
       start: function (index, level, ship) {
         ship.healthRegenModifier = 2

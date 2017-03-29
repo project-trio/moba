@@ -92,6 +92,20 @@ class Ship extends Movable {
     this.applyOpacity(this.top, isTransluscent, opacity)
   }
 
+  // Ability indicator
+
+  createIndicator (radius) {
+    this.removeIndicator()
+    this.indicator = Render.ring(radius - 1, 2, { color: 0xffffff, opacity: 0.5, parent: this.floor, segments: 64 })
+  }
+
+  removeIndicator () {
+    if (this.indicator) {
+      Render.remove(this.indicator)
+      this.indicator = null
+    }
+  }
+
   // Move
 
   canMove () {

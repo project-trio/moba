@@ -48,10 +48,8 @@ class Unit {
     this.floor = Render.group()
 
     const ringOffset = unitScale > 3 ? 2 : 6
-    const selectionRing = Render.ring(statBase.collision + ringOffset, 4, { color: 0x000000 })
-    this.floor.add(selectionRing)
+    const selectionRing = Render.ring(statBase.collision + ringOffset, 4, { color: 0x000000, opacity: 0.5, parent: this.floor })
     this.selectionIndicator = selectionRing
-    this.applyOpacity(this.floor, true, 0.5)
     this.selectionIndicator.visible = false
 
     this.container.add(this.floor)

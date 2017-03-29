@@ -1,5 +1,7 @@
 import storage from '@/helpers/storage'
 
+import Local from '@/play/local'
+
 import render from '@/play/render/render'
 
 let selectedUnit = null
@@ -134,6 +136,7 @@ export default {
     this.state.skills.activateGround = null
     this.state.skills.groundTarget = null
     this.state.skills.activeSkill = null
+    Local.player.unit.removeIndicator()
   },
 
   setKeyDown (key, code, modified) {
