@@ -48,7 +48,7 @@ class AreaOfEffect {
         } else {
           distance = Util.pointDistance(this.px, this.py, target.px, target.py)
         }
-        if (Util.withinSquared(distance, this.collisionSize * POSITION_MAGNITUDE_OFFSET)) {
+        if (Util.withinSquared(distance, this.collisionSize * POSITION_MAGNITUDE_OFFSET + target.stats.collision)) {
           if (this.attackDamage) {
             target.takeDamage(fromUnit, renderTime, this.attackDamage, this.attackPierce)
           }
