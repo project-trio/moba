@@ -6,6 +6,7 @@ export default window.local = {
   email: null,
   username: localStorage.getItem('username'),
 
+  leaving: null,
   id: null,
   game: null,
   player: null,

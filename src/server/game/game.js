@@ -109,6 +109,10 @@ class Game {
       } else {
         this.state = 'CLOSED'
         this.started = false
+        for (let pid in this.players) {
+          const player = this.players[pid]
+          player.game = null
+        }
         for (let idx = 0; idx < games.length; idx += 1) {
           if (games[idx].id === removeId) {
             games.splice(idx, 1)

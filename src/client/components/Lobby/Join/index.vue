@@ -54,15 +54,8 @@ export default {
     LobbyEvents.connect('join', { gid: this.gid }, (data) => {
       if (data.error) {
         const errorMessage = `Join error: ${data.error}`
-        if (Local.TESTING) {
-          console.log(errorMessage)
-          setTimeout(() => {
-            router.replace({ name: 'Game' })
-          }, 500)
-        } else {
-          window.alert(errorMessage)
-          router.replace({ name: 'Lobby' })
-        }
+        window.alert(errorMessage)
+        router.replace({ name: 'Lobby' })
       } else {
         this.size = data.size
         console.log('join', data)
@@ -71,6 +64,13 @@ export default {
         Local.game = newGame
       }
     })
+  },
+
+  beforeDestroy () {
+    if (Local.game && !Local.game.readyToStart) {
+      Local.leaving = Local.game.id
+      LobbyEvents.connect('leave game')
+    }
   },
 
   computed: {

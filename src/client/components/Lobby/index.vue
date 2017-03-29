@@ -14,21 +14,30 @@
 </template>
 
 <script>
+import router from '@/router'
 import store from '@/store'
 
 import util from '@/helpers/util'
 
+import Local from '@/play/local'
+
 import LobbyEvents from '@/play/events/lobby'
 
 export default {
-  created () {
-    LobbyEvents.connect('enter', null, (data) => {
-      store.state.game.playersOnline = data.online
-      store.state.game.list = data.games
+  mounted () {
+    LobbyEvents.connect('enter', { leaving: Local.leaving }, (data) => {
+      if (data.gid) {
+        console.log('redirecting to game', data.gid)
+        router.replace({ name: 'Join', params: { gid: data.gid } })
+      } else {
+        store.state.game.playersOnline = data.online
+        store.state.game.list = data.games
+        Local.leaving = null
+      }
     })
   },
 
-  destroyed () {
+  beforeDestroy () {
     LobbyEvents.connect('leave')
   },
 

@@ -200,10 +200,16 @@ module.exports = {
       console.log('lobby action', data)
 
       if (data.action === 'enter') {
-        client.join('lobby')
-        callback({ online: playersOnline, games: getGameList() })
+        if (player.game && data.leaving !== player.game.id) {
+          callback({ gid: player.game.id })
+        } else {
+          client.join('lobby')
+          callback({ online: playersOnline, games: getGameList() })
+        }
       } else if (data.action === 'leave') {
         client.leave('lobby')
+      } else if (data.action === 'leave game') {
+        player.leave()
       } else if (data.action === 'quick') {
         const game = quickJoin(player, data.size)
         callback({ gid: game ? game.id : null })
