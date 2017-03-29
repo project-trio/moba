@@ -41,17 +41,17 @@ export default {
         return this.cooldown
       },
       start: function (index, level, ship, cancel, target) {
-        const damage = 25
-        const collisionSize = 10
+        const damage = 12 + (level - 1) * 2
+        const maxRange = 200
         const bulletData = {
-          bulletSize: 11,
+          bulletSize: 10,
           bulletColor: 0xcc00ff,
           attackDamage: damage * 1000,
-          attackMoveSpeed: 10,
           attackPierce: 10,
-          maxRange: 250,
+          attackMoveSpeed: 8,
+          maxRange: maxRange,
           explosionRadius: 60,
-          collisionSize: collisionSize * 100,
+          collisionSize: 10 * 100,
           firstCollision: true,
         }
         new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
