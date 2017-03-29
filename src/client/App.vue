@@ -59,12 +59,16 @@ export default {
 </script>
 
 <style lang="stylus">
+html
+  height 100%
+  width 100%
+
 body
   margin 0
   overflow hidden
   background-color #fffffe
 
-.inherit
+body, .inherit
   width inherit
   height inherit
 
@@ -78,9 +82,11 @@ body
   font-weight 400
   color #111110
 
-body, .inherit
-  width inherit
-  height inherit
+.scrolls
+  -webkit-overflow-scrolling touch
+  overflow-x hidden
+  overflow-y auto
+  position relative
 
 .interactive, button
   cursor pointer
@@ -125,4 +131,9 @@ input
   color #5599cc
 .team-2
   color #dd6677
+
+.faint
+  color #aaa
+.note
+  font-style italic
 </style>
