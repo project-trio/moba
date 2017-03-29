@@ -13,6 +13,7 @@ module.exports = class Player {
     this.serverUpdate = 0
     this.actions = []
     this.levelNext = null
+    this.chatAt = null
   }
 
   data () {

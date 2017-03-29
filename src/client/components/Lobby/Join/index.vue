@@ -19,6 +19,9 @@
     <div class="invite-link faint note">
       Invite a friend: <a :href="url" onclick="return false">{{ url }}</a>
     </div>
+    <div class="chat-input-container">
+      <input ref="chatInput" v-model.trim="draftMessage" class="chat-input" placeholder="press enter to chat" :disabled="disableChat"></input>
+    </div>
   </div>
 </div>
 </template>
@@ -29,6 +32,7 @@ import store from '@/store'
 
 import Game from '@/play/game/entity/game/game'
 
+import Bridge from '@/play/events/bridge'
 import LobbyEvents from '@/play/events/lobby'
 
 import Local from '@/play/local'
@@ -47,6 +51,7 @@ export default {
   data () {
     return {
       size: null,
+      draftMessage: '',
     }
   },
 
@@ -89,6 +94,7 @@ export default {
       const result = [Array(this.size), Array(this.size)]
       for (let pid in this.players) {
         const player = this.players[pid]
+        player.id = pid
         result[player.team][player.teamIndex] = player
       }
       return result
@@ -97,11 +103,49 @@ export default {
     url () {
       return window.location.href
     },
+
+    disableChat () {
+      return !this.pressed
+    },
+
+    pressed () {
+      return store.state.key.pressed
+    },
+  },
+
+  watch: {
+    pressed (key) {
+      if (key.name === 'enter') {
+        this.$nextTick(() => {
+          this.$refs.chatInput.focus()
+        })
+
+        if (this.draftMessage) {
+          Bridge.emit('chat', { team: true, body: this.draftMessage }) //TODO or global
+          this.draftMessage = ''
+        }
+      }
+    },
   },
 }
 </script>
 
 <style lang="stylus" scoped>
+.lobby-join
+  padding-bottom 64px
+  box-sizing border-box
+
+.chat-input-container
+  position absolute
+  left 0
+  right 0
+  bottom 0
+  height 64px
+  width 100%
+.chat-input
+  height inherit
+  width inherit
+
 .vertical
   display none
 

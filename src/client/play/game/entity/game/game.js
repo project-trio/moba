@@ -30,6 +30,8 @@ export default function (gid, size) {
   let lastTickTime
   let tickOffsets = -4
 
+  this.id = gid
+
   store.state.game.running = false
 
   this.beginRender = function () {

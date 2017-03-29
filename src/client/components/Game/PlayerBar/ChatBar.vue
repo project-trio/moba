@@ -50,7 +50,7 @@ export default {
           this.$refs.chatInput.blur()
 
           if (this.draftMessage) {
-            Bridge.emit('team msg', { body: this.draftMessage }) //TODO or global
+            Bridge.emit('chat', { team: true, body: this.draftMessage }) //TODO or global
             this.draftMessage = ''
           }
         }

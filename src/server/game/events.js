@@ -187,9 +187,25 @@ module.exports = {
       player.actions.push(data)
     })
 
-    client.on('team msg', (data) => {
+    client.on('chat', (data) => {
+      if (!player.game) {
+        console.log('player does not have game')
+        return
+      }
+      const updateTime = player.game.serverUpdate
+      if (updateTime === player.chatAt) {
+        console.log('chatting too fast')
+        return
+      }
+
+      player.chatUpdate = updateTime
       data.id = player.id
-      player.game.teamBroadcast(player.team, 'msg', data)
+      data.at = updateTime
+      if (data.team) {
+        player.game.teamBroadcast(player.team, 'msg', data)
+      } else {
+        player.game.broadcast(player.team, 'msg', data)
+      }
     })
 
     client.on('updated', (data) => {

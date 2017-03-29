@@ -26,7 +26,7 @@ export default {
       const player = Local.game.player(data.id)
       data.from = player.name
       data.team = player.team
-      store.state.chatMessages.push(data)
+      store.state.chatMessages.unshift(data)
     })
   },
 
