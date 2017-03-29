@@ -5,9 +5,9 @@
     <span class="kills-container">
       <span class="kills team-1">{{ kills[0] }}</span>
       ⚔️
-      <span class="kills team-2">{{ kills[1] }}</span> <span class="tower-symbol">〒</span>
+      <span class="kills team-2">{{ kills[1] }}</span>
     </span>
-    <span class="towers team-2"> {{ towers[1] }}</span>
+    <span class="tower-symbol">〒</span> <span class="towers team-2"> {{ towers[1] }}</span>
   </div>
 </div>
 </template>
