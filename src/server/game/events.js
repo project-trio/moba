@@ -70,6 +70,11 @@ const quickJoin = function(player, size) {
   return createGame(player, size, false)
 }
 
+const startGame = function (game) {
+  game.start()
+  lobbyBroadcast({games: getGameList()})
+}
+
 //UPDATE
 
 const startTime = process.hrtime()
@@ -119,9 +124,8 @@ const loop = function() {
         player.actions = []
       }
       game.broadcast('update', { update: game.serverUpdate, actions: actionData })
-    } else if (game.readyToStart()) {
-      game.start()
-      lobbyBroadcast({games: getGameList()})
+    } else if ((CommonConsts.TESTING || game.size < 1) && game.checkFull()) {
+      startGame(game)
     }
   }
 
@@ -210,6 +214,25 @@ module.exports = {
 
     client.on('updated', (data) => {
       player.serverUpdate = data.update
+    })
+
+    client.on('start game', (data, callback) => {
+      const game = player.game
+      const response = {}
+      if (game) {
+        if (game.hostId === pid) {
+          if (game.canStart()) {
+            startGame(game)
+          } else {
+            response.error = 'Waiting for players to join'
+          }
+        } else {
+          response.error = 'You are not the host'
+        }
+      } else {
+        response.error = 'Game not found'
+      }
+      callback(response)
     })
 
     client.on('lobby action', (data, callback) => {

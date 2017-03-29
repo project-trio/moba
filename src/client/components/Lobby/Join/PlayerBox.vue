@@ -53,7 +53,6 @@ export default {
           if (this.cachedKeys.indexOf(key) === -1) {
             this.cachedKeys.push(key)
             this.cachedMessages.unshift(message)
-            console.log(key)
             newMessage = true
           }
         }

@@ -56,7 +56,7 @@ export default {
         console.log('Start game', data)
       }
       Local.game.updatePlayers(data)
-      Local.game.readyToStart = true
+      Local.game.starting = true
       router.replace({ name: 'Game' })
     })
   },

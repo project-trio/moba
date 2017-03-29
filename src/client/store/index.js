@@ -20,7 +20,10 @@ export default {
     game: {
       list: [],
       playersOnline: 0,
+
       players: null,
+      host: null,
+      ready: null,
       running: false,
       stats: {
         kills: [0, 0],

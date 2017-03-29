@@ -20,6 +20,7 @@ class Game {
     this.state = 'OPEN'
     this.serverUpdate = 0
     this.started = false
+    this.hostId = null
 
     console.log('Created game', this.id)
     games.push(this)
@@ -48,8 +49,12 @@ class Game {
 
 //STATE
 
-  readyToStart () {
-    return this.state === 'READY'
+  canStart () {
+    if (this.counts[0] === this.counts[1]) {
+      // const minSize = Math.ceil(this.size / 2) //TODO later
+      return true
+    }
+    return false
   }
 
 //JOIN
@@ -69,7 +74,9 @@ class Game {
       if (this.state !== 'OPEN') {
         return false
       }
-
+      if (!this.hostId) {
+        this.hostId = pid
+      }
       const team = this.counts[1] < this.counts[0] ? 1 : 0
       const teamSize = this.counts[team]
       this.counts[team] += 1
@@ -78,15 +85,16 @@ class Game {
       player.team = team
       player.teamIndex = teamSize
 
-      this.broadcast('add player', { players: this.formattedPlayers() })
-      player.join(this)
 
       if (this.checkFull()) {
         this.state = 'FULL'
         this.state = 'READY' //TODO temp
       }
+      this.broadcast('add player', { ready: this.canStart(), players: this.formattedPlayers() })
+      player.join(this)
+
     }
-    return {gid: this.id, size: this.size, players: this.formattedPlayers()}
+    return { gid: this.id, host: this.hostId, size: this.size, ready: this.canStart(), players: this.formattedPlayers() }
   }
 
   remove (player) {
@@ -105,7 +113,7 @@ class Game {
         if (!this.started) {
           this.state = 'OPEN'
         }
-        this.broadcast('player left', { players: this.formattedPlayers() })
+        this.broadcast('player left', { ready: this.canStart(), players: this.formattedPlayers() })
       } else {
         this.state = 'CLOSED'
         this.started = false
@@ -127,7 +135,7 @@ class Game {
 //METHODS
 
   start () {
-    this.broadcast('start game', {players: this.formattedPlayers(), updates: Config.updateDuration, ticks: Config.tickDuration})
+    this.broadcast('start game', { players: this.formattedPlayers(), updates: Config.updateDuration, ticks: Config.tickDuration })
     this.state = 'STARTED'
     this.started = true
     console.log('Started game', this.id)

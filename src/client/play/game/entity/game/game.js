@@ -190,17 +190,23 @@ export default function (gid, size) {
     return players[id]
   }
 
-  this.updatePlayers = function (playerData) {
-    if (playerData.updates) {
-      updateDuration = playerData.updates
-      tickDuration = playerData.ticks
+  this.updatePlayers = function (gameData) {
+    // console.log(gameData)
+    if (gameData.updates) {
+      updateDuration = gameData.updates
+      tickDuration = gameData.ticks
     }
-    const serverPlayers = playerData.players
+    const serverPlayers = gameData.players
     players = {}
     for (let pid in serverPlayers) {
       const playerInfo = serverPlayers[pid]
       players[pid] = new Player(pid, playerInfo)
     }
+
+    if (gameData.host) {
+      store.state.game.host = gameData.host
+    }
+    store.state.game.ready = gameData.ready
     store.state.game.players = serverPlayers
   }
 

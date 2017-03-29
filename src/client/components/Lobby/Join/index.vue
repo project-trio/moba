@@ -19,6 +19,7 @@
     <div class="invite-link faint note">
       Invite a friend: <a :href="url" onclick="return false">{{ url }}</a>
     </div>
+    <button @click="onStart" v-if="isHost" class="big interactive">{{ startText }}</button>
     <div class="chat-input-container">
       <input ref="chatInput" v-model.trim="draftMessage" class="chat-input" placeholder="press enter to chat" :disabled="disableChat"></input>
     </div>
@@ -59,7 +60,11 @@ export default {
     LobbyEvents.connect('join', { gid: this.gid }, (data) => {
       if (data.error) {
         const errorMessage = `Join error: ${data.error}`
-        window.alert(errorMessage)
+        if (Local.TESTING) {
+          window.alert(errorMessage)
+        } else {
+          console.warn(errorMessage)
+        }
         router.replace({ name: 'Lobby' })
       } else {
         this.size = data.size
@@ -72,7 +77,7 @@ export default {
   },
 
   beforeDestroy () {
-    if (Local.game && !Local.game.readyToStart) {
+    if (Local.game && !Local.game.starting) {
       Local.leaving = Local.game.id
       LobbyEvents.connect('leave game')
     }
@@ -111,6 +116,17 @@ export default {
     pressed () {
       return store.state.key.pressed
     },
+
+    isHost () {
+      console.log(Local.playerId, store.state.game.host)
+      return Local.playerId === store.state.game.host
+    },
+    startText () {
+      return this.readyToStart ? 'start!' : 'waiting...'
+    },
+    readyToStart () {
+      return store.state.game.ready
+    },
   },
 
   watch: {
@@ -125,6 +141,21 @@ export default {
           this.draftMessage = ''
         }
       }
+    },
+  },
+
+  methods: {
+    onStart () {
+      if (!this.readyToStart) {
+        return
+      }
+      Bridge.emit('start game', {}, (data) => {
+        if (data.error) {
+          const errorMessage = `Start error: ${data.error}`
+          window.alert(errorMessage)
+        } else {
+        }
+      })
     },
   },
 }
