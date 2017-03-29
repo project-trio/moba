@@ -138,7 +138,7 @@ export default function (gid, size) {
     if (renderedSinceUpdate) {
       const behindUpdates = update - updateCount
       if (behindUpdates > 0) {
-        tickOffsets -= 1
+        tickOffsets -= behindUpdates
         renderedSinceUpdate = false
         console.log('Catching up to server update', [behindUpdates, tickOffsets])
       }

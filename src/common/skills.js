@@ -69,7 +69,7 @@ export default {
     },
     {
       name: 'Dive',
-      description: 'Dive down to safety, dealing damage to enemies around you',
+      description: 'Dive down to safety, while dealing damage to enemies around you',
       target: 1,
       isDisabledBy: null,
       duration: 35,
@@ -126,7 +126,7 @@ export default {
     },
     {
       name: 'Effervesce',
-      description: 'Causes you to deal damage back to attackers',
+      description: 'Deal damage back to attackers',
       target: 1,
       disabledBy: [false, true, null],
       isDisabledBy: isDisabledBy,
