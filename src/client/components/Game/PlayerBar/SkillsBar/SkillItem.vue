@@ -1,11 +1,11 @@
 <template>
-<div class="skill-item" :class="{ selected: ready && isActiveSkill, disabled: disabled, cooldown: cooldownTime }">
+<div class="skill-item" :class="{ selected: ready && isActiveSkill, disabled: disabled, cooldown: cooldownTime, hasLevelup: showingLevelupIndicator }">
   <div class="button-content">
     <div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`"></div>
     <div :class="`item-circle level-ring-${indexName}`"></div>
-    <button @click="onSkill(false)" @mouseenter="onHover" @mouseleave="onBlur" class="skill-button">{{ indexName }}</button>
+    <button @click="onSkill(false)" @mouseenter="overButton(true)" @mouseleave="overButton(false)" class="skill-button">{{ indexName }}</button>
     <div>{{ skill.name }}</div>
-    <div v-if="levelupReady" @click="onLevelup" class="button-levelup interactive">
+    <div v-if="levelupReady" @click="onLevelup" @mouseenter="overLevelup(true)" @mouseleave="overLevelup(false)" class="button-levelup interactive">
       ⬆︎+1
     </div>
   </div>
@@ -35,6 +35,7 @@ export default {
       levelRing: null,
       submittedLevelup: true,
       disabledByOtherSkill: false,
+      isOverLevelup: false,
     }
   },
 
@@ -62,10 +63,20 @@ export default {
     descriptionHtml () {
       const rows = [`<div class="description-text">${this.skill.description}</div>`]
       if (this.skill.duration) {
-        rows.push(`<div>Duration: <span class="bold">${this.activeDuration / 1000}</span> seconds</div>`)
+        let durationText = `${this.activeDuration / 1000}`
+        if (this.isOverLevelup) {
+          const diff = this.skill.getDuration(this.level + 1) * 100 - this.activeDuration
+          durationText += ` <span class="levelup">(${diff >= 0 ? '+' : ''}${diff / 1000})</span>`
+        }
+        rows.push(`<div>Duration: <span class="bold">${durationText}</span> seconds</div>`)
       }
       if (this.skill.cooldown) {
-        rows.push(`<div>Cooldown: <span class="bold">${this.cooldownDuration / 1000}</span> seconds</div>`)
+        let cooldownText = `${this.cooldownDuration / 1000}`
+        if (this.isOverLevelup) {
+          const diff = this.skill.getCooldown(this.level + 1) * 100 - this.cooldownDuration
+          cooldownText += ` <span class="levelup">(${diff >= 0 ? '+' : ''}${diff / 1000})</span>`
+        }
+        rows.push(`<div>Cooldown: <span class="bold">${cooldownText}</span> seconds</div>`)
       }
       return rows.join('')
     },
@@ -78,8 +89,12 @@ export default {
       return this.level / 10
     },
 
+    showingLevelupIndicator () {
+      return store.state.level > store.state.skills.leveled
+    },
+
     levelupReady () {
-      return !this.submittedLevelup && this.levelupProgress < 1 && store.state.level > store.state.skills.leveled
+      return !this.submittedLevelup && this.levelupProgress < 1 && this.showingLevelupIndicator
     },
 
     activeDuration () {
@@ -212,13 +227,18 @@ export default {
       }
     },
 
-    onHover () {
-      this.createRangeIndicator()
-    },
-    onBlur () {
-      if (!this.isActiveSkill) {
-        this.removeRangeIndicator()
+    overButton (hovering) {
+      if (hovering) {
+        this.createRangeIndicator()
+      } else {
+        if (!this.isActiveSkill) {
+          this.removeRangeIndicator()
+        }
       }
+    },
+
+    overLevelup (hovering) {
+      this.isOverLevelup = hovering
     },
   },
 
@@ -274,6 +294,9 @@ export default {
   text-align left
   z-index 0
   pointer-events none
+.skill-item.hasLevelup .description-tooltip
+  height 116px
+  top -116px
 
 .skill-item .description-text
   margin-bottom 2px
@@ -297,6 +320,9 @@ export default {
   background #d55
   height 64px
   z-index 1
+
+.skill-item .levelup
+  color #d55
 
 .skill-item .button-levelup:hover
   opacity 0.8
