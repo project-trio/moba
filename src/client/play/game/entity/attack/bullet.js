@@ -7,6 +7,8 @@ import Render from '@/play/render/render'
 
 import Util from '@/play/game/util'
 
+import AreaOfEffect from '@/play/game/entity/attack/aoe'
+
 //LOCAL
 
 const POSITION_MAGNITUDE_OFFSET = 100
@@ -27,9 +29,11 @@ class Bullet {
 
     this.maxRange = this.unitTarget ? null : data.maxRange
     this.collisionSize = this.unitTarget ? target.stats.collision : data.collisionSize
+    this.explosionRadius = data.explosionRadius
+    this.color = data.bulletColor || 0x000000
 
     this.container = Render.group()
-    const ball = Render.sphere(data.bulletSize, {color: (data.bulletColor || 0x000000)})
+    const ball = Render.sphere(data.bulletSize, { color: this.color })
     this.container.add(ball)
     Local.game.map.floorContainer.add(this.container)
 
@@ -105,10 +109,20 @@ class Bullet {
   }
 
   reachedDestination (renderTime) {
-    if (this.unitTarget) {
+    if (this.explosionRadius) {
+      new AreaOfEffect(this.source, false, {
+        dot: false,
+        px: this.px,
+        py: this.py,
+        color: this.color,
+        opacity: 0.25,
+        radius: this.explosionRadius,
+        attackDamage: this.attackDamage,
+        attackPierce: this.attackPierce,
+        parent: Local.game.map.floorContainer,
+      })
+    } else if (this.unitTarget) {
       this.target.takeDamage(this.source, renderTime, this.attackDamage, this.attackPierce)
-    } else {
-      //TODO explode
     }
     this.destroy()
   }
@@ -158,7 +172,7 @@ class Bullet {
       this.updatePosition(movingToX, movingToY)
     } else {
       let reachedApproximate = false
-      if (this.maxRange && !Util.withinSquared(this.distanceToStart(), this.maxRange)) {
+      if (this.maxRange && !Util.withinSquared(this.distanceToStart(), this.maxRange * 100)) {
         reachedApproximate = true
         console.log('max range', this.distanceToStart(), this.maxRange)
       } else {

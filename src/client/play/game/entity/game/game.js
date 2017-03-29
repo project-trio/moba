@@ -5,6 +5,7 @@ import store from '@/store'
 import Local from '@/play/local'
 import Render from '@/play/render/render'
 
+import AreaOfEffect from '@/play/game/entity/attack/aoe'
 import Bullet from '@/play/game/entity/attack/bullet'
 
 import GameMap from '@/play/game/entity/game/map'
@@ -63,6 +64,7 @@ export default function (gid, size) {
       }
       Unit.update(renderTime, tickDuration, false)
       Bullet.update(renderTime, tickDuration, false)
+      AreaOfEffect.update(renderTime, Unit.all())
 
       const spawnMinionWave = Local.TESTING ? renderTime % 30000 == 5000 : renderTime % 45000 === 15000
       if (spawnMinionWave) {

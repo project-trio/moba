@@ -122,7 +122,7 @@ class Tower extends Unit {
     }
     for (let idx = 0; idx < units.length; idx += 1) {
       const unit = units[idx]
-      if (!unit.movable || (target && unit.id == target.id)) {
+      if (!unit.movable || (target && unit.id === target.id)) {
         continue
       }
       if (this.attackableStatus(unit)) {

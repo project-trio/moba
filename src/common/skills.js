@@ -1,4 +1,9 @@
+import Render from '@/play/render/render'
+
+import AreaOfEffect from '@/play/game/entity/attack/aoe'
 import Bullet from '@/play/game/entity/attack/bullet'
+
+//LOCAL
 
 const isDisabledBy = function (actives) {
   let disabling = false
@@ -9,6 +14,8 @@ const isDisabledBy = function (actives) {
   }
   return false
 }
+
+//SKILLS
 
 export default {
 
@@ -35,15 +42,17 @@ export default {
         return this.cooldown
       },
       start: function (index, level, ship, cancel, target) {
+        const damage = 25
+        const collisionSize = 10
         const bulletData = {
           bulletSize: 11,
-          bulletColor: 0x00ff00,
-          attackDamage: 100,
+          bulletColor: 0xcc00ff,
+          attackDamage: damage * 1000,
           attackMoveSpeed: 10,
           attackPierce: 10,
-          maxRange: 250 * 100,
-          explosionRadius: 50 * 100,
-          collisionSize: 10 * 100,
+          maxRange: 250,
+          explosionRadius: 60,
+          collisionSize: collisionSize * 100,
           firstCollision: true,
         }
         new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
@@ -68,11 +77,24 @@ export default {
         ship.removeTarget()
         ship.untargetable = true
         ship.noTargeting = true
+
+        const radius = 100
+        const damage = 100
+        ship.diveCircle = new AreaOfEffect(ship, true, {
+          dot: true,
+          color: 0x0066aa,
+          opacity: 0.5,
+          z: -4,
+          radius: radius,
+          attackDamage: damage * 1000,
+          attackPierce: 0,
+          parent: ship.container,
+        })
       },
       update: function (ship, start, current, end) {
         const elapsed = current - start
         const transitionTime = 500
-        const diveDepth = -33
+        const diveDepth = -30
         if (elapsed <= transitionTime) {
           ship.shipContainer.position.z = elapsed * diveDepth / transitionTime
         } else {
@@ -86,6 +108,9 @@ export default {
         ship.shipContainer.z = 0
         ship.untargetable = false
         ship.noTargeting = false
+
+        ship.diveCircle.destroy()
+        ship.diveCircle = null
       },
     },
     {
@@ -103,10 +128,10 @@ export default {
         return this.cooldown - (level - 1) * 5
       },
       start: function (index, level, ship) {
-        ship.reflectDamage = (50 + (level - 1) * 5) * 10
+        ship.reflectDamageRatio = 50 + (level - 1) * 5
       },
       end: function (ship) {
-        ship.reflectDamage = null
+        ship.reflectDamageRatio = null
       },
     },
   ],

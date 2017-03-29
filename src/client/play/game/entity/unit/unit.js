@@ -48,7 +48,7 @@ class Unit {
     this.floor = Render.group()
 
     const ringOffset = unitScale > 3 ? 2 : 6
-    const selectionRing = Render.ring(statBase.collision + ringOffset, 4, {})
+    const selectionRing = Render.ring(statBase.collision + ringOffset, 4, { color: 0x000000 })
     this.floor.add(selectionRing)
     this.selectionIndicator = selectionRing
     this.applyOpacity(this.floor, true, 0.5)
@@ -84,7 +84,6 @@ class Unit {
     this.healthRemaining = this.stats.healthMax
     this.sightRangeCheck = Util.squared(this.stats.sightRange)
     this.attackRangeCheck = Util.squared(this.stats.attackRange)
-    // this.stats.collisionCheck = Util.squared(this.stats.collision)
     this.moveConstant = new Decimal(this.stats.moveSpeed).dividedBy(2000)
 
     this.lastAttack = 0
@@ -288,8 +287,8 @@ class Unit {
     }
     this.updateHealth(newHealth)
 
-    if (!reflected && this.reflectDamage) {
-      const reflectedDamage = Math.round(damage / this.reflectDamage) //TODO desyncs?
+    if (!reflected && this.reflectDamageRatio) {
+      const reflectedDamage = Math.round(damage * 100 / this.reflectDamageRatio) //TODO desyncs?
       console.log(damage, reflectedDamage)
       source.takeDamage(this, renderTime, reflectedDamage, 0, true)
     }
