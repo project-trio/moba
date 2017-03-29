@@ -40,14 +40,14 @@ export default {
     keydown (event) {
       const keyDescription = validKeyEvent(event)
       if (keyDescription) {
-        store.setKeyDown(keyDescription.name, keyDescription.code, keyDescription.modifier)
+        store.setKeyDown(keyDescription.name, keyDescription.code, keyDescription.modifier, event)
       }
     },
 
     keyup (event) {
       const keyDescription = validKeyEvent(event)
       if (keyDescription) {
-        store.setKeyUp(keyDescription.name, keyDescription.code, keyDescription.modifier)
+        store.setKeyUp(keyDescription.name, keyDescription.code, keyDescription.modifier, event)
       }
     },
 
