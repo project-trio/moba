@@ -33,12 +33,22 @@ const getGameList = function() {
 }
 
 const createGame = function(player, size, joining) {
-  const game = new Game(size)
-  if (joining && !game.add(player)) {
-    return null
+  const response = {}
+  if (player.game) {
+    response.error = 'Already in a game'
+  } else if (CommonConsts.GAME_SIZES.indexOf(size) === -1) {
+    response.error = 'Invalid game size'
+  } else if (size > 0 && !CommonConsts.TESTING && player.name !== 'kiko ') {
+    response.error = 'You need to register before creating a larger than 1p game'
+  } else {
+    const game = new Game(size)
+    if (joining && !game.add(player)) {
+      response.error = 'Unable to join new game'
+    } else {
+      response.gid = game.id
+    }
   }
-  lobbyBroadcast({games: getGameList()})
-  return game
+  return response
 }
 
 const join = function(player, gid, callback) {
@@ -63,7 +73,7 @@ const quickJoin = function(player, size) {
     for (let idx = 0; idx < games.length; idx += 1) {
       const game = games[idx]
       if (game.add(player)) {
-        return game
+        return { gid: game.id }
       }
     }
   }
@@ -250,22 +260,11 @@ module.exports = {
       } else if (data.action === 'leave game') {
         player.leave()
       } else if (data.action === 'quick') {
-        const game = quickJoin(player, data.size)
-        callback({ gid: game ? game.id : null })
+        const gameResponse = quickJoin(player, data.size)
+        callback(gameResponse)
       } else if (data.action === 'create') {
-        const result = {}
-        const gameSize = data.size
-        if (gameSize > 0 && !CommonConsts.TESTING && player.name !== 'kiko ') {
-          result.error = 'You need to register before creating a larger than 1p game'
-        } else {
-          const game = createGame(player, gameSize, true)
-          if (game) {
-            result.gid = game.id
-          } else {
-            result.error = 'You may already be in a game'
-          }
-        }
-        callback(result)
+        const gameResponse = createGame(player, data.size, true)
+        callback(gameResponse)
       } else if (data.action === 'join') {
         join(player, data.gid, callback)
       } else {

@@ -6,7 +6,7 @@
   <div v-else>
     <h3>game size:</h3>
     <div class="selection-container">
-      <button v-for="gs in gameSizes" @click="onGameSize(gs.size)" class="selection interactive" :class="{ selected: gs.size === selectedSize }">{{ gs.label ? gs.label : `${gs.size} v ${gs.size}` }}</button>
+      <button v-for="size in gameSizes" @click="onGameSize(size)" class="selection interactive" :class="{ selected: size === selectedSize }">{{ sizeLabel(size) }}</button>
     </div>
     <h3>map:</h3>
     <div class="selection-container">
@@ -20,6 +20,8 @@
 <script>
 import router from '@/router'
 
+import CommonConsts from 'common/constants'
+
 import Local from '@/play/local'
 
 import LobbyEvents from '@/play/events/lobby'
@@ -29,10 +31,6 @@ export default {
     return {
       loading: false,
       selectedSize: 0,
-      gameSizes: [
-        { label: '1p', size: 0 }, { size: 1 }, { size: 2 }, { size: 3 }, { size: 4 },
-        { size: 5 }, { size: 6 }, { size: 10 }, { label: '50p', size: 50 },
-      ],
       selectedMap: 'standard',
       maps: [
         { name: 'mini', min: 0, max: 3 },
@@ -42,7 +40,23 @@ export default {
     }
   },
 
+  computed: {
+    gameSizes () {
+      return CommonConsts.GAME_SIZES
+    },
+  },
+
   methods: {
+    sizeLabel (size) {
+      if (size === 0) {
+        return '1p'
+      }
+      if (size > 10) {
+        return `${size * 2}p`
+      }
+      return `${size} v ${size}`
+    },
+
     onGameSize (size) {
       this.selectedSize = size
     },
