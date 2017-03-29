@@ -1,5 +1,5 @@
 <template>
-<div class="skill-item" :class="{ selected: ready && isActiveSkill, disabled: disabled, cooldown: cooldownTime, hasLevelup: showingLevelupIndicator }">
+<div class="skill-item" :class="{ selected: !disabled && isActiveSkill, disabled: disabled, cooldown: cooldownTime, hasLevelup: showingLevelupIndicator }">
   <div class="button-content">
     <div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`"></div>
     <div :class="`item-circle level-ring-${indexName}`"></div>
@@ -45,11 +45,7 @@ export default {
     },
 
     disabled () {
-      return this.level === 0 || this.activated || this.disabledByOtherSkill || store.state.dead
-    },
-
-    ready () {
-      return !this.disabled && this.cooldownRemaining === 0
+      return this.level === 0 || this.activated || this.cooldownRemaining > 0 || this.disabledByOtherSkill || store.state.dead
     },
 
     isActiveSkill () {
@@ -136,8 +132,9 @@ export default {
   watch: {
     currentPress (currentKey) {
       if (currentKey.code === this.keyCode) {
+        store.cancelActiveSkill()
         store.state.skills.activeSkill = this.index
-        if (this.ready && !currentKey.modifier) {
+        if (!this.disabled && !currentKey.modifier) {
           if (this.skill.getRange) {
             Local.player.unit.createIndicator(this.skill.getRange(this.level))
           }
@@ -248,7 +245,7 @@ export default {
       stroke: 40,
       arc: true,
       angle: this.activated ? 360 : 0,
-      sectorColor: '#66a',
+      sectorColor: '#68f',
       circleColor: '#aaa',
       fillCircle: true,
     })
@@ -286,8 +283,8 @@ export default {
 .skill-item .description-tooltip
   display none
   position absolute
-  height 88px
-  top -88px
+  height 92px
+  top -92px
   left 0
   right 0
   margin 0
