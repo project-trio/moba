@@ -32,7 +32,7 @@ const TOWER_STATS = {
     z: -5,
   },
 
-  standard: {
+  tower: {
     healthMax: [500, 0, 0],
     healthRegen: [0, 0, 0],
     armor: [20, 0, 0],

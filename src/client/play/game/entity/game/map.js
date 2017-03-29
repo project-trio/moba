@@ -19,7 +19,7 @@ maps.tiny = {
   height: 800,
   towers: [
     ['base', 400, 44, false],
-    ['standard', 320, 320, false],
+    ['tower', 320, 320, false],
   ],
   walls: [
     {
@@ -66,7 +66,7 @@ maps.standard = {
 
   towers: [
     ['base', 600, 44, false],
-    ['standard', 435, 360, true],
+    ['tower', 435, 360, true],
     ['turret', 44, 440, true],
     ['turret', 300, 840, true],
   ],
