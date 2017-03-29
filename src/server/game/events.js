@@ -192,13 +192,13 @@ module.exports = {
         console.log('player does not have game')
         return
       }
-      const updateTime = player.game.serverUpdate
-      if (updateTime === player.chatAt) {
+      const updateTime = Util.seconds() // player.game.serverUpdate
+      if (updateTime <= player.chatAt + 1) {
         console.log('chatting too fast')
         return
       }
 
-      player.chatUpdate = updateTime
+      player.chatAt = updateTime
       data.id = player.id
       data.at = updateTime
       if (data.team) {

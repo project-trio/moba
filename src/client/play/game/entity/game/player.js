@@ -15,6 +15,7 @@ export default class Player {
     this.team = parseInt(data.team, 10)
     this.teamIndex = parseInt(data.teamIndex, 10)
     this.isLocal = false
+    this.chatAt = 0
   }
 
 //MANAGE

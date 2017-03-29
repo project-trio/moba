@@ -5,7 +5,7 @@
       {{ player.name }}
     </div>
     <transition-group name="bubbling" tag="div" class="player-bubbles">
-      <div v-for="message in messages" class="bubble" :class="teamBackgroundClass" :key="message">{{ message.body }}</div>
+      <div v-for="message in messages" class="bubble" :class="teamBackgroundClass" :key="`${message.id}${message.at}`">{{ message.body }}</div>
     </transition-group>
   </div>
   <div v-else class="faint note">
@@ -17,6 +17,8 @@
 <script>
 import store from '@/store'
 
+import Util from '@/helpers/util'
+
 import Local from '@/play/local'
 
 export default {
@@ -24,18 +26,52 @@ export default {
     player: Object,
   },
 
+  data () {
+    return {
+      cachedMessages: [],
+      cachedKeys: [],
+    }
+  },
+
   computed: {
     classList () {
       return [
         !this.player ? 'empty' : null,
-        this.bottom ? 'bottom' : null,
+        this.bottom ? 'bottom' : 'top',
         this.isLocal ? 'local' : null,
         this.isLocal ? `team-${this.player.team + 1}-border` : null
       ]
     },
 
+    playerMessages () {
+      let newMessage = false
+      const messages = store.state.chatMessages
+      for (let idx = 0; idx < messages.length; idx += 1) {
+        const message = messages[idx]
+        if (message.id === this.player.id) {
+          const key = `${message.id}${message.at}`
+          if (this.cachedKeys.indexOf(key) === -1) {
+            this.cachedKeys.push(key)
+            this.cachedMessages.unshift(message)
+            console.log(key)
+            newMessage = true
+          }
+        }
+      }
+      return newMessage
+    },
     messages () {
-      return store.state.chatMessages.filter(msg => msg.id === this.player.id).slice(0, 3)
+      if (!this.playerMessages) {
+        return this.cachedMessages
+      }
+      const now = Util.seconds()
+      for (let idx = this.cachedMessages.length - 1; idx >= 0; idx -= 1) {
+        const message = this.cachedMessages[idx]
+        if (now - message.at > 10) {
+          this.cachedMessages.splice(idx, 1)
+        }
+      }
+      return this.cachedMessages
     },
 
     isLocal () {
@@ -60,10 +96,11 @@ export default {
   background #ddd
   height 64px
   flex-basis 144px
-  margin 8px
+  margin 0 8px
   flex-grow 1
   flex-shrink 0
   border-radius 1px
+  box-sizing border box
 
   display flex
   align-items center
@@ -83,7 +120,7 @@ export default {
   position absolute
   left 0
   right 0
-  top 64px
+  bottom -96px
   width 100%
   height 96px
   overflow hidden
@@ -92,6 +129,7 @@ export default {
   align-items center
 
 .bottom .player-bubbles
+  bottom 0
   top -96px
   flex-direction column-reverse
 
@@ -105,18 +143,44 @@ export default {
   padding-bottom 1px
   min-width 8px
   max-width 100%
-  border-radius 4px
+  border-radius 2px
+  transition-timing-function ease
+  position relative
+
 .bottom .bubble
   margin-top 0
   margin-bottom 4px
+.top .bubble::before, .bottom .bubble::after
+  width 10px
+  background inherit
+  content ''
+  height 5px
+  position absolute
+  left 0
+  right 0
+  margin auto
+  z-index -10
+.top .bubble::before
+  top -5px
+.bottom .bubble::after
+  bottom -5px
 
 .bubbling-enter-active, .bubbling-leave-active, .bubbling-move
   transition all 1s
 .bubbling-enter, .bubbling-leave-to
   opacity 0
   transform translateY(-24px)
+.bubbling-leave-to
+  transform translateY(24px)
+  position absolute
 .bottom .bubbling-enter, .bottom .bubbling-leave-to
   transform translateY(24px)
+.bottom .bubbling-leave-to
+  transform translateY(-24px)
+
+.bottom .bubble-bar
+  top 0
+  bottom -16px
 
 @media (max-width: 768px)
   .player-bubbles
