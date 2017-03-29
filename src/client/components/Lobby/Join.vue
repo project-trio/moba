@@ -4,11 +4,15 @@
     <h1>Loading...</h1>
   </div>
   <div v-else>
-    <h1>New game</h1>
-    <h2>{{ size }} v {{ size }}</h2>
+    <h1>{{ size }} v {{ size }}</h1>
     <h3>{{ playerCount }} of {{ size * 2 }} players</h3>
-    <div>
-
+    <div class="player-teams">
+      <div class="team-players team-1">
+        <div v-for="teamIndex in size" class="player-box">{{ teamIndex }}<br>{{ getPlayer(0, teamIndex - 1) }}</div>
+      </div>
+      <div class="team-players team-2">
+        <div v-for="teamIndex in size" class="player-box">{{ teamIndex }}<br>{{ getPlayer(1, teamIndex - 1) }}</div>
+      </div>
     </div>
     Invite a friend: <a :href="url">{{ url }}</a>
   </div>
@@ -78,11 +82,34 @@ export default {
   },
 
   methods: {
-
+    getPlayer (team, teamIndex) {
+      for (let pid in this.players) {
+        const player = this.players[pid]
+        if (player.team === team && player.teamIndex === teamIndex) {
+          return player
+        }
+      }
+      return null
+    }
   },
 }
 </script>
 
 <style lang="stylus" scoped>
+.player-teams
+  display flex
+  margin auto
+  max-width 720px
 
+.team-players
+  display flex
+  flex-direction column
+  flex-basis 50%
+
+.player-box
+  background #ddd
+  height 64px
+  // width 256px
+  margin 8px
+  flex-grow 1
 </style>
