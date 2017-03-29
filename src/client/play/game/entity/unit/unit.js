@@ -63,13 +63,13 @@ class Unit {
     // Stats
 
     this.stats = {
-      healthMax: statBase.healthMax[0] * 1000,
+      healthMax: statBase.healthMax[0] * 100,
       healthRegen: statBase.healthRegen[0],
       armor: statBase.armor[0],
       sightRange: statBase.sightRange[0] * 100,
       attackRange: statBase.attackRange[0] * 100,
-      attackDamage: statBase.attackDamage[0] * 1000,
-      attackPierce: statBase.attackPierce[0] * 1000,
+      attackDamage: statBase.attackDamage[0] * 100,
+      attackPierce: statBase.attackPierce[0] * 100,
       attackCooldown: statBase.attackCooldown[0],
       attackMoveSpeed: statBase.attackMoveSpeed[0],
       moveSpeed: statBase.moveSpeed[0],

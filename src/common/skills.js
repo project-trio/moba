@@ -49,12 +49,12 @@ export default {
         return this.cooldown
       },
       start: function (index, level, ship, cancel, target) {
-        const damage = levelMultiplier(12, level, 2)
+        const damage = levelMultiplier(120, level, 20)
         const maxRange = this.getRange(level)
         const bulletData = {
           bulletSize: 10,
           bulletColor: 0xcc00ff,
-          attackDamage: damage * 1000,
+          attackDamage: damage * 100,
           attackPierce: 10,
           attackMoveSpeed: 8,
           maxRange: maxRange,
@@ -90,14 +90,14 @@ export default {
         ship.noTargeting = true
 
         const radius = this.getRange(level)
-        const damage = 100
+        const damage = 10
         ship.diveCircle = new AreaOfEffect(ship, true, {
           dot: true,
           color: 0x0066aa,
           opacity: 0.5,
           z: -4,
           radius: radius,
-          attackDamage: damage * 1000,
+          attackDamage: damage * 100,
           attackPierce: 0,
           parent: ship.container,
         })

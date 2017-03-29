@@ -20,7 +20,7 @@ const TOWER_STATS = {
     sightRange: [200, 0, 0],
     attackRange: [200, 0, 0],
 
-    attackDamage: [5, 0, 0],
+    attackDamage: [50, 0, 0],
     attackPierce: [10, 0, 0],
     attackCooldown: [2, 0, 0],
     attackMoveSpeed: [10, 0, 0],
@@ -40,7 +40,7 @@ const TOWER_STATS = {
     sightRange: [190, 0, 0],
     attackRange: [190, 0, 0],
 
-    attackDamage: [14, 0, 0],
+    attackDamage: [140, 0, 0],
     attackPierce: [2, 0, 0],
     attackCooldown: [10, 0, 0],
     attackMoveSpeed: [10, 0, 0],
@@ -60,7 +60,7 @@ const TOWER_STATS = {
     sightRange: [190, 0, 0],
     attackRange: [190, 0, 0],
 
-    attackDamage: [10, 0, 0],
+    attackDamage: [100, 0, 0],
     attackPierce: [6, 0, 0],
     attackCooldown: [10, 0, 0],
     attackMoveSpeed: [10, 0, 0],

@@ -291,7 +291,7 @@ class Ship extends Movable {
     }
     this.levelExp = over
 
-    const healthIncrease = this.statBase.healthMax[1] * 1000
+    const healthIncrease = this.statBase.healthMax[1] * 100
     this.stats.healthMax += healthIncrease
     this.addHealth(healthIncrease)
 
@@ -300,8 +300,8 @@ class Ship extends Movable {
     this.stats.moveSpeed += this.statBase.moveSpeed[1]
     this.stats.sightRange += this.statBase.sightRange[1]
     this.stats.attackRange += this.statBase.attackRange[1] * 100
-    this.stats.attackDamage += this.statBase.attackDamage[1] * 1000
-    this.stats.attackPierce += this.statBase.attackPierce[1] * 1000
+    this.stats.attackDamage += this.statBase.attackDamage[1] * 100
+    this.stats.attackPierce += this.statBase.attackPierce[1] * 100
     this.stats.attackCooldown += this.statBase.attackCooldown[1]
     this.stats.attackMoveSpeed += this.statBase.attackMoveSpeed[1]
 
