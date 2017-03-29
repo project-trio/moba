@@ -3,7 +3,7 @@
   <div class="button-content">
     <div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`"></div>
     <div :class="`item-circle level-ring-${indexName}`"></div>
-    <button @click="onSkill(false)" class="skill-button">{{ indexName }}</button>
+    <button @click="onSkill(false)" @mouseenter="onHover" @mouseleave="onBlur" class="skill-button">{{ indexName }}</button>
     <div>{{ skill.name }}</div>
     <div v-if="levelupReady" @click="onLevelup" class="button-levelup interactive">
       ⬆︎+1
@@ -165,6 +165,17 @@ export default {
   },
 
   methods: {
+    createRangeIndicator () {
+      if (this.skill.getRange) {
+        Local.player.unit.createIndicator(this.skill.getRange(this.level))
+      }
+    },
+    removeRangeIndicator () {
+      if (this.skill.getRange) {
+        Local.player.unit.removeIndicator()
+      }
+    },
+
     onSkill (pressed) {
       if (this.skill.target === 0) {
         return
@@ -198,6 +209,15 @@ export default {
       if (this.levelupReady) {
         this.submittedLevelup = true
         Bridge.emit('action', { skill: this.index, level: true })
+      }
+    },
+
+    onHover () {
+      this.createRangeIndicator()
+    },
+    onBlur () {
+      if (!this.isActiveSkill) {
+        this.removeRangeIndicator()
       }
     },
   },
