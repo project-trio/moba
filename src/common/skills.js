@@ -6,8 +6,7 @@ import Bullet from '@/play/game/entity/attack/bullet'
 //LOCAL
 
 const isDisabledBy = function (actives) {
-  let disabling = false
-  for (let idx = 0; idx < actives.length; idx += 1) {
+  for (var idx = 0; idx < actives.length; idx += 1) { //TODO let
     if (actives[idx] > 0 && this.disabledBy[idx]) {
       return true
     }
