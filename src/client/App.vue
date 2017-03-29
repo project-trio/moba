@@ -131,6 +131,10 @@ input
   color #5599cc
 .team-2
   color #dd6677
+.team-1-bg
+  background #5599cc
+.team-2-bg
+  background #dd6677
 
 .faint
   color #aaa

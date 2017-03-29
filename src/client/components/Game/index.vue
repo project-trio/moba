@@ -42,7 +42,7 @@ export default {
   pointer-events none
 
 .bar-section
-  background rgba(96,96,96,0.9)
+  background rgba(80, 80, 80, 0.85)
   margin 0 8px
   padding 8px
   box-sizing border-box

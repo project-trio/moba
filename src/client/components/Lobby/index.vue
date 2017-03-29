@@ -1,5 +1,6 @@
 <template>
-<div class="lobby">
+<div class="lobby inherit scrolls">
+<div class="content">
   <h1>moba lobby</h1>
   <h3>hello {{ username }}!</h3>
   <div>{{ playersOnline }} online</div>
@@ -10,6 +11,7 @@
       <div>{{ Object.keys(game.players).length }} of {{ game.size * 2 }} players</div>
     </router-link>
   </div>
+</div>
 </div>
 </template>
 
@@ -58,7 +60,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.lobby
+.content
   max-width 720px
   margin auto
 

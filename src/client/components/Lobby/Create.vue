@@ -1,5 +1,5 @@
 <template>
-<div class="lobby-create">
+<div class="lobby-create inherit scrolls">
   <h1>create game</h1>
   <div v-if="loading">
   </div>

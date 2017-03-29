@@ -102,9 +102,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.lobby-join
-  overflow auto
-
 .vertical
   display none
 
@@ -113,6 +110,8 @@ export default {
   flex-direction column
   width 100%
   overflow-x auto
+  height 360px
+  justify-content space-between
 
 .team-players
   padding 8px
@@ -128,6 +127,7 @@ export default {
 
   .player-teams
     flex-direction row
+    height auto
   .team-players
     flex-direction column
     flex-basis 50%
