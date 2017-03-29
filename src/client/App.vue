@@ -135,6 +135,10 @@ input
   background #5599cc
 .team-2-bg
   background #dd6677
+.team-1-border
+  border 1px solid #5599cc
+.team-2-border
+  border 1px solid #dd6677
 
 .faint
   color #aaa

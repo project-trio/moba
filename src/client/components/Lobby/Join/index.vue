@@ -145,6 +145,8 @@ export default {
 .chat-input
   height inherit
   width inherit
+  font-size 1.5em
+  padding 0 8px
 
 .vertical
   display none

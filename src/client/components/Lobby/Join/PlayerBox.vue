@@ -1,7 +1,9 @@
 <template>
-<div class="player-box" :class="{ empty: !player, bottom: bottom }">
+<div class="player-box" :class="classList">
   <div v-if="player">
-    {{ player.name }}
+    <div class="player-info">
+      {{ player.name }}
+    </div>
     <transition-group name="bubbling" tag="div" class="player-bubbles">
       <div v-for="message in messages" class="bubble" :class="teamBackgroundClass" :key="message">{{ message.body }}</div>
     </transition-group>
@@ -15,15 +17,29 @@
 <script>
 import store from '@/store'
 
+import Local from '@/play/local'
+
 export default {
   props: {
     player: Object,
   },
 
   computed: {
+    classList () {
+      return [
+        !this.player ? 'empty' : null,
+        this.bottom ? 'bottom' : null,
+        this.isLocal ? 'local' : null,
+        this.isLocal ? `team-${this.player.team + 1}-border` : null
+      ]
+    },
+
     messages () {
-      console.log(store.state.chatMessages)
       return store.state.chatMessages.filter(msg => msg.id === this.player.id).slice(0, 3)
+    },
+
+    isLocal () {
+      return this.player && this.player.id === Local.playerId
     },
 
     bottom () {
@@ -53,6 +69,12 @@ export default {
   align-items center
   justify-content center
 
+.local
+  border-width 2px
+  box-sizing border-box
+.local .player-info
+  font-weight 500
+
 .player-box.empty
   background #eee
   font-size 1.1em
@@ -67,6 +89,7 @@ export default {
   overflow hidden
   display flex
   flex-direction column
+  align-items center
 
 .bottom .player-bubbles
   top -96px
@@ -78,7 +101,11 @@ export default {
   word-wrap break-word
   margin-top 4px
   display inline-block
-
+  padding 0 8px
+  padding-bottom 1px
+  min-width 8px
+  max-width 100%
+  border-radius 4px
 .bottom .bubble
   margin-top 0
   margin-bottom 4px
@@ -90,4 +117,8 @@ export default {
   transform translateY(-24px)
 .bottom .bubbling-enter, .bottom .bubbling-leave-to
   transform translateY(24px)
+
+@media (max-width: 768px)
+  .player-bubbles
+    display none
 </style>
