@@ -248,8 +248,8 @@ const GameMap = function (parent) {
     if (Local.TESTING || Local.player.name === 'bot') {
       automateTimer = setInterval(() => { //SAMPLE
         if (Local.player) {
-          const dx = Math.round(Math.random() * layout.width)
-          const dy = Math.round(Math.random() * layout.height)
+          const dx = Math.round(Math.random() * 100 * layout.width)
+          const dy = Math.round(Math.random() * 100 * layout.height)
           Bridge.emit('action', { target: [dx, dy] })
         }
       }, Math.random() * 2000 + 1000)
