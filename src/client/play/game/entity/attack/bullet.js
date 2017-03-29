@@ -174,7 +174,6 @@ class Bullet {
       let reachedApproximate = false
       if (this.maxRange && !Util.withinSquared(this.distanceToStart(), this.maxRange * 100)) {
         reachedApproximate = true
-        console.log('max range', this.distanceToStart(), this.maxRange)
       } else {
         const distX = this.destX - cx
         const distY = this.destY - cy

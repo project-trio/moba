@@ -1,5 +1,5 @@
 <template>
-<div class="skill-item" :class="{ selected: pressing, disabled: disabled, cooldown: cooldownTime }">
+<div class="skill-item" :class="{ selected: isPressing, disabled: disabled, cooldown: cooldownTime }">
   <div class="button-content" :class="{ active: isActiveSkill }">
     <div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`"></div>
     <div :class="`item-circle level-ring-${indexName}`"></div>
@@ -33,6 +33,7 @@ export default {
       levelRing: null,
       submittedLevelup: true,
       disabledByOtherSkill: false,
+      isPressing: false,
     }
   },
 
@@ -109,24 +110,10 @@ export default {
       return 0
     },
 
-    pressing () {
-      const currentKey = store.state.key.lastPress
-      if (currentKey) {
-        if (currentKey.name === 'escape') {
-          store.cancelActiveSkill()
-        } else if (currentKey.code === this.keyCode) {
-          if (this.ready && this.skill.target === 2) {
-            store.state.skills.activeSkill = this.index
-            store.state.skills.getGroundTarget = true
-          }
-          return true
-        }
-      }
-      if (currentKey && this.isActiveSkill) {
-        store.cancelActiveSkill()
-        console.log('Cancel skill', this.indexName, currentKey)
-      }
-      return false
+    currentPress () {
+      const code = store.state.key.lastPress.code
+      const modifier = store.state.key.lastPress.modifier
+      return code !== undefined && modifier !== undefined && store.state.key.lastPress
     },
     pressed () {
       return store.state.key.pressed
@@ -134,6 +121,21 @@ export default {
   },
 
   watch: {
+    currentPress (currentKey) {
+      if (currentKey.code === this.keyCode && !currentKey.modifier) {
+        this.isPressing = true
+        if (this.ready && this.skill.target === 2) {
+          store.state.skills.activeSkill = this.index
+          store.state.skills.getGroundTarget = true
+        }
+      } else {
+        this.isPressing = false
+        if (this.isActiveSkill && (currentKey.modifier || !currentKey.released)) {
+          store.cancelActiveSkill()
+          console.log('Cancel skill', this.indexName, currentKey)
+        }
+      }
+    },
     pressed (key) {
       if (key.code === this.keyCode) {
         if (key.modifier) {

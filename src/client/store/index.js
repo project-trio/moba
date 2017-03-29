@@ -58,9 +58,13 @@ export default {
     selectedUnit: null,
 
     key: {
-      lastPress: null,
+      lastPress: {
+        name: null,
+        code: null,
+        modifier: null,
+        released: false,
+      },
       count: 0,
-      modifier: false,
       pressed: {},
     },
   },
@@ -134,13 +138,20 @@ export default {
 
   setKeyDown (key, code, modified) {
     const keyState = this.state.key
-    if (!keyState.lastPress || keyState.lastPress.code !== code) {
-      keyState.lastPress = { name: key, code: code }
+    if (key !== null && (keyState.lastPress.released || keyState.lastPress.code !== code)) {
+      keyState.lastPress.name = key
+      keyState.lastPress.code = code
+      keyState.lastPress.released = false
       keyState.count += 1
     }
-    keyState.modifier = modified
+    if (!keyState.lastPress.released) {
+      keyState.lastPress.modifier = modified
+    }
   },
   setKeyUp (key, code, modified) {
+    if (!key) {
+      return
+    }
     const keyState = this.state.key
     keyState.count -= 1
     if (keyState.count <= 0) {
@@ -151,9 +162,11 @@ export default {
         modifier: modified,
         code: code,
       }
-      keyState.lastPress = null
-    } else if (keyState.lastPress && code === keyState.lastPress.code) {
-      keyState.lastPress = null
+      keyState.lastPress.code = null
+      keyState.lastPress.released = true
+    } else if (code === keyState.lastPress.code) {
+      keyState.lastPress.code = null
+      keyState.lastPress.released = true
     }
   },
 }

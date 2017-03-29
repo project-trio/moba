@@ -8,11 +8,19 @@
 import store from '@/store'
 
 const validKeyEvent = (event) => {
-  const name = event.key.toLowerCase()
-  if (event.repeat || name === 'control' || name === 'alt' || name === 'shift' || name === 'meta' || name === 'tab') {
+  if (event.repeat) {
     return false
   }
-  return name
+  const keyDescription = { code: event.which || event.keyCode }
+  const name = event.key.toLowerCase()
+  if (name === 'control' || name === 'alt' || name === 'shift' || name === 'meta') {
+    keyDescription.name = null
+    keyDescription.modifier = true
+  } else {
+    keyDescription.name = name
+    keyDescription.modifier = event.altKey || event.shiftKey || event.metaKey || event.ctrlKey
+  }
+  return keyDescription
 }
 
 export default {
@@ -30,18 +38,16 @@ export default {
 
   methods: {
     keydown (event) {
-      const name = validKeyEvent(event)
-      if (name) {
-        const keyCode = event.which || event.keyCode
-        store.setKeyDown(name, keyCode, event.altKey || event.shiftKey || event.metaKey || event.ctrlKey)
+      const keyDescription = validKeyEvent(event)
+      if (keyDescription) {
+        store.setKeyDown(keyDescription.name, keyDescription.code, keyDescription.modifier)
       }
     },
 
     keyup (event) {
-      const name = validKeyEvent(event)
-      if (name) {
-        const keyCode = event.which || event.keyCode
-        store.setKeyUp(name, keyCode, event.altKey || event.shiftKey || event.metaKey || event.ctrlKey)
+      const keyDescription = validKeyEvent(event)
+      if (keyDescription) {
+        store.setKeyUp(keyDescription.name, keyDescription.code, keyDescription.modifier)
       }
     },
 
