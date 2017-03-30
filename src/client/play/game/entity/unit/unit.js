@@ -184,6 +184,9 @@ class Unit {
   // Pointer
 
   onHover () {
+    if (this.isDying) {
+      return false
+    }
     document.body.style.cursor = 'pointer'
   }
 
@@ -196,6 +199,9 @@ class Unit {
       store.setSelectedUnit(this)
     }, 0)
     if (this.isLocal) { //TODO remove
+      return false
+    }
+    if (this.isDying) {
       return false
     }
     if (this.localAlly) {

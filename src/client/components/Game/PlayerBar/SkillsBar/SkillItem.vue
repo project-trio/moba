@@ -219,6 +219,7 @@ export default {
 
     onLevelup () {
       if (this.levelupReady) {
+        this.isOverLevelup = false
         this.submittedLevelup = true
         Bridge.emit('action', { skill: this.index, level: true })
       }
