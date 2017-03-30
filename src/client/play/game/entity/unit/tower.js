@@ -23,7 +23,7 @@ const TOWER_STATS = {
     attackDamage: [50, 0, 0],
     attackPierce: [10, 0, 0],
     attackCooldown: [2, 0, 0],
-    attackMoveSpeed: [10, 0, 0],
+    attackMoveSpeed: 10,
     bulletSize: 6,
     bulletColor: 0x660000,
 
@@ -43,7 +43,7 @@ const TOWER_STATS = {
     attackDamage: [140, 0, 0],
     attackPierce: [2, 0, 0],
     attackCooldown: [10, 0, 0],
-    attackMoveSpeed: [10, 0, 0],
+    attackMoveSpeed: 10,
     bulletSize: 5,
     bulletColor: 0x660000,
 
@@ -63,7 +63,7 @@ const TOWER_STATS = {
     attackDamage: [100, 0, 0],
     attackPierce: [6, 0, 0],
     attackCooldown: [10, 0, 0],
-    attackMoveSpeed: [10, 0, 0],
+    attackMoveSpeed: 10,
     bulletSize: 5,
     bulletColor: 0x770000,
 

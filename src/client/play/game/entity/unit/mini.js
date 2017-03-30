@@ -17,7 +17,7 @@ const MINI_STATS = {
     attackDamage: [10, 0, 0],
     attackPierce: [0, 0, 0],
     attackCooldown: [2, 0, 0],
-    attackMoveSpeed: [0, 0, 0],
+    attackMoveSpeed: 0,
 
     moveSpeed: [12, 0, 0],
     collision: 10,
@@ -34,7 +34,7 @@ const MINI_STATS = {
     attackDamage: [50, 0, 0],
     attackPierce: [0, 0, 0],
     attackCooldown: [18, 0, 0],
-    attackMoveSpeed: [10, 0, 0],
+    attackMoveSpeed: 10,
     bulletSize: 3,
 
     moveSpeed: [10, 0, 0],

@@ -71,7 +71,7 @@ class Unit {
       attackDamage: statBase.attackDamage[0] * 100,
       attackPierce: statBase.attackPierce[0] * 100,
       attackCooldown: statBase.attackCooldown[0],
-      attackMoveSpeed: statBase.attackMoveSpeed[0],
+      attackMoveSpeed: statBase.attackMoveSpeed,
       moveSpeed: statBase.moveSpeed[0],
       turnSpeed: statBase.turnSpeed || 8,
       collision: statBase.collision * 100,
