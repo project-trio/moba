@@ -187,11 +187,8 @@ class Bullet {
         this.px = movingToX
         this.py = movingToY
         this.updatePosition(movingToX, movingToY)
-        if (this.target.height) {
-          const zDiff = this.container.position.z - this.target.height
-          if (zDiff > 0) {
-            this.container.position.z -= this.dropRate
-          }
+        if (this.dropRate && this.container.position.z > 0) {
+          this.container.position.z -= this.dropRate
         }
       }
     }
