@@ -18,7 +18,7 @@ class Tower extends Unit {
   constructor (team, towerType, x, y) {
     const stats = towersData[towerType]
 
-    super(team, stats, towerType === 'base' ? 4 : 3, x, y)
+    super(team, stats, towerType === 'base' ? 4 : 3, x, y, null, false, true)
 
     this.name = towerType
     this.id = `tower${spawnCount}`
@@ -29,7 +29,6 @@ class Tower extends Unit {
     Render.voxel('turret-base', {teamColor: teamColor, receiveShadow: true, parent: this.base, owner: this})
     Render.voxel('turret-top', {teamColor: teamColor, parent: this.top, owner: this})
 
-    this.renderInBackground = true
     this.isBlocking = true
 
     this.container.position.z = stats.z

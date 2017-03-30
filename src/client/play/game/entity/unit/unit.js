@@ -23,14 +23,14 @@ class Unit {
 
   // Constructor
 
-  constructor (team, statBase, unitScale, x, y, startAngle, isLocal) {
+  constructor (team, statBase, unitScale, x, y, startAngle, isLocal, renderInBackground) {
     this.team = team
     this.localAlly = team === Local.player.team
     this.startAngle = startAngle
     this.damagers = {}
     this.isLocal = isLocal
 
-    this.renderInBackground = false
+    this.renderInBackground = renderInBackground
     this.movable = false
     this.attackTarget = null
     this.isAttackingTarget = false
@@ -61,8 +61,6 @@ class Unit {
     this.shipContainer.add(this.top)
     this.container.add(this.shipContainer)
     Local.game.map.floorContainer.add(this.container)
-
-    Render.addUnit(this, unitScale)
 
     // Stats
 
@@ -142,6 +140,7 @@ class Unit {
       this.setLocation(x, y)
     }
 
+    Render.addUnit(this, unitScale)
     allUnits.push(this)
   }
 

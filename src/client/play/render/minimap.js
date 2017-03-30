@@ -27,7 +27,7 @@ export default {
     canvas.style.height = `${renderHeight}px`
 
     scene = new THREE.Scene()
-    scene.background = new THREE.Color(0xdddddd)
+    scene.background = new THREE.Color(0xcccccc)
 
     camera = new THREE.OrthographicCamera(renderWidth / -2, renderWidth / 2, renderHeight / 2, renderHeight / -2, -1024, 1024)
   },
@@ -40,6 +40,14 @@ export default {
     const mesh = new THREE.Mesh(geometry, material)
     scene.add(mesh)
     unit.minimapCircle = mesh
+    const showing = unit.renderInBackground
+    if (showing) {
+      const position = unit.container.position
+      mesh.position.x = (position.x / mapWidth) * renderWidth - renderWidth / 2
+      mesh.position.y = (position.y / mapHeight) * renderHeight - renderHeight / 2
+    } else {
+      mesh.visible = false
+    }
   },
 
   update (units) {
@@ -49,7 +57,9 @@ export default {
       let showing = true
       if (unit.isDying) {
         showing = false
-      } else if (!unit.renderInBackground && unit.team !== localTeam && !unit.visibleForFrame) {
+      } else if (unit.renderInBackground) {
+        continue
+      } else if (unit.team !== localTeam && !unit.visibleForFrame) {
         showing = false
       }
       unit.minimapCircle.visible = showing
