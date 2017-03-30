@@ -68,7 +68,7 @@ export default function (gid, size) {
       Bullet.update(renderTime, tickDuration, false)
       AreaOfEffect.update(renderTime, Unit.all())
 
-      const spawnMinionWave = Local.TESTING ? renderTime % 30000 == 5000 : renderTime % 45000 === 15000
+      const spawnMinionWave = renderTime % 30000 === (Local.TESTING ? 5000 : 10000)
       if (spawnMinionWave) {
         Wave.spawn(this.map.minionData())
       }
