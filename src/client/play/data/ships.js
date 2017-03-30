@@ -39,7 +39,7 @@ export default {
     collision: 20,
   },
 
-  sunken: {
+  sinker: {
     split: true,
     healthMax: [1000, 100, 0],
     healthRegen: [40, 2, 0],

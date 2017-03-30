@@ -29,7 +29,7 @@ export default {
 
 //SUNKEN
 
-  sunken: [
+  sinker: [
     {
       name: 'Torpedo',
       description: 'Fires a torpedo that explodes on the first enemy target',
