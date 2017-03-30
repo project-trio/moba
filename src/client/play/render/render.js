@@ -6,6 +6,7 @@ import Vox from '@/play/external/vox'
 
 import pointer from '@/play/render/pointer'
 import RenderFog from '@/play/render/fog'
+import RenderMinimap from '@/play/render/minimap'
 
 let gameScene, gameCamera, renderer
 
@@ -99,14 +100,18 @@ export default {
     gameCamera.position.y = y
   },
 
-  render () {
+  render (units) {
     pointer.reposition(gameCamera)
 
     renderer.render(gameScene, gameCamera)
+
+    RenderFog.update(units, renderer)
+    RenderMinimap.update(units)
   },
 
-  fog (units) {
-    RenderFog.update(renderer, units)
+  addUnit (unit, unitScale) {
+    RenderFog.add(unit)
+    RenderMinimap.add(unit, unitScale)
   },
 
   remove (object) {
@@ -221,6 +226,7 @@ export default {
     options.floor.add(rectangle)
 
     RenderFog.create(width, height, options.ceiling)
+    RenderMinimap.create(width, height)
 
     return rectangle
   },

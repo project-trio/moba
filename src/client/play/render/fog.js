@@ -38,11 +38,10 @@ export default {
     const geometry = new THREE.CircleBufferGeometry(FOG_RADIUS, 48)
     const circle = new THREE.Mesh(geometry, circleMaterial)
     fogScene.add(circle)
-    unit.fogRadius = null
     unit.fogCircle = circle
   },
 
-  update (renderer, units) {
+  update (units, renderer) {
     const localTeam = Local.player.team
     let clearRadius = 0
     for (let idx = 0; idx < units.length; idx += 1) {
@@ -56,17 +55,16 @@ export default {
       } else {
         clearRadius = 0
       }
-      const circle = unit.fogCircle
       if (unit.fogRadius !== clearRadius) {
         const scale = clearRadius === 0 ? 0.0001 : clearRadius / FOG_RADIUS
-        circle.scale.x = scale
-        circle.scale.y = scale
+        unit.fogCircle.scale.x = scale
+        unit.fogCircle.scale.y = scale
         unit.fogRadius = clearRadius
       }
       if (clearRadius !== 0) {
         const position = unit.container.position
-        circle.position.x = position.x - mapWidth / 2
-        circle.position.y = position.y - mapHeight / 2
+        unit.fogCircle.position.x = position.x - mapWidth / 2
+        unit.fogCircle.position.y = position.y - mapHeight / 2
       }
     }
 

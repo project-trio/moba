@@ -18,8 +18,4 @@ export default {
   margin 0
   border-radius 4px 0 0 0
   padding-bottom 1px
-
-canvas
-  width 200px
-  height 200px
 </style>

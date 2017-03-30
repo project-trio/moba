@@ -1,5 +1,3 @@
-import Render from '@/play/render/render'
-
 import AreaOfEffect from '@/play/game/entity/attack/aoe'
 import Bullet from '@/play/game/entity/attack/bullet'
 

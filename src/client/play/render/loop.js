@@ -39,8 +39,7 @@ const animate = function (timestamp) {
 
     const position = Local.player.unit.container.position
     game.map.track(position.x, position.y)
-    Render.render()
-    Render.fog(Unit.all())
+    Render.render(Unit.all())
   }
   lastUpdate = timestamp
 

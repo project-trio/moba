@@ -6,7 +6,6 @@ import Bridge from '@/play/events/bridge'
 import Local from '@/play/local'
 
 import Render from '@/play/render/render'
-import RenderFog from '@/play/render/fog'
 
 import Util from '@/play/game/util'
 
@@ -24,11 +23,12 @@ class Unit {
 
   // Constructor
 
-  constructor (team, statBase, unitScale, x, y, startAngle) {
+  constructor (team, statBase, unitScale, x, y, startAngle, isLocal) {
     this.team = team
     this.localAlly = team === Local.player.team
     this.startAngle = startAngle
     this.damagers = {}
+    this.isLocal = isLocal
 
     this.renderInBackground = false
     this.movable = false
@@ -40,6 +40,10 @@ class Unit {
     this.angleBase = false
     this.untargetable = false
     this.noTargeting = false
+
+    this.fogRadius = null
+    this.fogCircle = null
+    this.minimapCircle = null
 
     this.container = Render.group()
     this.shipContainer = Render.group()
@@ -58,7 +62,7 @@ class Unit {
     this.container.add(this.shipContainer)
     Local.game.map.floorContainer.add(this.container)
 
-    RenderFog.add(this)
+    Render.addUnit(this, unitScale)
 
     // Stats
 
@@ -326,6 +330,9 @@ class Unit {
     Render.remove(this.container)
     if (this.fogCircle) {
       Render.remove(this.fogCircle)
+    }
+    if (this.minimapCircle) {
+      Render.remove(this.minimapCircle)
     }
     this.remove = true
   }

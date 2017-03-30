@@ -26,7 +26,7 @@ class Ship extends Movable {
 
   constructor (name, player, team, x, y, angle) {
     const statBase = shipStats[name]
-    super(team, statBase, 2, x, y, angle)
+    super(team, statBase, 2, x, y, angle, player.isLocal)
 
     this.skills = {
       data: skillsData[name],
@@ -40,7 +40,6 @@ class Ship extends Movable {
     this.id = player.id
     this.player = player
     this.name = name
-    this.isLocal = player.isLocal
 
     this.level = 1
     this.levelExp = 0

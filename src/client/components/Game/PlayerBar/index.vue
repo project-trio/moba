@@ -1,8 +1,8 @@
 <template>
 <div class="player-bar">
+  <chat-bar></chat-bar>
   <player-info class="bar-section"></player-info>
   <skills-bar class="bar-section"></skills-bar>
-  <chat-bar></chat-bar>
   <minimap class="bar-section"></minimap>
 </div>
 </template>
