@@ -19,7 +19,7 @@ export default {
   computed: {
     levelProgress () {
       if (this.stats.levelProgress === null) {
-        return `Level ${this.stats.level + 1}`
+        return `Level ${this.stats.level}`
       }
       return `${this.stats.levelProgress}% to level ${this.stats.level + 1}`
     },
