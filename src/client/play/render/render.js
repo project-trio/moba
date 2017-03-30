@@ -186,7 +186,7 @@ export default {
     })
   },
 
-  // Shapes
+  // Map
 
   wall (x, y, w, h, options) {
     const geometry = new THREE.BoxBufferGeometry(w, h, WALL_HEIGHT)
@@ -230,6 +230,8 @@ export default {
 
     return rectangle
   },
+
+  // Shapes
 
   rectangle (x, y, w, h, options) {
     const geometry = new THREE.BoxBufferGeometry(w, h, options.depth || 1)

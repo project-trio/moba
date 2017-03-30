@@ -1,7 +1,10 @@
 import store from '@/store'
 
-import Bridge from '@/play/events/bridge'
 import Local from '@/play/local'
+
+import dataConstants from '@/play/data/constants'
+
+import Bridge from '@/play/events/bridge'
 
 import pointer from '@/play/render/pointer'
 import Render from '@/play/render/render'
@@ -23,14 +26,27 @@ maps.tiny = {
   ],
   walls: [
     {
-      x: 650, y: 260,
-      w: 300, h: wallRadius * 2,
-      capStart: true,
+      start: { x: 535, y: 320 },
+      radius: wallRadius,
+      move: [
+        { dx: 133, dy: 0, },
+      ],
+      mirror: false,
+      endCap: true,
+    },
+  ],
+  minions: [
+    {
+      type: 'ranged',
+      paths: [
+        [[360, 74, 0, 0], [360, 400, 0, -1000]],
+        [[400, 80, 0, 0], [400, 400, 0, -1000]],
+        [[440, 74, 0, 0], [440, 400, 0, -1000]],
+      ],
+      mirror: false,
     },
   ],
 }
-
-const wallSmallH = 50
 
 maps.small = {
   width: 800,
@@ -38,27 +54,34 @@ maps.small = {
 
   towers: [
     ['base', 400, 44, false],
-    ['turret', 190, 380, true],
+    ['tower', 190, 380, true],
     ['turret', 470, 600, false],
   ],
 
-  walls: [ //TODO arrays of connection points
+  walls: [
     {
-      x: 240, y: 320,
-      w: wallSmallH * 2, h: wallRadius * 2,
-      capStart: true, capEnd: true,
+      start: { x: 190, y: 220 },
+      radius: wallRadius,
+      move: [
+        { dx: 0, dy: 50 },
+        { dx: 50, dy: 0, },
+      ],
       mirror: true,
+      endCap: true,
     },
+  ],
+  minions: [
     {
-      x: 240 - wallSmallH, y: 320 - wallSmallH,
-      w: wallRadius * 2, h: wallSmallH * 2,
-      capStart: true, capEnd: false,
-      mirror: true,
+      type: 'ranged',
+      paths: [
+        [[360, 74, 0, 0], [360, 700, 0, -1000]],
+        [[400, 80, 0, 0], [400, 700, 0, -1000]],
+        [[440, 74, 0, 0], [440, 700, 0, -1000]],
+      ],
+      mirror: false,
     },
   ],
 }
-
-const wallStandardH = 60
 
 maps.standard = {
   width: 1200,
@@ -73,16 +96,14 @@ maps.standard = {
 
   walls: [
     {
-      x: 320, y: 360,
-      w: wallStandardH * 2, h: wallRadius * 2,
-      capStart: true, capEnd: true,
+      start: { x: 380, y: 360 },
+      radius: wallRadius,
+      move: [
+        { dx: -60, dy: 0, },
+        { dx: 0, dy: -60 },
+      ],
       mirror: true,
-    },
-    {
-      x: 320 - wallStandardH, y: 360 - wallStandardH,
-      w: wallRadius * 2, h: wallStandardH * 2,
-      capStart: true, capEnd: false,
-      mirror: true,
+      endCap: true,
     },
   ],
 
@@ -99,9 +120,9 @@ maps.standard = {
     {
       type: 'ranged',
       paths: [
-        [[560, 74, 0, 0], [560, 900, 0, -1000]],
-        [[600, 80, 0, 0], [600, 900, 0, -1000]],
-        [[640, 74, 0, 0], [640, 900, 0, -1000]],
+        [[560, 74, 0, 0], [560, 1000, 0, -1000]],
+        [[600, 80, 0, 0], [600, 1000, 0, -1000]],
+        [[640, 74, 0, 0], [640, 1000, 0, -1000]],
       ],
       mirror: false,
     },
@@ -157,19 +178,21 @@ const GameMap = function (parent) {
     return walls
   }
 
-  const createWallRect = function (x, y, w, h) {
+  const createWallRect = function (x, y, w, h, team) {
     walls.push([(x - w / 2) * 100, (y - h / 2) * 100, w * 100, h * 100])
 
     Render.wall(x, y, w, h, {
+      color: dataConstants.wallColors[team],
       parent: wallContainer,
     })
   }
 
-  const createWallCap = function (vertical, x, y, radius) {
+  const createWallCap = function (x, y, radius, team) {
     radius = radius / 2
     walls.push([x * 100, y * 100, radius * 100])
 
     Render.wallCap(x, y, radius, {
+      color: dataConstants.wallColors[team],
       parent: wallContainer,
     })
   }
@@ -257,43 +280,41 @@ const GameMap = function (parent) {
 
     for (let idx = 0; idx < layout.walls.length; idx += 1) {
       const wall = layout.walls[idx]
-      let w = wall.w
-      let h = wall.h
-      let vertical = h > w
-
+      const radius = wall.radius
       for (let team = 0; team < 2; team += 1) {
         const firstTeam = team === 0
-        let tx = firstTeam ? mapWidth - wall.x : wall.x
-        let ty = firstTeam ? mapHeight - wall.y : wall.y
+        let teamX = firstTeam ? mapWidth - wall.start.x : wall.start.x
+        let teamY = firstTeam ? mapHeight - wall.start.y : wall.start.y
         const teamMp = firstTeam ? -1 : 1
-
         for (let mirror = 0; mirror < (wall.mirror ? 2 : 1); mirror += 1) {
           const mirrored = mirror > 0
           const mirroredMp = mirrored ? 1 : -1
-          if (mirrored) {
-            tx = (mapWidth - tx)
-          }
-          if (wall.capStart) {
-            let capX = tx
-            let capY = ty
+          let segmentX = mirrored ? mapWidth - teamX : teamX
+          let segmentY = teamY
+          for (let pidx = 0; pidx < wall.move.length; pidx += 1) {
+            const point = wall.move[pidx]
+            const dx = -point.dx * teamMp * mirroredMp
+            const dy = point.dy * teamMp
+            const vertical = dy !== 0
+            createWallCap(segmentX, segmentY, radius * 2, team)
+
+            let wallX = segmentX
+            let wallY = segmentY
             if (vertical) {
-              capY = ty - h / 2 * teamMp
+              wallY += dy
             } else {
-              capX = tx + w / 2 * teamMp * mirroredMp
+              wallX += dx
             }
-            createWallCap(vertical, capX, capY, Math.min(w, h))
-          }
-          if (wall.capEnd) {
-            let capX = tx
-            let capY = ty
-            if (vertical) {
-              capY = ty + h / 2 * teamMp
-            } else {
-              capX = tx - w / 2 * teamMp * mirroredMp
+            const wallWidth = Math.abs(point.dx || radius) * 2
+            const wallHeight = Math.abs(point.dy || radius) * 2
+            createWallRect(wallX, wallY, wallWidth, wallHeight, team)
+
+            segmentX += dx * 2
+            segmentY += dy * 2
+            if (pidx + 1 === wall.move.length && wall.endCap) {
+              createWallCap(segmentX, segmentY, radius * 2, team)
             }
-            createWallCap(vertical, capX, capY, Math.min(w, h))
           }
-          createWallRect(tx, ty, w, h)
         }
       }
     }
