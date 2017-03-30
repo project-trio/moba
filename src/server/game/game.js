@@ -144,7 +144,9 @@ class Game {
   teamBroadcast (team, name, message) {
     for (let pid in this.players) {
       const player = this.players[pid]
-      player.emit(name, message)
+      if (player.team === team) {
+        player.emit(name, message)
+      }
     }
   }
 

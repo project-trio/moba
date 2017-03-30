@@ -137,8 +137,14 @@ export default {
         })
 
         if (this.draftMessage) {
-          Bridge.emit('chat', { team: true, body: this.draftMessage }) //TODO or global
-          this.draftMessage = ''
+          Bridge.emit('chat', { team: false, body: this.draftMessage }, (response) => {
+            if (response.error) {
+              //TODO display throttle error
+              console.log('chat err', response)
+            } else {
+              this.draftMessage = ''
+            }
+          })
         }
       }
     },

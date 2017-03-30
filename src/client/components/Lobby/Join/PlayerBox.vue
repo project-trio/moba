@@ -46,7 +46,7 @@ export default {
     playerMessages () {
       let newMessage = false
       const messages = store.state.chatMessages
-      for (let idx = 0; idx < messages.length; idx += 1) {
+      for (let idx = messages.length - 1; idx >= 0; idx -= 1) {
         const message = messages[idx]
         if (message.id === this.player.id) {
           const key = `${message.id}${message.at}`
