@@ -6,17 +6,14 @@ import dataConstants from '@/play/data/constants'
 
 let renderer, scene, camera
 
-let renderWidth, renderHeight
-
-let mapWidth, mapHeight
+let renderWidth, renderHeight, mapScale
 
 export default {
 
   create (w, h) {
-    mapWidth = w
-    mapHeight = h
     renderHeight = 200
     renderWidth = w / h * renderHeight
+    mapScale = renderHeight / h
 
     const canvas = document.getElementById('minimap')
     renderer = new THREE.WebGLRenderer({
@@ -43,11 +40,29 @@ export default {
     const showing = unit.renderInBackground
     if (showing) {
       const position = unit.container.position
-      mesh.position.x = (position.x / mapWidth) * renderWidth - renderWidth / 2
-      mesh.position.y = (position.y / mapHeight) * renderHeight - renderHeight / 2
+      mesh.position.x = position.x * mapScale - renderWidth / 2
+      mesh.position.y = position.y * mapScale - renderHeight / 2
     } else {
       mesh.visible = false
     }
+  },
+
+  addWall (x, y, w, h, team) {
+    const geometry = new THREE.BoxBufferGeometry(w * mapScale, h * mapScale, 1)
+    const material = new THREE.MeshBasicMaterial({ color: dataConstants.wallColors[team] })
+    const mesh = new THREE.Mesh(geometry, material)
+    mesh.position.x = x * mapScale - renderWidth / 2
+    mesh.position.y = y * mapScale - renderHeight / 2
+    scene.add(mesh)
+  },
+
+  addWallCap (x, y, r, team) {
+    const geometry = new THREE.CircleBufferGeometry(r * mapScale, 8)
+    const material = new THREE.MeshBasicMaterial({ color: dataConstants.wallColors[team] })
+    const mesh = new THREE.Mesh(geometry, material)
+    mesh.position.x = x * mapScale - renderWidth / 2
+    mesh.position.y = y * mapScale - renderHeight / 2
+    scene.add(mesh)
   },
 
   update (units) {
@@ -65,8 +80,8 @@ export default {
       unit.minimapCircle.visible = showing
       if (showing) {
         const position = unit.container.position
-        unit.minimapCircle.position.x = (position.x / mapWidth) * renderWidth - renderWidth / 2
-        unit.minimapCircle.position.y = (position.y / mapHeight) * renderHeight - renderHeight / 2
+        unit.minimapCircle.position.x = position.x * mapScale - renderWidth / 2
+        unit.minimapCircle.position.y = position.y * mapScale - renderHeight / 2
       }
     }
 

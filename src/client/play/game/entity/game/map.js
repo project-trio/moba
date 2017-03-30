@@ -8,6 +8,7 @@ import Bridge from '@/play/events/bridge'
 
 import pointer from '@/play/render/pointer'
 import Render from '@/play/render/render'
+import RenderMinimap from '@/play/render/minimap'
 
 import Tower from '@/play/game/entity/unit/tower'
 
@@ -181,6 +182,7 @@ const GameMap = function (parent) {
   const createWallRect = function (x, y, w, h, team) {
     walls.push([(x - w / 2) * 100, (y - h / 2) * 100, w * 100, h * 100])
 
+    RenderMinimap.addWall(x, y, w, h, team)
     Render.wall(x, y, w, h, {
       color: dataConstants.wallColors[team],
       parent: wallContainer,
@@ -191,6 +193,7 @@ const GameMap = function (parent) {
     radius = radius / 2
     walls.push([x * 100, y * 100, radius * 100])
 
+    RenderMinimap.addWallCap(x, y, radius, team)
     Render.wallCap(x, y, radius, {
       color: dataConstants.wallColors[team],
       parent: wallContainer,
