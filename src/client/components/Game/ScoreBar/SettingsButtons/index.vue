@@ -30,13 +30,19 @@ export default {
 <style lang="stylus" scoped>
 .settings-buttons
   position absolute
+  display flex
   right 0
-  bottom 0
+  top 0
   margin 0
-  border-radius 4px 0 0 0
+  border-radius 0 0 0 4px !important
+  // height 80px
+  padding 4px
 
 button
-  width 44px
-  height 44px
+  padding 0
+  font-size 1.1em
+  width 32px
+  height 32px
+  margin 4px
   border-radius 2px
 </style>

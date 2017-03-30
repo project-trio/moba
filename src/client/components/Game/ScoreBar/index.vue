@@ -1,6 +1,6 @@
 <template>
 <div class="score-bar">
-  <div class="bar-section">
+  <div class="scores-section bar-section">
     <span class="towers team-1">{{ towers[0] }}</span> <span class="tower-symbol">〒</span>
     <span class="kills-container">
       <span class="kills team-1">{{ kills[0] }}</span>
@@ -9,13 +9,20 @@
     </span>
     <span class="tower-symbol">〒</span> <span class="towers team-2"> {{ towers[1] }}</span>
   </div>
+  <settings-buttons class="bar-section"></settings-buttons>
 </div>
 </template>
 
 <script>
 import store from '@/store'
 
+import SettingsButtons from '@/components/Game/ScoreBar/SettingsButtons'
+
 export default {
+  components: {
+    SettingsButtons,
+  },
+
   computed: {
     kills () {
       return store.state.game.stats.kills
@@ -38,7 +45,7 @@ export default {
   font-weight 600
   text-shadow 0 1px 1px #444
 
-.bar-section
+.scores-section
   padding-left 20px
   padding-right 20px
 
