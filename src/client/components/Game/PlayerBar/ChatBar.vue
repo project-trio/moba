@@ -9,6 +9,7 @@
   </div>
   <div class="chat-input-container">
     <input v-if="showingInput" ref="chatInput" v-model.trim="draftMessage" class="chat-input"></input>
+    <div v-else class="chat-placeholder">press enter to chat...</div>
   </div>
 </div>
 </template>
@@ -43,9 +44,7 @@ export default {
       } else if (key.name === 'enter') {
         this.showingInput = !this.showingInput
         if (this.showingInput) {
-          this.$nextTick(() => {
-            this.$refs.chatInput.focus()
-          })
+          this.onShowChat()
         } else {
           this.$refs.chatInput.blur()
 
@@ -55,6 +54,14 @@ export default {
           }
         }
       }
+    },
+  },
+
+  methods: {
+    onShowChat () {
+      this.$nextTick(() => {
+        this.$refs.chatInput.focus()
+      })
     },
   },
 }
@@ -72,6 +79,14 @@ export default {
 .chat-input
   height inherit
   width inherit
+.chat-placeholder
+  text-align left
+  width 100%
+  height 100%
+  color rgba(255, 255, 255, 0.5)
+  font-size 1.2em
+  margin-left 4px
+  line-height 1.5em
 
 .chat-messages
   margin 8px 0
