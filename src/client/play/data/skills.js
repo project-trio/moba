@@ -27,7 +27,7 @@ export default {
   boxy: [
   ],
 
-//SUNKEN
+//SINKER
 
   sinker: [
     {
@@ -49,7 +49,7 @@ export default {
         return this.cooldown
       },
       start: function (index, level, ship, cancel, target) {
-        const damage = levelMultiplier(120, level, 20)
+        const damage = levelMultiplier(100, level, 10)
         const maxRange = this.getRange(level)
         const bulletData = {
           bulletSize: 10,
@@ -90,7 +90,7 @@ export default {
         ship.noTargeting = true
 
         const radius = this.getRange(level)
-        const damage = 10
+        const damage = levelMultiplier(5, level, 1)
         ship.diveCircle = new AreaOfEffect(ship, true, {
           dot: true,
           color: 0x0066aa,
