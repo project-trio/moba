@@ -2,6 +2,8 @@ const THREE = require('three')
 
 import Local from '@/play/local'
 
+import RenderMinimap from '@/play/render/minimap'
+
 let fogScene, fogCamera, fogTarget
 let circleMaterial
 
@@ -26,12 +28,13 @@ export default {
     const fogMaterial = new THREE.MeshBasicMaterial({color: 0x000000, alphaMap: fogTarget.texture, depthTest: true, depthWrite: false})
     fogMaterial.transparent = true
     fogMaterial.opacity = 0.3
-
-    fogCamera = new THREE.OrthographicCamera(mapWidth / -2, mapWidth / 2, mapHeight / 2, mapHeight / -2, -1024, 1024)
-
     const fogPlane = new THREE.Mesh(fogGeometry, fogMaterial)
     fogPlane.position.set(mapWidth / 2, mapHeight / 2, -5)
     parent.add(fogPlane)
+    const fogPlaneMinimap = new THREE.Mesh(fogGeometry, fogMaterial)
+    RenderMinimap.addFog(fogPlaneMinimap)
+
+    fogCamera = new THREE.OrthographicCamera(mapWidth / -2, mapWidth / 2, mapHeight / 2, mapHeight / -2, -1024, 1024)
   },
 
   add (unit) {
@@ -41,7 +44,7 @@ export default {
     unit.fogCircle = circle
   },
 
-  update (units, renderer) {
+  update (units, renderer, mmRenderer) {
     const localTeam = Local.player.team
     let clearRadius = 0
     for (let idx = 0; idx < units.length; idx += 1) {
@@ -69,6 +72,7 @@ export default {
     }
 
     renderer.render(fogScene, fogCamera, fogTarget)
+    mmRenderer.render(fogScene, fogCamera, fogTarget)
   },
 
 }

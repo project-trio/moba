@@ -105,8 +105,8 @@ export default {
 
     renderer.render(gameScene, gameCamera)
 
-    RenderFog.update(units, renderer)
-    RenderMinimap.update(units)
+    const mmRenderer = RenderMinimap.update(units)
+    RenderFog.update(units, renderer, mmRenderer)
   },
 
   addUnit (unit, unitScale) {
@@ -225,8 +225,8 @@ export default {
 
     options.floor.add(rectangle)
 
-    RenderFog.create(width, height, options.ceiling)
     RenderMinimap.create(width, height)
+    RenderFog.create(width, height, options.ceiling)
 
     return rectangle
   },
