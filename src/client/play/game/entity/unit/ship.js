@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'
 
-import CommonSkills from 'common/skills'
+import skillsData from '@/play/data/skills'
 
 import store from '@/store'
 
@@ -29,7 +29,7 @@ class Ship extends Movable {
     super(team, statBase, 2, x, y, angle)
 
     this.skills = {
-      data: CommonSkills[name],
+      data: skillsData[name],
       started: [0, 0, 0],
       actives: [0, 0, 0],
       cooldowns: [0, 0, 0],
