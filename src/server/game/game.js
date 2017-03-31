@@ -136,6 +136,8 @@ class Game {
 
   start (updatesUntilStart) {
     this.broadcast('start game', {
+      gid: this.id,
+      size: this.size,
       players: this.formattedPlayers(),
       updates: Config.updateDuration,
       ticks: Config.tickDuration,
