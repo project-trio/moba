@@ -1,5 +1,7 @@
 import Render from '@/play/render/render'
 
+import dataConstants from '@/play/data/constants'
+
 import AreaOfEffect from '@/play/game/entity/attack/aoe'
 import Bullet from '@/play/game/entity/attack/bullet'
 
@@ -120,8 +122,9 @@ export default {
         const sightRange = levelMultiplier(140, level, 20)
         const stats = { sightRange: [sightRange, 0] }
         ship.eye = new Unit(ship.team, stats, null, target[0] / 100, target[1] / 100, null, false, true)
-        const sphere = Render.sphere(12, { parent: ship.eye.top, color: 0xff0000, segments: 16 }) //TODO team color
-        sphere.position.z = levelMultiplier(50, level, 3)
+        const color = dataConstants.teamColors[ship.team]
+        const sphere = Render.sphere(12, { parent: ship.eye.top, color: color, segments: 16 })
+        sphere.position.z = levelMultiplier(70, level, 4)
       },
       end: function (ship) {
         ship.eye.isDying = true
