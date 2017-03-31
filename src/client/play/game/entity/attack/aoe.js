@@ -1,3 +1,5 @@
+import Local from '@/play/local'
+
 import Render from '@/play/render/render'
 
 import Util from '@/play/game/util'
@@ -18,7 +20,7 @@ class AreaOfEffect {
     this.dot = data.dot
     this.active = true
 
-    this.circle = Render.circle(data.radius, { color: data.color, opacity: data.opacity, parent: data.parent })
+    this.circle = Render.circle(data.radius, { color: data.color, opacity: data.opacity, parent: withUnit ? data.parent : Local.game.map.floorContainer })
 
     if (data.px) {
       this.px = data.px
@@ -33,6 +35,7 @@ class AreaOfEffect {
     this.collisionSize = data.radius
     this.attackDamage = data.attackDamage
     this.attackPierce = data.attackPierce
+    this.eyeShield = data.eyeShield
 
     areaofEffects.push(this)
   }
@@ -41,16 +44,24 @@ class AreaOfEffect {
     const fromUnit = this.source
     for (let idx = 0; idx < units.length; idx += 1) {
       const target = units[idx]
-      if (!fromUnit.alliedTo(target) && !target.isDying && !target.untargetable) {
-        let distance
-        if (this.withUnit) {
-          distance = fromUnit.distanceTo(target)
-        } else {
-          distance = Util.pointDistance(this.px, this.py, target.px, target.py)
+      const isAlly = fromUnit.alliedTo(target)
+
+      if (isAlly) {
+        if (this.eyeShield) {
+          target.eyeShield = this.eyeShield
         }
-        if (Util.withinSquared(distance, this.collisionSize * POSITION_MAGNITUDE_OFFSET + target.stats.collision)) {
-          if (this.attackDamage) {
-            target.takeDamage(fromUnit, renderTime, this.attackDamage, this.attackPierce)
+      } else {
+        if (this.attackDamage && !target.isDying && !target.untargetable) {
+          let distance
+          if (this.withUnit) {
+            distance = fromUnit.distanceTo(target)
+          } else {
+            distance = Util.pointDistance(this.px, this.py, target.px, target.py)
+          }
+          if (Util.withinSquared(distance, this.collisionSize * POSITION_MAGNITUDE_OFFSET + target.stats.collision)) {
+            if (this.attackDamage) {
+              target.takeDamage(fromUnit, renderTime, this.attackDamage, this.attackPierce)
+            }
           }
         }
       }

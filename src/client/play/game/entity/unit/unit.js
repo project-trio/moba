@@ -40,6 +40,7 @@ class Unit {
     this.angleBase = false
     this.untargetable = false
     this.noTargeting = false
+    this.eyeShield = null
 
     this.fogRadius = null
     this.fogCircle = null
@@ -281,6 +282,9 @@ class Unit {
 
   takeDamage (source, renderTime, amount, pierce, reflected) {
     let armor = Math.max(0, this.stats.armor - pierce)
+    if (this.eyeShield) {
+      armor += this.eyeShield
+    }
     if (this.armorModifier) {
       armor *= this.armorModifier
       if (!Number.isInteger(armor)) {
@@ -533,6 +537,7 @@ Unit.update = function (renderTime, timeDelta, tweening) {
       if (!unit.isDead && unit.movable) {
         unit.updateMoveTarget()
       }
+      unit.eyeShield = null
     }
   }
 
