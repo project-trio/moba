@@ -9,6 +9,7 @@ module.exports = class Player {
     this.teamIndex = null
     this.name = client.name
     this.shipName = 'sinker'
+    this.switchUnit = null
 
     this.serverUpdate = 0
     this.actions = []

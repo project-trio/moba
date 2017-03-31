@@ -20,25 +20,32 @@ const animate = function (timestamp) {
   }
   const game = Local.game
   if (game.running) {
+    const isPlaying = game.playing
     const ticksToRender = game.calculateTicksToRender(timestamp)
     if (ticksToRender > 0) {
-      const processUpdate = updatePanel && ticksToRender == 1
+      const processUpdate = isPlaying && updatePanel && ticksToRender == 1
       if (processUpdate) {
         updatePanel.begin()
       }
+
       game.performTicks(ticksToRender, timestamp)
-      Local.player.unit.updateVisibility()
-      if (processUpdate) {
-        updatePanel.end()
+
+      if (isPlaying) {
+        Local.player.unit.updateVisibility()
+        if (processUpdate) {
+          updatePanel.end()
+        }
       }
-    } else { // Tween
+    } else if (isPlaying) { // Tween
       const tweenTimeDelta = timestamp - lastUpdate
       Bullet.update(timestamp, tweenTimeDelta, true)
       Unit.update(timestamp, tweenTimeDelta, true)
     }
 
-    const position = Local.player.unit.container.position
-    game.map.track(position.x, position.y)
+    if (isPlaying) {
+      const position = Local.player.unit.container.position
+      game.map.track(position.x, position.y)
+    }
     Render.render(Unit.all())
   }
   lastUpdate = timestamp

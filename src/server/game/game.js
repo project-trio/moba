@@ -134,8 +134,13 @@ class Game {
 
 //METHODS
 
-  start () {
-    this.broadcast('start game', { players: this.formattedPlayers(), updates: Config.updateDuration, ticks: Config.tickDuration })
+  start (updatesUntilStart) {
+    this.broadcast('start game', {
+      players: this.formattedPlayers(),
+      updates: Config.updateDuration,
+      ticks: Config.tickDuration,
+      updatesUntilStart: updatesUntilStart,
+    })
     this.state = 'STARTED'
     this.started = true
     console.log('Started game', this.id)

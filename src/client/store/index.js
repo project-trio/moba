@@ -25,6 +25,7 @@ export default {
       host: null,
       ready: null,
       running: false,
+      playing: false,
       stats: {
         kills: [0, 0],
         towers: [0, 0],

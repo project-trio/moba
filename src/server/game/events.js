@@ -11,6 +11,10 @@ const Player = require('./player')
 const clientPlayers = {}
 let playersOnline = 0
 
+const startTime = process.hrtime()
+const updateDuration = Config.updateDuration
+const updatesUntilStart = (CommonConsts.TESTING ? 10 : 20) * 1000 / updateDuration
+
 //LOCAL
 
 const lobbyBroadcast = (data) => {
@@ -81,14 +85,12 @@ const quickJoin = function(player, size) {
 }
 
 const startGame = function (game) {
-  game.start()
+  game.start(updatesUntilStart)
   lobbyBroadcast({games: getGameList()})
 }
 
 //UPDATE
 
-const startTime = process.hrtime()
-const updateDuration = Config.updateDuration
 let loopCount = 0
 
 const loop = function() {
@@ -99,39 +101,48 @@ const loop = function() {
       game.serverUpdate += 1
 
       const actionData = {}
+      const onSelectionScreen = game.serverUpdate < updatesUntilStart
       for (let pid in game.players) {
         const player = game.players[pid]
-        const playerActions = []
-        const submittingSkills = [false, false, false]
-
-        const levelupIndex = player.levelNext
-        if (levelupIndex !== null) {
-          playerActions.push({ skill: levelupIndex, level: true })
-          player.levelNext = null
-          submittingSkills[levelupIndex] = true
-        }
-
-        let hasTarget = false
-        for (let ai = player.actions.length - 1; ai >= 0; ai -= 1) {
-          const action = player.actions[ai]
-          const target = action.target
-          if (target) {
-            if (hasTarget) {
-              continue
-            }
-            hasTarget = true
+        if (onSelectionScreen) {
+          if (player.switchUnit) {
+            player.shipName = player.switchUnit
+            actionData[pid] = { unit: player.shipName }
+            player.switchUnit = null
           }
-          const skillIndex = action.skill
-          if (skillIndex !== undefined) {
-            if (submittingSkills[skillIndex]) {
-              continue
-            }
-            submittingSkills[skillIndex] = true
+        } else {
+          const playerActions = []
+          const submittingSkills = [false, false, false]
+
+          const levelupIndex = player.levelNext
+          if (levelupIndex !== null) {
+            playerActions.push({ skill: levelupIndex, level: true })
+            player.levelNext = null
+            submittingSkills[levelupIndex] = true
           }
-          playerActions.push(action)
+
+          let hasTarget = false
+          for (let ai = player.actions.length - 1; ai >= 0; ai -= 1) {
+            const action = player.actions[ai]
+            const target = action.target
+            if (target) {
+              if (hasTarget) {
+                continue
+              }
+              hasTarget = true
+            }
+            const skillIndex = action.skill
+            if (skillIndex !== undefined) {
+              if (submittingSkills[skillIndex]) {
+                continue
+              }
+              submittingSkills[skillIndex] = true
+            }
+            playerActions.push(action)
+          }
+          actionData[pid] = playerActions
+          player.actions = []
         }
-        actionData[pid] = playerActions
-        player.actions = []
       }
       game.broadcast('update', { update: game.serverUpdate, actions: actionData })
     } else if ((CommonConsts.TESTING || game.size < 1) && game.checkFull()) {
@@ -186,15 +197,26 @@ module.exports = {
       lobbyBroadcast({ online: playersOnline, games: games })
     })
 
+    client.on('switch unit', (data) => {
+      player.switchUnit = data.name
+    })
+
     client.on('action', (data) => {
+      if (!player.game) {
+        console.log('Action ERR: No game for player')
+        return
+      }
+      if (player.game.serverUpdate < updatesUntilStart) {
+        console.log('Action ERR: Game not started yet')
+        return
+      }
       if (player.actions.length > 10) {
         console.log('Action ERR: Too many actions')
         return
       }
-      const skillIndex = data.skill
-      if (skillIndex !== undefined) {
+      if (data.skill !== undefined) {
         if (data.level) {
-          player.levelNext = skillIndex
+          player.levelNext = data.skill
           return
         }
       }

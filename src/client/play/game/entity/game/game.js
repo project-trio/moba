@@ -27,19 +27,23 @@ export default function (gid, size) {
   let ticksPerUpdate
   let renderedSinceUpdate = false
   let ticksRendered = 0
+  let updatesUntilStart = 0
   let lastTickTime
   let tickOffsets = -4
 
   this.id = gid
+  this.running = false
+  this.playing = false
 
   store.state.game.running = false
+  store.state.game.playing = false
 
   this.beginRender = function () {
     const gameContainer = Render.group()
     this.container = gameContainer
 
     this.serverUpdate = -1
-    this.running = false
+    // this.running = false
 
     this.map = new GameMap(gameContainer)
 
@@ -64,13 +68,17 @@ export default function (gid, size) {
           break
         }
       }
-      Unit.update(renderTime, tickDuration, false)
-      Bullet.update(renderTime, tickDuration, false)
-      AreaOfEffect.update(renderTime, Unit.all())
+      if (renderTime > 0) {
+        Unit.update(renderTime, tickDuration, false)
+        Bullet.update(renderTime, tickDuration, false)
+        AreaOfEffect.update(renderTime, Unit.all())
 
-      const spawnMinionWave = renderTime % 30000 === (Local.TESTING ? 5000 : 10000)
-      if (spawnMinionWave) {
-        Wave.spawn(this.map.minionData())
+        const spawnMinionWave = renderTime % 30000 === (Local.TESTING ? 5000 : 10000)
+        if (spawnMinionWave) {
+          Wave.spawn(this.map.minionData())
+        }
+      } else if (renderTime === 0) {
+        this.startPlaying()
       }
 
       ticksRendered += 1
@@ -96,14 +104,24 @@ export default function (gid, size) {
     if (!nextUpdate) {
       return false
     }
+    const onSelectionScreen = updateCount < updatesUntilStart
 
     updateQueue[updateCount] = null
     updateCount += 1
 
     for (let pid in nextUpdate) { // 'action' response
       const player = players[pid]
-      if (player) {
-        const playerActions = nextUpdate[pid]
+      if (!player) {
+        console.warn('Update invalid for player', pid)
+        continue
+      }
+      const playerActions = nextUpdate[pid]
+      if (onSelectionScreen) {
+        console.log('onSelectionScreen', playerActions)
+        if (playerActions.switchUnit) {
+          player.shipName = playerActions.switchUnit
+        }
+      } else {
         const ship = player.unit
         for (let ai = playerActions.length - 1; ai >= 0; ai -= 1) {
           const action = playerActions[ai]
@@ -123,8 +141,6 @@ export default function (gid, size) {
             }
           }
         }
-      } else {
-        console.log('Update invalid for player', pid)
       }
     }
     return true
@@ -145,6 +161,19 @@ export default function (gid, size) {
     }
   }
 
+  this.startPlaying = function () {
+    for (let pid in players) {
+      const player = players[pid]
+      if (player) {
+        player.createShip()
+      }
+    }
+    store.setSelectedUnit(Local.player.unit)
+
+    this.playing = true
+    store.state.game.playing = true
+  }
+
   this.start = function () {
     Local.player = players[Local.playerId]
     Local.player.isLocal = true
@@ -153,26 +182,19 @@ export default function (gid, size) {
     this.beginRender()
 
     ticksPerUpdate = updateDuration / tickDuration
-    console.log('STARTED', updateDuration, tickDuration, ticksPerUpdate)
+    ticksRendered = -updatesUntilStart * ticksPerUpdate
+    console.log('STARTED', updateDuration, tickDuration, ticksPerUpdate, ticksRendered)
     console.log(Local.playerId, players)
 
     const mapType = teamSize <= 1 ? 'tiny' : (teamSize <= 3 ? 'small' : ('standard'))
     this.map.build(mapType)
 
-    for (let pid in players) {
-      const player = players[pid]
-      if (player) {
-        player.createShip()
-      }
-    }
-    store.setSelectedUnit(Local.player.unit)
-    store.state.game.running = true
-
     // status = 'STARTED'
     startTime = performance.now()
     lastTickTime = startTime
-    this.enqueueUpdate(0, {})
+    this.enqueueUpdate(0, {}) //TODO remove?
 
+    store.state.game.running = true
     this.running = true
   }
 
@@ -192,9 +214,10 @@ export default function (gid, size) {
 
   this.updatePlayers = function (gameData) {
     // console.log(gameData)
-    if (gameData.updates) {
+    if (gameData.updates !== undefined) {
       updateDuration = gameData.updates
       tickDuration = gameData.ticks
+      updatesUntilStart = gameData.updatesUntilStart
     }
     const serverPlayers = gameData.players
     players = {}
