@@ -112,51 +112,64 @@ class Ship extends Movable {
     return !this.isDying
   }
 
-  shouldMove (renderTime) {
-    if (!super.shouldMove()) {
-      return false
-    }
+  checkQueuedSkill (renderTime) {
     const targetSkill = this.targetingSkill
     if (targetSkill) {
-      const distance = this.distanceToPoint(targetSkill.px, targetSkill.py)
+      const distance = targetSkill.px ? this.distanceToPoint(targetSkill.px, targetSkill.py) : this.distanceTo(targetSkill.target)
       if (Util.withinSquared(distance, targetSkill.range)) {
+        console.log('In range for skill', renderTime)
         this.performSkill(renderTime, targetSkill.index, targetSkill.target)
         this.setTarget(null)
         this.reachedDestination(false)
         this.targetingSkill = null
-        return false
+        return true
       }
     }
-    return true
+    return false
+  }
+
+  shouldMove (renderTime, tweening) {
+    if (!super.shouldMove()) {
+      return false
+    }
+    if (tweening) {
+      return true
+    }
+    return !this.checkQueuedSkill(renderTime)
   }
 
   // Skills
 
-  trySkill (renderTime, index, target) {
-    if (target) {
+  trySkill (renderTime, index, targetData) {
+    if (targetData) {
       const skill = this.skills.data[index]
       const skillLevel = this.skills.levels[index]
-      console.log(index, target)
-      if (typeof target === 'string') {
-      } else {
-        const destX = target[0]
-        const destY = target[1]
-        const distance = this.distanceToPoint(destX, destY)
-        const skillRange = skill.getRange(skillLevel) * 100
-        if (!Util.withinSquared(distance, skillRange)) {
+      const skillRange = skill.getRange(skillLevel) * 100
+      if (typeof targetData === 'string') {
+        const target = this.setTargetId(targetData)
+        if (target) {
           this.targetingSkill = {
             index: index,
             target: target,
-            px: destX, py: destY,
             range: skillRange,
           }
-          console.log('Queueing skill for target', this.targetingSkill)
-          this.targetDestination(destX, destY)
-          return
+          console.log('Queueing unit target skill', renderTime, this.targetingSkill)
         }
+      } else {
+        const destX = targetData[0]
+        const destY = targetData[1]
+        this.targetingSkill = {
+          index: index,
+          target: targetData,
+          px: destX, py: destY,
+          range: skillRange,
+        }
+        console.log('Queueing ground target skill', renderTime, this.targetingSkill)
+        this.targetDestination(destX, destY)
       }
+      return
     }
-    this.performSkill(renderTime, index, target)
+    this.performSkill(renderTime, index)
   }
 
   performSkill (renderTime, index, target) {

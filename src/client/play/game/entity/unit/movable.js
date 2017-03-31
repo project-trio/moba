@@ -136,12 +136,17 @@ class Movable extends Unit {
     this.isMoving = false
   }
 
-  updateMoveTarget () {
+  updateMoveTarget (renderTime) {
     if (this.attackTarget && this.moveToTarget) {
       if (this.attackTarget.targetableStatus() && this.canSee(this.attackTarget)) {
-        this.isAttackingTarget = this.inAttackRange(this.attackTarget)
-        if (!this.isAttackingTarget) {
-          this.setDestination(this.attackTarget.px, this.attackTarget.py, true)
+        if (this.checkQueuedSkill && this.checkQueuedSkill(renderTime)) {
+          this.setTarget(null)
+          this.reachedDestination(false)
+        } else {
+          this.isAttackingTarget = this.inAttackRange(this.attackTarget)
+          if (!this.isAttackingTarget) {
+            this.setDestination(this.attackTarget.px, this.attackTarget.py, true)
+          }
         }
       } else if (this.requiresSightOfTarget || this.attackTarget.isDying) {
         if (this.isLocal) {

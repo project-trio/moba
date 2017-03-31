@@ -42,10 +42,13 @@ export default {
       cooldowns: [0, 0, 0],
       actives: [0, 0, 0],
 
-      activeSkill: null,
+      active: null,
+      target: null,
+      activation: null,
+
       getGroundTarget: false,
-      groundTarget: null,
-      activateGround: null,
+      getUnitTarget: false,
+      withAlliance: false,
     },
 
     selectedStats: {
@@ -137,9 +140,10 @@ export default {
 
   cancelActiveSkill () {
     this.state.skills.getGroundTarget = false
-    this.state.skills.activateGround = null
-    this.state.skills.groundTarget = null
-    this.state.skills.activeSkill = null
+    this.state.skills.getUnitTarget = false
+    this.state.skills.activation = null
+    this.state.skills.target = null
+    this.state.skills.active = null
     Local.player.unit.removeIndicator()
   },
 

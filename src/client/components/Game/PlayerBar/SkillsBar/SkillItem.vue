@@ -13,7 +13,8 @@
       {{ skill.name }}
     </div>
   </div>
-  <div class="description-tooltip bar-section" v-html="descriptionHtml"></div>
+  <div v-if="isActiveSkill && hintText" class="description-tooltip tooltip-small">{{ hintText }}</div>
+  <div v-if="!isAnySkillActive" class="description-tooltip tooltip-large bar-section" v-html="descriptionHtml"></div>
 </div>
 </template>
 
@@ -52,12 +53,31 @@ export default {
       return this.level === 0 || this.activated || this.cooldownRemaining > 0 || this.disabledByOtherSkill || store.state.dead
     },
 
+    isAnySkillActive () {
+      return store.state.skills.active !== null
+    },
+
     isActiveSkill () {
-      return this.index === store.state.skills.activeSkill
+      return this.index === store.state.skills.active
     },
 
     indexName () {
       return `${this.index + 1}`
+    },
+
+    hintText () {
+      if (this.skill.target <= 1) {
+        return null
+      }
+      if (this.skill.target === 2) {
+        return 'Select a point on the ground to target'
+      }
+      if (this.skill.target === 3) {
+        return 'Select an enemy to target'
+      }
+      if (this.skill.target === 4) {
+        return 'Select an ally to target'
+      }
     },
 
     descriptionHtml () {
@@ -90,7 +110,7 @@ export default {
     },
 
     showingLevelupIndicator () {
-      return store.state.level > store.state.skills.leveled
+      return !this.isAnySkillActive && store.state.level > store.state.skills.leveled
     },
 
     levelupReady () {
@@ -137,13 +157,15 @@ export default {
     currentPress (currentKey) {
       if (currentKey.code === this.keyCode) {
         store.cancelActiveSkill()
-        store.state.skills.activeSkill = this.index
+        store.state.skills.active = this.index
         if (!this.disabled && !currentKey.modifier) {
           if (this.skill.getRange) {
             Local.player.unit.createIndicator(this.skill.getRange(this.level))
           }
           if (this.skill.target === 2) {
             store.state.skills.getGroundTarget = true
+          } else if (this.skill.target === 3) {
+            store.state.skills.getEnemyTarget = true
           }
         }
       } else {
@@ -199,24 +221,32 @@ export default {
       if (this.disabled || this.cooldownRemaining > 200) {
         return
       }
+      const skillIndex = this.index
       if (this.skill.target === 1) {
         store.cancelActiveSkill()
-        Bridge.emit('action', { skill: this.index, target: null })
-      } else if (this.skill.target === 2) {
-        const activate = () => {
-          Bridge.emit('action', { skill: this.index, target: store.state.skills.groundTarget })
+        Bridge.emit('action', { skill: skillIndex, target: null })
+      } else {
+        const groundTarget = this.skill.target === 2
+        const activate = (target) => {
+          Bridge.emit('action', { skill: skillIndex, target: target })
           store.cancelActiveSkill()
         }
         if (pressed) {
-          if (store.state.skills.groundTarget) {
-            activate()
+          const target = groundTarget ? store.state.skills.groundTarget : store.state.skills.unitTarget
+          if (target) {
+            activate(target)
           } else {
             store.cancelActiveSkill()
           }
         } else {
-          store.state.skills.activeSkill = this.index
-          store.state.skills.getGroundTarget = true
-          store.state.skills.activateGround = activate
+          store.state.skills.active = skillIndex
+          store.state.skills.activation = activate
+          if (groundTarget) {
+            store.state.skills.getGroundTarget = true
+          } else {
+            store.state.skills.getUnitTarget = true
+            store.state.skills.withAlliance = this.skill.target === 3 ? false : this.skill.target === 4 ? true : null
+          }
         }
       }
     },
@@ -293,15 +323,21 @@ export default {
 .skill-item .description-tooltip
   display none
   position absolute
-  height 92px
-  top -92px
   left 0
   right 0
   margin 0
-  text-align left
   z-index 0
   pointer-events none
-.skill-item.hasLevelup .description-tooltip
+.skill-item .tooltip-small
+  height 28px
+  top -28px
+  text-shadow -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000
+  font-size 1.1em
+.skill-item .tooltip-large
+  text-align left
+  height 92px
+  top -92px
+.skill-item.hasLevelup .tooltip-large
   height 116px
   top -116px
 

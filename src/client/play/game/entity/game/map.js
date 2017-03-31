@@ -242,7 +242,7 @@ const GameMap = function (parent) {
       const showActivateGround = store.state.skills.getGroundTarget
       if (showActivateGround) {
         const target = getTargetFromPoint(point)
-        store.state.skills.groundTarget = target
+        store.state.skills.target = target
         this.selectionRing.position.x = target[0] / 100
         this.selectionRing.position.y = target[1] / 100
       }
@@ -255,9 +255,8 @@ const GameMap = function (parent) {
     ground.onClick = (point) => {
       const target = getTargetFromPoint(point)
 
-      if (store.state.skills.getGroundTarget && store.state.skills.activateGround) {
-        store.state.skills.groundTarget = target
-        store.state.skills.activateGround()
+      if (store.state.skills.getGroundTarget) {
+        store.state.skills.activation(target)
       } else {
         store.cancelActiveSkill()
         Bridge.emit('action', { target })

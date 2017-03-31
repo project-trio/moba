@@ -214,6 +214,13 @@ class Unit {
     if (this.isDying) {
       return false
     }
+    if (store.state.skills.getUnitTarget) {
+      const withAlliance = store.state.skills.withAlliance
+      if (withAlliance === null || withAlliance === this.localAlly) {
+        store.state.skills.activation(this.id)
+        return true
+      }
+    }
     if (this.localAlly) {
       return false
     }
@@ -362,19 +369,26 @@ class Unit {
     this.attackTarget = null
   }
 
-  setTargetId (id) {
+  getTargetId (id) {
     for (let idx = 0; idx < allUnits.length; idx += 1) {
       const unit = allUnits[idx]
       if (unit.id === id) {
         if (unit.isDead) {
           return false
         }
-        const dist = this.distanceTo(unit)
-        this.moveToTarget = true
-        return this.setTarget(unit, dist, this.isLocal)
+        return unit
       }
     }
     console.error('Target id not found', id)
+  }
+
+  setTargetId (id) {
+    const target = this.getTargetId(id)
+    if (target) {
+      const dist = this.distanceTo(target)
+      this.moveToTarget = true
+      return this.setTarget(target, dist, this.isLocal)
+    }
   }
 
   setTarget (target, distance) {
@@ -553,7 +567,7 @@ Unit.update = function (renderTime, timeDelta, tweening) {
     for (let idx = 0; idx < allUnits.length; idx += 1) {
       const unit = allUnits[idx]
       if (!unit.isDead && unit.movable) {
-        unit.updateMoveTarget()
+        unit.updateMoveTarget(renderTime)
       }
       unit.eyeShield = null
     }
@@ -571,7 +585,7 @@ Unit.update = function (renderTime, timeDelta, tweening) {
     if (tweening && (!unit.isRendering || unit.isBlocked)) {
       continue
     }
-    if (unit.shouldMove(renderTime)) {
+    if (unit.shouldMove(renderTime, tweening)) {
       unit.move(timeDelta, tweening)
     }
   }
