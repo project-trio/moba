@@ -94,7 +94,6 @@ export default function (gid, size) {
       return false
     }
     const onSelectionScreen = updateCount <= updatesUntilStart
-
     updateQueue[updateCount] = null
     updateCount += 1
 
@@ -118,7 +117,10 @@ export default function (gid, size) {
       } else {
         const ship = player.unit
         if (!ship) {
-          console.error('Update invalid for ship', pid, player, nextUpdate)
+          console.error('Update invalid for ship', pid, player, nextUpdate, Unit.all())
+          if (Local.TESTING) {
+            window.alert('No ship')
+          }
           continue
         }
         for (let ai = playerActions.length - 1; ai >= 0; ai -= 1) {
@@ -194,7 +196,6 @@ export default function (gid, size) {
     ticksPerUpdate = updateDuration / tickDuration
     ticksRendered = -updatesUntilStart * ticksPerUpdate
     console.log('STARTED', updateDuration, tickDuration, ticksPerUpdate, ticksRendered)
-    console.log(Local.playerId, players)
 
     const mapType = teamSize <= 1 ? 'tiny' : (teamSize <= 3 ? 'small' : ('standard'))
     this.map.build(mapType)

@@ -256,7 +256,6 @@ export default {
     },
 
     onLevelup () {
-      console.log(this.levelupReady)
       if (this.levelupReady) {
         this.isOverLevelup = false
         this.submittedLevelup = true
