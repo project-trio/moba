@@ -2,6 +2,15 @@
 <div class="inherit">
   <canvas id="canvas" class="inherit"></canvas>
 
+  <div class="game-status">
+    <div v-if="playing">
+      <h1 v-if="reemergeIn !== null">respawn in {{ reemergeIn }}</h1>
+    </div>
+    <div v-else>
+      Game over
+    </div>
+  </div>
+
   <unit-select v-if="!playing"></unit-select>
   <score-bar class="ui-bar"></score-bar>
   <player-bar class="ui-bar"></player-bar>
@@ -46,6 +55,16 @@ export default {
     renderTime () {
       return store.state.game.renderTime
     },
+
+    reemergeIn () {
+      if (store.state.reemergeAt) {
+        const diff = store.state.reemergeAt - this.renderTime
+        if (diff >= 0) {
+          return Math.round(diff / 1000)
+        }
+      }
+      return null
+    },
   },
 }
 </script>
@@ -59,6 +78,21 @@ export default {
   justify-content center
   user-select none
   color #fffffe
+  pointer-events none
+
+.game-status
+  display flex
+  align-content center
+  justify-content center
+  position absolute
+  top 0
+  left 0
+  right 0
+  bottom 0
+  margin auto
+  padding-top 34px
+  color #fffffe
+  text-shadow -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000
   pointer-events none
 
 .bar-section

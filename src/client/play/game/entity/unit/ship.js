@@ -16,7 +16,7 @@ import Unit from '@/play/game/entity/unit/unit'
 
 //LOCAL
 
-const waitToRespawn = 1990
+const waitToRespawn = 2000
 const expPerLevel = 1200
 const maxLevel = 30
 
@@ -256,6 +256,7 @@ class Ship extends Movable {
     this.updateSkills(null)
     this.opacity(0.5)
     this.respawned = false
+    this.reemergeAt = renderTime + waitToRespawn * 2 + 1000 * this.level
 
     super.die(renderTime)
 
@@ -292,6 +293,7 @@ class Ship extends Movable {
 
     if (this.isLocal) {
       store.state.dead = true
+      store.state.reemergeAt = this.reemergeAt
     }
   }
 
@@ -450,11 +452,13 @@ class Ship extends Movable {
     if (this.isDead) {
       if (this.timeOfDeath) {
         const deathDuration = renderTime - this.timeOfDeath
-        if (deathDuration > waitToRespawn) {
+        if (deathDuration >= waitToRespawn) {
           if (!this.respawned) {
             this.respawn()
-          } else if (deathDuration > waitToRespawn + 1000 * this.level) {
-            if (!this.blocked()) {
+          } else if (renderTime >= this.reemergeAt) {
+            if (this.blocked()) {
+              //TODO warning
+            } else {
               this.reemerge()
             }
           }

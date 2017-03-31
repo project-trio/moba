@@ -64,6 +64,7 @@ export default {
       moveSpeed: 0,
     },
     dead: false,
+    reemergeAt: 0,
     level: 1,
     selectedUnit: null,
 
