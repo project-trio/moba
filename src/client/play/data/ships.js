@@ -16,7 +16,7 @@ export default {
 
     moveSpeed: [12, 0],
     turnSpeed: 10,
-    collision: 20,
+    collision: 24,
   },
 
   glitch: {
