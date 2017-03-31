@@ -198,7 +198,7 @@ module.exports = {
     })
 
     client.on('switch unit', (data) => {
-      player.switchUnit = data.name
+      player.switchUnit = data.name //TODO validate real
     })
 
     client.on('action', (data) => {

@@ -21,7 +21,7 @@ export default {
       list: [],
       playersOnline: 0,
 
-      players: null,
+      players: [],
       host: null,
       ready: null,
       running: false,

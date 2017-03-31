@@ -117,9 +117,14 @@ export default function (gid, size) {
       }
       const playerActions = nextUpdate[pid]
       if (onSelectionScreen) {
-        console.log('onSelectionScreen', playerActions)
-        if (playerActions.switchUnit) {
-          player.shipName = playerActions.switchUnit
+        if (playerActions.unit) {
+          player.shipName = playerActions.unit
+          const storePlayer = store.state.game.players[pid]
+          if (!storePlayer) {
+            console.warn('Player not found for store', player, store.state.game.players)
+          } else {
+            storePlayer.shipName = player.shipName
+          }
         }
       } else {
         const ship = player.unit
