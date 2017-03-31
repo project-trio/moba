@@ -22,6 +22,7 @@ class Movable extends Unit {
   constructor (team, statBase, unitScale, x, y, startAngle, isLocal) {
     super(team, statBase, unitScale, x, y, startAngle, isLocal)
 
+    this.stunnedUntil = 0
     this.movable = true
     this.moveToTarget = false
     this.moveTargetAngle = null
@@ -80,6 +81,13 @@ class Movable extends Unit {
     this.infoContainer.position.y = moveToY
   }
 
+  update (renderTime, timeDelta) {
+    if (this.isStunned && !this.checkStun(renderTime)) {
+      this.isStunned = false
+    }
+    super.update(renderTime, timeDelta)
+  }
+
   // Move
 
   blocked (bx, by) {
@@ -128,8 +136,21 @@ class Movable extends Unit {
     }
   }
 
+  stun (renderTime, duration) {
+    const stunEnd = renderTime + duration
+    if (stunEnd > this.stunnedUntil) {
+      console.log('Stun for', duration, stunEnd)
+      this.isStunned = true
+      this.stunnedUntil = stunEnd
+    }
+  }
+
+  checkStun (renderTime) {
+    return renderTime < this.stunnedUntil
+  }
+
   shouldMove () {
-    return this.isMoving
+    return this.isMoving && !this.isStunned
   }
 
   reachedDestination (needsNewDestination) {

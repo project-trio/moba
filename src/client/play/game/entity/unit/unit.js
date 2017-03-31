@@ -43,6 +43,7 @@ class Unit {
     this.untargetable = unattackable
     this.noTargeting = unattackable
     this.eyeShield = null
+    this.isStunned = false
 
     this.fogRadius = null
     this.fogCircle = null
@@ -533,6 +534,9 @@ class Unit {
   }
 
   checkAttack (renderTime) {
+    if (this.isStunned) {
+      return
+    }
     let attackForTick = this.getAttackTarget(allUnits)
     this.isFiring = attackForTick && this.cacheAttackCheck
     if (this.isFiring) {

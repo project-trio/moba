@@ -30,6 +30,7 @@ class Bullet {
     this.maxRange = this.unitTarget ? null : data.maxRange
     this.collisionSize = this.unitTarget ? target.stats.collision : data.collisionSize
     this.explosionRadius = data.explosionRadius
+    this.stunDuration = data.stunDuration
     this.color = data.bulletColor || 0x000000
 
     this.container = Render.group()
@@ -122,7 +123,12 @@ class Bullet {
         parent: Local.game.map.floorContainer,
       })
     } else if (this.unitTarget) {
-      this.target.takeDamage(this.source, renderTime, this.attackDamage, this.attackPierce)
+      if (this.attackDamage) {
+        this.target.takeDamage(this.source, renderTime, this.attackDamage, this.attackPierce)
+      }
+      if (this.stunDuration && this.target.stunnedUntil !== undefined) {
+        this.target.stun(renderTime, this.stunDuration)
+      }
     }
     this.destroy()
   }

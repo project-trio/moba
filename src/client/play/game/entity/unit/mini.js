@@ -115,7 +115,7 @@ class Mini extends Movable {
   }
 
   shouldMove () {
-    return this.currentDest != null
+    return this.currentDest != null && super.shouldMove()
   }
 
   die (renderTime) {

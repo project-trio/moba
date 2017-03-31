@@ -46,7 +46,7 @@ export default {
       },
       start: function (index, level, ship, cancel, target) {
         const damage = levelMultiplier(20, level, 5)
-        const stunDuration = levelMultiplier(1000, level, 100)
+        const stunDuration = levelMultiplier(3000, level, 200)
         const maxRange = this.getRange(level)
         const bulletData = {
           bulletSize: 10,
@@ -55,7 +55,6 @@ export default {
           attackPierce: 10,
           attackMoveSpeed: 8,
           maxRange: maxRange,
-          explosionRadius: 60,
           collisionSize: 10 * 100,
           firstCollision: false,
           stunDuration: stunDuration,

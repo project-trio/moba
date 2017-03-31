@@ -128,16 +128,6 @@ class Ship extends Movable {
     return false
   }
 
-  shouldMove (renderTime, tweening) {
-    if (!super.shouldMove()) {
-      return false
-    }
-    if (tweening) {
-      return true
-    }
-    return !this.checkQueuedSkill(renderTime)
-  }
-
   // Skills
 
   trySkill (renderTime, index, targetData) {
@@ -174,11 +164,11 @@ class Ship extends Movable {
 
   performSkill (renderTime, index, target) {
     if (this.isDead) {
-      console.log('Skill disabled during death', this.id, index)
+      console.log('Skill disabled during death', renderTime, this.id, index)
       return
     }
     if (renderTime < this.skills.cooldowns[index]) {
-      console.log('Skill still on cooldown', this.id, index)
+      console.log('Skill still on cooldown', renderTime, this.id, index)
       return
     }
     const skill = this.skills.data[index]
@@ -471,6 +461,7 @@ class Ship extends Movable {
         }
       }
     } else {
+      this.checkQueuedSkill(renderTime)
       this.updateExperience()
       this.doRegenerate()
       super.update(renderTime, timeDelta)
