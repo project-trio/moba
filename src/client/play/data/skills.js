@@ -105,27 +105,27 @@ export default {
       description: 'Spawns a seeing-eye that reveals nearby enemies',
       target: 2,
       isDisabledBy: null,
-      duration: 35,
-      cooldown: 200,
-      range: 500,
+      duration: 25,
+      cooldown: 400,
+      range: 200,
       getRange: function (level) {
-        return this.range
+        return levelMultiplier(this.range, level, 30)
       },
       getDuration: function (level) {
-        return levelMultiplier(this.duration, level, 2)
+        return levelMultiplier(this.duration, level, 5)
       },
       getCooldown: function (level) {
-        return levelMultiplier(this.cooldown, level, -10)
+        return levelMultiplier(this.cooldown, level, -20)
       },
       start: function (index, level, ship, cancel, target) {
-        const sightRange = levelMultiplier(200, level, 20)
+        const sightRange = levelMultiplier(140, level, 20)
         const stats = { sightRange: [sightRange, 0] }
-        console.log(target)
         ship.eye = new Unit(ship.team, stats, null, target[0] / 100, target[1] / 100, null, false, true)
         const sphere = Render.sphere(12, { parent: ship.eye.top, color: 0xff0000, segments: 16 }) //TODO team color
-        sphere.position.z = 40
+        sphere.position.z = levelMultiplier(50, level, 3)
       },
       end: function (ship) {
+        ship.eye.isDying = true
         ship.eye.destroy()
       },
     },
