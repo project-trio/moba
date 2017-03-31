@@ -14,7 +14,7 @@ export default class Player {
     this.name = data.name
     this.team = parseInt(data.team, 10)
     this.teamIndex = parseInt(data.teamIndex, 10)
-    this.isLocal = false
+    this.isLocal = pid === Local.playerId
     this.chatAt = 0
   }
 
@@ -33,7 +33,7 @@ export default class Player {
 
   createShip () {
     const position = this.spawnLocation()
-    this.unit = new Ship(this.shipName, this, this.team, position[0], position[1])
+    this.unit = new Ship(this.shipName, this, this.team, position[0], position[1], null, this.isLocal)
   }
 
   destroy () {

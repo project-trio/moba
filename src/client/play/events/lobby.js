@@ -56,8 +56,14 @@ export default {
         console.log('Start game', data)
       }
       Local.game.updatePlayers(data)
-      Local.game.starting = true
-      router.replace({ name: 'Game' })
+      if (Local.game.player(Local.playerId)) {
+        Local.game.starting = true
+        router.replace({ name: 'Game' })
+      } else {
+        window.alert('Local player not found. You may be connected on another page. Please refresh and try again.')
+        console.log(Local.playerId, Local.game)
+        router.replace({ name: 'Lobby' })
+      }
     })
   },
 

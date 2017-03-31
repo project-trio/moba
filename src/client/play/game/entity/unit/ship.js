@@ -24,9 +24,9 @@ const maxLevel = 30
 
 class Ship extends Movable {
 
-  constructor (name, player, team, x, y, angle) {
+  constructor (name, player, team, x, y, angle, isLocal) {
     const statBase = shipStats[name]
-    super(team, statBase, 2, x, y, angle, player.isLocal)
+    super(team, statBase, 2, x, y, angle, isLocal)
 
     this.skills = {
       data: skillsData[name],

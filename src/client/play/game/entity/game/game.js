@@ -182,7 +182,6 @@ export default function (gid, size) {
 
   this.start = function () {
     Local.player = players[Local.playerId]
-    Local.player.isLocal = true
 
     TrigCache.prepare()
     this.beginRender()
