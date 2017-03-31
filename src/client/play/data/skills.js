@@ -1,5 +1,9 @@
+import Render from '@/play/render/render'
+
 import AreaOfEffect from '@/play/game/entity/attack/aoe'
 import Bullet from '@/play/game/entity/attack/bullet'
+
+import Unit from '@/play/game/entity/unit/unit'
 
 //LOCAL
 
@@ -23,6 +27,108 @@ export default {
 //BOXY
 
   boxy: [
+    {
+      name: `Lightning Eye`,
+      description: 'Fires a bolt of lightning that stuns its target',
+      target: 3,
+      isDisabledBy: null,
+      duration: 0,
+      cooldown: 150,
+      range: 200,
+      getRange: function (level) {
+        return this.range
+      },
+      getDuration: function (level) {
+        return 0
+      },
+      getCooldown: function (level) {
+        return this.cooldown
+      },
+      start: function (index, level, ship, cancel, target) {
+        const damage = levelMultiplier(20, level, 5)
+        const stunDuration = levelMultiplier(1000, level, 100)
+        const maxRange = this.getRange(level)
+        const bulletData = {
+          bulletSize: 10,
+          bulletColor: 0x00ff66,
+          attackDamage: damage * 100,
+          attackPierce: 10,
+          attackMoveSpeed: 8,
+          maxRange: maxRange,
+          explosionRadius: 60,
+          collisionSize: 10 * 100,
+          firstCollision: false,
+          stunDuration: stunDuration,
+        }
+        new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+      },
+      end: function (ship) {
+      },
+    },
+    {
+      name: `Storm's Eye`,
+      description: 'Create a haven to shield allies inside from oncoming damage',
+      target: 1,
+      isDisabledBy: null,
+      duration: 35,
+      cooldown: 200,
+      range: 150,
+      getRange: function (level) {
+        return this.range
+      },
+      getDuration: function (level) {
+        return levelMultiplier(this.duration, level, 2)
+      },
+      getCooldown: function (level) {
+        return levelMultiplier(this.cooldown, level, -10)
+      },
+      start: function (index, level, ship) {
+        const radius = this.getRange(level)
+        const shield = levelMultiplier(25, level, 2)
+        ship.eyeCircle = new AreaOfEffect(ship, false, {
+          dot: true,
+          color: 0x0066aa,
+          opacity: 0.5,
+          px: ship.px, py: ship.py,
+          z: -4,
+          radius: radius,
+          eyeShield: shield,
+        })
+      },
+      end: function (ship) {
+        ship.eyeCircle.destroy()
+        ship.eyeCircle = null
+      },
+    },
+    {
+      name: 'Providence',
+      description: 'Spawns a seeing-eye that reveals nearby enemies',
+      target: 2,
+      isDisabledBy: null,
+      duration: 35,
+      cooldown: 200,
+      range: 500,
+      getRange: function (level) {
+        return this.range
+      },
+      getDuration: function (level) {
+        return levelMultiplier(this.duration, level, 2)
+      },
+      getCooldown: function (level) {
+        return levelMultiplier(this.cooldown, level, -10)
+      },
+      start: function (index, level, ship, cancel, target) {
+        const sightRange = levelMultiplier(200, level, 20)
+        const stats = { sightRange: [sightRange, 0] }
+        console.log(target)
+        ship.eye = new Unit(ship.team, stats, null, target[0] / 100, target[1] / 100, null, false, true)
+        const sphere = Render.sphere(12, { parent: ship.eye.top, color: 0xff0000, segments: 16 }) //TODO team color
+        sphere.position.z = 40
+      },
+      end: function (ship) {
+        ship.eye.destroy()
+      },
+    },
   ],
 
 //SINKER
