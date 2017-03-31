@@ -272,7 +272,7 @@ export default {
   },
 
   sphere (radius, options) {
-    const geometry = new THREE.SphereBufferGeometry(radius)
+    const geometry = new THREE.SphereBufferGeometry(radius, options.segments, options.segments && options.segments * 2 / 3)
     const material = new THREE.MeshStandardMaterial({color: options.color})
     const sphere = new THREE.Mesh(geometry, material)
     sphere.castShadow = true

@@ -69,9 +69,9 @@ export default function (gid, size) {
         }
       }
       if (renderTime > 0) {
-        Unit.update(renderTime, tickDuration, false)
-        Bullet.update(renderTime, tickDuration, false)
         AreaOfEffect.update(renderTime, Unit.all())
+        Bullet.update(renderTime, tickDuration, false)
+        Unit.update(renderTime, tickDuration, false)
 
         const spawnMinionWave = renderTime % 30000 === (Local.TESTING ? 5000 : 10000)
         if (spawnMinionWave) {
@@ -132,11 +132,12 @@ export default function (gid, size) {
           const action = playerActions[ai]
           const target = action.target
           const skillIndex = action.skill
+          ship.targetingSkill = null
           if (skillIndex !== undefined) {
             if (action.level) {
               ship.levelup(skillIndex)
             } else {
-              ship.performSkill(renderTime, skillIndex, target)
+              ship.trySkill(renderTime, skillIndex, target)
             }
           } else if (target && ship.canMove()) {
             if (typeof target === 'string') {

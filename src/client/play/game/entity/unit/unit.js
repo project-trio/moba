@@ -23,7 +23,8 @@ class Unit {
 
   // Constructor
 
-  constructor (team, statBase, unitScale, x, y, startAngle, isLocal, renderInBackground) {
+  constructor (team, statBase, unitScale, sx, sy, startAngle, isLocal, renderInBackground) {
+    const unattackable = !statBase.healthMax
     this.team = team
     this.localAlly = team === Local.player.team
     this.startAngle = startAngle
@@ -38,8 +39,9 @@ class Unit {
     this.bulletCount = 0
     this.height = 0
     this.angleBase = false
-    this.untargetable = false
-    this.noTargeting = false
+    this.unattackable = unattackable
+    this.untargetable = unattackable
+    this.noTargeting = unattackable
     this.eyeShield = null
 
     this.fogRadius = null
@@ -52,11 +54,6 @@ class Unit {
     this.top = Render.group()
     this.floor = Render.group()
 
-    const ringOffset = unitScale > 3 ? 2 : 6
-    const selectionRing = Render.ring(statBase.collision + ringOffset, 4, { color: 0x000000, opacity: 0.5, parent: this.floor })
-    this.selectionIndicator = selectionRing
-    this.selectionIndicator.visible = false
-
     this.container.add(this.floor)
     this.shipContainer.add(this.base)
     this.shipContainer.add(this.top)
@@ -66,79 +63,88 @@ class Unit {
     // Stats
 
     this.stats = {
-      healthMax: statBase.healthMax[0] * 100,
-      healthRegen: statBase.healthRegen[0],
-      armor: statBase.armor[0],
       sightRange: statBase.sightRange[0] * 100,
-      attackRange: statBase.attackRange[0] * 100,
-      attackDamage: statBase.attackDamage[0] * 100,
-      attackPierce: statBase.attackPierce[0] * 100,
-      attackCooldown: statBase.attackCooldown[0],
-      attackMoveSpeed: statBase.attackMoveSpeed,
-      moveSpeed: statBase.moveSpeed[0],
-      turnSpeed: statBase.turnSpeed || 8,
-      collision: statBase.collision * 100,
-      bulletSize: statBase.bulletSize,
-      bulletColor: statBase.bulletColor,
     }
-
-    this.healthRemaining = this.stats.healthMax
     this.sightRangeCheck = Util.squared(this.stats.sightRange)
-    this.attackRangeCheck = Util.squared(this.stats.attackRange)
-    this.moveConstant = new Decimal(this.stats.moveSpeed).dividedBy(2000)
 
-    this.lastAttack = 0
+    if (!unattackable) {
+      const ringOffset = unitScale > 3 ? 2 : 6
+      const selectionRing = Render.ring(statBase.collision + ringOffset, 4, { color: 0x000000, opacity: 0.5, parent: this.floor })
+      this.selectionIndicator = selectionRing
+      this.selectionIndicator.visible = false
 
-    // Health Bar
+      this.stats.healthMax = statBase.healthMax[0] * 100
+      this.stats.healthRegen = statBase.healthRegen[0]
+      this.stats.armor = statBase.armor[0]
+      this.stats.sightRange = statBase.sightRange[0] * 100
+      this.stats.attackRange = statBase.attackRange[0] * 100
+      this.stats.attackDamage = statBase.attackDamage[0] * 100
+      this.stats.attackPierce = statBase.attackPierce[0] * 100
+      this.stats.attackCooldown = statBase.attackCooldown[0]
+      this.stats.attackMoveSpeed = statBase.attackMoveSpeed
+      this.stats.moveSpeed = statBase.moveSpeed[0]
+      this.stats.turnSpeed = statBase.turnSpeed || 8
+      this.stats.collision = statBase.collision * 100
+      this.stats.bulletSize = statBase.bulletSize
+      this.stats.bulletColor = statBase.bulletColor
 
-    const outlineWeight = 1
-    const hpRadius = 3
+      this.healthRemaining = this.stats.healthMax
+      this.attackRangeCheck = Util.squared(this.stats.attackRange)
+      this.moveConstant = new Decimal(this.stats.moveSpeed).dividedBy(2000)
 
-    let hpHeight, hpWidth
-    let hpOffsetZ
-    if (unitScale === 1) {
-      hpHeight = 3
-      hpWidth = 40
-      hpOffsetZ = 40
-    } else if (unitScale === 2 || unitScale === 3) {
-      hpHeight = 4
-      hpWidth = 62
-      hpOffsetZ = 60
-    } else {
-      hpHeight = 5
-      hpWidth = 72
-      hpOffsetZ = 80
+      this.lastAttack = 0
+
+      // Health Bar
+
+      const outlineWeight = 1
+      const hpRadius = 3
+
+      let hpHeight, hpWidth
+      let hpOffsetZ
+      if (unitScale === 1) {
+        hpHeight = 3
+        hpWidth = 40
+        hpOffsetZ = 40
+      } else if (unitScale === 2 || unitScale === 3) {
+        hpHeight = 4
+        hpWidth = 62
+        hpOffsetZ = 60
+      } else {
+        hpHeight = 5
+        hpWidth = 72
+        hpOffsetZ = 80
+      }
+      this.healthWidth = hpWidth
+      this.infoContainer = Render.group()
+      this.unitInfo = Render.group()
+      this.infoContainer.add(this.unitInfo)
+      this.unitInfo.position.y = 40
+      this.unitInfo.position.z = hpOffsetZ
+      this.hpHeight = hpHeight
+      this.hpWidth = hpWidth
+
+      Render.rectangle(0, 0, hpWidth, hpHeight, { // HP Backing
+        color: 0xFF3333,
+        strokeWidth: outlineWeight,
+        strokeColor: 0xFFFFFF,
+        radius: hpRadius,
+        parent: this.unitInfo,
+      })
+
+      this.healthBar = Render.rectangle(-hpWidth / 2, 0, hpWidth, hpHeight, {
+        color: 0x33FF99,
+        radius: hpRadius + 2,
+        parent: this.unitInfo,
+      })
+      this.healthBar.geometry.translate(hpWidth / 2, 0, 0)
+
+      Local.game.map.addInfo(this.infoContainer)
     }
-    this.healthWidth = hpWidth
-    this.infoContainer = Render.group()
-    this.unitInfo = Render.group()
-    this.infoContainer.add(this.unitInfo)
-    this.unitInfo.position.y = 40
-    this.unitInfo.position.z = hpOffsetZ
-    this.hpHeight = hpHeight
-    this.hpWidth = hpWidth
-
-    Render.rectangle(0, 0, hpWidth, hpHeight, { // HP Backing
-      color: 0xFF3333,
-      strokeWidth: outlineWeight,
-      strokeColor: 0xFFFFFF,
-      radius: hpRadius,
-      parent: this.unitInfo,
-    })
-
-    this.healthBar = Render.rectangle(-hpWidth / 2, 0, hpWidth, hpHeight, {
-      color: 0x33FF99,
-      radius: hpRadius + 2,
-      parent: this.unitInfo,
-    })
-    this.healthBar.geometry.translate(hpWidth / 2, 0, 0)
-
-    Local.game.map.addInfo(this.infoContainer)
 
     // Start location
 
-    if (x) {
-      this.setLocation(x, y)
+    if (sx) {
+      this.setLocation(sx, sy)
     }
 
     Render.addUnit(this, unitScale)
@@ -225,7 +231,9 @@ class Unit {
     this.px = x * 100
     this.py = y * 100
     this.container.position.set(x, y, 0)
-    this.infoContainer.position.set(x, y, 0)
+    if (this.infoContainer) {
+      this.infoContainer.position.set(x, y, 0)
+    }
 
     const angle = this.startAngle || (-Math.PI * 1.5 * (this.team == 0 ? -1 : 1))
     this.top.rotation.z = angle
@@ -234,6 +242,9 @@ class Unit {
 
   distanceTo (unit) {
     return Util.pointDistance(this.px, this.py, unit.px, unit.py)
+  }
+  distanceToPoint (px, py) {
+    return Util.pointDistance(this.px, this.py, px, py)
   }
 
   shouldMove () {
@@ -291,7 +302,7 @@ class Unit {
         console.error('armor', armor)
       }
     }
-    const damage = Math.max(1, amount - armor) //TODO percent
+    const damage = Math.max(1, amount - armor * 10) //TODO percent
     const newHealth = Math.max(this.healthRemaining - damage, 0)
     if (newHealth == 0) {
       this.isDying = true
@@ -324,12 +335,16 @@ class Unit {
   die (time) {
     this.isDead = true
     this.timeOfDeath = time
-    this.infoContainer.visible = false
+    if (this.infoContainer) {
+      this.infoContainer.visible = false
+    }
     this.removeTarget()
   }
 
   destroy () {
-    Render.remove(this.infoContainer)
+    if (this.infoContainer) {
+      Render.remove(this.infoContainer)
+    }
     Render.remove(this.container)
     if (this.fogCircle) {
       Render.remove(this.fogCircle)
@@ -475,6 +490,9 @@ class Unit {
   }
 
   isAttackOffCooldown (renderTime) {
+    if (this.unattackable) {
+      return false
+    }
     let cooldown = this.stats.attackCooldown * 100
     if (this.attackCooldownModifier) {
       cooldown *= this.attackCooldownModifier
@@ -553,7 +571,7 @@ Unit.update = function (renderTime, timeDelta, tweening) {
     if (tweening && (!unit.isRendering || unit.isBlocked)) {
       continue
     }
-    if (unit.shouldMove()) {
+    if (unit.shouldMove(renderTime)) {
       unit.move(timeDelta, tweening)
     }
   }

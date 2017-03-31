@@ -50,6 +50,7 @@ class Ship extends Movable {
     this.selected = false
     this.requiresSightOfTarget = false
     this.reflectDamage = null
+    this.targetingSkill = null
 
     store.state.game.ships[this.id] = { kills: 0, deaths: 0, damage: 0 }
     this.displayStats = store.state.game.ships[this.id]
@@ -111,11 +112,52 @@ class Ship extends Movable {
     return !this.isDying
   }
 
-  shouldMove () {
-    return this.isMoving
+  shouldMove (renderTime) {
+    if (!super.shouldMove()) {
+      return false
+    }
+    const targetSkill = this.targetingSkill
+    if (targetSkill) {
+      const distance = this.distanceToPoint(targetSkill.px, targetSkill.py)
+      if (Util.withinSquared(distance, targetSkill.range)) {
+        this.performSkill(renderTime, targetSkill.index, targetSkill.target)
+        this.setTarget(null)
+        this.reachedDestination(false)
+        this.targetingSkill = null
+        return false
+      }
+    }
+    return true
   }
 
   // Skills
+
+  trySkill (renderTime, index, target) {
+    if (target) {
+      const skill = this.skills.data[index]
+      const skillLevel = this.skills.levels[index]
+      console.log(index, target)
+      if (typeof target === 'string') {
+      } else {
+        const destX = target[0]
+        const destY = target[1]
+        const distance = this.distanceToPoint(destX, destY)
+        const skillRange = skill.getRange(skillLevel) * 100
+        if (!Util.withinSquared(distance, skillRange)) {
+          this.targetingSkill = {
+            index: index,
+            target: target,
+            px: destX, py: destY,
+            range: skillRange,
+          }
+          console.log('Queueing skill for target', this.targetingSkill)
+          this.targetDestination(destX, destY)
+          return
+        }
+      }
+    }
+    this.performSkill(renderTime, index, target)
+  }
 
   performSkill (renderTime, index, target) {
     if (this.isDead) {
