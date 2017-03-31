@@ -1,11 +1,11 @@
 <template>
-<div class="skill-item" :class="{ selected: !disabled && isActiveSkill, disabled: disabled, cooldown: cooldownTime, hasLevelup: showingLevelupIndicator }">
+<div class="skill-item" :class="{ selected: !disabled && isActiveSkill, disabled: disabled, cooldown: cooldownTime, showsLevelup: showingLevelupIndicator }">
   <div class="skill-content">
     <div class="button-content">
       <div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`"></div>
       <div :class="`item-circle level-ring-${indexName}`"></div>
       <button @click="onSkill(false)" @mouseenter="overButton(true)" @mouseleave="overButton(false)" class="skill-button">{{ indexName }}</button>
-      <div v-if="levelupReady" @click="onLevelup" @mouseenter="overLevelup(true)" @mouseleave="overLevelup(false)" class="button-levelup interactive">
+      <div v-if="showingLevelupIndicator" @click="onLevelup" @mouseenter="overLevelup(true)" @mouseleave="overLevelup(false)" class="button-levelup interactive">
         ⬆︎+1
       </div>
     </div>
@@ -109,12 +109,16 @@ export default {
       return this.level / 10
     },
 
+    higherLevelThanSkills () {
+      return store.state.level > store.state.skills.leveled
+    },
+
     showingLevelupIndicator () {
-      return !this.isAnySkillActive && store.state.level > store.state.skills.leveled
+      return !this.isAnySkillActive && this.higherLevelThanSkills
     },
 
     levelupReady () {
-      return !this.submittedLevelup && this.levelupProgress < 1 && this.showingLevelupIndicator
+      return !this.submittedLevelup && this.levelupProgress < 1 && this.higherLevelThanSkills
     },
 
     activeDuration () {
@@ -164,8 +168,8 @@ export default {
           }
           if (this.skill.target === 2) {
             store.state.skills.getGroundTarget = true
-          } else if (this.skill.target === 3) {
-            store.state.skills.getEnemyTarget = true
+          } else {
+            store.state.skills.getUnitTarget = true
           }
         }
       } else {
@@ -252,6 +256,7 @@ export default {
     },
 
     onLevelup () {
+      console.log(this.levelupReady)
       if (this.levelupReady) {
         this.isOverLevelup = false
         this.submittedLevelup = true
@@ -337,7 +342,7 @@ export default {
   text-align left
   height 92px
   top -92px
-.skill-item.hasLevelup .tooltip-large
+.skill-item.showsLevelup .tooltip-large
   height 116px
   top -116px
 

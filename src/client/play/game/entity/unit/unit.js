@@ -197,10 +197,21 @@ class Unit {
     if (this.isDying) {
       return false
     }
+    if (store.state.skills.getUnitTarget && this.id !== store.state.skills.getUnitTarget.id) {
+      const withAlliance = store.state.skills.withAlliance
+      if (withAlliance === null || withAlliance === this.localAlly) {
+        store.state.skills.unitTarget = this.id
+        this.setSelection(0xff0000)
+      }
+    }
     document.body.style.cursor = 'pointer'
   }
 
   onBlur () {
+    if (this.id === store.state.skills.unitTarget) {
+      store.state.skills.unitTarget = null
+      this.setSelection(null)
+    }
     document.body.style.cursor = null
   }
 
