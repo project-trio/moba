@@ -1,12 +1,16 @@
 <template>
 <div class="skill-item" :class="{ selected: !disabled && isActiveSkill, disabled: disabled, cooldown: cooldownTime, hasLevelup: showingLevelupIndicator }">
-  <div class="button-content">
-    <div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`"></div>
-    <div :class="`item-circle level-ring-${indexName}`"></div>
-    <button @click="onSkill(false)" @mouseenter="overButton(true)" @mouseleave="overButton(false)" class="skill-button">{{ indexName }}</button>
-    <div>{{ skill.name }}</div>
-    <div v-if="levelupReady" @click="onLevelup" @mouseenter="overLevelup(true)" @mouseleave="overLevelup(false)" class="button-levelup interactive">
-      ⬆︎+1
+  <div class="skill-content">
+    <div class="button-content">
+      <div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`"></div>
+      <div :class="`item-circle level-ring-${indexName}`"></div>
+      <button @click="onSkill(false)" @mouseenter="overButton(true)" @mouseleave="overButton(false)" class="skill-button">{{ indexName }}</button>
+      <div v-if="levelupReady" @click="onLevelup" @mouseenter="overLevelup(true)" @mouseleave="overLevelup(false)" class="button-levelup interactive">
+        ⬆︎+1
+      </div>
+    </div>
+    <div class="skill-label">
+      {{ skill.name }}
     </div>
   </div>
   <div class="description-tooltip bar-section" v-html="descriptionHtml"></div>
@@ -268,9 +272,14 @@ export default {
   display inline-block
   margin 4px
 
+.skill-item .skill-content
+  width 104px
 .skill-item .button-content
   position relative
-  z-index 1
+  width 88px
+  height 88px
+  margin auto
+// .skill-item .skill-label
 
 .skill-item.selected .skill-button
   box-shadow inset 0 0 32px #f0d
