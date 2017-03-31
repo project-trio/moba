@@ -23,7 +23,7 @@ const animate = function (timestamp) {
     const isPlaying = game.playing
     const ticksToRender = game.calculateTicksToRender(timestamp)
     if (ticksToRender > 0) {
-      const processUpdate = isPlaying && updatePanel && ticksToRender == 1
+      const processUpdate = isPlaying && updatePanel
       if (processUpdate) {
         updatePanel.begin()
       }
@@ -47,13 +47,14 @@ const animate = function (timestamp) {
       game.map.track(position.x, position.y)
     }
     Render.render(Unit.all())
+
+    window.requestAnimationFrame(animate)
   }
   lastUpdate = timestamp
 
   if (framePanel) {
     framePanel.end()
   }
-  window.requestAnimationFrame(animate)
 }
 
 //PUBLIC
@@ -63,16 +64,29 @@ export default {
   start () {
     window.requestAnimationFrame(animate)
 
-    // if (Local.TESTING) {
-      updatePanel = new Stats()
-      updatePanel.showPanel(1)
-      document.body.appendChild(updatePanel.dom)
-
-      framePanel = new Stats()
-      framePanel.showPanel(0)
-      framePanel.dom.style.top = '48px'
-      document.body.appendChild(framePanel.dom)
+    // if (!Local.TESTING) {
+    //   return
     // }
+    updatePanel = new Stats()
+    updatePanel.showPanel(1)
+    document.body.appendChild(updatePanel.dom)
+
+    framePanel = new Stats()
+    framePanel.showPanel(0)
+    framePanel.dom.style.top = '48px'
+    document.body.appendChild(framePanel.dom)
+  },
+
+  stop () {
+    if (Local.game) {
+      Local.game.running = false
+    }
+    if (updatePanel) {
+      updatePanel.dom.remove()
+      framePanel.dom.remove()
+      updatePanel = null
+      framePanel = null
+    }
   },
 
 }

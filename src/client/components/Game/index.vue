@@ -1,23 +1,29 @@
 <template>
 <div class="inherit">
   <canvas id="canvas" class="inherit"></canvas>
+
+  <unit-select v-if="!playing"></unit-select>
   <score-bar class="ui-bar"></score-bar>
   <player-bar class="ui-bar"></player-bar>
 </div>
 </template>
 
 <script>
-import PlayerBar from '@/components/Game/PlayerBar'
-import ScoreBar from '@/components/Game/ScoreBar'
+import store from '@/store'
 
 import Local from '@/play/local'
 
 import Loop from '@/play/render/loop'
 
+import PlayerBar from '@/components/Game/PlayerBar'
+import ScoreBar from '@/components/Game/ScoreBar'
+import UnitSelect from '@/components/Game/UnitSelect'
+
 export default {
   components: {
     PlayerBar,
     ScoreBar,
+    UnitSelect,
   },
 
   mounted () {
@@ -26,6 +32,20 @@ export default {
     }
     Local.game.start()
     Loop.start()
+  },
+
+  destroyed () {
+    Loop.stop()
+  },
+
+  computed: {
+    playing () {
+      return store.state.game.playing
+    },
+
+    renderTime () {
+      return store.state.game.renderTime
+    },
   },
 }
 </script>

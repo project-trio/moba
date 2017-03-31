@@ -1,13 +1,15 @@
 <template>
 <div class="player-bar">
   <chat-bar></chat-bar>
-  <player-info class="bar-section"></player-info>
-  <skills-bar class="bar-section"></skills-bar>
-  <minimap class="bar-section"></minimap>
+  <player-info v-show="playing" class="bar-section"></player-info>
+  <skills-bar v-show="playing" class="bar-section"></skills-bar>
+  <minimap v-show="playing" class="bar-section"></minimap>
 </div>
 </template>
 
 <script>
+import store from '@/store'
+
 import ChatBar from '@/components/Game/PlayerBar/ChatBar'
 import Minimap from '@/components/Game/PlayerBar/Minimap'
 import PlayerInfo from '@/components/Game/PlayerBar/PlayerInfo'
@@ -19,6 +21,12 @@ export default {
     Minimap,
     PlayerInfo,
     SkillsBar,
+  },
+
+  computed: {
+    playing () {
+      return store.state.game.playing
+    },
   },
 }
 </script>
