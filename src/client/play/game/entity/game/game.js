@@ -29,26 +29,15 @@ export default function (gid, size) {
   let ticksRendered = 0
   let updatesUntilStart = 0
   let lastTickTime
-  let tickOffsets = -4
+  let tickOffsets = -5
 
   this.id = gid
   this.running = false
   this.playing = false
+  this.serverUpdate = -1
 
   store.state.game.running = false
   store.state.game.playing = false
-
-  this.beginRender = function () {
-    const gameContainer = Render.group()
-    this.container = gameContainer
-
-    this.serverUpdate = -1
-    // this.running = false
-
-    this.map = new GameMap(gameContainer)
-
-    Render.add(gameContainer)
-  }
 
   this.calculateTicksToRender = function (currentTime) {
     const tickOffsetTime = tickOffsets * ticksPerUpdate * tickDuration / 2
@@ -112,7 +101,7 @@ export default function (gid, size) {
     for (let pid in nextUpdate) { // 'action' response
       const player = players[pid]
       if (!player) {
-        console.warn('Update invalid for player', pid)
+        console.error('Update invalid for player', pid, nextUpdate)
         continue
       }
       const playerActions = nextUpdate[pid]
@@ -128,6 +117,10 @@ export default function (gid, size) {
         }
       } else {
         const ship = player.unit
+        if (!ship) {
+          console.error('Update invalid for ship', pid, player, nextUpdate)
+          continue
+        }
         for (let ai = playerActions.length - 1; ai >= 0; ai -= 1) {
           const action = playerActions[ai]
           const target = action.target
@@ -168,6 +161,10 @@ export default function (gid, size) {
   }
 
   this.startPlaying = function () {
+    if (this.playing) {
+      console.warn('game already playing')
+      return
+    }
     for (let pid in players) {
       const player = players[pid]
       if (player) {
@@ -181,10 +178,18 @@ export default function (gid, size) {
   }
 
   this.start = function () {
+    if (this.running) {
+      console.warn('game already running')
+      return
+    }
     Local.player = players[Local.playerId]
 
     TrigCache.prepare()
-    this.beginRender()
+
+    const gameContainer = Render.group()
+    this.container = gameContainer
+    this.map = new GameMap(gameContainer)
+    Render.add(gameContainer)
 
     ticksPerUpdate = updateDuration / tickDuration
     ticksRendered = -updatesUntilStart * ticksPerUpdate
@@ -197,7 +202,6 @@ export default function (gid, size) {
     // status = 'STARTED'
     startTime = performance.now()
     lastTickTime = startTime
-    this.enqueueUpdate(0, {}) //TODO remove?
 
     store.state.game.running = true
     this.running = true

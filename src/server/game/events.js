@@ -98,8 +98,6 @@ const loop = function() {
   for (let idx = 0; idx < games.length; idx += 1) {
     const game = games[idx]
     if (game.started) {
-      game.serverUpdate += 1
-
       const actionData = {}
       const onSelectionScreen = game.serverUpdate < updatesUntilStart
       for (let pid in game.players) {
@@ -121,30 +119,36 @@ const loop = function() {
             submittingSkills[levelupIndex] = true
           }
 
-          let hasTarget = false
-          for (let ai = player.actions.length - 1; ai >= 0; ai -= 1) {
-            const action = player.actions[ai]
-            const target = action.target
-            if (target) {
-              if (hasTarget) {
-                continue
+          const pendingActionCount = player.actions.length
+          if (pendingActionCount) {
+            let hasTarget = false
+            for (let ai = pendingActionCount - 1; ai >= 0; ai -= 1) {
+              const action = player.actions[ai]
+              const target = action.target
+              if (target) {
+                if (hasTarget) {
+                  continue
+                }
+                hasTarget = true
               }
-              hasTarget = true
-            }
-            const skillIndex = action.skill
-            if (skillIndex !== undefined) {
-              if (submittingSkills[skillIndex]) {
-                continue
+              const skillIndex = action.skill
+              if (skillIndex !== undefined) {
+                if (submittingSkills[skillIndex]) {
+                  continue
+                }
+                submittingSkills[skillIndex] = true
               }
-              submittingSkills[skillIndex] = true
+              playerActions.push(action)
             }
-            playerActions.push(action)
+            player.actions = []
           }
-          actionData[pid] = playerActions
-          player.actions = []
+          if (playerActions.length > 0) {
+            actionData[pid] = playerActions
+          }
         }
       }
       game.broadcast('update', { update: game.serverUpdate, actions: actionData })
+      game.serverUpdate += 1
     } else if ((CommonConsts.TESTING || game.size < 1) && game.checkFull()) {
       startGame(game)
     }
