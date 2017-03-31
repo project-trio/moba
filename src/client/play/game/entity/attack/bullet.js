@@ -86,7 +86,7 @@ class Bullet {
       } else { //TODO workaround
         moveX = 0
         moveY = 0
-        console.warn('Bullet at destination', this.px, this.py)
+        // console.warn('Bullet at destination', this.px, this.py)
       }
     } else {
       this.aimTargetAngle = Math.atan2(dy, dx)

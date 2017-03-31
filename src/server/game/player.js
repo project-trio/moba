@@ -8,7 +8,7 @@ module.exports = class Player {
     this.team = null
     this.teamIndex = null
     this.name = client.name
-    this.shipName = 'sinker'
+    this.shipName = 'boxy'
     this.switchUnit = null
 
     this.serverUpdate = 0
