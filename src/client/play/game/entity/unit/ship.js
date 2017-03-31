@@ -218,7 +218,12 @@ class Ship extends Movable {
       this.displayStats.deaths += 1
     }
 
-    const damagers = []
+    const killData = {
+      kill: this.player.name,
+      damagers: [],
+      team: this.team,
+      executed: false,
+    }
     let lastDamager = null
     let lastDamageAt = 0
     for (let did in this.damagers) {
@@ -231,13 +236,14 @@ class Ship extends Movable {
       if (enemyDamage.unit.player && damagedAt > renderTime - 10 * 1000) {
         this.displayStats.deaths += 1
         enemyDamage.unit.kills += 1
-        damagers.push(enemyDamage.unit.player.name)
+        killData.damagers.push(enemyDamage.unit.player.name)
       }
     }
-    if (!damagers.length) {
-      damagers.push(lastDamager)
+    if (!killData.damagers.length) {
+      killData.damagers.push(lastDamager)
+      killData.executed = true
     }
-    store.state.chatMessages.push({ kill: this.player.name, damagers: damagers, team: this.team })
+    store.state.chatMessages.push(killData)
 
     if (this.isLocal) {
       store.state.dead = true
