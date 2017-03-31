@@ -93,7 +93,7 @@ export default function (gid, size) {
     if (!nextUpdate) {
       return false
     }
-    const onSelectionScreen = updateCount < updatesUntilStart
+    const onSelectionScreen = updateCount <= updatesUntilStart
 
     updateQueue[updateCount] = null
     updateCount += 1

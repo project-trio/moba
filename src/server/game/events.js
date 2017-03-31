@@ -99,7 +99,7 @@ const loop = function() {
     const game = games[idx]
     if (game.started) {
       const actionData = {}
-      const onSelectionScreen = game.serverUpdate < updatesUntilStart
+      const onSelectionScreen = game.serverUpdate <= updatesUntilStart
       for (let pid in game.players) {
         const player = game.players[pid]
         if (onSelectionScreen) {
