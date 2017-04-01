@@ -85,7 +85,7 @@ export default {
       const rows = [`<div class="description-text">${this.skill.description}</div>`]
       if (this.skill.duration) {
         let durationText = `${this.activeDuration / 1000}`
-        if (this.isOverLevelup) {
+        if (this.isOverLevelup && this.level > 0) {
           const diff = this.skill.getDuration(this.level + 1) * 100 - this.activeDuration
           durationText += ` <span class="levelup">(${diff >= 0 ? '+' : ''}${diff / 1000})</span>`
         }
@@ -93,7 +93,7 @@ export default {
       }
       if (this.skill.cooldown) {
         let cooldownText = `${this.cooldownDuration / 1000}`
-        if (this.isOverLevelup) {
+        if (this.isOverLevelup && this.level > 0) {
           const diff = this.skill.getCooldown(this.level + 1) * 100 - this.cooldownDuration
           cooldownText += ` <span class="levelup">(${diff >= 0 ? '+' : ''}${diff / 1000})</span>`
         }
@@ -123,10 +123,10 @@ export default {
     },
 
     activeDuration () {
-      return this.skill.getDuration(this.level) * 100
+      return this.skill.getDuration(this.level === 0 ? 1 : this.level) * 100
     },
     cooldownDuration () {
-      return this.skill.getCooldown(this.level) * 100
+      return this.skill.getCooldown(this.level === 0 ? 1 : this.level) * 100
     },
 
     allActives () {
