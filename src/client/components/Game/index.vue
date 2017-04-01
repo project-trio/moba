@@ -3,11 +3,14 @@
   <canvas id="canvas" class="inherit"></canvas>
 
   <div class="game-status">
-    <div v-if="playing">
+    <div v-if="missingUpdate">
+      <h1>waiting for server connection</h1>
+    </div>
+    <div v-else-if="playing">
       <h1 v-if="reemergeIn !== null">respawn in {{ reemergeIn }}</h1>
     </div>
     <div v-else-if="!running">
-      <h1>Game over</h1>
+      <h1>game over</h1>
     </div>
   </div>
 
@@ -48,6 +51,9 @@ export default {
   },
 
   computed: {
+    missingUpdate () {
+      return store.state.game.missingUpdate
+    },
     running () {
       return store.state.game.running
     },

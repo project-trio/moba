@@ -51,8 +51,13 @@ export default function (gid, size) {
     while (ticksToRender > 0) {
       renderTime = ticksRendered * tickDuration
       if (ticksRendered % ticksPerUpdate === 0) {
-        if (!dequeueUpdate(renderTime)) {
+        if (dequeueUpdate(renderTime)) {
+          store.state.game.missingUpdate = false
+        } else {
           tickOffsets += 1
+          if (ticksToRender > ticksPerUpdate) {
+            store.state.game.missingUpdate = true
+          }
           console.log('Missing update', ticksToRender, tickOffsets)
           break
         }
