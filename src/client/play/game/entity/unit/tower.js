@@ -1,6 +1,5 @@
 import store from '@/store'
 
-import dataConstants from '@/play/data/constants'
 import towersData from '@/play/data/towers'
 
 import Local from '@/play/local'
@@ -25,9 +24,8 @@ class Tower extends Unit {
     spawnCount += 1
     this.targetedAt = null
 
-    const teamColor = dataConstants.teamColors[team]
-    Render.voxel('turret-base', {teamColor: teamColor, receiveShadow: true, parent: this.base, owner: this})
-    Render.voxel('turret-top', {teamColor: teamColor, parent: this.top, owner: this})
+    Render.voxel(team, 'turret-base', { receiveShadow: true, parent: this.base, owner: this })
+    Render.voxel(team, 'turret-top', { parent: this.top, owner: this })
 
     this.isBlocking = true
 

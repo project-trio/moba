@@ -1,4 +1,3 @@
-import dataConstants from '@/play/data/constants'
 import minisData from '@/play/data/minis'
 
 import Render from '@/play/render/render'
@@ -7,39 +6,55 @@ import Movable from '@/play/game/entity/unit/movable'
 
 //CLASS
 
-let mapWidth, mapHeight //TODO
+let mapWidth, mapHeight
 let spawnCount = 0
 
 class Mini extends Movable {
 
-  constructor (team, type, path, mirrored, _mapWidth, _mapHeight) {
-    mapWidth = _mapWidth
-    mapHeight = _mapHeight
-
+  constructor (team, type, path, mirrored) {
     const stats = minisData[type]
 
     super(team, stats, 1)
 
+    this.type = type
     this.name = `${type} mini`
+    this.moveToTarget = true
+    this.exactDestination = true
+
+    this.setPath(path, mirrored)
+
+    Render.voxel(team, 'mini', { z: -7, parent: this.top, owner: this })
+  }
+
+  setPath (path, mirrored) {
     this.id = `mini${spawnCount}`
     spawnCount += 1
-    this.moveToTarget = true
     this.path = path
     this.pathFlip = false
     this.mirrored = mirrored
     this.pathProgress = 0
-    this.exactDestination = true
-
     this.pathing = true
     this.returningToPath = false
     this.pathStep = 0
 
     this.updateDestination()
     this.setLocation(this.currentDest[0], this.currentDest[1])
-
     this.reachedDestination(true)
+  }
 
-    Render.voxel('mini', {z: -7, teamColor: dataConstants.teamColors[team], parent: this.top, owner: this})
+  refresh (team, path, mirrored) {
+    this.isDead = false
+    this.isDying = false
+    this.updateHealth(this.stats.healthMax)
+    if (this.isRendering) {
+      this.container.visible = true
+    }
+
+    this.setPath(path, mirrored)
+
+    this.damagers = {}
+    this.attackTarget = null
+    this.invisible = false
   }
 
   setDestination (x, y, preadjusted, moveX, moveY, fixedMovement) {
@@ -70,13 +85,13 @@ class Mini extends Movable {
       if (this.mirrored) {
         nextDest[0] = mapWidth - nextDest[0]
       }
-      if (nextDest[2] && this.pathFlip == this.mirrored) {
+      if (nextDest[2] && this.pathFlip === this.mirrored) {
         nextDest[2] = -nextDest[2]
       }
-      if ((this.team == 0) != this.pathFlip) {
+      if ((this.team === 0) != this.pathFlip) {
         nextDest[1] = mapHeight - nextDest[1]
       }
-      if (nextDest[3] && this.team == 1) {
+      if (nextDest[3] && this.team === 1) {
         nextDest[3] = -nextDest[3]
       }
     }
@@ -118,10 +133,17 @@ class Mini extends Movable {
     return this.currentDest != null && super.shouldMove()
   }
 
-  die (renderTime) {
-    super.die(renderTime)
+  die () {
+    this.isDead = true
+    this.container.visible = false
+    this.isRendering = false
+    this.invisible = true
+    this.removeTarget()
 
-    this.destroy()
+    const cacheArray = cache[this.type][this.team]
+    setTimeout(() => {
+      cacheArray.push(this)
+    }, 0)
   }
 
   // Aim
@@ -151,6 +173,26 @@ class Mini extends Movable {
     }
   }
 
+}
+
+//CACHE
+
+const cache = {
+  melee: [[], []],
+  ranged: [[], []],
+}
+
+Mini.spawn = function (team, type, path, mirrored) {
+  const cachedMini = cache[type][team].pop()
+  if (cachedMini) {
+    return cachedMini.refresh(team, path, mirrored)
+  }
+  return new Mini(team, type, path, mirrored)
+}
+
+Mini.init = function (_mapWidth, _mapHeight) {
+  mapWidth = _mapWidth
+  mapHeight = _mapHeight
 }
 
 export default Mini

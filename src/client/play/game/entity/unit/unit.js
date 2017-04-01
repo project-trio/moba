@@ -26,7 +26,7 @@ class Unit {
   constructor (team, statBase, unitScale, sx, sy, startAngle, isLocal, renderInBackground) {
     const unattackable = !statBase.healthMax
     this.team = team
-    this.localAlly = team === Local.player.team
+    this.localAlly = Local.player && team === Local.player.team
     this.startAngle = startAngle
     this.damagers = {}
     this.isLocal = isLocal
@@ -293,7 +293,7 @@ class Unit {
   }
 
   addHealth (addedHealth) {
-    if (this.healthRemaining == this.stats.healthMax) {
+    if (this.healthRemaining === this.stats.healthMax) {
       return
     }
 
@@ -525,7 +525,7 @@ class Unit {
     if (this.isStunned) {
       return
     }
-    let attackForTick = this.getAttackTarget(allUnits)
+    const attackForTick = this.getAttackTarget(allUnits)
     this.isFiring = attackForTick && this.cacheAttackCheck
     if (this.isFiring) {
       this.attack(attackForTick, renderTime)

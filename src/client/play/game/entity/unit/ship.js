@@ -4,7 +4,6 @@ import skillsData from '@/play/data/skills'
 
 import store from '@/store'
 
-import dataConstants from '@/play/data/constants'
 import shipStats from '@/play/data/ships'
 
 import Render from '@/play/render/render'
@@ -62,11 +61,10 @@ class Ship extends Movable {
     }
 
     const offset = name === 'roller' ? -19 : 0
-    const teamColor = dataConstants.teamColors[team]
-    Render.voxel(`${name}-top`, {teamColor: teamColor, parent: this.top, z: offset, owner: this})
+    Render.voxel(team, `${name}-top`, { parent: this.top, z: offset, owner: this })
     if (statBase.split) {
       this.angleBase = true
-      Render.voxel(`${name}-base`, {teamColor: teamColor, parent: this.base, z: offset, owner: this})
+      Render.voxel(team, `${name}-base`, {parent: this.base, z: offset, owner: this})
     }
 
     // const base = Render.sprite('ship')
@@ -314,7 +312,7 @@ class Ship extends Movable {
     this.isBlocking = true
     this.opacity(1.0)
 
-    if (this.localAlly || this.isRendering) {
+    if (this.isRendering) {
       this.infoContainer.visible = true
     }
     if (this.isLocal) {

@@ -10,6 +10,7 @@ import pointer from '@/play/render/pointer'
 import Render from '@/play/render/render'
 import RenderMinimap from '@/play/render/minimap'
 
+import Mini from '@/play/game/entity/unit/mini'
 import Tower from '@/play/game/entity/unit/tower'
 
 //LAYOUTS
@@ -208,6 +209,8 @@ const GameMap = function (parent) {
     const mapHeight = layout.height
     Render.positionCamera(mapWidth / 2, mapHeight / 2)
 
+    Mini.init(mapWidth, mapHeight)
+
     this.selectionRing = Render.ring(32, 4, {
       color: 0xff00dd,
       opacity: 0.5,
@@ -272,6 +275,16 @@ const GameMap = function (parent) {
           Bridge.emit('action', { target: [dx, dy] })
         }
       }, Math.random() * 2000 + 1000)
+    }
+
+    for (let idx = 0; idx < layout.minions.length; idx += 1) {
+      const minionSpawn = layout.minions[idx]
+      for (let team = 0; team < 2; team += 1) {
+        for (let pidx = 0; pidx < minionSpawn.paths.length; pidx += 1) {
+          const mini = Mini.spawn(team, minionSpawn.type, minionSpawn.paths[pidx], minionSpawn.mirrored)
+          mini.isDying = true
+        }
+      }
     }
 
     for (let idx = 0; idx < layout.walls.length; idx += 1) {

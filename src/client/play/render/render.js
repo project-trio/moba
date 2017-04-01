@@ -2,6 +2,8 @@ const THREE = require('three')
 
 import store from '@/store'
 
+import dataConstants from '@/play/data/constants'
+
 import Vox from '@/play/external/vox'
 
 import pointer from '@/play/render/pointer'
@@ -15,6 +17,8 @@ const WALL_HEIGHT = 60
 let windowWidth, windowHeight
 
 let font
+
+let voxelCache = [{}, {}]
 
 //LOCAL
 
@@ -165,24 +169,32 @@ export default {
     return sprite
   },
 
-  voxel (name, options) {
-    const parser = new Vox.Parser()
-    parser.parse(require(`@/assets/${name}.vox`)).then((voxelData) => {
-      const builder = new Vox.MeshBuilder(voxelData, { voxelSize: 2 }) //TODO cache
+  voxelMesh (mesh, team, options) {
+    mesh.rotation.x = Math.PI / 2
+    if (options.z) {
+      mesh.position.z = options.z
+    }
+    if (options.parent) {
+      options.parent.add(mesh)
+    }
+    mesh.castShadow = true
+    mesh.receiveShadow = true
+    mesh.owner = options.owner
+    return mesh
+  },
+
+  voxel (team, name, options) {
+    let builder = voxelCache[team][name]
+    if (builder) {
       const mesh = builder.createMesh()
-      mesh.rotation.x = Math.PI / 2
-      if (options.z) {
-        mesh.position.z = options.z
-      }
-      if (options.parent) {
-        options.parent.add(mesh)
-      }
-      if (options.teamColor) {
-        mesh.material.color.setHex(options.teamColor)
-      }
-      mesh.castShadow = true
-      mesh.receiveShadow = true
-      mesh.owner = options.owner
+      return this.voxelMesh(mesh, team, options)
+    }
+    new Vox.Parser().parse(require(`@/assets/${name}.vox`)).then((voxelData) => {
+      let builder = new Vox.MeshBuilder(voxelData, { voxelSize: 2 }) //TODO cache
+      voxelCache[team][name] = builder
+      const mesh = builder.createMesh()
+      mesh.material.color.setHex(dataConstants.teamColors[team])
+      return this.voxelMesh(mesh, team, options)
     })
   },
 

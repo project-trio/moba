@@ -1,12 +1,8 @@
-import Local from '@/play/local'
-
 import Mini from '@/play/game/entity/unit/mini'
 
 export default {
 
   spawn (waveData) {
-    const mapWidth = Local.game.map.width()
-    const mapHeight = Local.game.map.height()
     waveData.forEach((minionData) => {
       const paths = minionData.paths
       const name = minionData.type
@@ -15,7 +11,7 @@ export default {
           const mirrored = mirror == 0
           for (let pi = 0; pi < paths.length; pi += 1) {
             const path = paths[pi]
-            new Mini(team, name, path, mirrored, mapWidth, mapHeight)
+            Mini.spawn(team, name, path, mirrored)
           }
         }
       }
