@@ -1,5 +1,6 @@
 <template>
 <div class="settings-buttons">
+  <button @click="onHelp" class="interactive">?</button>
   <button @click="onFullscreen" class="interactive">⤢</button>
   <button @click="onSettings" class="interactive">⚙</button>
 </div>
@@ -16,6 +17,10 @@ export default {
   },
 
   methods: {
+    onHelp () {
+      store.state.game.showHelp = !store.state.game.showHelp
+    },
+
     onFullscreen () {
       fullscreen.toggle()
     },

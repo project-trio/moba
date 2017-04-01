@@ -3,11 +3,19 @@
   <canvas id="canvas" class="inherit"></canvas>
 
   <div class="game-status">
-    <div v-if="winningTeam !== null">
+    <div v-if="showHelp" class="bar-section panel">
+      <h1>Help</h1>
+      <p>Click the gear icon to toggle quality mode (disables shadows, antialiasing, etc.)</p>
+      <h2>Hotkeys</h2>
+      <p>Activate skills with <b>1</b>, <b>2</b>, <b>3</b></p>
+      <p>Upgrade with <b>shift</b>, <b>control</b>, or <b>alt</b> + <b>1</b>, <b>2</b>, <b>3</b></p>
+      <p>Press <b>enter</b> to chat</p>
+    </div>
+    <div v-else-if="winningTeam !== null" class="bar-section panel">
       <h1>game over</h1>
       <h2 :class="`team-${winningTeam + 1}`">team {{ winningTeamColor }} won!</h2>
     </div>
-    <div v-else-if="missingUpdate">
+    <div v-else-if="missingUpdate" class="bar-section panel">
       <h1>waiting for server connection</h1>
     </div>
     <div v-else-if="playing">
@@ -53,6 +61,9 @@ export default {
   },
 
   computed: {
+    showHelp () {
+      return store.state.game.showHelp
+    },
     missingUpdate () {
       return store.state.game.missingUpdate
     },
@@ -115,4 +126,10 @@ export default {
   padding 8px
   box-sizing border-box
   pointer-events auto
+
+.panel
+  padding 0 16px
+  pointer-events none
+  width 480px
+  max-width 100%
 </style>

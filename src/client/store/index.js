@@ -28,6 +28,7 @@ export default {
       running: false,
       playing: false,
       missingUpdate: false,
+      showHelp: false,
       stats: {
         kills: [0, 0],
         towers: [0, 0],
