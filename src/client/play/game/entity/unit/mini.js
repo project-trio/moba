@@ -140,10 +140,7 @@ class Mini extends Movable {
     this.invisible = true
     this.removeTarget()
 
-    const cacheArray = cache[this.type][this.team]
-    setTimeout(() => {
-      cacheArray.push(this)
-    }, 0)
+    cache[this.type][this.team].push(this)
   }
 
   // Aim

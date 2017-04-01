@@ -45,7 +45,9 @@ export default {
 
       socket.on('disconnect', (data) => {
         console.log('disconnect', data)
-        window.alert('Disconnected from the server. Press OK to reload.')
+        if (!Local.TESTING) {
+          window.alert('Disconnected from the server. Press OK to reload.')
+        }
         window.location.reload(false)
       })
     })
