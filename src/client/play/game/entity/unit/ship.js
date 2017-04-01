@@ -112,12 +112,13 @@ class Ship extends Movable {
   checkQueuedSkill (renderTime) {
     const targetSkill = this.targetingSkill
     if (targetSkill) {
-      const distance = targetSkill.px ? this.distanceToPoint(targetSkill.px, targetSkill.py) : this.distanceTo(targetSkill.target)
+      const unitTarget = !targetSkill.px
+      const distance = unitTarget ? this.distanceTo(targetSkill.target) : this.distanceToPoint(targetSkill.px, targetSkill.py)
       if (Util.withinSquared(distance, targetSkill.range)) {
-        console.log('In range for skill', renderTime)
         this.performSkill(renderTime, targetSkill.index, targetSkill.target)
-        this.setTarget(null)
-        this.reachedDestination(false)
+        if (!unitTarget) {
+          this.reachedDestination(false)
+        }
         this.targetingSkill = null
         return true
       }
@@ -162,6 +163,10 @@ class Ship extends Movable {
   performSkill (renderTime, index, target) {
     if (this.isDead) {
       console.log('Skill disabled during death', renderTime, this.id, index)
+      return
+    }
+    if (target && target.isDead) {
+      console.log('Skill canceled by dead target', renderTime, this.id, index)
       return
     }
     if (renderTime < this.skills.cooldowns[index]) {
@@ -387,8 +392,11 @@ class Ship extends Movable {
         target.setSelection(0xff0000)
       }
     } else {
-      if (this.isLocal && this.moveToTarget) {
-        console.log('target canceled')
+      if (this.moveToTarget) {
+        this.targetingSkill = null
+        if (this.isLocal) {
+          console.warn('target canceled')
+        }
       }
       this.moveToTarget = false
     }
@@ -460,10 +468,10 @@ class Ship extends Movable {
         }
       }
     } else {
-      this.checkQueuedSkill(renderTime)
       this.updateExperience()
       this.doRegenerate()
       super.update(renderTime, timeDelta)
+      this.checkQueuedSkill(renderTime)
     }
   }
 
