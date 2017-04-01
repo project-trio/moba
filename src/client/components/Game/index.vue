@@ -6,8 +6,8 @@
     <div v-if="playing">
       <h1 v-if="reemergeIn !== null">respawn in {{ reemergeIn }}</h1>
     </div>
-    <div v-else>
-      Game over
+    <div v-else-if="!running">
+      <h1>Game over</h1>
     </div>
   </div>
 
@@ -48,6 +48,9 @@ export default {
   },
 
   computed: {
+    running () {
+      return store.state.game.running
+    },
     playing () {
       return store.state.game.playing
     },
