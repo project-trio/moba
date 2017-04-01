@@ -96,10 +96,6 @@ class Unit {
       this.lastAttack = 0
 
       // Health Bar
-
-      const outlineWeight = 1
-      const hpRadius = 3
-
       let hpHeight, hpWidth
       let hpOffsetZ
       if (unitScale === 1) {
@@ -122,17 +118,17 @@ class Unit {
       this.hpHeight = hpHeight
       this.hpWidth = hpWidth
 
-      Render.rectangle(0, 0, hpWidth, hpHeight, { // HP Backing
-        color: 0xFF3333,
-        strokeWidth: outlineWeight,
-        strokeColor: 0xFFFFFF,
-        radius: hpRadius,
+      const outlineWeight = 1
+      Render.rectangle(0, 0, hpWidth + outlineWeight, hpHeight + outlineWeight, {
+        color: 0x000000,
         parent: this.infoContainer,
       })
-
+      Render.rectangle(0, 0, hpWidth, hpHeight, {
+        color: 0xFF3333,
+        parent: this.infoContainer,
+      })
       this.healthBar = Render.rectangle(-hpWidth / 2, 0, hpWidth, hpHeight, {
         color: 0x33FF99,
-        radius: hpRadius + 2,
         parent: this.infoContainer,
       })
       this.healthBar.geometry.translate(hpWidth / 2, 0, 0)

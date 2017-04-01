@@ -234,8 +234,8 @@ export default {
   // Shapes
 
   rectangle (x, y, w, h, options) {
-    const geometry = new THREE.BoxBufferGeometry(w, h, options.depth || 1)
-    const material = new THREE.MeshBasicMaterial({color: options.color})
+    const geometry = new THREE.PlaneBufferGeometry(w, h)
+    const material = new THREE.MeshBasicMaterial({ color: options.color })
     const rectangle = new THREE.Mesh(geometry, material)
     rectangle.position.set(x, y, options.z || 0)
     if (options.parent) {
