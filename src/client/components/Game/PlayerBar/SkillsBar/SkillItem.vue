@@ -41,6 +41,7 @@ export default {
       submittedLevelup: true,
       disabledByOtherSkill: false,
       isOverLevelup: false,
+      activationCooldown: null,
     }
   },
 
@@ -114,7 +115,7 @@ export default {
     },
 
     showingLevelupIndicator () {
-      return !this.isAnySkillActive && this.higherLevelThanSkills
+      return !this.isAnySkillActive && this.levelupReady
     },
 
     levelupReady () {
@@ -143,8 +144,12 @@ export default {
       if (cooldownAt > 0) {
         const diff = cooldownAt - store.state.game.renderTime
         if (diff >= 0) {
+          if (!this.activationCooldown) {
+            this.activationCooldown = diff
+          }
           return diff
         }
+        this.activationCooldown = null
         store.state.skills.cooldowns.splice(this.index, 1, 0)
       }
       return 0
@@ -196,7 +201,7 @@ export default {
 
     cooldownRemaining (remaining) {
       if (remaining >= 0) {
-        const angle = 360 - Math.floor(remaining / this.cooldownDuration * 360)
+        const angle = 360 - Math.floor(remaining / this.activationCooldown * 360)
         this.cooldownRing.changeAngle(angle >= 360 ? 0 : angle)
       }
     },
@@ -222,7 +227,7 @@ export default {
       if (this.skill.target === 0) {
         return
       }
-      if (this.disabled || this.cooldownRemaining > 200) {
+      if (this.disabled || this.cooldownRemaining > 100) {
         return
       }
       const skillIndex = this.index
