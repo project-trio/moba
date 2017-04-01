@@ -12,7 +12,7 @@ export default {
     attackCooldown: [2, 0],
     attackMoveSpeed: 10,
     bulletSize: 6,
-    bulletColor: 0x660000,
+    bulletColor: 0xff0000,
 
     moveSpeed: [0, 0],
     collision: 35,
@@ -20,7 +20,7 @@ export default {
   },
 
   tower: {
-    healthMax: [500, 0],
+    healthMax: [600, 0],
     healthRegen: [0, 0],
     armor: [20, 0],
 
@@ -32,7 +32,7 @@ export default {
     attackCooldown: [10, 0],
     attackMoveSpeed: 10,
     bulletSize: 5,
-    bulletColor: 0x660000,
+    bulletColor: 0x990000,
 
     moveSpeed: [0, 0],
     collision: 30,
@@ -40,7 +40,7 @@ export default {
   },
 
   turret: {
-    healthMax: [300, 0],
+    healthMax: [500, 0],
     healthRegen: [0, 0],
     armor: [10, 0],
 
@@ -52,7 +52,7 @@ export default {
     attackCooldown: [10, 0],
     attackMoveSpeed: 10,
     bulletSize: 5,
-    bulletColor: 0x770000,
+    bulletColor: 0x330000,
 
     moveSpeed: [0, 0],
     collision: 30,

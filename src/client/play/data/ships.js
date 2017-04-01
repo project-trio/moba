@@ -1,14 +1,14 @@
 export default {
   boxy: {
     split: true,
-    healthMax: [1000, 100],
+    healthMax: [800, 40],
     healthRegen: [40, 2],
-    armor: [20, 1],
+    armor: [100, 5],
 
     sightRange: [160, 1],
     attackRange: [140, 1],
 
-    attackDamage: [60, 1],
+    attackDamage: [50, 1],
     attackPierce: [0, 0],
     attackCooldown: [15, 0],
     attackMoveSpeed: 11,
@@ -20,9 +20,9 @@ export default {
   },
 
   glitch: {
-    healthMax: [800, 40],
+    healthMax: [700, 10],
     healthRegen: [40, 1],
-    armor: [10, 0],
+    armor: [50, 0],
 
     sightRange: [160, 0],
     attackRange: [120, 0],
@@ -40,7 +40,7 @@ export default {
 
   sinker: {
     split: true,
-    healthMax: [1000, 100],
+    healthMax: [900, 20],
     healthRegen: [40, 1],
     armor: [5, 1],
 
