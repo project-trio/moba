@@ -1,10 +1,9 @@
 import Decimal from 'decimal.js'
 
-import skillsData from '@/play/data/skills'
-
 import store from '@/store'
 
 import shipStats from '@/play/data/ships'
+import skillsData from '@/play/data/skills'
 
 import Render from '@/play/render/render'
 

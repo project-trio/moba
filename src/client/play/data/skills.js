@@ -68,7 +68,7 @@ export default {
     },
     {
       name: `Storm's Eye`,
-      description: 'Create a haven to shield allies inside from oncoming damage',
+      description: 'Make a haven to protect allies, reducing the damage they take while inside',
       target: 1,
       isDisabledBy: null,
       duration: 35,

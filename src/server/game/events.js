@@ -13,7 +13,7 @@ let playersOnline = 0
 
 const startTime = process.hrtime()
 const updateDuration = Config.updateDuration
-const updatesUntilStart = (CommonConsts.TESTING ? 5 : 20) * 1000 / updateDuration
+const updatesUntilStart = (CommonConsts.TESTING ? 10 : 20) * 1000 / updateDuration
 
 //LOCAL
 
