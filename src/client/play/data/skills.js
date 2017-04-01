@@ -245,13 +245,13 @@ export default {
       disabledBy: [null, false, true],
       isDisabledBy: isDisabledBy,
       getDuration: function (level) {
-        return levelMultiplier(40, level, 5)
+        return levelMultiplier(40, level, 2)
       },
       getCooldown: function (level) {
         return 150
       },
       start: function (index, level, ship) {
-        ship.attackCooldownModifier = levelMultiplier(60, level, -5) / 100
+        ship.attackCooldownModifier = levelMultiplier(60, level, -3) / 100
         ship.armorModifier = 0.5
       },
       end: function (ship) {
@@ -299,7 +299,7 @@ export default {
         return levelMultiplier(150, level, -2)
       },
       start: function (index, level, ship) {
-        ship.healthRegenModifier = levelMultiplier(2, level, 1)
+        ship.healthRegenModifier = levelMultiplier(2, Math.floor(level / 2), 1)
         ship.moveSpeedModifier = 0.5
       },
       end: function (ship) {
