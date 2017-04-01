@@ -29,7 +29,7 @@ export default function (gid, size) {
   let ticksRendered = 0
   let updatesUntilStart = 0
   let lastTickTime
-  let tickOffsets = -5
+  let tickOffsets = -4
 
   this.id = gid
   this.running = false
@@ -53,7 +53,7 @@ export default function (gid, size) {
       if (ticksRendered % ticksPerUpdate === 0) {
         if (!dequeueUpdate(renderTime)) {
           tickOffsets += 1
-          console.log('Missing update', [ticksToRender, tickOffsets])
+          console.log('Missing update', ticksToRender, tickOffsets)
           break
         }
       }
@@ -157,7 +157,7 @@ export default function (gid, size) {
       if (behindUpdates > 0) {
         tickOffsets -= behindUpdates
         renderedSinceUpdate = false
-        console.log('Catching up to server update', [behindUpdates, tickOffsets])
+        console.log('Catching up to server update', behindUpdates, tickOffsets)
       }
     }
   }

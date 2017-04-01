@@ -50,7 +50,10 @@ export default {
 
     Bridge.on('start game', (data) => {
       if (!Local.game) {
-        console.log('Backfilling game', data)
+        if (Local.TESTING) { //TODO remove backfilling
+          window.alert('Game not found')
+        }
+        console.error('GNF', data)
         Local.game = new Game(data.gid, data.size)
       } else {
         console.log('Start game', data)
