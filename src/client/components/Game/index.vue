@@ -82,7 +82,7 @@ export default {
 
 .game-status
   display flex
-  align-content center
+  align-items center
   justify-content center
   position absolute
   top 0

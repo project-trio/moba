@@ -1,21 +1,27 @@
 <template>
 <div class="unit-select">
 <div class="content">
-  {{ renderTime }}
-  <div class="units-list">
-    <button v-for="(unit, name) in units" @click="onUnit(name)" class="unit-box">{{ name }}</button>
+  <div class="start-countdown">
+    <h2>starting in {{ countdownTime }}s</h2>
   </div>
-  <div class="chosen-box">
-    <canvas id="unit"></canvas>
-    {{ chosenUnit }}
+  <h1>choose your unit</h1>
+  <div class="unit-selection">
+    <div class="chosen-box selection-half">
+      <canvas id="unit"></canvas>
+      {{ chosenUnit }}
+    </div>
+    <div class="units-list selection-half" :class="`team-${localTeam + 1}`">
+      <button v-for="(unit, name) in units" @click="onUnit(name)" class="unit-box interactive" :class="{ selected: chosenUnit === name }">{{ name }}</button>
+    </div>
   </div>
 
   <div class="player-teams scrolls">
+    <h1>teams</h1>
     <div class="team-players team-1">
-      <div v-for="player in teamPlayers[0]" :player="player" class="player-ship" :key="player.id">{{ player.shipName }}</div>
+      <div v-for="player in teamPlayers[0]" :player="player" class="player-ship animated" :class="{ selected: player.id === localId }" :key="player.id">{{ player.shipName }}</div>
     </div>
     <div class="team-players team-2">
-      <div v-for="player in teamPlayers[1]" :player="player" class="player-ship" :key="player.id">{{ player.shipName }}</div>
+      <div v-for="player in teamPlayers[1]" :player="player" class="player-ship animated" :class="{ selected: player.id === localId }" :key="player.id">{{ player.shipName }}</div>
     </div>
   </div>
 </div>
@@ -39,13 +45,21 @@ export default {
   },
 
   computed: {
-    renderTime () {
-      return Math.round(store.state.game.renderTime / 1000)
+    countdownTime () {
+      return Math.round(-store.state.game.renderTime / 1000)
     },
 
+    localId () {
+      return Local.playerId
+    },
+    localPlayer () {
+      return store.state.game.players[this.localId]
+    },
+    localTeam () {
+      return this.localPlayer ? this.localPlayer.team : 0
+    },
     chosenUnit () {
-      const localPlayer = store.state.game.players[Local.playerId]
-      return localPlayer ? localPlayer.shipName : ''
+      return this.localPlayer ? this.localPlayer.shipName : ''
     },
     units () {
       return shipsData
@@ -79,6 +93,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+h1
+  color #aaa
+
 .unit-select
   position absolute
   top 0
@@ -92,31 +109,45 @@ export default {
   box-sizing border-box
 
 .content
-  background rgba(255, 255, 255, 0.75)
+  background rgba(0, 0, 0, 0.75)
+  -webkit-backdrop-filter blur(10px)
   width 100%
   height 100%
+  box-sizing border-box
+  padding 16px
+  color #fffffe
 
 //LOCAL
+
+.unit-selection
+  display flex
+  justify-content center
+  flex-wrap wrap
+
+.selection-half
+  width 300px
+  height 300px
 
 .units-list
   display flex
   justify-content center
-
+  flex-wrap wrap
 .unit-box
   margin 8px
-  padding 8px
   width 80px
   height 80px
-  flex-basis 80px
-  background #fff
+  background #eee
   border-radius 3px
+.unit-box.selected
+  border-width 5px
+  border-style solid
+  border-color inherit
+  box-sizing border-box
 
 .chosen-box
-  margin auto
-  width 300px
-  height 300px
-  background #fff
+  background #aaa
   border-radius 8px
+  margin-bottom 32px
 
 //PLAYERS
 
@@ -125,7 +156,6 @@ export default {
   flex-direction column
   width 100%
   overflow-x auto
-  height 360px
   justify-content space-between
 .team-players
   padding 8px
@@ -138,7 +168,17 @@ export default {
   height 80px
   flex-basis 80px
   border-radius 8px
-  background #fff
+  background #eee
+  display flex
+  align-items center
+  justify-content center
+  font-weight 500
+  font-size 1.5em
+.player-ship.selected
+  border-width 5px
+  border-style solid
+  border-color inherit
+  box-sizing border-box
 
 @media (max-width: 768px)
   .player-teams

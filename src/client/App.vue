@@ -129,8 +129,10 @@ input
 
 .team-1
   color #5599cc
+  border-color #5599cc
 .team-2
   color #dd6677
+  border-color #dd6677
 .team-1-bg
   background #5599cc
 .team-2-bg
