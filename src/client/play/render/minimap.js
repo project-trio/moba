@@ -20,6 +20,8 @@ export default {
       antialias: true,
       canvas: canvas,
     })
+    renderer.setPixelRatio(window.devicePixelRatio)
+
     canvas.style.width = `${renderWidth}px`
     canvas.style.height = `${renderHeight}px`
 
