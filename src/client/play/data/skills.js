@@ -35,7 +35,7 @@ export default {
       target: 3,
       isDisabledBy: null,
       duration: 0,
-      cooldown: 150,
+      cooldown: 200,
       range: 200,
       getRange: function (level) {
         return this.range
@@ -44,11 +44,11 @@ export default {
         return 0
       },
       getCooldown: function (level) {
-        return this.cooldown
+        return levelMultiplier(this.cooldown, level, 5)
       },
       start: function (index, level, ship, cancel, target) {
         const damage = levelMultiplier(20, level, 5)
-        const stunDuration = levelMultiplier(3000, level, 200)
+        const stunDuration = levelMultiplier(2000, level, 200)
         const maxRange = this.getRange(level)
         const bulletData = {
           bulletSize: 10,
@@ -196,14 +196,14 @@ export default {
         ship.noTargeting = true
 
         const radius = this.getRange(level)
-        const damage = levelMultiplier(5, level, 1)
+        const damage = levelMultiplier(300, level, 30)
         ship.diveCircle = new AreaOfEffect(ship, true, {
           dot: true,
           color: 0x0066aa,
           opacity: 0.5,
           z: -4,
           radius: radius,
-          attackDamage: damage * 100,
+          attackDamage: damage,
           attackPierce: 0,
           parent: ship.container,
         })
@@ -262,16 +262,16 @@ export default {
       target: 1,
       disabledBy: [null, false, true],
       isDisabledBy: isDisabledBy,
-      duration: 60,
+      duration: 40,
       cooldown: 150,
       getDuration: function (level) {
-        return levelMultiplier(this.duration, level, 10)
+        return levelMultiplier(this.duration, level, 5)
       },
       getCooldown: function (level) {
         return this.cooldown
       },
       start: function (index, level, ship) {
-        ship.attackCooldownModifier = 0.25
+        ship.attackCooldownModifier = levelMultiplier(60, level, -5) / 100
         ship.armorModifier = 0.5
       },
       end: function (ship) {
@@ -291,7 +291,7 @@ export default {
         return levelMultiplier(this.duration, level, 5)
       },
       getCooldown: function (level) {
-        return levelMultiplier(this.cooldown, level, -10)
+        return levelMultiplier(this.cooldown, level, -5)
       },
       start: function (index, level, ship) {
         ship.removeTarget()
@@ -320,10 +320,10 @@ export default {
         return this.duration
       },
       getCooldown: function (level) {
-        return levelMultiplier(this.cooldown, level, -5)
+        return levelMultiplier(this.cooldown, level, -2)
       },
       start: function (index, level, ship) {
-        ship.healthRegenModifier = 2
+        ship.healthRegenModifier = levelMultiplier(2, level, 1)
         ship.moveSpeedModifier = 0.5
       },
       end: function (ship) {
