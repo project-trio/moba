@@ -311,9 +311,7 @@ class Ship extends Movable {
     this.isBlocking = true
     this.opacity(1.0)
 
-    if (this.isRendering) {
-      this.infoContainer.visible = true
-    }
+    this.infoContainer.visible = true
     if (this.isLocal) {
       store.state.dead = false
     }
