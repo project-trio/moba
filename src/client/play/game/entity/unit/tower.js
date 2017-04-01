@@ -92,7 +92,7 @@ class Tower extends Unit {
     super.die(renderTime)
 
     if (this.name === 'base') {
-      Local.game.end(this.team)
+      Local.game.end(1 - this.team)
     }
 
     store.state.chatMessages.push({ tower: this.name, team: this.team })

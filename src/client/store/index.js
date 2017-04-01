@@ -24,6 +24,7 @@ export default {
       players: [],
       host: null,
       ready: null,
+      winningTeam: null,
       running: false,
       playing: false,
       missingUpdate: false,

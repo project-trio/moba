@@ -189,6 +189,10 @@ export default function (gid, size) {
       console.warn('game already running')
       return
     }
+    this.running = true
+    store.state.game.running = true
+    store.state.game.winningTeam = null
+
     Local.player = players[Local.playerId]
 
     TrigCache.prepare()
@@ -208,19 +212,14 @@ export default function (gid, size) {
     // status = 'STARTED'
     startTime = performance.now()
     lastTickTime = startTime
-
-    store.state.game.running = true
-    this.running = true
   }
 
-  this.end = function (losingTeam) {
+  this.end = function (winningTeam) {
     this.running = false
     this.playing = false
     store.state.game.running = false
     store.state.game.playing = false
-
-    // const overText = Render.text('GAME OVER', centerX, centerY, {font: '64px Arial', fill: 0xff1010}, gameContainer)
-    // const winnerText = Render.text('Team ' + (2-losingTeam) + ' won!', centerX, centerY + 88, {font: '44px Arial', fill: 0xff1010}, gameContainer)
+    store.state.game.winningTeam = winningTeam
   }
 
   // Players

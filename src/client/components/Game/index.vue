@@ -3,18 +3,20 @@
   <canvas id="canvas" class="inherit"></canvas>
 
   <div class="game-status">
-    <div v-if="missingUpdate">
+    <div v-if="winningTeam !== null">
+      <h1>game over</h1>
+      <h2 :class="`team-${winningTeam + 1}`">team {{ winningTeamColor }} won!</h2>
+    </div>
+    <div v-else-if="missingUpdate">
       <h1>waiting for server connection</h1>
     </div>
     <div v-else-if="playing">
       <h1 v-if="reemergeIn !== null">respawn in {{ reemergeIn }}</h1>
     </div>
-    <div v-else-if="!running">
-      <h1>game over</h1>
-    </div>
   </div>
 
-  <unit-select v-if="!playing"></unit-select>
+  <unit-select v-if="!playing && winningTeam === null"></unit-select>
+
   <score-bar class="ui-bar"></score-bar>
   <player-bar class="ui-bar"></player-bar>
 </div>
@@ -54,11 +56,14 @@ export default {
     missingUpdate () {
       return store.state.game.missingUpdate
     },
-    running () {
-      return store.state.game.running
-    },
     playing () {
       return store.state.game.playing
+    },
+    winningTeam () {
+      return store.state.game.winningTeam
+    },
+    winningTeamColor () {
+      return this.winningTeam === 0 ? 'blue' : 'pink'
     },
 
     renderTime () {
