@@ -175,7 +175,7 @@ class Ship extends Movable {
     }
 
     const skillLevel = this.skills.levels[index]
-    const durationEndTime = renderTime + skill.getDuration ? skill.getDuration(skillLevel) * 100 : 0
+    const durationEndTime = renderTime + (skill.getDuration ? skill.getDuration(skillLevel) * 100 : 0)
     const cooldownEndTime = renderTime + skill.getCooldown(skillLevel) * 100
     this.skills.started[index] = renderTime
     this.skills.actives[index] = durationEndTime
