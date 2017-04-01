@@ -40,6 +40,8 @@ import Local from '@/play/local'
 
 import PlayerBox from '@/components/Lobby/Join/PlayerBox'
 
+const KEY_ENTER = 13
+
 export default {
   components: {
     PlayerBox,
@@ -135,7 +137,7 @@ export default {
 
   watch: {
     pressed (key) {
-      if (key.name === 'enter') {
+      if (key.code === KEY_ENTER) {
         this.$nextTick(() => {
           this.$refs.chatInput.focus()
         })

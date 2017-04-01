@@ -19,6 +19,9 @@ import store from '@/store'
 
 import Bridge from '@/play/events/bridge'
 
+const KEY_ESCAPE = 27
+const KEY_ENTER = 13
+
 export default {
   data () {
     return {
@@ -39,9 +42,9 @@ export default {
 
   watch: {
     pressed (key) {
-      if (key.name === 'escape') {
+      if (key.code === KEY_ESCAPE) {
         this.showingInput = false
-      } else if (key.name === 'enter') {
+      } else if (key.code === KEY_ENTER) {
         this.showingInput = !this.showingInput
         if (this.showingInput) {
           this.onShowChat()
