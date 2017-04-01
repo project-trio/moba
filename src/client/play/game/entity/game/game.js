@@ -229,24 +229,25 @@ export default function (gid, size) {
   }
 
   this.updatePlayers = function (gameData) {
-    // console.log(gameData)
-    if (gameData.updates !== undefined) {
-      updateDuration = gameData.updates
-      tickDuration = gameData.ticks
-      updatesUntilStart = gameData.updatesUntilStart
-    }
     const serverPlayers = gameData.players
-    players = {}
-    for (let pid in serverPlayers) {
-      const playerInfo = serverPlayers[pid]
-      players[pid] = new Player(pid, playerInfo)
-    }
-
-    if (gameData.host) {
-      store.state.game.host = gameData.host
-    }
-    store.state.game.ready = gameData.ready
     store.state.game.players = serverPlayers
+
+    if (!this.running) { //TODO show disconnected players in game
+      if (gameData.updates !== undefined) {
+        updateDuration = gameData.updates
+        tickDuration = gameData.ticks
+        updatesUntilStart = gameData.updatesUntilStart
+      }
+      players = {}
+      for (let pid in serverPlayers) {
+        const playerInfo = serverPlayers[pid]
+        players[pid] = new Player(pid, playerInfo)
+      }
+      if (gameData.host) {
+        store.state.game.host = gameData.host
+      }
+      store.state.game.ready = gameData.ready
+    }
   }
 
 }
