@@ -39,7 +39,7 @@ export default {
         return this.range
       },
       getCooldown: function (level) {
-        return levelMultiplier(200, level, 5)
+        return levelMultiplier(200, level, -5)
       },
       start: function (index, level, ship, cancel, target) {
         const damage = levelMultiplier(20, level, 5)
