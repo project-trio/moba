@@ -20,6 +20,9 @@ const updatesUntilStart = (CommonConsts.TESTING ? 10 : 20) * 1000 / updateDurati
 const lobbyBroadcast = (data) => {
   SocketIO.io.to('lobby').emit('lobby', data)
 }
+const lobbyBroadcastGames = () => {
+  lobbyBroadcast({games: getGameList()})
+}
 
 const getGameList = function() {
   const result = []
@@ -47,8 +50,10 @@ const createGame = function(player, size, joining) {
   } else {
     const game = new Game(size)
     if (joining && !game.add(player)) {
+      game.destroy()
       response.error = 'Unable to join new game'
     } else {
+      lobbyBroadcastGames()
       response.gid = game.id
     }
   }
@@ -86,7 +91,7 @@ const quickJoin = function(player, size) {
 
 const startGame = function (game) {
   game.start(updatesUntilStart)
-  lobbyBroadcast({games: getGameList()})
+  lobbyBroadcastGames()
 }
 
 //UPDATE

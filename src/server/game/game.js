@@ -97,6 +97,21 @@ class Game {
     return { gid: this.id, host: this.hostId, size: this.size, ready: this.canStart(), players: this.formattedPlayers() }
   }
 
+  destroy () {
+    this.state = 'CLOSED'
+    this.started = false
+    for (let pid in this.players) {
+      const player = this.players[pid]
+      player.game = null
+    }
+    for (let idx = 0; idx < games.length; idx += 1) {
+      if (games[idx].id === this.id) {
+        games.splice(idx, 1)
+        break
+      }
+    }
+  }
+
   remove (player) {
     const pid = player.id
     if (this.players[pid]) {
@@ -107,26 +122,14 @@ class Game {
         delete this.players[pid]
       }
 
-      const removeId = this.id
-      console.log('Removed', removeId, this.activePlayerCount())
+      console.log('Removed', this.id, this.activePlayerCount())
       if (this.activePlayerCount() > 0) {
         if (!this.started) {
           this.state = 'OPEN'
         }
         this.broadcast('player left', { ready: this.canStart(), players: this.formattedPlayers() })
       } else {
-        this.state = 'CLOSED'
-        this.started = false
-        for (let pid in this.players) {
-          const player = this.players[pid]
-          player.game = null
-        }
-        for (let idx = 0; idx < games.length; idx += 1) {
-          if (games[idx].id === removeId) {
-            games.splice(idx, 1)
-            break
-          }
-        }
+        this.destroy()
       }
       return true
     }
