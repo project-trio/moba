@@ -83,7 +83,7 @@ export default {
 
     descriptionHtml () {
       const rows = [`<div class="description-text">${this.skill.description}</div>`]
-      if (this.skill.duration) {
+      if (this.skill.getDuration) {
         let durationText = `${this.activeDuration / 1000}`
         if (this.isOverLevelup && this.level > 0) {
           const diff = this.skill.getDuration(this.level + 1) * 100 - this.activeDuration
@@ -91,7 +91,7 @@ export default {
         }
         rows.push(`<div>Duration: <span class="bold">${durationText}</span> seconds</div>`)
       }
-      if (this.skill.cooldown) {
+      if (this.skill.getCooldown) {
         let cooldownText = `${this.cooldownDuration / 1000}`
         if (this.isOverLevelup && this.level > 0) {
           const diff = this.skill.getCooldown(this.level + 1) * 100 - this.cooldownDuration

@@ -34,17 +34,12 @@ export default {
       description: 'Fires a bolt of lightning that stuns its target',
       target: 3,
       isDisabledBy: null,
-      duration: 0,
-      cooldown: 200,
       range: 200,
       getRange: function (level) {
         return this.range
       },
-      getDuration: function (level) {
-        return 0
-      },
       getCooldown: function (level) {
-        return levelMultiplier(this.cooldown, level, 5)
+        return levelMultiplier(200, level, 5)
       },
       start: function (index, level, ship, cancel, target) {
         const damage = levelMultiplier(20, level, 5)
@@ -71,17 +66,15 @@ export default {
       description: 'Make a haven to protect allies, reducing the damage they take while inside',
       target: 1,
       isDisabledBy: null,
-      duration: 35,
-      cooldown: 200,
       range: 150,
       getRange: function (level) {
         return this.range
       },
       getDuration: function (level) {
-        return levelMultiplier(this.duration, level, 2)
+        return levelMultiplier(35, level, 2)
       },
       getCooldown: function (level) {
-        return levelMultiplier(this.cooldown, level, -10)
+        return levelMultiplier(200, level, -10)
       },
       start: function (index, level, ship) {
         const radius = this.getRange(level)
@@ -106,17 +99,15 @@ export default {
       description: 'Spawns a seeing-eye that reveals nearby enemies',
       target: 2,
       isDisabledBy: null,
-      duration: 25,
-      cooldown: 400,
       range: 200,
       getRange: function (level) {
         return levelMultiplier(this.range, level, 30)
       },
       getDuration: function (level) {
-        return levelMultiplier(this.duration, level, 5)
+        return levelMultiplier(25, level, 5)
       },
       getCooldown: function (level) {
-        return levelMultiplier(this.cooldown, level, -20)
+        return levelMultiplier(400, level, -20)
       },
       start: function (index, level, ship, cancel, target) {
         const sightRange = levelMultiplier(140, level, 20)
@@ -142,17 +133,12 @@ export default {
       target: 2,
       disabledBy: [null, true, false],
       isDisabledBy: isDisabledBy,
-      duration: 0,
-      cooldown: 150,
       range: 200,
       getRange: function (level) {
         return this.range
       },
-      getDuration: function (level) {
-        return 0
-      },
       getCooldown: function (level) {
-        return this.cooldown
+        return 150
       },
       start: function (index, level, ship, cancel, target) {
         const damage = levelMultiplier(100, level, 10)
@@ -178,17 +164,15 @@ export default {
       description: 'Dive down to safety, while dealing damage to enemies around you',
       target: 1,
       isDisabledBy: null,
-      duration: 35,
-      cooldown: 200,
       range: 100,
       getRange: function (level) {
         return this.range
       },
       getDuration: function (level) {
-        return levelMultiplier(this.duration, level, 2)
+        return levelMultiplier(35, level, 2)
       },
       getCooldown: function (level) {
-        return levelMultiplier(this.cooldown, level, -10)
+        return levelMultiplier(200, level, -10)
       },
       start: function (index, level, ship) {
         ship.removeTarget()
@@ -232,17 +216,15 @@ export default {
     },
     {
       name: 'Effervesce',
-      description: 'Deal damage back to attackers',
+      description: 'Bounce a percentage of damage taken back on attackers',
       target: 1,
       disabledBy: [false, true, null],
       isDisabledBy: isDisabledBy,
-      duration: 50,
-      cooldown: 150,
       getDuration: function (level) {
-        return this.duration
+        return 50
       },
       getCooldown: function (level) {
-        return levelMultiplier(this.cooldown, level, -5)
+        return levelMultiplier(150, level, -5)
       },
       start: function (index, level, ship) {
         ship.reflectDamageRatio = levelMultiplier(50, level, 5)
@@ -262,13 +244,11 @@ export default {
       target: 1,
       disabledBy: [null, false, true],
       isDisabledBy: isDisabledBy,
-      duration: 40,
-      cooldown: 150,
       getDuration: function (level) {
-        return levelMultiplier(this.duration, level, 5)
+        return levelMultiplier(40, level, 5)
       },
       getCooldown: function (level) {
-        return this.cooldown
+        return 150
       },
       start: function (index, level, ship) {
         ship.attackCooldownModifier = levelMultiplier(60, level, -5) / 100
@@ -285,13 +265,11 @@ export default {
       target: 1,
       disabledBy: [false, null, true],
       isDisabledBy: isDisabledBy,
-      duration: 40,
-      cooldown: 200,
       getDuration: function (level) {
-        return levelMultiplier(this.duration, level, 5)
+        return levelMultiplier(40, level, 5)
       },
       getCooldown: function (level) {
-        return levelMultiplier(this.cooldown, level, -5)
+        return levelMultiplier(200, level, -5)
       },
       start: function (index, level, ship) {
         ship.removeTarget()
@@ -314,13 +292,11 @@ export default {
       target: 1,
       disabledBy: [false, true, null],
       isDisabledBy: isDisabledBy,
-      duration: 50,
-      cooldown: 150,
       getDuration: function (level) {
-        return this.duration
+        return 50
       },
       getCooldown: function (level) {
-        return levelMultiplier(this.cooldown, level, -2)
+        return levelMultiplier(150, level, -2)
       },
       start: function (index, level, ship) {
         ship.healthRegenModifier = levelMultiplier(2, level, 1)
