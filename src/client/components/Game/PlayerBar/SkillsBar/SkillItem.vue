@@ -27,6 +27,13 @@ import Local from '@/play/local'
 
 import Bridge from '@/play/events/bridge'
 
+import Unit from '@/play/game/entity/unit/unit'
+
+const getUnitTarget = function (targetType) {
+  store.state.skills.getUnitTarget = true
+  store.state.skills.withAlliance = targetType === 3 ? false : targetType === 4 ? true : null
+}
+
 export default {
   props: {
     skill: Object,
@@ -166,15 +173,22 @@ export default {
     currentPress (currentKey) {
       if (currentKey.code === this.keyCode) {
         store.cancelActiveSkill()
-        store.state.skills.active = this.index
+        const skillIndex = this.index
+        store.state.skills.active = skillIndex
         if (!this.disabled && !currentKey.modifier) {
           if (this.skill.getRange) {
             Local.player.unit.createIndicator(this.skill.getRange(this.level))
           }
-          if (this.skill.target === 2) {
-            store.state.skills.getGroundTarget = true
-          } else {
-            store.state.skills.getUnitTarget = true
+          if (this.skill.target > 1) {
+            store.state.skills.activation = (target) => {
+              Bridge.emit('action', { skill: skillIndex, target: target })
+              store.cancelActiveSkill()
+            }
+            if (this.skill.target === 2) {
+              store.state.skills.getGroundTarget = true
+            } else {
+              getUnitTarget(this.skill.target)
+            }
           }
         }
       } else {
@@ -235,14 +249,22 @@ export default {
         store.cancelActiveSkill()
         Bridge.emit('action', { skill: skillIndex, target: null })
       } else {
-        const groundTarget = this.skill.target === 2
+        const groundTargeted = this.skill.target === 2
         const activate = (target) => {
           Bridge.emit('action', { skill: skillIndex, target: target })
           store.cancelActiveSkill()
         }
         if (pressed) {
-          const target = groundTarget ? store.state.skills.groundTarget : store.state.skills.unitTarget
+          const target = groundTargeted ? store.state.skills.groundTarget : store.state.skills.unitTarget
           if (target) {
+            if (!groundTargeted) {
+              const unitTarget = Unit.get(target)
+              if (!unitTarget || store.state.skills.withAlliance !== unitTarget.localAlly) {
+                console.log('target not for alliance', unitTarget)
+                return
+              }
+              unitTarget.skillTarget(true)
+            }
             activate(target)
           } else {
             store.cancelActiveSkill()
@@ -250,11 +272,10 @@ export default {
         } else {
           store.state.skills.active = skillIndex
           store.state.skills.activation = activate
-          if (groundTarget) {
+          if (groundTargeted) {
             store.state.skills.getGroundTarget = true
           } else {
-            store.state.skills.getUnitTarget = true
-            store.state.skills.withAlliance = this.skill.target === 3 ? false : this.skill.target === 4 ? true : null
+            getUnitTarget(this.skill.target)
           }
         }
       }

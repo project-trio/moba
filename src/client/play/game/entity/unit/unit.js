@@ -188,15 +188,23 @@ class Unit {
 
   // Pointer
 
+  skillTarget (enabled) {
+    store.state.skills.unitTarget = enabled ? this.id : null
+    this.setSelection(enabled ? 0xff0000 : null)
+  }
+
   onHover () {
     if (this.isDying) {
       return false
     }
-    if (store.state.skills.getUnitTarget && this.id !== store.state.skills.getUnitTarget.id) {
-      const withAlliance = store.state.skills.withAlliance
-      if (withAlliance === null || withAlliance === this.localAlly) {
+    if (this.id !== store.state.skills.unitTarget) {
+      if (store.state.skills.getUnitTarget) {
+        const withAlliance = store.state.skills.withAlliance
+        if (withAlliance === null || withAlliance === this.localAlly) {
+          this.skillTarget(true)
+        }
+      } else {
         store.state.skills.unitTarget = this.id
-        this.setSelection(0xff0000)
       }
     }
     document.body.style.cursor = 'pointer'
@@ -204,8 +212,7 @@ class Unit {
 
   onBlur () {
     if (this.id === store.state.skills.unitTarget) {
-      store.state.skills.unitTarget = null
-      this.setSelection(null)
+      this.skillTarget(false)
     }
     document.body.style.cursor = null
   }
@@ -369,22 +376,9 @@ class Unit {
     this.attackTarget = null
   }
 
-  getTargetId (id) {
-    for (let idx = 0; idx < allUnits.length; idx += 1) {
-      const unit = allUnits[idx]
-      if (unit.id === id) {
-        if (unit.isDead) {
-          return false
-        }
-        return unit
-      }
-    }
-    console.error('Target id not found', id)
-  }
-
   setTargetId (id) {
-    const target = this.getTargetId(id)
-    if (target) {
+    const target = Unit.get(id)
+    if (target && !target.isDead) {
       const dist = this.distanceTo(target)
       this.moveToTarget = true
       return this.setTarget(target, dist, this.isLocal)
@@ -538,6 +532,16 @@ class Unit {
 
 Unit.all = function () {
   return allUnits
+}
+
+Unit.get = function (id) {
+  for (let idx = 0; idx < allUnits.length; idx += 1) {
+    const unit = allUnits[idx]
+    if (unit.id === id) {
+      return unit
+    }
+  }
+  console.error('Target id not found', id)
 }
 
 Unit.update = function (renderTime, timeDelta, tweening) {

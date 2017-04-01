@@ -147,7 +147,6 @@ export default {
     this.state.skills.getGroundTarget = false
     this.state.skills.getUnitTarget = false
     this.state.skills.activation = null
-    this.state.skills.unitTarget = null
     this.state.skills.groundTarget = null
     this.state.skills.active = null
     Local.player.unit.removeIndicator()

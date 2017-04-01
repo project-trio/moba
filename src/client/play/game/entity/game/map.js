@@ -256,7 +256,7 @@ const GameMap = function (parent) {
     ground.onClick = (point) => {
       const target = getTargetFromPoint(point)
 
-      if (store.state.skills.getGroundTarget && store.state.skills.activation) {
+      if (store.state.skills.getGroundTarget) {
         store.state.skills.activation(target)
       } else {
         store.cancelActiveSkill()
