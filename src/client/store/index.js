@@ -152,10 +152,9 @@ export default {
     Local.player.unit.removeIndicator()
   },
 
-  setKeyDown (key, code, modified, event) {
+  setKeyDown (ignore, code, modified, event) {
     const keyState = this.state.key
-    if (key !== null && !event.metaKey && (keyState.lastPress.released || keyState.lastPress.code !== code)) {
-      keyState.lastPress.name = key
+    if (!ignore && !event.metaKey && (keyState.lastPress.released || keyState.lastPress.code !== code)) {
       keyState.lastPress.code = code
       keyState.lastPress.released = false
       keyState.count += 1
@@ -164,8 +163,8 @@ export default {
       keyState.lastPress.modifier = modified
     }
   },
-  setKeyUp (key, code, modified, event) {
-    if (!key) {
+  setKeyUp (ignore, code, modified, event) {
+    if (ignore) {
       return
     }
     const keyState = this.state.key
@@ -173,7 +172,6 @@ export default {
     if (keyState.count <= 0) {
       keyState.count = 0
       keyState.pressed = {
-        name: key,
         at: performance.now(),
         modifier: modified,
         code: code,

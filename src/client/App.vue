@@ -11,10 +11,10 @@ const validKeyEvent = (event) => {
   if (event.repeat) {
     return false
   }
-  const keyDescription = { code: event.which || event.keyCode }
-  const name = event.key.toLowerCase()
-  if (name === 'control' || name === 'alt' || name === 'shift' || name === 'meta') {
-    keyDescription.name = null
+  const keyCode = event.which || event.keyCode
+  const keyDescription = { code: keyCode }
+  if (keyCode === 16 || keyCode === 17 || keyCode === 18 || keyCode === 91 || keyCode === 93) {
+    keyDescription.ignore = true
     keyDescription.modifier = true
   } else {
     keyDescription.name = name
@@ -40,14 +40,14 @@ export default {
     keydown (event) {
       const keyDescription = validKeyEvent(event)
       if (keyDescription) {
-        store.setKeyDown(keyDescription.name, keyDescription.code, keyDescription.modifier, event)
+        store.setKeyDown(keyDescription.ignore, keyDescription.code, keyDescription.modifier, event)
       }
     },
 
     keyup (event) {
       const keyDescription = validKeyEvent(event)
       if (keyDescription) {
-        store.setKeyUp(keyDescription.name, keyDescription.code, keyDescription.modifier, event)
+        store.setKeyUp(keyDescription.ignore, keyDescription.code, keyDescription.modifier, event)
       }
     },
 
