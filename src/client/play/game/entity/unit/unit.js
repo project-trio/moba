@@ -117,10 +117,8 @@ class Unit {
       }
       this.healthWidth = hpWidth
       this.infoContainer = Render.group()
-      this.unitInfo = Render.group()
-      this.infoContainer.add(this.unitInfo)
-      this.unitInfo.position.y = 40
-      this.unitInfo.position.z = hpOffsetZ
+      this.infoContainer.position.y = 40
+      this.infoContainer.position.z = hpOffsetZ
       this.hpHeight = hpHeight
       this.hpWidth = hpWidth
 
@@ -129,17 +127,17 @@ class Unit {
         strokeWidth: outlineWeight,
         strokeColor: 0xFFFFFF,
         radius: hpRadius,
-        parent: this.unitInfo,
+        parent: this.infoContainer,
       })
 
       this.healthBar = Render.rectangle(-hpWidth / 2, 0, hpWidth, hpHeight, {
         color: 0x33FF99,
         radius: hpRadius + 2,
-        parent: this.unitInfo,
+        parent: this.infoContainer,
       })
       this.healthBar.geometry.translate(hpWidth / 2, 0, 0)
 
-      Local.game.map.addInfo(this.infoContainer)
+      this.container.add(this.infoContainer)
     }
 
     // Start location
@@ -250,9 +248,6 @@ class Unit {
     this.px = x * 100
     this.py = y * 100
     this.container.position.set(x, y, 0)
-    if (this.infoContainer) {
-      this.infoContainer.position.set(x, y, 0)
-    }
 
     const angle = this.startAngle || (-Math.PI * 1.5 * (this.team == 0 ? -1 : 1))
     this.top.rotation.z = angle
@@ -361,9 +356,6 @@ class Unit {
   }
 
   destroy () {
-    if (this.infoContainer) {
-      Render.remove(this.infoContainer)
-    }
     Render.remove(this.container)
     if (this.fogCircle) {
       Render.remove(this.fogCircle)

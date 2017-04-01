@@ -141,11 +141,9 @@ const GameMap = function (parent) {
   let container = Render.group()
   const floorContainer = Render.group()
   const wallContainer = Render.group()
-  const infoContainer = Render.group()
   const fogContainer = Render.group()
   floorContainer.add(wallContainer)
   container.add(floorContainer)
-  container.add(infoContainer)
   container.add(fogContainer)
   parent.add(container)
   this.floorContainer = floorContainer
@@ -166,10 +164,6 @@ const GameMap = function (parent) {
 
   this.addSight = function (sight) {
     sightsArray.push(sight)
-  }
-
-  this.addInfo = function (container) {
-    infoContainer.add(container)
   }
 
   this.blockCheck = function (moveX, moveY) {

@@ -77,7 +77,7 @@ class Ship extends Movable {
     Render.text(displayName, -this.hpWidth / 2, this.hpHeight + 1, {
       size: displayTextSize,
       color: 0xaaaaaa,
-      parent: this.unitInfo,
+      parent: this.infoContainer,
     })
     this.renderLevelText()
   }
@@ -325,13 +325,13 @@ class Ship extends Movable {
   // Experience
 
   renderLevelText () {
-    if (this.unitInfo.levelText) {
-      Render.remove(this.unitInfo.levelText)
+    if (this.infoContainer.levelText) {
+      Render.remove(this.infoContainer.levelText)
     }
     Render.text(this.level, this.hpWidth / 2, this.hpHeight, {
       size: 12,
       color: 0x666666,
-      parent: this.unitInfo,
+      parent: this.infoContainer,
       ref: 'levelText',
     })
   }
@@ -497,7 +497,6 @@ class Ship extends Movable {
           sightTarget.isRendering = isInSight
           if (!sightTarget.renderInBackground) {
             sightTarget.container.visible = isInSight
-            sightTarget.infoContainer.visible = isInSight
           }
         }
         revealUnit = isInSight && (updatedVisibility || sightTarget.isMoving)
