@@ -19,6 +19,7 @@ class AreaOfEffect {
     this.withUnit = withUnit
     this.dot = data.dot
     this.active = true
+    this.hitsTowers = data.hitsTowers
 
     this.circle = Render.circle(data.radius, { color: data.color, opacity: data.opacity, parent: withUnit ? data.parent : Local.game.map.floorContainer })
 
@@ -44,6 +45,9 @@ class AreaOfEffect {
     const fromUnit = this.source
     for (let idx = 0; idx < units.length; idx += 1) {
       const target = units[idx]
+      if (target.tower && !this.hitsTowers) {
+        continue
+      }
       const isAlly = fromUnit.alliedTo(target)
 
       if (isAlly) {

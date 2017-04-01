@@ -19,6 +19,7 @@ class Tower extends Unit {
 
     super(team, stats, towerType === 'base' ? 4 : 3, x, y, null, false, true)
 
+    this.tower = true
     this.name = towerType
     this.id = `tower${spawnCount}`
     spawnCount += 1
