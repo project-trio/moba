@@ -7,8 +7,7 @@
   <h1>choose your unit</h1>
   <div class="unit-selection">
     <div class="chosen-box selection-half">
-      <canvas id="unit"></canvas>
-      {{ chosenUnit }}
+      <canvas id="preview"></canvas>
     </div>
     <div class="units-list selection-half" :class="`team-${localTeam + 1}`">
       <button v-for="(unit, name) in units" @click="onUnit(name)" class="unit-box interactive" :class="{ selected: chosenUnit === name }">{{ name }}</button>
@@ -33,15 +32,22 @@ import store from '@/store'
 
 import Local from '@/play/local'
 
+import shipsData from '@/play/data/ships'
+
 import Bridge from '@/play/events/bridge'
 
-import shipsData from '@/play/data/ships'
+import RenderPreview from '@/play/render/preview'
 
 export default {
   mounted () {
+    RenderPreview.create()
+    if (this.chosenUnit) {
+      RenderPreview.load(this.chosenUnit, this.localTeam)
+    }
   },
 
   destroyed () {
+    RenderPreview.destroy()
   },
 
   computed: {
@@ -79,6 +85,12 @@ export default {
     },
   },
 
+  watch: {
+    chosenUnit (name) {
+      RenderPreview.load(name, this.localTeam)
+    },
+  },
+
   methods: {
     onUnit (name) {
       Bridge.emit('switch unit', { name }, (response) => {
@@ -109,7 +121,7 @@ h1
   box-sizing border-box
 
 .content
-  background rgba(0, 0, 0, 0.75)
+  background rgba(0, 0, 0, 0.67)
   -webkit-backdrop-filter blur(10px)
   width 100%
   height 100%
@@ -128,6 +140,10 @@ h1
   width 300px
   height 300px
 
+#preview
+  width 100%
+  height 100%
+
 .units-list
   display flex
   justify-content center
@@ -145,7 +161,7 @@ h1
   box-sizing border-box
 
 .chosen-box
-  background #aaa
+  background #e7e7e7
   border-radius 8px
   margin-bottom 32px
 
