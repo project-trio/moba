@@ -81,7 +81,7 @@ const quickJoin = function(player, size) {
       }
     }
   }
-  return createGame(player, size, false)
+  return createGame(player, size, true)
 }
 
 const startGame = function (game) {
@@ -290,7 +290,7 @@ module.exports = {
         const gameResponse = quickJoin(player, data.size)
         callback(gameResponse)
       } else if (data.action === 'create') {
-        const gameResponse = createGame(player, data.size, true)
+        const gameResponse = createGame(player, data.size, false)
         callback(gameResponse)
       } else if (data.action === 'join') {
         join(player, data.gid, callback)

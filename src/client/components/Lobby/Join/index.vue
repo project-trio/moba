@@ -69,9 +69,13 @@ export default {
       } else {
         this.size = data.size
         console.log('join', data)
-        const newGame = new Game(data.gid, data.size)
-        newGame.updatePlayers(data)
-        Local.game = newGame
+        if (Local.game) { //TODO
+          window.alert('Game already exists, please try again.')
+        } else {
+          const newGame = new Game(data.gid, data.size)
+          newGame.updatePlayers(data)
+          Local.game = newGame
+        }
       }
     })
   },
