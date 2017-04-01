@@ -227,7 +227,7 @@ export default {
         return levelMultiplier(150, level, -5)
       },
       start: function (index, level, ship) {
-        ship.reflectDamageRatio = levelMultiplier(50, level, 5)
+        ship.reflectDamageRatio = levelMultiplier(14, level, 2)
       },
       end: function (ship) {
         ship.reflectDamageRatio = null

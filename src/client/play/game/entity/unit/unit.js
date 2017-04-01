@@ -320,7 +320,7 @@ class Unit {
     this.updateHealth(newHealth)
 
     if (!reflected && this.reflectDamageRatio) {
-      const reflectedDamage = Math.round(damage * 100 / this.reflectDamageRatio) //TODO desyncs?
+      const reflectedDamage = Math.round((damage * this.reflectDamageRatio) / 100) //TODO desyncs?
       // console.log(damage, reflectedDamage)
       source.takeDamage(this, renderTime, reflectedDamage, 0, true)
     }
