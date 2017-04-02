@@ -154,7 +154,9 @@ export default {
     Local.player.unit.removeIndicator()
     if (cancelHighlight && this.state.skills.unitTarget) {
       const unitTarget = Unit.get(this.state.skills.unitTarget)
-      unitTarget.setSelection(null)
+      if (unitTarget) {
+        unitTarget.setSelection(null)
+      }
     }
   },
 

@@ -34,7 +34,7 @@ const getUnitTarget = function (targetType) {
   store.state.skills.withAlliance = targetType === 3 ? false : targetType === 4 ? true : null
   if (store.state.skills.unitTarget) {
     const unitTarget = Unit.get(store.state.skills.unitTarget)
-    if (store.state.skills.withAlliance !== unitTarget.localAlly) {
+    if (!unitTarget || store.state.skills.withAlliance !== unitTarget.localAlly) {
       console.log('target not for alliance', unitTarget)
     } else {
       unitTarget.setSelection(0xff0000)
