@@ -227,7 +227,7 @@ export default {
           } else {
             console.log('Cancel skill', this.indexName, currentKey)
           }
-          store.cancelActiveSkill()
+          store.cancelActiveSkill(true)
         }
       }
     },

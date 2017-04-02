@@ -4,6 +4,8 @@ import Local from '@/play/local'
 
 import render from '@/play/render/render'
 
+import Unit from '@/play/game/entity/unit/unit'
+
 let selectedUnit = null
 
 export default {
@@ -143,13 +145,17 @@ export default {
 
   // Hotkeys
 
-  cancelActiveSkill () {
+  cancelActiveSkill (cancelHighlight) {
     this.state.skills.activation = null
     this.state.skills.getGroundTarget = false
     this.state.skills.getUnitTarget = false
     this.state.skills.groundTarget = null
     this.state.skills.active = null
     Local.player.unit.removeIndicator()
+    if (cancelHighlight && this.state.skills.unitTarget) {
+      const unitTarget = Unit.get(this.state.skills.unitTarget)
+      unitTarget.setSelection(null)
+    }
   },
 
   setKeyDown (ignore, code, modified, event) {
