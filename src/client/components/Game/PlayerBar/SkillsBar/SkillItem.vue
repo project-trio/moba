@@ -32,6 +32,14 @@ import Unit from '@/play/game/entity/unit/unit'
 const getUnitTarget = function (targetType) {
   store.state.skills.getUnitTarget = true
   store.state.skills.withAlliance = targetType === 3 ? false : targetType === 4 ? true : null
+  if (store.state.skills.unitTarget) {
+    const unitTarget = Unit.get(store.state.skills.unitTarget)
+    if (store.state.skills.withAlliance !== unitTarget.localAlly) {
+      console.log('target not for alliance', unitTarget)
+    } else {
+      unitTarget.setSelection(0xff0000)
+    }
+  }
 }
 
 const MATCH_BRACKET_FORMATTING = /\[\[([^\]]+)\]\]/g
@@ -200,10 +208,7 @@ export default {
             Local.player.unit.createIndicator(this.skill.getRange(this.level))
           }
           if (this.skill.target > 1) {
-            store.state.skills.activation = (target) => {
-              Bridge.emit('action', { skill: skillIndex, target: target })
-              store.cancelActiveSkill()
-            }
+            store.state.skills.activation = this.getActivation()
             if (this.skill.target === 2) {
               store.state.skills.getGroundTarget = true
             } else {
@@ -257,6 +262,13 @@ export default {
       }
     },
 
+    getActivation () {
+      return (target) => {
+        Bridge.emit('action', { skill: this.index, target: target })
+        store.cancelActiveSkill()
+      }
+    },
+
     onSkill (pressed) {
       if (this.skill.target === 0) {
         return
@@ -270,10 +282,7 @@ export default {
         Bridge.emit('action', { skill: skillIndex, target: null })
       } else {
         const groundTargeted = this.skill.target === 2
-        const activate = (target) => {
-          Bridge.emit('action', { skill: skillIndex, target: target })
-          store.cancelActiveSkill()
-        }
+        const activate = this.getActivation()
         if (pressed) {
           const target = groundTargeted ? store.state.skills.groundTarget : store.state.skills.unitTarget
           if (target) {
@@ -283,7 +292,6 @@ export default {
                 console.log('target not for alliance', unitTarget)
                 return
               }
-              unitTarget.skillTarget(true)
             }
             activate(target)
           } else {

@@ -188,20 +188,15 @@ class Unit {
 
   // Pointer
 
-  skillTarget (enabled) {
-    store.state.skills.unitTarget = enabled ? this.id : null
-    this.setSelection(enabled ? 0xff0000 : null)
-  }
-
   onHover () {
     if (this.isDying) {
       return false
     }
     if (this.id !== store.state.skills.unitTarget) {
       if (store.state.skills.getUnitTarget) {
-        const withAlliance = store.state.skills.withAlliance
-        if (withAlliance === null || withAlliance === this.localAlly) {
-          this.skillTarget(true)
+        store.state.skills.unitTarget = this.id
+        if (store.state.skills.withAlliance === this.localAlly) {
+          this.setSelection(0xff0000)
         }
       } else {
         store.state.skills.unitTarget = this.id
@@ -212,7 +207,10 @@ class Unit {
 
   onBlur () {
     if (this.id === store.state.skills.unitTarget) {
-      this.skillTarget(false)
+      store.state.skills.unitTarget = null
+      if (store.state.skills.getUnitTarget) {
+        this.setSelection(null)
+      }
     }
     document.body.style.cursor = null
   }
