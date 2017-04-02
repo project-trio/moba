@@ -34,6 +34,8 @@ const getUnitTarget = function (targetType) {
   store.state.skills.withAlliance = targetType === 3 ? false : targetType === 4 ? true : null
 }
 
+const MATCH_BRACKET_FORMATTING = /\[\[([^\]]+)\]\]/g
+
 export default {
   props: {
     skill: Object,
@@ -88,11 +90,29 @@ export default {
       }
     },
 
+    showsDiff () {
+      return this.isOverLevelup && this.level > 0
+    },
+
     descriptionHtml () {
-      const rows = [`<div class="description-text">${this.skill.description}</div>`]
+      let description = this.skill.description.replace(MATCH_BRACKET_FORMATTING, (match, substitution) => {
+        const substitutionFunction = this.skill[`getEffect${substitution}`]
+        const factor = substitution === 'Duration' ? 1000 : this.skill[`factor${substitution}`] || 1
+        const suffix = substitution === 'Duration' ? ' seconds' : (substitution === 'Damage' ? ' damage' : this.skill[`suffix${substitution}`] || '')
+
+        const valueForLevel = substitutionFunction(this.level === 0 ? 1 : this.level)
+        let effectText = `${valueForLevel / factor}`
+        if (this.showsDiff) {
+          const diff = substitutionFunction(this.level + 1) - valueForLevel
+          effectText += ` <span class="levelup">(${diff >= 0 ? '+' : ''}${diff / factor})</span>`
+        }
+        return `<span class="bold">${effectText}${suffix}</span>`
+      })
+
+      const rows = [`<div class="description-text">${description}</div>`]
       if (this.skill.getDuration) {
         let durationText = `${this.activeDuration / 1000}`
-        if (this.isOverLevelup && this.level > 0) {
+        if (this.showsDiff) {
           const diff = this.skill.getDuration(this.level + 1) * 100 - this.activeDuration
           durationText += ` <span class="levelup">(${diff >= 0 ? '+' : ''}${diff / 1000})</span>`
         }
@@ -100,9 +120,9 @@ export default {
       }
       if (this.skill.getCooldown) {
         let cooldownText = `${this.cooldownDuration / 1000}`
-        if (this.isOverLevelup && this.level > 0) {
+        if (this.showsDiff) {
           const diff = this.skill.getCooldown(this.level + 1) * 100 - this.cooldownDuration
-          cooldownText += ` <span class="levelup">(${diff >= 0 ? '+' : ''}${diff / 1000})</span>`
+          cooldownText += ` <span class="levelup">(${diff === 0 ? '-' : (diff > 0 ? '+' : '')}${diff / 1000})</span>`
         }
         rows.push(`<div>Cooldown: <span class="bold">${cooldownText}</span> seconds</div>`)
       }

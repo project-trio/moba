@@ -31,19 +31,24 @@ export default {
   boxy: [
     {
       name: `Lightning Eye`,
-      description: 'Fires a bolt of lightning that stuns its target',
+      description: 'Fires a bolt of lightning that stuns for [[Duration]], dealing [[Damage]]',
       target: 3,
       isDisabledBy: null,
-      range: 200,
+      getEffectDuration: function (level) {
+        return levelMultiplier(2000, level, 200)
+      },
+      getEffectDamage: function (level) {
+        return levelMultiplier(20, level, 5)
+      },
       getRange: function (level) {
-        return this.range
+        return 200
       },
       getCooldown: function (level) {
         return levelMultiplier(200, level, -5)
       },
       start: function (index, level, ship, cancel, target) {
-        const damage = levelMultiplier(20, level, 5)
-        const stunDuration = levelMultiplier(2000, level, 200)
+        const damage = this.getEffectDamage(level)
+        const stunDuration = this.getEffectDuration(level)
         const maxRange = this.getRange(level)
         const bulletData = {
           bulletSize: 10,
@@ -63,12 +68,14 @@ export default {
     },
     {
       name: `Storm's Eye`,
-      description: 'Make a haven to protect allies, reducing the damage they take while inside',
+      description: 'Reduces damage allies inside the effect take from attacks by [[Damage]]',
       target: 1,
       isDisabledBy: null,
-      range: 150,
+      getEffectDamage: function (level) {
+        return levelMultiplier(25, level, 2)
+      },
       getRange: function (level) {
-        return this.range
+        return 150
       },
       getDuration: function (level) {
         return levelMultiplier(35, level, 2)
@@ -78,7 +85,7 @@ export default {
       },
       start: function (index, level, ship) {
         const radius = this.getRange(level)
-        const shield = levelMultiplier(25, level, 2)
+        const shield = this.getEffectDamage(level)
         ship.eyeCircle = new AreaOfEffect(ship, false, {
           dot: true,
           color: 0x0066aa,
@@ -96,12 +103,15 @@ export default {
     },
     {
       name: 'Providence',
-      description: 'Spawns a seeing-eye that reveals nearby enemies',
+      description: 'Spawns a seeing-eye that reveals enemies within [[Range]]',
+      suffixRange: ' range',
       target: 2,
       isDisabledBy: null,
-      range: 200,
       getRange: function (level) {
-        return levelMultiplier(this.range, level, 30)
+        return levelMultiplier(200, level, 30)
+      },
+      getEffectRange: function (level) {
+        return levelMultiplier(140, level, 20)
       },
       getDuration: function (level) {
         return levelMultiplier(25, level, 5)
@@ -110,7 +120,7 @@ export default {
         return levelMultiplier(400, level, -20)
       },
       start: function (index, level, ship, cancel, target) {
-        const sightRange = levelMultiplier(140, level, 20)
+        const sightRange = this.getEffectRange(level)
         const stats = { sightRange: [sightRange, 0] }
         ship.eye = new Unit(ship.team, stats, null, target[0] / 100, target[1] / 100, null, false, true)
         const color = dataConstants.teamColors[ship.team]
@@ -129,19 +139,21 @@ export default {
   sinker: [
     {
       name: 'Torpedo',
-      description: 'Fires a torpedo that explodes on the first enemy target',
+      description: 'Fires a torpedo that explodes on the first enemy hit for [[Damage]]',
       target: 2,
       disabledBy: [null, true, false],
       isDisabledBy: isDisabledBy,
-      range: 200,
       getRange: function (level) {
-        return this.range
+        return 200
+      },
+      getEffectDamage: function (level) {
+        return levelMultiplier(100, level, 10)
       },
       getCooldown: function (level) {
         return 150
       },
       start: function (index, level, ship, cancel, target) {
-        const damage = levelMultiplier(100, level, 10)
+        const damage = this.getEffectDamage(level)
         const maxRange = this.getRange(level)
         const bulletData = {
           bulletSize: 10,
@@ -161,12 +173,16 @@ export default {
     },
     {
       name: 'Dive',
-      description: 'Dive down to safety, while dealing damage to enemies around you',
+      description: 'Dive down to safety, dealing [[Dps]] to enemies around you',
+      factorDps: 50, //TODO ticks
+      suffixDps: ' dps',
       target: 1,
       isDisabledBy: null,
-      range: 100,
       getRange: function (level) {
-        return this.range
+        return 100
+      },
+      getEffectDps: function (level) {
+        return levelMultiplier(300, level, 30)
       },
       getDuration: function (level) {
         return levelMultiplier(35, level, 2)
@@ -180,7 +196,7 @@ export default {
         ship.noTargeting = true
 
         const radius = this.getRange(level)
-        const damage = levelMultiplier(300, level, 30)
+        const damage = this.getEffectDps(level)
         ship.diveCircle = new AreaOfEffect(ship, true, {
           dot: true,
           color: 0x0066aa,
@@ -216,10 +232,14 @@ export default {
     },
     {
       name: 'Effervesce',
-      description: 'Bounce a percentage of damage taken back on attackers',
+      description: 'Bounce [[Strength]] of damage taken back on attackers',
+      suffixStrength: '%',
       target: 1,
       disabledBy: [false, true, null],
       isDisabledBy: isDisabledBy,
+      getEffectStrength: function (level) {
+        return levelMultiplier(14, level, 2)
+      },
       getDuration: function (level) {
         return 50
       },
@@ -227,7 +247,7 @@ export default {
         return levelMultiplier(150, level, -5)
       },
       start: function (index, level, ship) {
-        ship.reflectDamageRatio = levelMultiplier(14, level, 2)
+        ship.reflectDamageRatio = this.getEffectStrength(level)
       },
       end: function (ship) {
         ship.reflectDamageRatio = null
@@ -240,10 +260,14 @@ export default {
   glitch: [
     {
       name: 'Brute force',
-      description: 'Boosts attack speed, while more vulnerable to damage',
+      description: 'Boosts attack speed by [[AttackSpeed]], while more vulnerable to damage',
+      suffixAttackSpeed: '%',
       target: 1,
       disabledBy: [null, false, true],
       isDisabledBy: isDisabledBy,
+      getEffectAttackSpeed: function (level) {
+        return levelMultiplier(40, level, 3)
+      },
       getDuration: function (level) {
         return levelMultiplier(40, level, 2)
       },
@@ -251,7 +275,7 @@ export default {
         return 150
       },
       start: function (index, level, ship) {
-        ship.attackCooldownModifier = levelMultiplier(60, level, -3) / 100
+        ship.attackCooldownModifier = 1 - this.getEffectAttackSpeed(level) / 100
         ship.armorModifier = 0.5
       },
       end: function (ship) {
@@ -261,7 +285,7 @@ export default {
     },
     {
       name: 'Encrypt',
-      description: 'Stealth from enemies for a brief time',
+      description: 'Turn invisible and untargetable to enemies',
       target: 1,
       disabledBy: [false, null, true],
       isDisabledBy: isDisabledBy,
@@ -288,10 +312,15 @@ export default {
     },
     {
       name: 'Salvage',
-      description: 'Boost health regeneration while lowering movement speed',
+      description: 'Boost health regeneration by [[Regen]], while halving movement speed',
+      factorRegen: 50 / 1000 * 100, //TODO ticks
+      suffixRegen: ' hp / s',
       target: 1,
       disabledBy: [false, true, null],
       isDisabledBy: isDisabledBy,
+      getEffectRegen: function (level) {
+        return levelMultiplier(40, level, 4)
+      },
       getDuration: function (level) {
         return 50
       },
@@ -299,7 +328,7 @@ export default {
         return levelMultiplier(150, level, -2)
       },
       start: function (index, level, ship) {
-        ship.healthRegenModifier = levelMultiplier(2, Math.floor(level / 2), 1)
+        ship.healthRegenModifier = this.getEffectRegen(level)
         ship.moveSpeedModifier = 0.5
       },
       end: function (ship) {

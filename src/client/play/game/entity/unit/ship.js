@@ -217,7 +217,7 @@ class Ship extends Movable {
   doRegenerate () {
     let regen = this.stats.healthRegen
     if (this.healthRegenModifier) {
-      regen *= this.healthRegenModifier
+      regen += this.healthRegenModifier
       if (!Number.isInteger(regen)) {
         console.error('regen', regen)
       }
