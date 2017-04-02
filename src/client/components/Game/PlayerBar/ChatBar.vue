@@ -34,9 +34,7 @@ export default {
 
   computed: {
     messages () {
-      this.$nextTick(() => {
-        this.$refs.chatScroll.scrollTop = this.$refs.chatScroll.scrollHeight
-      })
+      this.scrollToBottom()
       return store.state.chatMessages
     },
 
@@ -70,12 +68,19 @@ export default {
   },
 
   methods: {
+    scrollToBottom (showing) {
+      this.$nextTick(() => {
+        this.$refs.chatScroll.scrollTop = this.$refs.chatScroll.scrollHeight
+      })
+    },
+
     toggleChat (showing) {
       if (showing) {
         this.$refs.chatInput.focus()
       } else {
         this.$refs.chatInput.blur()
       }
+      this.scrollToBottom()
     },
 
     onFocusChat () {
@@ -133,6 +138,7 @@ export default {
   overflow hidden
 .chat-messages-container.active
   background rgba(96, 96, 96, 0.5)
+  max-height 500px
 
 .chat-messages
   text-align left
