@@ -8,6 +8,8 @@ const Config = require('./config')
 const Game = require('./game')
 const Player = require('./player')
 
+const MAXIMUM_IDLE_UPDATES = CommonConsts.TESTING ? 1000 : 1000
+
 const clientPlayers = {}
 let playersOnline = 0
 
@@ -50,7 +52,7 @@ const createGame = function(player, size, joining) {
   } else {
     const game = new Game(size)
     if (joining && !game.add(player)) {
-      game.destroy()
+      game.destroy(null)
       response.error = 'Unable to join new game'
     } else {
       lobbyBroadcastGames()
@@ -62,7 +64,7 @@ const createGame = function(player, size, joining) {
 
 const join = function(player, gid, callback) {
   const games = Game.all
-  for (let idx = 0; idx < games.length; idx += 1) {
+  for (let idx = games.length - 1; idx >= 0; idx -= 1) {
     const game = games[idx]
     if (game.id === gid) {
       const gameData = game.add(player)
@@ -79,7 +81,7 @@ const join = function(player, gid, callback) {
 const quickJoin = function(player, size) {
   if (size > 0) {
     const games = Game.all
-    for (let idx = 0; idx < games.length; idx += 1) {
+    for (let idx = games.length - 1; idx >= 0; idx -= 1) {
       const game = games[idx]
       if (game.add(player)) {
         return { gid: game.id }
@@ -100,9 +102,10 @@ let loopCount = 0
 
 const loop = function() {
   const games = Game.all
-  for (let idx = 0; idx < games.length; idx += 1) {
+  for (let idx = games.length - 1; idx >= 0; idx -= 1) {
     const game = games[idx]
     if (game.started) {
+      let actionFound = false
       const actionData = {}
       const onSelectionScreen = game.serverUpdate <= updatesUntilStart
       for (let pid in game.players) {
@@ -149,8 +152,19 @@ const loop = function() {
           }
           if (playerActions.length > 0) {
             actionData[pid] = playerActions
+            actionFound = true
           }
         }
+      }
+      if (actionFound) {
+        game.idleCount = 0
+      } else if (game.idleCount > MAXIMUM_IDLE_UPDATES) {
+        console.log(game.id, 'Game timed out due to inactivity')
+        game.broadcast('closed')
+        game.destroy(idx)
+        continue
+      } else {
+        game.idleCount += 1
       }
       game.broadcast('update', { update: game.serverUpdate, actions: actionData })
       game.serverUpdate += 1

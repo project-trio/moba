@@ -1,3 +1,4 @@
+import router from '@/router'
 import store from '@/store'
 
 import Bridge from '@/play/events/bridge'
@@ -9,6 +10,12 @@ import Local from '@/play/local'
 export default {
 
   init () {
+    Bridge.on('closed', () => {
+      window.alert('Game closed due to inactivity')
+      Local.game.close()
+      router.replace({ name: 'Lobby' })
+    })
+
     Bridge.on('update', (data) => {
       const update = data.update
       if (Local.game.serverUpdate !== update - 1) {

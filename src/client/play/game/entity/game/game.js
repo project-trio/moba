@@ -39,6 +39,8 @@ export default function (gid, size) {
   store.state.game.running = false
   store.state.game.playing = false
 
+  // Update
+
   this.calculateTicksToRender = function (currentTime) {
     const tickOffsetTime = tickOffsets * ticksPerUpdate * tickDuration / 2
     return Math.floor((currentTime - lastTickTime - tickOffsetTime) / tickDuration)
@@ -182,6 +184,14 @@ export default function (gid, size) {
 
     this.playing = true
     store.state.game.playing = true
+  }
+
+  // Setup
+
+  this.close = function () {
+    Render.remove(this.container)
+    Local.game = null
+    Local.player.game = null
   }
 
   this.start = function () {

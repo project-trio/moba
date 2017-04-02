@@ -15,10 +15,14 @@ let updatePanel, framePanel
 //LOOP
 
 const animate = function (timestamp) {
+  const game = Local.game
+  if (!game) {
+    return
+  }
+
   if (framePanel) {
     framePanel.begin()
   }
-  const game = Local.game
   if (game.running) {
     const isPlaying = game.playing
     const ticksToRender = game.calculateTicksToRender(timestamp)

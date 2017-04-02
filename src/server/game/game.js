@@ -19,6 +19,7 @@ class Game {
     this.game = null
     this.state = 'OPEN'
     this.serverUpdate = 0
+    this.idleCount = 0
     this.started = false
     this.hostId = null
 
@@ -97,18 +98,24 @@ class Game {
     return { gid: this.id, host: this.hostId, size: this.size, ready: this.canStart(), players: this.formattedPlayers() }
   }
 
-  destroy () {
+  destroy (withIndex) {
     this.state = 'CLOSED'
     this.started = false
     for (let pid in this.players) {
       const player = this.players[pid]
       player.game = null
     }
-    for (let idx = 0; idx < games.length; idx += 1) {
-      if (games[idx].id === this.id) {
-        games.splice(idx, 1)
-        break
+
+    if (withIndex === null) {
+      for (let idx = games.length - 1; idx >= 0; idx -= 1) {
+        if (games[idx].id === this.id) {
+          withIndex = idx
+          break
+        }
       }
+    }
+    if (withIndex !== null) {
+      games.splice(withIndex, 1)
     }
   }
 
@@ -129,7 +136,7 @@ class Game {
         }
         this.broadcast('player left', { ready: this.canStart(), players: this.formattedPlayers() })
       } else {
-        this.destroy()
+        this.destroy(null)
       }
       return true
     }
