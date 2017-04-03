@@ -12,12 +12,15 @@
     <div class="bar-section panel">
       <h1>game over</h1>
       <h2 :class="`team-${winningTeam + 1}`">team {{ winningTeamColor }} won!</h2>
-      <button @click="onReturnToLobby" class="panel-button">continue</button>
+      <button @click="onReturnToLobby" class="panel-button interactive">leave</button>
     </div>
     <div class="bar-section panel">
-      <div v-for="i in 5">
-        {{ i }}
-      </div>
+      <table class="player-scores">
+        <tr><th>team</th><th>name</th><th>level</th><th>kills</th><th>deaths</th><th>damage</th></tr>
+        <tr v-for="result in playerResults" :class="`team-${result.team + 1}`">
+          <td>{{ result.team + 1 }}</td><td>{{ result.name }}</td><td>{{ result.level }}</td><td>{{ result.kills }}</td><td>{{ result.deaths }}</td><td>{{ result.damage / 100 }}</td>
+        </tr>
+      </table>
     </div>
   </div>
   <div v-else-if="missingUpdate" class="bar-section panel">
@@ -32,10 +35,6 @@
 <script>
 import router from '@/router'
 import store from '@/store'
-
-import Local from '@/play/local'
-
-import Loop from '@/play/render/loop'
 
 export default {
   components: {
@@ -53,10 +52,14 @@ export default {
       return store.state.game.playing
     },
     winningTeam () {
-      return store.state.game.winningTeam || 1
+      return store.state.game.winningTeam
     },
     winningTeamColor () {
       return this.winningTeam === 0 ? 'blue' : 'pink'
+    },
+
+    playerResults () {
+      return store.state.game.ships
     },
 
     renderTime () {
@@ -98,9 +101,21 @@ export default {
   text-shadow -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000
   pointer-events none
 
+button
+  pointer-events auto
+  height 44px
+  width 256px
+
 .panel
-  padding 0 16px
-  pointer-events none
+  padding 16px
   width 480px
   max-width 100%
+
+.player-scores
+  width 100%
+  text-shadow none
+
+th, td
+  background #333
+  font-weight 500
 </style>

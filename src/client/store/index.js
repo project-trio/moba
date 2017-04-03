@@ -23,7 +23,7 @@ const defaultGameState = () => {
       towers: [0, 0],
     },
     renderTime: 0,
-    ships: {},
+    ships: [],
   }
 }
 
