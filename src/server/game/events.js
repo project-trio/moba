@@ -1,6 +1,7 @@
 const SocketIO = require('socket.io')
 
 const CommonConsts = require.main.require('../common/constants')
+const commonMaps = require.main.require('../common/maps')
 
 const Util = require.main.require('./utils/util')
 
@@ -55,18 +56,25 @@ const createGame = function(player, size, map, joining) {
     response.error = 'Invalid game size'
   } else if (size > 0 && !CommonConsts.TESTING && player.name !== 'kiko ') {
     response.error = 'You need to register before creating a larger than 1p game'
+  } else if (!map) {
+    response.error = 'Please choose a map'
   } else {
-    const game = new Game(size, map)
-    if (joining) {
-      const joinData = game.add(player)
-      if (joinData.error) {
-        game.destroy(null)
-        response.error = joinData.error
+    const mapData = commonMaps[map]
+    if (!mapData) {
+      response.error = 'Invalid map'
+    } else {
+      const game = new Game(size, map)
+      if (joining) {
+        const joinData = game.add(player)
+        if (joinData.error) {
+          game.destroy(null)
+          response.error = joinData.error
+        }
       }
-    }
-    if (!response.error) {
-      lobbyBroadcastGames()
-      response.gid = game.id
+      if (!response.error) {
+        lobbyBroadcastGames()
+        response.gid = game.id
+      }
     }
   }
   return response
