@@ -59,8 +59,6 @@ export default {
   },
 
   create () {
-    pointer.bind()
-
     resize()
 
     // Scene
@@ -97,6 +95,12 @@ export default {
     // gameScene.add(helper)
 
     this.createRenderer()
+  },
+
+  destroy () {
+    gameScene = null
+    gameCamera = null
+    renderer = null
   },
 
   positionCamera (x, y) {

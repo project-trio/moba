@@ -82,8 +82,8 @@ export default {
     },
 
     reemergeIn () {
-      if (store.state.reemergeAt) {
-        const diff = store.state.reemergeAt - this.renderTime
+      if (store.state.local.reemergeAt) {
+        const diff = store.state.local.reemergeAt - this.renderTime
         if (diff >= 0) {
           return Math.round(diff / 1000)
         }

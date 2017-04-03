@@ -32,8 +32,8 @@ export default {
         console.log('redirecting to game', data.gid)
         router.replace({ name: 'Join', params: { gid: data.gid } })
       } else {
-        store.state.game.playersOnline = data.online
-        store.state.game.list = data.games
+        store.state.lobby.onlineCount = data.online
+        store.state.lobby.games = data.games
         Local.leaving = null
       }
     })
@@ -49,7 +49,7 @@ export default {
     },
 
     playersOnline () {
-      return util.pluralize(store.state.game.playersOnline, 'player')
+      return util.pluralize(store.state.lobby.onlineCount, 'player')
     },
 
     games () {

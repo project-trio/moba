@@ -10,7 +10,7 @@ import Unit from '@/play/game/entity/unit/unit'
 
 let lastUpdate = 0
 
-let updatePanel, framePanel
+let updatePanel, framePanel, animationId
 
 //LOOP
 
@@ -52,7 +52,7 @@ const animate = function (timestamp) {
     }
     Render.render(Unit.all())
 
-    window.requestAnimationFrame(animate)
+    animationId = window.requestAnimationFrame(animate)
   }
   lastUpdate = timestamp
 
@@ -66,7 +66,7 @@ const animate = function (timestamp) {
 export default {
 
   start () {
-    window.requestAnimationFrame(animate)
+    animationId = window.requestAnimationFrame(animate)
 
     // if (!Local.TESTING) {
     //   return
@@ -82,6 +82,9 @@ export default {
   },
 
   stop () {
+    window.cancelAnimationFrame(animationId)
+    animationId = null
+
     if (Local.game) {
       Local.game.running = false
     }

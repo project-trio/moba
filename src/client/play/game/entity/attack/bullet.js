@@ -13,7 +13,7 @@ import AreaOfEffect from '@/play/game/entity/attack/aoe'
 
 const POSITION_MAGNITUDE_OFFSET = 100
 
-const allBullets = []
+let allBullets = null
 
 //CLASS
 
@@ -210,6 +210,14 @@ class Bullet {
 }
 
 //STATIC
+
+Bullet.init = function () {
+  allBullets = []
+}
+
+Bullet.destroy = function () {
+  allBullets = null
+}
 
 Bullet.all = function () {
   return allBullets

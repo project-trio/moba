@@ -140,8 +140,7 @@ maps.standard = {
 const GameMap = function (parent) {
 
   let layout
-
-  Render.create()
+  let automateTimer = null
 
   let container = Render.group()
   const floorContainer = Render.group()
@@ -153,7 +152,7 @@ const GameMap = function (parent) {
   parent.add(container)
   this.floorContainer = floorContainer
 
-  pointer.setParent(floorContainer)
+  pointer.init(floorContainer)
 
   const walls = []
 
@@ -236,14 +235,13 @@ const GameMap = function (parent) {
     })
     ground.owner = ground
 
-    let automateTimer = null
     ground.onHover = () => {
     }
     ground.onMove = (point) => {
-      const showActivateGround = store.state.skills.getGroundTarget
+      const showActivateGround = store.state.local.skills.getGroundTarget
       if (showActivateGround) {
         const target = getTargetFromPoint(point)
-        store.state.skills.groundTarget = target
+        store.state.local.skills.groundTarget = target
         this.selectionRing.position.x = target[0] / 100
         this.selectionRing.position.y = target[1] / 100
       }
@@ -256,8 +254,8 @@ const GameMap = function (parent) {
     ground.onClick = (point) => {
       const target = getTargetFromPoint(point)
 
-      if (store.state.skills.getGroundTarget) {
-        store.state.skills.activation(target)
+      if (store.state.local.skills.getGroundTarget) {
+        store.state.local.skills.activation(target)
       } else {
         store.cancelActiveSkill()
         Bridge.emit('action', { target })
@@ -351,9 +349,11 @@ const GameMap = function (parent) {
   }
 
   this.destroy = function () {
-    if (container) {
-      container.destroy()
-      container = null
+    Mini.destroy()
+
+    if (automateTimer) {
+      clearInterval(automateTimer)
+      automateTimer = null
     }
   }
 

@@ -188,8 +188,8 @@ class Ship extends Movable {
     skill.start(index, skillLevel, this, this.endSkill, target)
 
     if (this.isLocal) {
-      store.state.skills.actives.splice(index, 1, durationEndTime)
-      store.state.skills.cooldowns.splice(index, 1, cooldownEndTime)
+      store.state.local.skills.actives.splice(index, 1, durationEndTime)
+      store.state.local.skills.cooldowns.splice(index, 1, cooldownEndTime)
     }
   }
 
@@ -201,8 +201,8 @@ class Ship extends Movable {
         this.skills.levels[index] = currentLevel + 1
 
         if (this.isLocal) {
-          store.state.skills.leveled = this.skills.leveled
-          store.state.skills.levels.splice(index, 1, currentLevel + 1)
+          store.state.local.skills.leveled = this.skills.leveled
+          store.state.local.skills.levels.splice(index, 1, currentLevel + 1)
         }
       } else {
         console.error('Skill already maxed', index, currentLevel)
@@ -230,7 +230,7 @@ class Ship extends Movable {
     this.skills.data[index].end(this)
 
     if (this.isLocal) {
-      store.state.skills.actives.splice(index, 1, 0)
+      store.state.local.skills.actives.splice(index, 1, 0)
     }
   }
 
@@ -294,8 +294,8 @@ class Ship extends Movable {
     store.state.chatMessages.push(killData)
 
     if (this.isLocal) {
-      store.state.dead = true
-      store.state.reemergeAt = this.reemergeAt
+      store.state.local.dead = true
+      store.state.local.reemergeAt = this.reemergeAt
     }
   }
 
@@ -318,7 +318,7 @@ class Ship extends Movable {
 
     this.infoContainer.visible = true
     if (this.isLocal) {
-      store.state.dead = false
+      store.state.local.dead = false
     }
   }
 
@@ -368,7 +368,7 @@ class Ship extends Movable {
     this.renderLevelText()
 
     if (this.isLocal) {
-      store.state.level = this.level
+      store.state.local.level = this.level
     }
   }
 

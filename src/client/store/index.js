@@ -8,39 +8,27 @@ import Unit from '@/play/game/entity/unit/unit'
 
 let selectedUnit = null
 
-export default {
-  state: {
-    signin: {
-      username: storage.get('username'),
-      loading: false,
+const defaultGameState = () => {
+  return {
+    players: [],
+    host: null,
+    ready: null,
+    winningTeam: null,
+    running: false,
+    playing: false,
+    missingUpdate: false,
+    showHelp: false,
+    stats: {
+      kills: [0, 0],
+      towers: [0, 0],
     },
+    renderTime: 0,
+    ships: {},
+  }
+}
 
-    settings: {
-      quality: storage.getInt('quality', 1),
-    },
-
-    game: {
-      list: [],
-      playersOnline: 0,
-
-      players: [],
-      host: null,
-      ready: null,
-      winningTeam: null,
-      running: false,
-      playing: false,
-      missingUpdate: false,
-      showHelp: false,
-      stats: {
-        kills: [0, 0],
-        towers: [0, 0],
-      },
-      renderTime: 0,
-      ships: {},
-    },
-
-    chatMessages: [],
-
+const defaultLocalState = () => {
+  return {
     skills: {
       leveled: 0,
       levels: [0, 0, 0],
@@ -57,6 +45,34 @@ export default {
       withAlliance: false,
     },
 
+    dead: false,
+    reemergeAt: 0,
+    level: 1,
+  }
+}
+
+export default {
+  state: {
+    signin: {
+      username: storage.get('username'),
+      loading: false,
+    },
+
+    settings: {
+      quality: storage.getInt('quality', 1),
+    },
+
+    lobby: {
+      games: [],
+      onlineCount: 0,
+    },
+
+    chatMessages: [],
+
+    game: defaultGameState(),
+
+    local: defaultLocalState(),
+
     selectedStats: {
       name: null,
       level: 0,
@@ -68,10 +84,6 @@ export default {
       range: 0,
       moveSpeed: 0,
     },
-    dead: false,
-    reemergeAt: 0,
-    level: 1,
-    selectedUnit: null,
 
     key: {
       lastPress: {
@@ -83,6 +95,13 @@ export default {
       count: 0,
       pressed: {},
     },
+  },
+
+  // Reset
+
+  resetGameState () {
+    this.state.game = defaultGameState()
+    this.state.local = defaultLocalState()
   },
 
   // Signin
@@ -146,14 +165,14 @@ export default {
   // Hotkeys
 
   cancelActiveSkill (cancelHighlight) {
-    this.state.skills.activation = null
-    this.state.skills.getGroundTarget = false
-    this.state.skills.getUnitTarget = false
-    this.state.skills.groundTarget = null
-    this.state.skills.active = null
+    this.state.local.skills.activation = null
+    this.state.local.skills.getGroundTarget = false
+    this.state.local.skills.getUnitTarget = false
+    this.state.local.skills.groundTarget = null
+    this.state.local.skills.active = null
     Local.player.unit.removeIndicator()
-    if (cancelHighlight && this.state.skills.unitTarget) {
-      const unitTarget = Unit.get(this.state.skills.unitTarget)
+    if (cancelHighlight && this.state.local.skills.unitTarget) {
+      const unitTarget = Unit.get(this.state.local.skills.unitTarget)
       if (unitTarget) {
         unitTarget.setSelection(null)
       }

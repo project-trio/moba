@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import store from '@/store'
+
 export default {
   computed: {
     levelProgress () {
@@ -25,7 +27,7 @@ export default {
     },
 
     stats () {
-      return this.$root.$data.state.selectedStats
+      return store.state.selectedStats
     },
   },
 }

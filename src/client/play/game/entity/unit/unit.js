@@ -13,7 +13,7 @@ import Bullet from '@/play/game/entity/attack/bullet'
 
 //LOCAL
 
-const allUnits = []
+let allUnits = null
 
 let targetingGround = false
 
@@ -192,23 +192,23 @@ class Unit {
     if (this.isDying) {
       return false
     }
-    if (this.id !== store.state.skills.unitTarget) {
-      if (store.state.skills.getUnitTarget) {
-        store.state.skills.unitTarget = this.id
-        if (store.state.skills.withAlliance === this.localAlly) {
+    if (this.id !== store.state.local.skills.unitTarget) {
+      if (store.state.local.skills.getUnitTarget) {
+        store.state.local.skills.unitTarget = this.id
+        if (store.state.local.skills.withAlliance === this.localAlly) {
           this.setSelection(0xff0000)
         }
       } else {
-        store.state.skills.unitTarget = this.id
+        store.state.local.skills.unitTarget = this.id
       }
     }
     document.body.style.cursor = 'pointer'
   }
 
   onBlur () {
-    if (this.id === store.state.skills.unitTarget) {
-      store.state.skills.unitTarget = null
-      if (store.state.skills.getUnitTarget) {
+    if (this.id === store.state.local.skills.unitTarget) {
+      store.state.local.skills.unitTarget = null
+      if (store.state.local.skills.getUnitTarget) {
         this.setSelection(null)
       }
     }
@@ -225,17 +225,17 @@ class Unit {
     if (this.isDying) {
       return false
     }
-    if (store.state.skills.getUnitTarget) {
-      const withAlliance = store.state.skills.withAlliance
+    if (store.state.local.skills.getUnitTarget) {
+      const withAlliance = store.state.local.skills.withAlliance
       if (withAlliance === null || withAlliance === this.localAlly) {
-        store.state.skills.activation(this.id)
+        store.state.local.skills.activation(this.id)
         return true
       }
     }
     if (this.localAlly) {
       return false
     }
-    if (store.state.skills.getGroundTarget) {
+    if (store.state.local.skills.getGroundTarget) {
       return false
     }
 
@@ -527,6 +527,15 @@ class Unit {
 }
 
 //STATIC
+
+Unit.init = function () {
+  allUnits = []
+  targetingGround = false
+}
+
+Unit.destroy = function () {
+  allUnits = null
+}
 
 Unit.all = function () {
   return allUnits

@@ -4,7 +4,7 @@ import shipStats from '@/play/data/ships'
 
 import Render from '@/play/render/render'
 
-let renderer, scene, camera, cameraTarget, container, canvas
+let renderer, scene, camera, cameraTarget, container, canvas, animationId
 
 let renderWidth, renderHeight
 
@@ -14,7 +14,7 @@ function animate () {
   if (!renderer) {
     return
   }
-  requestAnimationFrame(animate)
+  animationId = window.requestAnimationFrame(animate)
 
   camera.lookAt(cameraTarget)
   renderer.render(scene, camera)
@@ -92,7 +92,16 @@ export default {
   },
 
   destroy () {
+    window.cancelAnimationFrame(animationId)
+    animationId = null
+
+    scene.remove(container)
     renderer = null
+    scene = null
+    camera = null
+    cameraTarget = null
+    container = null
+    canvas = null
   },
 
 }

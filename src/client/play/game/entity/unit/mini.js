@@ -174,22 +174,28 @@ class Mini extends Movable {
 
 //CACHE
 
-const cache = {
-  melee: [[], []],
-  ranged: [[], []],
-}
+let cache
 
 Mini.spawn = function (team, type, path, mirrored) {
   const cachedMini = cache[type][team].pop()
   if (cachedMini) {
-    return cachedMini.refresh(team, path, mirrored)
+    cachedMini.refresh(team, path, mirrored)
+    return cachedMini
   }
   return new Mini(team, type, path, mirrored)
 }
 
 Mini.init = function (_mapWidth, _mapHeight) {
+  cache = {
+    melee: [[], []],
+    ranged: [[], []],
+  }
   mapWidth = _mapWidth
   mapHeight = _mapHeight
+}
+
+Mini.destroy = function () {
+  cache = null
 }
 
 export default Mini

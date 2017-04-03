@@ -6,7 +6,7 @@ import Util from '@/play/game/util'
 
 const POSITION_MAGNITUDE_OFFSET = 100
 
-const areaofEffects = []
+let areaofEffects = null
 
 //CLASS
 
@@ -80,6 +80,14 @@ class AreaOfEffect {
 }
 
 //STATIC
+
+AreaOfEffect.init = function () {
+  areaofEffects = []
+}
+
+AreaOfEffect.destroy = function () {
+  areaofEffects = null
+}
 
 AreaOfEffect.all = function () {
   return areaofEffects

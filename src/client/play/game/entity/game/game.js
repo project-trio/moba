@@ -189,9 +189,15 @@ export default function (gid, size) {
   // Setup
 
   this.close = function () {
-    Render.remove(this.container)
+    Unit.destroy()
+    Bullet.destroy()
+    AreaOfEffect.destroy()
+    Render.destroy()
+    this.map.destroy()
+
     Local.game = null
     Local.player.game = null
+    store.resetGameState()
   }
 
   this.start = function () {
@@ -199,6 +205,12 @@ export default function (gid, size) {
       console.warn('game already running')
       return
     }
+
+    Unit.init()
+    Bullet.init()
+    AreaOfEffect.init()
+    Render.create()
+
     this.running = true
     store.state.game.running = true
     store.state.game.winningTeam = null

@@ -30,11 +30,11 @@ import Bridge from '@/play/events/bridge'
 import Unit from '@/play/game/entity/unit/unit'
 
 const getUnitTarget = function (targetType) {
-  store.state.skills.getUnitTarget = true
-  store.state.skills.withAlliance = targetType === 3 ? false : targetType === 4 ? true : null
-  if (store.state.skills.unitTarget) {
-    const unitTarget = Unit.get(store.state.skills.unitTarget)
-    if (!unitTarget || store.state.skills.withAlliance !== unitTarget.localAlly) {
+  store.state.local.skills.getUnitTarget = true
+  store.state.local.skills.withAlliance = targetType === 3 ? false : targetType === 4 ? true : null
+  if (store.state.local.skills.unitTarget) {
+    const unitTarget = Unit.get(store.state.local.skills.unitTarget)
+    if (!unitTarget || store.state.local.skills.withAlliance !== unitTarget.localAlly) {
       console.log('target not for alliance', unitTarget)
     } else {
       unitTarget.setSelection(0xff0000)
@@ -68,15 +68,15 @@ export default {
     },
 
     disabled () {
-      return this.level === 0 || this.activated || this.cooldownRemaining > 0 || this.disabledByOtherSkill || store.state.dead
+      return this.level === 0 || this.activated || this.cooldownRemaining > 0 || this.disabledByOtherSkill || store.state.local.dead
     },
 
     isAnySkillActive () {
-      return store.state.skills.active !== null
+      return store.state.local.skills.active !== null
     },
 
     isActiveSkill () {
-      return this.index === store.state.skills.active
+      return this.index === store.state.local.skills.active
     },
 
     indexName () {
@@ -139,14 +139,14 @@ export default {
 
     level () {
       this.submittedLevelup = false
-      return store.state.skills.levels[this.index]
+      return store.state.local.skills.levels[this.index]
     },
     levelupProgress () {
       return this.level / 10
     },
 
     higherLevelThanSkills () {
-      return store.state.level > store.state.skills.leveled
+      return store.state.local.level > store.state.local.skills.leveled
     },
 
     showingLevelupIndicator () {
@@ -165,14 +165,14 @@ export default {
     },
 
     allActives () {
-      return store.state.skills.actives
+      return store.state.local.skills.actives
     },
 
     activated () {
       return this.allActives[this.index]
     },
     cooldownTime () {
-      return this.activated ? 0 : store.state.skills.cooldowns[this.index]
+      return this.activated ? 0 : store.state.local.skills.cooldowns[this.index]
     },
     cooldownRemaining () {
       const cooldownAt = this.cooldownTime
@@ -185,7 +185,7 @@ export default {
           return diff
         }
         this.activationCooldown = null
-        store.state.skills.cooldowns.splice(this.index, 1, 0)
+        store.state.local.skills.cooldowns.splice(this.index, 1, 0)
       }
       return 0
     },
@@ -202,15 +202,15 @@ export default {
       if (currentKey.code === this.keyCode) {
         store.cancelActiveSkill()
         const skillIndex = this.index
-        store.state.skills.active = skillIndex
+        store.state.local.skills.active = skillIndex
         if (!this.disabled && !currentKey.modifier) {
           if (this.skill.getRange) {
             Local.player.unit.createIndicator(this.skill.getRange(this.level))
           }
           if (this.skill.target > 1) {
-            store.state.skills.activation = this.getActivation()
+            store.state.local.skills.activation = this.getActivation()
             if (this.skill.target === 2) {
-              store.state.skills.getGroundTarget = true
+              store.state.local.skills.getGroundTarget = true
             } else {
               getUnitTarget(this.skill.target)
             }
@@ -284,11 +284,11 @@ export default {
         const groundTargeted = this.skill.target === 2
         const activate = this.getActivation()
         if (pressed) {
-          const target = groundTargeted ? store.state.skills.groundTarget : store.state.skills.unitTarget
+          const target = groundTargeted ? store.state.local.skills.groundTarget : store.state.local.skills.unitTarget
           if (target) {
             if (!groundTargeted) {
               const unitTarget = Unit.get(target)
-              if (!unitTarget || store.state.skills.withAlliance !== unitTarget.localAlly) {
+              if (!unitTarget || store.state.local.skills.withAlliance !== unitTarget.localAlly) {
                 console.log('target not for alliance', unitTarget)
                 return
               }
@@ -298,10 +298,10 @@ export default {
             store.cancelActiveSkill()
           }
         } else {
-          store.state.skills.active = skillIndex
-          store.state.skills.activation = activate
+          store.state.local.skills.active = skillIndex
+          store.state.local.skills.activation = activate
           if (groundTargeted) {
-            store.state.skills.getGroundTarget = true
+            store.state.local.skills.getGroundTarget = true
           } else {
             getUnitTarget(this.skill.target)
           }

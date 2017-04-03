@@ -21,10 +21,10 @@ export default {
     Bridge.on('lobby', (data) => {
       console.log('lobby', data)
       if (data.online) {
-        store.state.game.playersOnline = data.online
+        store.state.lobby.onlineCount = data.online
       }
       if (data.games) {
-        store.state.game.list = data.games
+        store.state.lobby.games = data.games
       }
     })
 

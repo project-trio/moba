@@ -18,7 +18,7 @@ export default {
 
   computed: {
     skillLevels () {
-      return this.$root.$data.state.skills.levels
+      return store.state.local.skills.levels
     },
 
     skills () {

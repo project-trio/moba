@@ -3,9 +3,7 @@ const THREE = require('three')
 const raycaster = new THREE.Raycaster()
 const pointerLocation = new THREE.Vector2()
 
-let intersectContainer
-let intersecting
-let hovering = {}
+let intersectContainer, intersecting, hovering
 
 //LISTENER
 
@@ -28,11 +26,25 @@ function onClick (event) {
 //PUBLIC
 
 export default {
-  bind () {
+  init (container) {
+    intersectContainer = container
+
+    hovering = {}
     const canvas = document.getElementById('canvas')
     canvas.addEventListener('mousedown', onClick, false)
     canvas.addEventListener('mousemove', onMouseMove, false)
     canvas.addEventListener('contextmenu', onClick, false)
+  },
+
+  destroy () {
+    hovering = null
+    intersecting = null
+    intersectContainer = null
+
+    const canvas = document.getElementById('canvas')
+    canvas.removeEventListener('mousedown', onClick, false)
+    canvas.removeEventListener('mousemove', onMouseMove, false)
+    canvas.removeEventListener('contextmenu', onClick, false)
   },
 
   reposition (camera) {
@@ -60,8 +72,4 @@ export default {
     }
     hovering = newHovering
   },
-
-  setParent (container) {
-    intersectContainer = container
-  }
 }
