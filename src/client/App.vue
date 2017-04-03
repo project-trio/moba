@@ -7,11 +7,17 @@
 <script>
 import store from '@/store'
 
+const KEY_TAB = 9
+const KEY_ESCAPE = 27
+
 const validKeyEvent = (event) => {
+  const keyCode = event.which || event.keyCode
+  if (keyCode === KEY_TAB || keyCode === KEY_ESCAPE) {
+    event.preventDefault()
+  }
   if (event.repeat) {
     return false
   }
-  const keyCode = event.which || event.keyCode
   const keyDescription = { code: keyCode }
   if (keyCode === 16 || keyCode === 17 || keyCode === 18 || keyCode === 91 || keyCode === 93) {
     keyDescription.ignore = true

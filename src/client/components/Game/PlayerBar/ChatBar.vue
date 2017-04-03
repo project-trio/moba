@@ -10,7 +10,7 @@
     </div>
   </div>
   <div class="chat-input-container">
-    <input ref="chatInput" v-model.trim="draftMessage" v-on:focus="onFocusChat" v-on:blur="onBlurChat" class="chat-input" :class="{ active: showingInput }"></input>
+    <input ref="chatInput" v-model.trim="draftMessage" @focus="onFocusChat" @blur="onBlurChat" class="chat-input" :class="{ active: showingInput }"></input>
     <div v-if="!showingInput" class="chat-placeholder">press enter to chat</div>
   </div>
 </div>
@@ -21,8 +21,8 @@ import store from '@/store'
 
 import Bridge from '@/play/events/bridge'
 
-const KEY_ESCAPE = 27
 const KEY_ENTER = 13
+const KEY_ESCAPE = 27
 
 export default {
   data () {

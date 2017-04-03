@@ -2,9 +2,9 @@
 <div class="inherit">
   <canvas id="canvas" class="inherit"></canvas>
 
-  <game-status></game-status>
-
   <unit-select v-if="!playing && winningTeam === null"></unit-select>
+
+  <game-status></game-status>
 
   <score-bar class="ui-bar"></score-bar>
   <player-bar class="ui-bar"></player-bar>
