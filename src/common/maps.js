@@ -144,6 +144,71 @@ const maps = {}
       },
     ],
   }
+
+  // Large
+
+  const LARGE_WIDTH = 2000
+  const LARGE_HEIGHT = 2000
+  wH = LARGE_WIDTH / 2
+  hH = LARGE_HEIGHT / 2
+  maps.large = {
+    minSize: 6,
+    maxSize: null,
+
+    width: LARGE_WIDTH,
+    height: LARGE_HEIGHT,
+
+    towers: [
+      ['base', wH, 44, false],
+      ['tower', wH - 350, 400, true],
+      ['tower', 44, 440, true],
+      ['turret', 400, hH - 200, true],
+      ['turret', wH - 120, hH - 100, false],
+    ],
+
+    walls: [
+      {
+        start: { x: 380, y: 400 },
+        radius: wallRadius,
+        move: [
+          { dx: -60, dy: 0, },
+          { dx: 0, dy: -60 },
+        ],
+        mirror: true,
+        endCap: true,
+      },
+      {
+        start: { x: wH - 100, y: 400 },
+        radius: wallRadius,
+        move: [
+          { dx: 100, dy: 0, },
+        ],
+        mirror: false,
+        endCap: true,
+      },
+    ],
+
+    minions: [
+      {
+        type: 'melee',
+        paths: [
+          [[wH - 80, 90, 0, 0], [90, 100, hH, -23], [90, 360, 0, -hH], [260, 880, -311, -950], [260, hH, 0, -hH]],
+          [[wH - 80, 60, 0, 0], [120, 70, hH, -25], [120, 390, 0, -hH], [300, 880, -345, -939], [300, hH, 0, -hH]],
+          [[wH - 80, 30, 0, 0], [150, 40, hH, -27], [150, 420, 0, -hH], [340, 880, -382, -924], [340, hH, 0, -hH]],
+        ],
+        mirror: true,
+      },
+      {
+        type: 'ranged',
+        paths: [
+          [[wH - 40, 74, 0, 0], [wH - 40, hH, 0, -hH]],
+          [[wH, 80, 0, 0], [wH, hH, 0, -hH]],
+          [[wH + 40, 74, 0, 0], [wH + 40, hH, 0, -hH]],
+        ],
+        mirror: false,
+      },
+    ],
+  }
 }
 
 module.exports = maps
