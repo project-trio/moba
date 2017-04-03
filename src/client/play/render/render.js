@@ -10,41 +10,50 @@ import pointer from '@/play/render/pointer'
 import RenderFog from '@/play/render/fog'
 import RenderMinimap from '@/play/render/minimap'
 
-let gameScene, gameCamera, renderer
-
 const WALL_HEIGHT = 60
+const pixelRatio = window.devicePixelRatio
 
-let windowWidth, windowHeight
+let gameScene, gameCamera, renderer
+let pixelMultiplier = null
 
 let font
-
 let voxelCache = [{}, {}]
 
 //LOCAL
 
 const resize = function () {
-  windowWidth = window.innerWidth
-  windowHeight = window.innerHeight
+  const width = window.innerWidth
+  const height = window.innerHeight
 
-  if (!renderer) {
-    return
+  const quality = store.state.settings.quality
+  let newPixelMultiplier = 1
+  if (quality < 1) {
+    const pixelCount = width * height
+    if (pixelCount > 1920 * 1080) {
+      newPixelMultiplier = 0.25
+    } else if (pixelCount > 1280 * 720) {
+      newPixelMultiplier = 0.5
+    }
+  }
+  if (newPixelMultiplier !== pixelMultiplier) {
+    pixelMultiplier = newPixelMultiplier
+    renderer.setPixelRatio(pixelRatio * pixelMultiplier)
   }
 
-  renderer.setSize(windowWidth, windowHeight)
+  renderer.setSize(width, height)
 
-  gameCamera.aspect = windowWidth / windowHeight
+  gameCamera.aspect = width / height
   gameCamera.updateProjectionMatrix()
+
 }
 
-window.addEventListener('resize', resize)
-
 //PUBLIC
-
-// let counter = 0
 
 export default {
 
   createRenderer () {
+    pixelMultiplier = null
+
     const quality = store.state.settings.quality
     renderer = new THREE.WebGLRenderer({
       antialias: quality > 0,
@@ -54,17 +63,14 @@ export default {
     if (quality > 0) {
       renderer.shadowMap.type = THREE.PCFSoftShadowMap
     }
-    renderer.setPixelRatio(window.devicePixelRatio)
     resize()
   },
 
   create () {
-    resize()
-
     // Scene
 
     gameScene = new THREE.Scene()
-    gameCamera = new THREE.PerspectiveCamera(90, windowWidth / windowHeight)
+    gameCamera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight)
     gameCamera.lookAt(gameScene)
     gameCamera.position.z = 512
 
@@ -95,12 +101,15 @@ export default {
     // gameScene.add(helper)
 
     this.createRenderer()
+    window.addEventListener('resize', resize)
   },
 
   destroy () {
+    window.removeEventListener('resize', resize)
     gameScene = null
     gameCamera = null
     renderer = null
+    pixelMultiplier = null
   },
 
   positionCamera (x, y) {
