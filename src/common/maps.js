@@ -2,7 +2,7 @@ const maps = {}
 
 {
   const wallRadius = 24
-  let wH, hH
+  var wH, hH
 
   // Tiny
 

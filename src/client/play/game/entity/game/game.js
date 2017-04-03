@@ -16,7 +16,6 @@ import Unit from '@/play/game/entity/unit/unit'
 
 export default function (gid, size, mapName) {
   let players = {}
-  let teamSize = size
   let startTime
 
   let updateCount = 0
