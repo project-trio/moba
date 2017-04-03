@@ -50,7 +50,7 @@ class Ship extends Movable {
     this.reflectDamage = null
     this.targetingSkill = null
 
-    const scores = { name: player.name, team: this.team, level: this.level, kills: 0, deaths: 0, damage: 0 }
+    const scores = { name: player.name, ship: name, team: this.team, level: this.level, kills: 0, deaths: 0, damage: 0 }
     store.state.game.ships.push(scores)
     this.displayStats = scores
 
