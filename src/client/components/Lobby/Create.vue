@@ -10,7 +10,7 @@
     </div>
     <h3>map:</h3>
     <div class="selection-container">
-      <button v-for="map in maps" @click="onMap(map.name)" class="selection interactive" :class="{ selected: map.name === selectedMap }">{{ map.name }}</button>
+      <button v-for="map in mapsForSize" @click="onMap(map)" class="selection interactive" :class="{ selected: map === selectedMap }">{{ map }}</button>
     </div>
     <button @click="onSubmit" class="big interactive">confirm</button>
   </div>
@@ -21,6 +21,7 @@
 import router from '@/router'
 
 import CommonConsts from 'common/constants'
+import commonMaps from 'common/maps'
 
 import Local from '@/play/local'
 
@@ -31,18 +32,24 @@ export default {
     return {
       loading: false,
       selectedSize: 0,
-      selectedMap: 'standard',
-      maps: [
-        { name: 'mini', min: 0, max: 3 },
-        { name: 'standard', min: 2, max: 6 },
-        { name: 'large', min: 5, max: 9001 },
-      ],
+      selectedMap: null,
     }
   },
 
   computed: {
     gameSizes () {
       return CommonConsts.GAME_SIZES
+    },
+
+    mapsForSize () {
+      const maps = []
+      for (let name in commonMaps) {
+        const map = commonMaps[name]
+        if (this.selectedSize >= map.minSize && (!map.maxSize || this.selectedSize <= map.maxSize)) {
+          maps.push(name)
+        }
+      }
+      return maps
     },
   },
 
