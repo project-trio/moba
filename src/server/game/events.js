@@ -51,10 +51,14 @@ const createGame = function(player, size, joining) {
     response.error = 'You need to register before creating a larger than 1p game'
   } else {
     const game = new Game(size)
-    if (joining && !game.add(player)) {
-      game.destroy(null)
-      response.error = 'Unable to join new game'
-    } else {
+    if (joining) {
+      const joinData = game.add(player)
+      if (joinData.error) {
+        game.destroy(null)
+        response.error = joinData.error
+      }
+    }
+    if (!response.error) {
       lobbyBroadcastGames()
       response.gid = game.id
     }
@@ -68,11 +72,12 @@ const join = function(player, gid, callback) {
     const game = games[idx]
     if (game.id === gid) {
       const gameData = game.add(player)
-      if (gameData) {
-        callback(gameData)
-        return true
+      if (gameData.error) {
+        callback({ error: gameData.error })
+        return false
       }
-      callback({error: 'Unable to join'})
+      callback(gameData)
+      return true
     }
   }
   callback({error: "Game doesn't exist"})
@@ -83,7 +88,8 @@ const quickJoin = function(player, size) {
     const games = Game.all
     for (let idx = games.length - 1; idx >= 0; idx -= 1) {
       const game = games[idx]
-      if (game.add(player)) {
+      const gameData = game.add(player)
+      if (!gameData.error) {
         return { gid: game.id }
       }
     }
@@ -168,7 +174,7 @@ const loop = function() {
       }
       game.broadcast('update', { update: game.serverUpdate, actions: actionData })
       game.serverUpdate += 1
-    } else if ((CommonConsts.TESTING || game.size < 1) && game.checkFull()) {
+    } else if (CommonConsts.TESTING && game.checkFull()) {
       startGame(game)
     }
   }
@@ -202,8 +208,8 @@ module.exports = {
 
     client.on('admin', (data, callback) => {
       if (CommonConsts.TESTING || name === 'kiko ') {
-        console.log('Admin', pid)
-        callback({games: games, players: clientPlayers})
+        console.log('Admin', pid, getGameList())
+        callback({ online: playersOnline, games: getGameList() })
       }
     })
 

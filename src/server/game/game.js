@@ -45,7 +45,7 @@ class Game {
   }
 
   checkFull () {
-    return this.playerCount() >= this.size * 2
+    return this.playerCount() >= (this.size === 0 ? 1 : this.size * 2)
   }
 
 //STATE
@@ -73,7 +73,7 @@ class Game {
     const pid = player.id
     if (!this.players[pid]) {
       if (this.state !== 'OPEN') {
-        return false
+        return { error: `Unable to join: ${this.state} game` }
       }
       if (!this.hostId) {
         this.hostId = pid
@@ -86,14 +86,11 @@ class Game {
       player.team = team
       player.teamIndex = teamSize
 
-
       if (this.checkFull()) {
         this.state = 'FULL'
-        this.state = 'READY' //TODO temp
       }
       this.broadcast('add player', { ready: this.canStart(), players: this.formattedPlayers() })
       player.join(this)
-
     }
     return { gid: this.id, host: this.hostId, size: this.size, ready: this.canStart(), players: this.formattedPlayers() }
   }
