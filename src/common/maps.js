@@ -2,27 +2,30 @@ const maps = {}
 
 {
   const wallRadius = 24
+  let wH, hH
 
-  // Mini
+  // Tiny
 
+  const TINY_SIZE = 900
+  wH = TINY_SIZE / 2
   maps.tiny = {
     minSize: 0,
     maxSize: 2,
 
-    width: 800,
-    height: 800,
+    width: TINY_SIZE,
+    height: TINY_SIZE,
 
     towers: [
-      ['base', 400, 44, false],
-      ['tower', 320, 320, false],
+      ['base', wH, 44, false],
+      ['turret', wH - 90, wH - 90, false],
     ],
 
     walls: [
       {
-        start: { x: 535, y: 320 },
+        start: { x: TINY_SIZE, y: wH - 130 },
         radius: wallRadius,
         move: [
-          { dx: 133, dy: 0, },
+          { dx: -160, dy: 0, },
         ],
         mirror: false,
         endCap: true,
@@ -33,26 +36,32 @@ const maps = {}
       {
         type: 'ranged',
         paths: [
-          [[360, 74, 0, 0], [360, 400, 0, -1000]],
-          [[400, 80, 0, 0], [400, 400, 0, -1000]],
-          [[440, 74, 0, 0], [440, 400, 0, -1000]],
+          [[wH - 40, 74, 0, 0], [wH - 40, wH, 0, -1000]],
+          [[wH, 80, 0, 0], [wH, wH, 0, -1000]],
+          [[wH + 40, 74, 0, 0], [wH + 40, wH, 0, -1000]],
         ],
         mirror: false,
       },
     ],
   }
 
+  // Small
+
+  const SMALL_WIDTH = 900
+  const SMALL_HEIGHT = 1400
+  wH = SMALL_WIDTH / 2
+  hH = SMALL_HEIGHT / 2
   maps.small = {
     minSize: 0,
     maxSize: 4,
 
-    width: 800,
-    height: 1400,
+    width: SMALL_WIDTH,
+    height: SMALL_HEIGHT,
 
     towers: [
-      ['base', 400, 44, false],
+      ['base', wH, 44, false],
       ['tower', 190, 380, true],
-      ['turret', 470, 600, false],
+      ['turret', wH + 80, hH - 100, false],
     ],
 
     walls: [
@@ -72,9 +81,9 @@ const maps = {}
       {
         type: 'ranged',
         paths: [
-          [[360, 74, 0, 0], [360, 700, 0, -1000]],
-          [[400, 80, 0, 0], [400, 700, 0, -1000]],
-          [[440, 74, 0, 0], [440, 700, 0, -1000]],
+          [[wH - 40, 74, 0, 0], [wH - 40, hH, 0, -SMALL_HEIGHT]],
+          [[wH, 80, 0, 0], [wH, hH, 0, -SMALL_HEIGHT]],
+          [[wH + 40, 74, 0, 0], [wH + 40, hH, 0, -SMALL_HEIGHT]],
         ],
         mirror: false,
       },
@@ -85,8 +94,8 @@ const maps = {}
 
   const STANDARD_WIDTH = 1200
   const STANDARD_HEIGHT = 2000
-  const SWH = STANDARD_WIDTH / 2
-  const SHH = STANDARD_HEIGHT / 2
+  wH = STANDARD_WIDTH / 2
+  hH = STANDARD_HEIGHT / 2
   maps.standard = {
     minSize: 2,
     maxSize: 10,
@@ -95,10 +104,10 @@ const maps = {}
     height: STANDARD_HEIGHT,
 
     towers: [
-      ['base', SWH, 44, false],
+      ['base', wH, 44, false],
       ['tower', 435, 360, true],
       ['turret', 44, 440, true],
-      ['turret', SWH - 300, SHH - 160, true],
+      ['turret', wH - 300, hH - 160, true],
     ],
 
     walls: [
@@ -118,18 +127,18 @@ const maps = {}
       {
         type: 'melee',
         paths: [
-          [[SWH - 80, 90, 0, 0], [90, 100, SHH, -23], [90, 360, 0, -SHH], [260, 880, -311, -950], [260, 900, 0, -SHH]],
-          [[SWH - 80, 60, 0, 0], [120, 70, SHH, -25], [120, 390, 0, -SHH], [300, 880, -345, -939], [300, 900, 0, -SHH]],
-          [[SWH - 80, 30, 0, 0], [150, 40, SHH, -27], [150, 420, 0, -SHH], [340, 880, -382, -924], [340, 900, 0, -SHH]],
+          [[wH - 80, 90, 0, 0], [90, 100, hH, -23], [90, 360, 0, -hH], [260, 880, -311, -950], [260, hH, 0, -hH]],
+          [[wH - 80, 60, 0, 0], [120, 70, hH, -25], [120, 390, 0, -hH], [300, 880, -345, -939], [300, hH, 0, -hH]],
+          [[wH - 80, 30, 0, 0], [150, 40, hH, -27], [150, 420, 0, -hH], [340, 880, -382, -924], [340, hH, 0, -hH]],
         ],
         mirror: true,
       },
       {
         type: 'ranged',
         paths: [
-          [[SWH - 40, 74, 0, 0], [SWH - 40, SHH, 0, -SHH]],
-          [[SWH, 80, 0, 0], [SWH, SHH, 0, -SHH]],
-          [[SWH + 40, 74, 0, 0], [SWH + 40, SHH, 0, -SHH]],
+          [[wH - 40, 74, 0, 0], [wH - 40, hH, 0, -hH]],
+          [[wH, 80, 0, 0], [wH, hH, 0, -hH]],
+          [[wH + 40, 74, 0, 0], [wH + 40, hH, 0, -hH]],
         ],
         mirror: false,
       },
