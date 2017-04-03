@@ -10,7 +10,7 @@ import Unit from '@/play/game/entity/unit/unit'
 
 let lastUpdate = 0
 
-let updatePanel, framePanel, animationId
+let updatePanel, tickPanel, framePanel, animationId
 
 //LOOP
 
@@ -27,17 +27,17 @@ const animate = function (timestamp) {
     const isPlaying = game.playing
     const ticksToRender = game.calculateTicksToRender(timestamp)
     if (ticksToRender > 0) {
-      const processUpdate = isPlaying && updatePanel
+      const processUpdate = isPlaying && tickPanel
       if (processUpdate) {
-        updatePanel.begin()
+        tickPanel.begin()
       }
 
-      game.performTicks(ticksToRender, timestamp)
+      game.performTicks(ticksToRender, timestamp, updatePanel)
 
       if (isPlaying) {
         Local.player.unit.updateVisibility()
         if (processUpdate) {
-          updatePanel.end()
+          tickPanel.end()
         }
       }
     } else if (isPlaying) { // Tween
@@ -75,10 +75,17 @@ export default {
     updatePanel.showPanel(1)
     document.body.appendChild(updatePanel.dom)
 
+    tickPanel = new Stats()
+    tickPanel.showPanel(1)
+    document.body.appendChild(tickPanel.dom)
+    tickPanel.dom.style.top = '48px'
+
     framePanel = new Stats()
     framePanel.showPanel(0)
-    framePanel.dom.style.top = '48px'
     document.body.appendChild(framePanel.dom)
+    framePanel.dom.style.top = '96px'
+
+    Local.game.updatePanel = updatePanel
   },
 
   stop () {
@@ -87,11 +94,14 @@ export default {
 
     if (Local.game) {
       Local.game.running = false
+      Local.game.updatePanel = null
     }
-    if (updatePanel) {
+    if (tickPanel) {
       updatePanel.dom.remove()
+      tickPanel.dom.remove()
       framePanel.dom.remove()
       updatePanel = null
+      tickPanel = null
       framePanel = null
     }
   },

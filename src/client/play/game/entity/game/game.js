@@ -156,6 +156,12 @@ export default function (gid, size, mapName) {
   // Play
 
   this.enqueueUpdate = function (update, actions) {
+    if (update >= 9 && this.updatePanel) {
+      if (update > 9) {
+        this.updatePanel.end()
+      }
+      this.updatePanel.begin()
+    }
     this.serverUpdate = update
     updateQueue[update] = actions
     if (renderedSinceUpdate) {
