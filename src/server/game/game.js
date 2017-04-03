@@ -52,6 +52,9 @@ class Game {
 //STATE
 
   canStart () {
+    if (this.size === 0) {
+      return this.counts[0]
+    }
     if (this.counts[0] === this.counts[1]) {
       // const minSize = Math.ceil(this.size / 2) //TODO later
       return true
