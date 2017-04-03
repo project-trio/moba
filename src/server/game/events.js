@@ -36,12 +36,14 @@ const getGameList = function() {
       players: game.formattedPlayers(),
       state: game.state,
       size: game.size,
+      map: game.map,
+      update: game.serverUpdate,
     })
   }
   return result
 }
 
-const createGame = function(player, size, joining) {
+const createGame = function(player, size, map, joining) {
   const response = {}
   if (player.game) {
     response.error = 'Already in a game'
@@ -50,7 +52,7 @@ const createGame = function(player, size, joining) {
   } else if (size > 0 && !CommonConsts.TESTING && player.name !== 'kiko ') {
     response.error = 'You need to register before creating a larger than 1p game'
   } else {
-    const game = new Game(size)
+    const game = new Game(size, map)
     if (joining) {
       const joinData = game.add(player)
       if (joinData.error) {
@@ -83,7 +85,7 @@ const join = function(player, gid, callback) {
   callback({error: "Game doesn't exist"})
 }
 
-const quickJoin = function(player, size) {
+const quickJoin = function(player, size, map) {
   if (size > 0) {
     const games = Game.all
     for (let idx = games.length - 1; idx >= 0; idx -= 1) {
@@ -94,7 +96,7 @@ const quickJoin = function(player, size) {
       }
     }
   }
-  return createGame(player, size, true)
+  return createGame(player, size, map, true)
 }
 
 const startGame = function (game) {
@@ -312,10 +314,10 @@ module.exports = {
       } else if (data.action === 'leave game') {
         player.leave()
       } else if (data.action === 'quick') {
-        const gameResponse = quickJoin(player, data.size)
+        const gameResponse = quickJoin(player, data.size, data.map)
         callback(gameResponse)
       } else if (data.action === 'create') {
-        const gameResponse = createGame(player, data.size, false)
+        const gameResponse = createGame(player, data.size, data.map, false)
         callback(gameResponse)
       } else if (data.action === 'join') {
         join(player, data.gid, callback)

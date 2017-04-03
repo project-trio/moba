@@ -33,7 +33,7 @@ const startupRoute = function () {
   if (!Local.TESTING) {
     router.replace({ name: 'Lobby' })
   } else {
-    LobbyEvents.connect('quick', { size: 0 }, (data) => { //SAMPLE
+    LobbyEvents.connect('quick', { size: 0, map: 'small' }, (data) => { //SAMPLE
       router.push({ name: 'Join', params: { gid: data.gid } })
     })
   }

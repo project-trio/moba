@@ -10,12 +10,13 @@ const games = []
 
 class Game {
 
-  constructor (size) {
+  constructor (size, map) {
     this.players = {}
     this.isActive = false
     this.counts = [0, 0]
     this.id = Util.uid()
     this.size = size
+    this.map = map
     this.game = null
     this.state = 'OPEN'
     this.serverUpdate = 0
@@ -92,7 +93,7 @@ class Game {
       this.broadcast('add player', { ready: this.canStart(), players: this.formattedPlayers() })
       player.join(this)
     }
-    return { gid: this.id, host: this.hostId, size: this.size, ready: this.canStart(), players: this.formattedPlayers() }
+    return { gid: this.id, host: this.hostId, size: this.size, map: this.map, ready: this.canStart(), players: this.formattedPlayers() }
   }
 
   destroy (withIndex) {
@@ -145,6 +146,7 @@ class Game {
     this.broadcast('start game', {
       gid: this.id,
       size: this.size,
+      map: this.map,
       players: this.formattedPlayers(),
       updates: Config.updateDuration,
       ticks: Config.tickDuration,

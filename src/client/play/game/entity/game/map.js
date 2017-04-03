@@ -19,8 +19,7 @@ import Tower from '@/play/game/entity/unit/tower'
 
 //CONSTRUCTOR
 
-const GameMap = function (parent) {
-
+const GameMap = function (mapName, parent) {
   let layout
   let automateTimer = null
 
@@ -86,9 +85,8 @@ const GameMap = function (parent) {
     return [diffX, diffY]
   }
 
-  this.build = function (name) {
-    name = 'standard'
-    layout = maps[name]
+  this.build = function () {
+    layout = commonMaps[mapName]
 
     const mapWidth = layout.width
     const mapHeight = layout.height

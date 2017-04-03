@@ -14,7 +14,7 @@ import Wave from '@/play/game/entity/game/wave'
 
 import Unit from '@/play/game/entity/unit/unit'
 
-export default function (gid, size) {
+export default function (gid, size, mapName) {
   let players = {}
   let teamSize = size
   let startTime
@@ -221,19 +221,18 @@ export default function (gid, size) {
 
     const gameContainer = Render.group()
     this.container = gameContainer
-    this.map = new GameMap(gameContainer)
+    this.map = new GameMap(mapName, gameContainer)
     Render.add(gameContainer)
 
     ticksPerUpdate = updateDuration / tickDuration
     ticksRendered = -updatesUntilStart * ticksPerUpdate
     console.log('STARTED', updateDuration, tickDuration, ticksPerUpdate, ticksRendered)
 
-    const mapType = teamSize <= 1 ? 'tiny' : (teamSize <= 3 ? 'small' : ('standard'))
-    this.map.build(mapType)
-
     // status = 'STARTED'
     startTime = performance.now()
     lastTickTime = startTime
+
+    this.map.build()
   }
 
   this.end = function (winningTeam) {
