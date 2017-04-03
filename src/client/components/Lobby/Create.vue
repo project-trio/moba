@@ -82,7 +82,9 @@ export default {
           } else {
             window.alert(errorMessage)
           }
-          router.replace({ name: 'Lobby' })
+          if (data.backToLobby) {
+            router.replace({ name: 'Lobby' })
+          }
         } else {
           router.replace({ name: 'Join', params: { gid: data.gid } })
         }
