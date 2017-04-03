@@ -100,6 +100,8 @@ export default {
   // Reset
 
   resetGameState () {
+    selectedUnit = null
+    this.cancelActiveSkill(false)
     this.state.game = defaultGameState()
     this.state.local = defaultLocalState()
   },

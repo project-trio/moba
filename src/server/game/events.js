@@ -26,6 +26,10 @@ const lobbyBroadcastGames = () => {
   lobbyBroadcast({games: getGameList()})
 }
 
+const getPlayerNames = function() {
+  return Object.keys(clientPlayers)
+}
+
 const getGameList = function() {
   const result = []
   const games = Game.all
@@ -211,7 +215,7 @@ module.exports = {
     client.on('admin', (data, callback) => {
       if (CommonConsts.TESTING || name === 'kiko ') {
         console.log('Admin', pid, getGameList())
-        callback({ online: playersOnline, games: getGameList() })
+        callback({ names: getPlayerNames(), games: getGameList() })
       }
     })
 
