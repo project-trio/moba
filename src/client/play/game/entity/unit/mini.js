@@ -23,7 +23,7 @@ class Mini extends Movable {
 
     this.setPath(path, mirrored)
 
-    Render.voxel(team, 'mini', { z: -7, parent: this.top, owner: this })
+    Render.voxel(team, 'mini', { z: -7, parent: this.top, owner: this, cache: true })
   }
 
   setPath (path, mirrored) {

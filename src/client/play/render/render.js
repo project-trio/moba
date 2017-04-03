@@ -17,7 +17,7 @@ let gameScene, gameCamera, renderer
 let pixelMultiplier = null
 
 let font
-let voxelCache = [{}, {}]
+let voxelCache
 
 //LOCAL
 
@@ -67,6 +67,8 @@ export default {
   },
 
   create () {
+    voxelCache = [{}, {}]
+
     // Scene
 
     gameScene = new THREE.Scene()
@@ -110,6 +112,7 @@ export default {
     gameCamera = null
     renderer = null
     pixelMultiplier = null
+    voxelCache = null
   },
 
   positionCamera (x, y) {
@@ -197,14 +200,16 @@ export default {
   },
 
   voxel (team, name, options) {
-    let builder = voxelCache[team][name]
+    let builder = options.cache && voxelCache ? voxelCache[team][name] : null
     if (builder) {
       const mesh = builder.createMesh()
       return this.voxelMesh(mesh, team, options)
     }
     new Vox.Parser().parse(require(`@/assets/${name}.vox`)).then((voxelData) => {
       let builder = new Vox.MeshBuilder(voxelData, { voxelSize: 2 }) //TODO cache
-      voxelCache[team][name] = builder
+      if (options.cache) {
+        voxelCache[team][name] = builder
+      }
       const mesh = builder.createMesh()
       mesh.material.color.setHex(dataConstants.teamColors[team])
       return this.voxelMesh(mesh, team, options)

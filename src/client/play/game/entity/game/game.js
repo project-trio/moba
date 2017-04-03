@@ -211,10 +211,10 @@ export default function (gid, size, mapName) {
       return
     }
 
+    Render.create()
     Unit.init()
     Bullet.init()
     AreaOfEffect.init()
-    Render.create()
 
     this.started = true
     store.state.game.started = true
