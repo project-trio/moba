@@ -1,5 +1,5 @@
 <template>
-<div class="game-status">
+<div class="game-status scrollable">
   <div v-if="showHelp" class="bar-section panel">
     <h1>Help</h1>
     <p>Click the gear icon to toggle quality mode (disables shadows, antialiasing, etc.)</p>
@@ -16,7 +16,7 @@
     </div>
     <div class="bar-section panel">
       <table class="player-scores">
-        <tr><th>team</th><th>name</th><th>level</th><th>kills</th><th>deaths</th><th>damage</th></tr>
+        <tr><th>team</th><th>name</th><th>level</th><th>assists</th><th>deaths</th><th>damage</th></tr>
         <tr v-for="result in playerResults" :class="`team-${result.team + 1}`">
           <td>{{ result.team + 1 }}</td><td>{{ result.name }}</td><td>{{ result.level }}</td><td>{{ result.kills }}</td><td>{{ result.deaths }}</td><td>{{ result.damage / 100 }}</td>
         </tr>

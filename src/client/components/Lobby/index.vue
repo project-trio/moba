@@ -32,6 +32,7 @@ export default {
         console.log('redirecting to game', data.gid)
         router.replace({ name: 'Join', params: { gid: data.gid } })
       } else {
+        console.log('joined lobby', data)
         store.state.lobby.onlineCount = data.online
         store.state.lobby.games = data.games
         Local.leaving = null
@@ -53,7 +54,7 @@ export default {
     },
 
     games () {
-      return store.state.game.list
+      return store.state.lobby.games
     },
   },
 }
