@@ -31,11 +31,11 @@ export default function (gid, size, mapName) {
   let tickOffsets = -4
 
   this.id = gid
-  this.running = false
+  this.started = false
   this.playing = false
   this.serverUpdate = -1
 
-  store.state.game.running = false
+  store.state.game.started = false
   store.state.game.playing = false
 
   // Update
@@ -206,8 +206,8 @@ export default function (gid, size, mapName) {
   }
 
   this.start = function () {
-    if (this.running) {
-      console.warn('game already running')
+    if (this.started) {
+      console.warn('game already started')
       return
     }
 
@@ -216,8 +216,8 @@ export default function (gid, size, mapName) {
     AreaOfEffect.init()
     Render.create()
 
-    this.running = true
-    store.state.game.running = true
+    this.started = true
+    store.state.game.started = true
     store.state.game.winningTeam = null
 
     Local.player = players[Local.playerId]
@@ -241,9 +241,7 @@ export default function (gid, size, mapName) {
   }
 
   this.end = function (winningTeam) {
-    this.running = false
     this.playing = false
-    store.state.game.running = false
     store.state.game.playing = false
     store.state.game.winningTeam = winningTeam
   }
@@ -258,7 +256,7 @@ export default function (gid, size, mapName) {
     const serverPlayers = gameData.players
     store.state.game.players = serverPlayers
 
-    if (!this.running) { //TODO show disconnected players in game
+    if (!this.started) { //TODO show disconnected players in game
       if (gameData.updates !== undefined) {
         updateDuration = gameData.updates
         tickDuration = gameData.ticks

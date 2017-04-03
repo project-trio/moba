@@ -23,7 +23,7 @@ const animate = function (timestamp) {
   if (framePanel) {
     framePanel.begin()
   }
-  if (game.running) {
+  if (game.started) {
     const isPlaying = game.playing
     const ticksToRender = game.calculateTicksToRender(timestamp)
     if (ticksToRender > 0) {
@@ -93,7 +93,7 @@ export default {
     animationId = null
 
     if (Local.game) {
-      Local.game.running = false
+      Local.game.started = false
       Local.game.updatePanel = null
     }
     if (tickPanel) {
