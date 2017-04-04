@@ -86,6 +86,7 @@ const GameMap = function (mapName, parent) {
   }
 
   this.build = function () {
+    // mapName = 'tiny' //SAMPLE
     layout = commonMaps[mapName]
 
     const mapWidth = layout.width

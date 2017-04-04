@@ -142,7 +142,7 @@ class Unit {
       this.setLocation(sx, sy)
     }
 
-    Render.addUnit(this, unitScale)
+    Render.addUnit(this, this.stats.collision)
     allUnits.push(this)
   }
 

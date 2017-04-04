@@ -37,9 +37,11 @@ export default {
     scene.add(fogPlane)
   },
 
-  add (unit, unitScale) {
-    const size = unitScale * 1.5 + (unit.isLocal ? 3 : 1.5)
-    const geometry = new THREE.CircleBufferGeometry(size, unit.isLocal ? 16 : 4)
+  add (unit, size) {
+    if (!size) {
+      size = 1000
+    }
+    const geometry = new THREE.CircleBufferGeometry(size * mapScale / 100 * 2, unit.isLocal ? 16 : 4)
     const color = unit.isLocal ? 0x222222 : dataConstants.teamColors[unit.team]
     const material = new THREE.MeshBasicMaterial({ color })
     const mesh = new THREE.Mesh(geometry, material)
