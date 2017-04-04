@@ -37,10 +37,12 @@ export default {
     }
     Local.game.start()
     Loop.start()
+    window.addEventListener('beforeunload', this.confirmExit)
   },
 
   destroyed () {
     Loop.stop()
+    window.removeEventListener('beforeunload', this.confirmExit)
   },
 
   computed: {
@@ -50,6 +52,14 @@ export default {
 
     winningTeam () {
       return store.state.game.winningTeam
+    },
+  },
+
+  methods: {
+    confirmExit () {
+      if (!Local.TESTING) {
+        return 'Game in progress. You will be left afk in the game and may be unable to join a new game due to leaving. Are you sure?'
+      }
     },
   },
 }
