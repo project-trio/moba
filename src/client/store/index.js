@@ -60,7 +60,7 @@ export default {
 
     settings: {
       antialias: storage.getBool('antialias', true),
-      resolution: storage.getInt('resolution', 1),
+      resolution: storage.getInt('resolution', 2),
       shadows: storage.getInt('shadows', 1),
     },
 

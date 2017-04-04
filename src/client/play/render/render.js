@@ -11,7 +11,6 @@ import RenderFog from '@/play/render/fog'
 import RenderMinimap from '@/play/render/minimap'
 
 const WALL_HEIGHT = 60
-const pixelRatio = window.devicePixelRatio
 
 let gameScene, gameCamera, renderer
 let pixelMultiplier = null
@@ -26,12 +25,11 @@ const resize = function () {
   const height = window.innerHeight
 
   const resolution = store.state.settings.resolution
-  let newPixelMultiplier = pixelRatio / (resolution === 0 ? 4 : resolution === 1 ? 2 : 1)
+  let newPixelMultiplier = window.devicePixelRatio / (resolution === 0 ? 4 : resolution === 1 ? 2 : 1)
   if (newPixelMultiplier !== pixelMultiplier) {
     pixelMultiplier = newPixelMultiplier
     renderer.setPixelRatio(newPixelMultiplier)
   }
-
   renderer.setSize(width, height)
 
   gameCamera.aspect = width / height
