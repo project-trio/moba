@@ -34,10 +34,14 @@ class Ship extends Movable {
       levels: [0, 0, 0],
       leveled: 0,
     }
+    this.tween = statBase.tween || null
     this.statBase = statBase
     this.id = player.id
     this.player = player
     this.name = name
+    this.angleBase = statBase.split
+    this.angleTop = statBase.split && !statBase.lockTop
+    this.reemergeAt = store.state.game.renderTime
 
     this.level = 1
     this.levelExp = 0
@@ -60,17 +64,9 @@ class Ship extends Movable {
       this.setSelection(0xffff00)
     }
 
-    const offset = name === 'roller' ? -19 : 0
-    Render.voxel(team, `${name}-top`, { parent: this.top, z: offset, owner: this })
-    if (statBase.split) {
-      this.angleBase = true
-      Render.voxel(team, `${name}-base`, {parent: this.base, z: offset, owner: this})
-    }
+    statBase.create(name, team, this.top, this.base, this)
 
-    // const base = Render.sprite('ship')
-    // this.base.add(base)
-
-    const displayName = player.name //SAMPLE team === 0 ? player.name : 'bot'
+    const displayName = player.name
     const displayTextSize = displayName.length < 4 ? 10 : 10 - (displayName.length - 4) / 4
     Render.text(displayName, -this.hpWidth / 2, this.hpHeight + 1, {
       size: displayTextSize,
@@ -82,12 +78,6 @@ class Ship extends Movable {
 
   allyNotLocal () {
     return !this.isLocal && super.localAlly
-  }
-
-  opacity (opacity) {
-    const isTransluscent = opacity < 1
-    this.applyOpacity(this.base, isTransluscent, opacity)
-    this.applyOpacity(this.top, isTransluscent, opacity)
   }
 
   // Ability indicator

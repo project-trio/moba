@@ -26,6 +26,11 @@ const isDisabledBy = function (actives) {
 
 export default {
 
+//PULSOR
+
+  pulsor: [
+  ],
+
 //BOXY
 
   boxy: [
@@ -213,16 +218,16 @@ export default {
         const transitionTime = 500
         const diveDepth = -30
         if (elapsed <= transitionTime) {
-          ship.shipContainer.position.z = elapsed * diveDepth / transitionTime
+          ship.model.position.z = elapsed * diveDepth / transitionTime
         } else {
           const remaining = end - current
           if (remaining <= transitionTime) {
-            ship.shipContainer.position.z = remaining * diveDepth / transitionTime
+            ship.model.position.z = remaining * diveDepth / transitionTime
           }
         }
       },
       end: function (ship) {
-        ship.shipContainer.z = 0
+        ship.model.z = 0
         ship.untargetable = false
         ship.noTargeting = false
 

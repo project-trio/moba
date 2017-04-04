@@ -50,15 +50,15 @@ class Unit {
     this.minimapCircle = null
 
     this.container = Render.group()
-    this.shipContainer = Render.group()
+    this.model = Render.group()
     this.base = Render.group()
     this.top = Render.group()
     this.floor = Render.group()
 
     this.container.add(this.floor)
-    this.shipContainer.add(this.base)
-    this.shipContainer.add(this.top)
-    this.container.add(this.shipContainer)
+    this.model.add(this.base)
+    this.model.add(this.top)
+    this.container.add(this.model)
     Local.game.map.floorContainer.add(this.container)
 
     // Stats
@@ -170,20 +170,16 @@ class Unit {
     }
   }
 
-  applyOpacity (container, isTransluscent, opacity) {
-    const mesh = container.children[0]
-    if (mesh) {
-      mesh.material.transparent = isTransluscent
-      if (isTransluscent) {
-        mesh.material.opacity = opacity
-      }
-    }
-  }
-
   opacity (opacity) {
     const isTransluscent = opacity < 1
-    this.applyOpacity(this.base, isTransluscent, opacity)
-    this.applyOpacity(this.top, isTransluscent, opacity)
+    this.model.traverse((node) => {
+      if (node.material) {
+        node.material.transparent = isTransluscent
+        if (isTransluscent) {
+          node.material.opacity = opacity
+        }
+      }
+    })
   }
 
   // Pointer
@@ -422,28 +418,27 @@ class Unit {
   }
 
   updateAim () {
-    let aimTop, aimBase
+    let aimTop
     if (this.attackTarget) {
       aimTop = Util.angleBetween(this, this.attackTarget, true)
     }
-    if (this.moveTargetAngle) {
-      aimBase = this.moveTargetAngle
-    }
+    let aimBase = this.moveTargetAngle
+
     if (!aimTop) {
       aimTop = aimBase
     }
     if (this.angleBase) {
       if (!aimBase) {
         aimBase = aimTop
+      } else if (!this.angleTop) {
+        aimTop = aimBase
       }
-    } else {
-      aimBase = null
+      if (aimBase) {
+        this.angleTo(this.base, aimBase)
+      }
     }
     if (aimTop) {
       this.angleTo(this.top, aimTop)
-    }
-    if (aimBase) {
-      this.angleTo(this.base, aimBase)
     }
   }
 
@@ -488,10 +483,10 @@ class Unit {
 
   attack (enemy, renderTime) {
     this.lastAttack = renderTime
-    if (!this.stats.attackMoveSpeed) { //SAMPLE || this.stats.attackMoveSpeed != 11) {
+    if (!this.stats.attackMoveSpeed) {
       enemy.takeDamage(this, renderTime, this.stats.attackDamage, this.stats.attackPierce)
     } else {
-      new Bullet(this, enemy, this.stats, this.px, this.py, this.base.rotation.z)
+      new Bullet(this, enemy, this.stats, this.px, this.py, this.base.rotation.z) //TODO top rotation
     }
   }
 
@@ -593,6 +588,9 @@ Unit.update = function (renderTime, timeDelta, tweening) {
     const unit = allUnits[idx]
     if (unit.isDying) {
       continue
+    }
+    if (unit.tween) {
+      unit.tween(renderTime)
     }
     unit.updateAim()
 

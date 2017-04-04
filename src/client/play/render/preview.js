@@ -10,11 +10,15 @@ let renderWidth, renderHeight
 
 //ANIMATE
 
-function animate () {
+function animate (time) {
   if (!renderer) {
     return
   }
   animationId = window.requestAnimationFrame(animate)
+
+  if (container.tween) {
+    container.tween(time)
+  }
 
   camera.lookAt(cameraTarget)
   renderer.render(scene, camera)
@@ -85,10 +89,9 @@ export default {
     }
 
     const statBase = shipStats[name]
-    Render.voxel(team, `${name}-top`, { parent: container })
-    if (statBase.split) {
-      Render.voxel(team, `${name}-base`, { parent: container })
-    }
+    container.reemergeAt = performance.now() + 300
+    statBase.create(name, team, container, container, container)
+    container.tween = statBase.tween
   },
 
   destroy () {
