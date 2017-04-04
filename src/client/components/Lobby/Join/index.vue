@@ -59,6 +59,7 @@ export default {
   },
 
   created () {
+    Local.gid = this.gid
     LobbyEvents.connect('join', { gid: this.gid }, (data) => {
       if (data.error) {
         const errorMessage = `Join error: ${data.error}`
@@ -84,7 +85,6 @@ export default {
 
   beforeDestroy () {
     if (Local.game && !Local.game.starting) {
-      Local.leaving = Local.game.id
       LobbyEvents.connect('leave game')
     }
   },

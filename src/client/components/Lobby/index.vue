@@ -27,7 +27,7 @@ import LobbyEvents from '@/play/events/lobby'
 
 export default {
   mounted () {
-    LobbyEvents.connect('enter', { leaving: Local.leaving }, (data) => {
+    LobbyEvents.connect('enter', { leaving: Local.gid }, (data) => {
       if (data.gid) {
         console.log('redirecting to game', data.gid)
         router.replace({ name: 'Join', params: { gid: data.gid } })
@@ -35,7 +35,7 @@ export default {
         console.log('joined lobby', data)
         store.state.lobby.onlineCount = data.online
         store.state.lobby.games = data.games
-        Local.leaving = null
+        Local.gid = null
       }
     })
   },
