@@ -1,6 +1,6 @@
 <template>
 <div class="score-bar">
-  <div v-show="started" class="scores-section bar-section">
+  <div v-show="showScores" class="scores-section bar-section">
     <span class="towers team-1">{{ towers[0] }}</span> <span class="tower-symbol">〒</span>
     <span class="kills-container">
       <span class="kills team-1">{{ kills[0] }}</span>
@@ -24,8 +24,8 @@ export default {
   },
 
   computed: {
-    started () {
-      return store.state.game.started
+    showScores () {
+      return store.state.game.playing || store.state.game.winningTeam !== null
     },
 
     kills () {
