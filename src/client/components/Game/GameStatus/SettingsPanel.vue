@@ -1,5 +1,5 @@
 <template>
-<div class="bar-section panel">
+<div class="settings-panel bar-section panel">
   <h1>Settings</h1>
   <div class="row">
     <label>Resolution: <button @click="onResolution" class="interactive">{{ pixelResolution }}x</button></label>
@@ -53,9 +53,13 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.settings-panel
+  pointer-events none
+
 button
   width 88px
   height 44px
   border-radius 6px
   margin 8px
+  pointer-events auto
 </style>

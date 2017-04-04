@@ -133,6 +133,8 @@ const GameMap = function (mapName, parent) {
     }
 
     ground.onClick = (point) => {
+      store.state.game.showPanel = null
+
       const target = getTargetFromPoint(point)
 
       if (store.state.local.skills.getGroundTarget) {
