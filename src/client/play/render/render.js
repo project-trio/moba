@@ -25,19 +25,11 @@ const resize = function () {
   const width = window.innerWidth
   const height = window.innerHeight
 
-  const quality = store.state.settings.quality
-  let newPixelMultiplier = 1
-  if (quality < 1) {
-    const pixelCount = width * height
-    if (pixelCount > 1920 * 1080) {
-      newPixelMultiplier = 0.25
-    } else if (pixelCount > 1280 * 720) {
-      newPixelMultiplier = 0.5
-    }
-  }
+  const resolution = store.state.settings.resolution
+  let newPixelMultiplier = pixelRatio / (resolution === 0 ? 4 : resolution === 1 ? 2 : 1)
   if (newPixelMultiplier !== pixelMultiplier) {
     pixelMultiplier = newPixelMultiplier
-    renderer.setPixelRatio(pixelRatio * pixelMultiplier)
+    renderer.setPixelRatio(newPixelMultiplier)
   }
 
   renderer.setSize(width, height)
@@ -54,13 +46,13 @@ export default {
   createRenderer () {
     pixelMultiplier = null
 
-    const quality = store.state.settings.quality
     renderer = new THREE.WebGLRenderer({
-      antialias: quality > 0,
+      antialias: store.state.settings.antialias,
       canvas: document.getElementById('canvas'),
     })
-    renderer.shadowMap.enabled = quality > 0
-    if (quality > 0) {
+    const shadowQuality = store.state.settings.shadows
+    renderer.shadowMap.enabled = shadowQuality >= 1
+    if (shadowQuality >= 2) {
       renderer.shadowMap.type = THREE.PCFSoftShadowMap
     }
     resize()

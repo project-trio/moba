@@ -17,7 +17,7 @@ const defaultGameState = () => {
     started: false,
     playing: false,
     missingUpdate: false,
-    showHelp: false,
+    showPanel: null,
     stats: {
       kills: [0, 0],
       towers: [0, 0],
@@ -59,7 +59,9 @@ export default {
     },
 
     settings: {
-      quality: storage.getInt('quality', 1),
+      antialias: storage.getBool('antialias', true),
+      resolution: storage.getInt('resolution', 1),
+      shadows: storage.getInt('shadows', 1),
     },
 
     lobby: {
@@ -115,11 +117,12 @@ export default {
 
   // Settings
 
-  toggleQualitySetting () {
-    const newQuality = 1 - this.state.settings.quality
-    this.state.settings.quality = newQuality
-    render.createRenderer()
-    storage.set('quality', newQuality)
+  applySetting (name, value, graphics) {
+    this.state.settings[name] = value
+    storage.set(name, value)
+    if (graphics) {
+      render.createRenderer()
+    }
   },
 
   // Game

@@ -1,13 +1,7 @@
 <template>
 <div class="game-status scrollable">
-  <div v-if="showHelp" class="bar-section panel">
-    <h1>Help</h1>
-    <p>Click the gear icon to toggle quality mode (disables shadows, antialiasing, etc.)</p>
-    <h2>Hotkeys</h2>
-    <p>Activate skills with <b>1</b>, <b>2</b>, <b>3</b></p>
-    <p>Upgrade with <b>shift</b>, <b>control</b>, or <b>alt</b> + <b>1</b>, <b>2</b>, <b>3</b></p>
-    <p>Press <b>enter</b> to chat with your team</p>
-  </div>
+  <help-panel v-if="showPanel === 'help'"></help-panel>
+  <settings-panel v-else-if="showPanel === 'settings'"></settings-panel>
   <div v-else-if="gameOver">
     <div class="bar-section panel">
       <h1>game over</h1>
@@ -30,13 +24,18 @@
 import router from '@/router'
 import store from '@/store'
 
+import HelpPanel from '@/components/Game/GameStatus/HelpPanel'
 import PlayerScores from '@/components/Game/GameStatus/PlayerScores'
+import SettingsPanel from '@/components/Game/GameStatus/SettingsPanel'
 
 const KEY_TAB = 9
+const KEY_ESCAPE = 27
 
 export default {
   components: {
+    HelpPanel,
     PlayerScores,
+    SettingsPanel,
   },
 
   data () {
@@ -46,8 +45,8 @@ export default {
   },
 
   computed: {
-    showHelp () {
-      return store.state.game.showHelp
+    showPanel () {
+      return store.state.game.showPanel
     },
     missingUpdate () {
       return store.state.game.missingUpdate
@@ -72,6 +71,9 @@ export default {
       const released = pressing.released
       return code !== undefined && released !== undefined && pressing
     },
+    pressed () {
+      return store.state.key.pressed
+    },
 
     renderTime () {
       return store.state.game.renderTime
@@ -91,6 +93,12 @@ export default {
   watch: {
     currentPress (key) {
       this.pressingTab = key.code === KEY_TAB
+    },
+
+    pressed (key) {
+      if (key.code === KEY_ESCAPE) {
+        store.state.game.showPanel = null
+      }
     },
   },
 

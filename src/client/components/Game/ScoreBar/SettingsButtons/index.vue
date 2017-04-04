@@ -12,21 +12,22 @@ import store from '@/store'
 import fullscreen from '@/play/external/fullscreen.js'
 
 export default {
-  computed: {
-
-  },
-
   methods: {
+    togglePanel (name) {
+      store.state.game.showPanel = store.state.game.showPanel !== name ? name : null
+    },
+
     onHelp () {
-      store.state.game.showHelp = !store.state.game.showHelp
+      this.togglePanel('help')
     },
 
     onFullscreen () {
+      this.togglePanel(null)
       fullscreen.toggle()
     },
 
     onSettings () {
-      store.toggleQualitySetting()
+      this.togglePanel('settings')
     },
   },
 }
