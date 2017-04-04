@@ -246,7 +246,10 @@ module.exports = {
     })
 
     client.on('switch unit', (data) => {
-      player.switchUnit = data.name //TODO validate real
+      const newShip = data.name
+      if (CommonConsts.SHIP_NAMES.indexOf(newShip) !== -1) {
+        player.switchUnit = newShip
+      }
     })
 
     client.on('action', (data) => {

@@ -10,7 +10,7 @@
       <canvas id="preview"></canvas>
     </div>
     <div class="units-list selection-half" :class="`team-${localTeam + 1}`">
-      <button v-for="(unit, name) in units" @click="onUnit(name)" class="unit-box interactive" :class="{ selected: chosenUnit === name }">{{ name }}</button>
+      <button v-for="name in shipNames" @click="onUnit(name)" class="unit-box interactive" :class="{ selected: chosenUnit === name }">{{ name }}</button>
     </div>
   </div>
 
@@ -28,11 +28,11 @@
 </template>
 
 <script>
+import CommonConsts from 'common/constants'
+
 import store from '@/store'
 
 import Local from '@/play/local'
-
-import shipsData from '@/play/data/ships'
 
 import Bridge from '@/play/events/bridge'
 
@@ -67,8 +67,8 @@ export default {
     chosenUnit () {
       return this.localPlayer ? this.localPlayer.shipName : ''
     },
-    units () {
-      return shipsData
+    shipNames () {
+      return CommonConsts.SHIP_NAMES
     },
 
     players () {
