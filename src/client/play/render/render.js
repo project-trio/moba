@@ -34,7 +34,6 @@ const resize = function () {
 
   gameCamera.aspect = width / height
   gameCamera.updateProjectionMatrix()
-
 }
 
 //PUBLIC
@@ -307,6 +306,8 @@ export default {
 
   outline (mesh, color, scale) {
     const outlineMaterial = new THREE.MeshBasicMaterial({ color: color, side: THREE.BackSide })
+    outlineMaterial.transparent = true
+    outlineMaterial.opacity = 0.5
     const outlineMesh = new THREE.Mesh(mesh.geometry, outlineMaterial)
     outlineMesh.scale.multiplyScalar(scale)
     mesh.add(outlineMesh)

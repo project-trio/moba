@@ -19,7 +19,7 @@ const levelMultiplier = function (base, level, multiplier) {
 }
 
 const isDisabledBy = function (actives) {
-  for (var idx = 0; idx < actives.length; idx += 1) { //TODO let
+  for (let idx = 0; idx < actives.length; idx += 1) {
     if (actives[idx] > 0 && this.disabledBy[idx]) {
       return true
     }

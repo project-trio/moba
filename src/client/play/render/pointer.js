@@ -17,8 +17,10 @@ function onClick (event) {
   for (let i = 0; i < intersecting.length; i++) {
     const intersect = intersecting[i]
     const owner = intersect.object.owner
-    if (owner && owner.onClick && owner.onClick(intersect.point, rightClick)) {
-      return false
+    if (owner && owner.onClick) {
+      if (owner.onClick(intersect.point, rightClick)) {
+        return false
+      }
     }
   }
 }
