@@ -34,6 +34,41 @@ export default {
 //BEEDLE
 
   beedle: [
+    {
+      name: `Electric sting`,
+      description: 'Fires a bolt of electricity that stuns for [[Duration]], dealing [[Damage]]',
+      target: TARGET_ENEMY,
+      isDisabledBy: null,
+      getEffectDuration: function (level) {
+        return levelMultiplier(2000, level, 200)
+      },
+      getEffectDamage: function (level) {
+        return levelMultiplier(20, level, 5)
+      },
+      getRange: function (level) {
+        return 150
+      },
+      getCooldown: function (level) {
+        return levelMultiplier(200, level, -5)
+      },
+      start: function (index, level, ship, cancel, target) {
+        const damage = this.getEffectDamage(level)
+        const stunDuration = this.getEffectDuration(level)
+        const maxRange = this.getRange(level)
+        const bulletData = {
+          bulletSize: 10,
+          bulletColor: 0xdddd00,
+          attackDamage: damage * 100,
+          attackPierce: 10,
+          attackMoveSpeed: 8,
+          maxRange: maxRange,
+          collisionSize: 10 * 100,
+          firstCollision: false,
+          stunDuration: stunDuration,
+        }
+        new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+      },
+    },
   ],
 
 //PROPPY
@@ -53,7 +88,7 @@ export default {
         return levelMultiplier(100, level, 10)
       },
       getRange: function (level) {
-        return 200
+        return levelMultiplier(200, level, 10)
       },
       getCooldown: function (level) {
         return levelMultiplier(200, level, -5)
@@ -62,7 +97,7 @@ export default {
         const damage = this.getEffectDamage(level)
         const maxRange = this.getRange(level)
         const bulletData = {
-          bulletSize: 12,
+          bulletSize: 8,
           bulletColor: 0x660066,
           attackDamage: damage * 100,
           attackPierce: 10,
@@ -80,41 +115,6 @@ export default {
 //BOXY
 
   boxy: [
-    {
-      name: `Lightning Eye`,
-      description: 'Fires a bolt of lightning that stuns for [[Duration]], dealing [[Damage]]',
-      target: TARGET_ENEMY,
-      isDisabledBy: null,
-      getEffectDuration: function (level) {
-        return levelMultiplier(2000, level, 200)
-      },
-      getEffectDamage: function (level) {
-        return levelMultiplier(20, level, 5)
-      },
-      getRange: function (level) {
-        return 200
-      },
-      getCooldown: function (level) {
-        return levelMultiplier(200, level, -5)
-      },
-      start: function (index, level, ship, cancel, target) {
-        const damage = this.getEffectDamage(level)
-        const stunDuration = this.getEffectDuration(level)
-        const maxRange = this.getRange(level)
-        const bulletData = {
-          bulletSize: 10,
-          bulletColor: 0x00ff66,
-          attackDamage: damage * 100,
-          attackPierce: 10,
-          attackMoveSpeed: 8,
-          maxRange: maxRange,
-          collisionSize: 10 * 100,
-          firstCollision: false,
-          stunDuration: stunDuration,
-        }
-        new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
-      },
-    },
     {
       name: `Storm's Eye`,
       description: 'Reduces damage allies inside the effect take from attacks by [[Damage]]',
@@ -207,11 +207,11 @@ export default {
         const damage = this.getEffectDamage(level)
         const maxRange = this.getRange(level)
         const bulletData = {
-          bulletSize: 10,
+          bulletSize: 9,
           bulletColor: 0xcc00ff,
           attackDamage: damage * 100,
           attackPierce: 10,
-          attackMoveSpeed: 8,
+          attackMoveSpeed: 7,
           maxRange: maxRange,
           explosionRadius: 60,
           collisionSize: 10 * 100,
