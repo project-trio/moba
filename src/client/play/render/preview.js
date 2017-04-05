@@ -4,9 +4,12 @@ import shipStats from '@/play/data/ships'
 
 import Render from '@/play/render/render'
 
-let renderer, scene, camera, cameraTarget, container, canvas, animationId
-
+let renderer, scene, camera, cameraTarget, container, shipContainer, canvas, animationId
 let renderWidth, renderHeight
+let statBase = null
+
+let spinDirection = 1
+const spinCutoff = 0.02
 
 //ANIMATE
 
@@ -16,8 +19,31 @@ function animate (time) {
   }
   animationId = window.requestAnimationFrame(animate)
 
-  if (container.tween) {
-    container.tween(time)
+  if (statBase) {
+    let rotateContainer = false
+    if (container.tween) {
+      container.tween(time)
+      rotateContainer = true
+    }
+    const rotationBase = shipContainer.children[0]
+    if (rotationBase) {
+      const random = Math.random()
+      if (random < spinCutoff) {
+        if (random < spinCutoff / 2) {
+          spinDirection = Math.sign(random - spinCutoff / 4)
+        } else {
+          spinDirection = 0
+        }
+      }
+      if (spinDirection !== 0) {
+        const spin = random / 200 * spinDirection
+        if (rotateContainer) {
+          shipContainer.rotation.z += spin
+        } else {
+          rotationBase.rotation.y += spin
+        }
+      }
+    }
   }
 
   camera.lookAt(cameraTarget)
@@ -38,7 +64,9 @@ export default {
 
     container = Render.group()
     container.position.y = elevation
+    shipContainer = Render.group()
     container.rotation.z = unitRotation
+    container.add(shipContainer)
 
     renderer = new THREE.WebGLRenderer({
       antialias: true,
@@ -84,13 +112,15 @@ export default {
   },
 
   load (name, team) {
-    for (let i = container.children.length - 1; i >= 0; i -= 1) {
-      container.remove(container.children[i])
+    for (let i = shipContainer.children.length - 1; i >= 0; i -= 1) {
+      shipContainer.remove(shipContainer.children[i])
     }
+    shipContainer.rotation.z = 0
 
-    const statBase = shipStats[name]
+    statBase = shipStats[name]
+
     container.reemergeAt = performance.now() + 300
-    statBase.create(name, team, container, container, container)
+    statBase.create(name, team, shipContainer, shipContainer, container)
     container.tween = statBase.tween
   },
 
@@ -104,6 +134,8 @@ export default {
     camera = null
     cameraTarget = null
     container = null
+    shipContainer = null
+    statBase = null
     canvas = null
   },
 
