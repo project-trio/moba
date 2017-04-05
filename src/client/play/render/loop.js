@@ -16,49 +16,46 @@ let updatePanel, tickPanel, framePanel, animationId
 
 const animate = function (timestamp) {
   const game = Local.game
-  if (!game) {
+  if (!game || game.finished) {
     return
   }
+  animationId = window.requestAnimationFrame(animate)
 
-  if (framePanel) {
+  const isPlaying = game.playing
+  if (isPlaying && framePanel) {
     framePanel.begin()
   }
-  if (game.started) {
-    const isPlaying = game.playing
-    const ticksToRender = game.calculateTicksToRender(timestamp)
-    if (ticksToRender > 0) {
-      const processUpdate = isPlaying && tickPanel
-      if (processUpdate) {
-        tickPanel.begin()
-      }
-
-      game.performTicks(ticksToRender, timestamp, updatePanel)
-
-      if (isPlaying) {
-        Local.player.unit.updateVisibility()
-        if (processUpdate) {
-          tickPanel.end()
-        }
-      }
-    } else if (isPlaying) { // Tween
-      const tweenTimeDelta = timestamp - lastUpdate
-      Bullet.update(timestamp, tweenTimeDelta, true)
-      Unit.update(timestamp, tweenTimeDelta, true)
+  const ticksToRender = game.calculateTicksToRender(timestamp)
+  if (ticksToRender > 0) {
+    const processUpdate = isPlaying && tickPanel
+    if (processUpdate) {
+      tickPanel.begin()
     }
+
+    game.performTicks(ticksToRender, timestamp, updatePanel)
 
     if (isPlaying) {
-      const position = Local.player.unit.container.position
-      game.map.track(position.x, position.y)
+      Local.player.unit.updateVisibility()
+      if (processUpdate) {
+        tickPanel.end()
+      }
     }
-    Render.render(Unit.all())
-
-    animationId = window.requestAnimationFrame(animate)
+  } else if (isPlaying) { // Tween
+    const tweenTimeDelta = timestamp - lastUpdate
+    Bullet.update(timestamp, tweenTimeDelta, true)
+    Unit.update(timestamp, tweenTimeDelta, true)
   }
-  lastUpdate = timestamp
 
-  if (framePanel) {
+  if (isPlaying) {
+    const position = Local.player.unit.container.position
+    game.map.track(position.x, position.y)
+  }
+  Render.render(Unit.all())
+
+  if (framePanel && isPlaying) {
     framePanel.end()
   }
+  lastUpdate = timestamp
 }
 
 //PUBLIC

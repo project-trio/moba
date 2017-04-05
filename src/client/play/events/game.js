@@ -17,12 +17,15 @@ export default {
     })
 
     Bridge.on('update', (data) => {
-      const update = data.update
-      if (Local.game.serverUpdate !== update - 1) {
-        console.error('Invalid update', Local.game.serverUpdate, update)
+      const game = Local.game
+      if (game && !game.finished) {
+        const update = data.update
+        if (game.serverUpdate !== update - 1) {
+          console.error('Invalid update', game.serverUpdate, update)
+        }
+        game.enqueueUpdate(update, data.actions)
+        Bridge.emit('updated', { update: update })
       }
-      Local.game.enqueueUpdate(update, data.actions)
-      Bridge.emit('updated', { update: update })
     })
 
     Bridge.on('msg', (data) => {

@@ -33,6 +33,7 @@ export default function (gid, size, mapName) {
   this.id = gid
   this.started = false
   this.playing = false
+  this.finished = false
   this.serverUpdate = -1
 
   store.state.game.started = false
@@ -241,6 +242,7 @@ export default function (gid, size, mapName) {
   }
 
   this.end = function (winningTeam) {
+    this.finished = true
     this.playing = false
     store.state.game.playing = false
     store.state.game.winningTeam = winningTeam
