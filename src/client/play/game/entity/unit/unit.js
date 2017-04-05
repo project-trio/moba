@@ -74,6 +74,10 @@ class Unit {
       this.selectionIndicator = selectionRing
       this.selectionIndicator.visible = false
 
+      const clickCircle = Render.circle(statBase.collision + 8, { color: 0x000000, opacity: 0, parent: this.base })
+      clickCircle.position.z = 1
+      clickCircle.owner = this
+
       this.stats.healthMax = statBase.healthMax[0] * 100
       this.stats.healthRegen = statBase.healthRegen[0]
       this.stats.armor = statBase.armor[0]
