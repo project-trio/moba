@@ -303,4 +303,14 @@ export default {
     return sphere
   },
 
+  // Effects
+
+  outline (mesh, color, scale) {
+    const outlineMaterial = new THREE.MeshBasicMaterial({ color: color, side: THREE.BackSide })
+    const outlineMesh = new THREE.Mesh(mesh.geometry, outlineMaterial)
+    outlineMesh.scale.multiplyScalar(scale)
+    mesh.add(outlineMesh)
+    return outlineMesh
+  },
+
 }

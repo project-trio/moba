@@ -263,9 +263,14 @@ export default {
       },
       start: function (index, level, ship) {
         ship.reflectDamageRatio = this.getEffectStrength(level)
+        ship.effervesceMesh = Render.outline(ship.base.children[0], 0xff0000, 1.07)
       },
       end: function (ship) {
         ship.reflectDamageRatio = null
+        if (ship.effervesceMesh) {
+          Render.remove(ship.effervesceMesh)
+          ship.effervesceMesh = null
+        }
       },
     },
   ],
@@ -293,10 +298,15 @@ export default {
       start: function (index, level, ship) {
         ship.attackCooldownModifier = 1 - this.getEffectAttackSpeed(level) / 100
         ship.armorModifier = 0.5
+        ship.bruteForceMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
       },
       end: function (ship) {
         ship.attackCooldownModifier = null
         ship.armorModifier = null
+        if (ship.bruteForceMesh) {
+          Render.remove(ship.bruteForceMesh)
+          ship.bruteForceMesh = null
+        }
       },
     },
     {
@@ -348,10 +358,15 @@ export default {
       start: function (index, level, ship) {
         ship.healthRegenModifier = this.getEffectRegen(level)
         ship.moveSpeedModifier = 0.5
+        ship.salvageMesh = Render.outline(ship.top.children[0], 0x00ff00, 1.07)
       },
       end: function (ship) {
         ship.healthRegenModifier = null
         ship.moveSpeedModifier = null
+        if (ship.salvageMesh) {
+          Render.remove(ship.salvageMesh)
+          ship.salvageMesh = null
+        }
       },
     },
   ],
