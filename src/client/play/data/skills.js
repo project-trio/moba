@@ -9,6 +9,11 @@ import Unit from '@/play/game/entity/unit/unit'
 
 //LOCAL
 
+// const TARGET_NONE = 0
+const TARGET_SELF = 1
+const TARGET_GROUND = 2
+const TARGET_ENEMY = 3
+
 const levelMultiplier = function (base, level, multiplier) {
   return base + (level - 1) * multiplier
 }
@@ -42,7 +47,7 @@ export default {
     {
       name: `Lightning Eye`,
       description: 'Fires a bolt of lightning that stuns for [[Duration]], dealing [[Damage]]',
-      target: 3,
+      target: TARGET_ENEMY,
       isDisabledBy: null,
       getEffectDuration: function (level) {
         return levelMultiplier(2000, level, 200)
@@ -73,13 +78,12 @@ export default {
         }
         new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
       },
-      end: function (ship) {
-      },
     },
     {
       name: `Storm's Eye`,
       description: 'Reduces damage allies inside the effect take from attacks by [[Damage]]',
-      target: 1,
+      target: TARGET_SELF,
+      endOnDeath: false,
       isDisabledBy: null,
       getEffectDamage: function (level) {
         return levelMultiplier(25, level, 2)
@@ -115,7 +119,8 @@ export default {
       name: 'Providence',
       description: 'Spawns a seeing-eye that reveals enemies within [[Range]]',
       suffixRange: ' range',
-      target: 2,
+      target: TARGET_GROUND,
+      endOnDeath: false,
       isDisabledBy: null,
       getRange: function (level) {
         return levelMultiplier(200, level, 30)
@@ -150,7 +155,7 @@ export default {
     {
       name: 'Torpedo',
       description: 'Fires a torpedo that explodes on the first enemy hit for [[Damage]]',
-      target: 2,
+      target: TARGET_GROUND,
       disabledBy: [null, true, false],
       isDisabledBy: isDisabledBy,
       getRange: function (level) {
@@ -178,15 +183,14 @@ export default {
         }
         new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
       },
-      end: function (ship) {
-      },
     },
     {
       name: 'Dive',
       description: 'Dive down to safety, dealing [[Dps]] to enemies around you',
       factorDps: 50, //TODO ticks
       suffixDps: ' dps',
-      target: 1,
+      target: TARGET_SELF,
+      endOnDeath: true,
       isDisabledBy: null,
       getRange: function (level) {
         return 100
@@ -244,7 +248,8 @@ export default {
       name: 'Effervesce',
       description: 'Bounce [[Strength]] of damage taken back on attackers',
       suffixStrength: '%',
-      target: 1,
+      target: TARGET_SELF,
+      endOnDeath: true,
       disabledBy: [false, true, null],
       isDisabledBy: isDisabledBy,
       getEffectStrength: function (level) {
@@ -272,7 +277,8 @@ export default {
       name: 'Brute force',
       description: 'Boosts attack speed by [[AttackSpeed]], while more vulnerable to damage',
       suffixAttackSpeed: '%',
-      target: 1,
+      target: TARGET_SELF,
+      endOnDeath: true,
       disabledBy: [null, false, true],
       isDisabledBy: isDisabledBy,
       getEffectAttackSpeed: function (level) {
@@ -296,7 +302,8 @@ export default {
     {
       name: 'Encrypt',
       description: 'Turn invisible and untargetable to enemies',
-      target: 1,
+      target: TARGET_SELF,
+      endOnDeath: true,
       disabledBy: [false, null, true],
       isDisabledBy: isDisabledBy,
       getDuration: function (level) {
@@ -325,7 +332,8 @@ export default {
       description: 'Boost health regeneration by [[Regen]], while halving movement speed',
       factorRegen: 50 / 1000 * 100, //TODO ticks
       suffixRegen: ' hp / s',
-      target: 1,
+      target: TARGET_SELF,
+      endOnDeath: true,
       disabledBy: [false, true, null],
       isDisabledBy: isDisabledBy,
       getEffectRegen: function (level) {

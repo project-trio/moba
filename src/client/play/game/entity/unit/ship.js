@@ -169,19 +169,24 @@ class Ship extends Movable {
       console.log('Skill disabled by another active', this.id, index, skill.disabledBy, this.skills.actives)
       return
     }
-
+    const instantaneous = skill.getDuration === undefined
     const skillLevel = this.skills.levels[index]
-    const durationEndTime = renderTime + (skill.getDuration ? skill.getDuration(skillLevel) * 100 : 0)
+
     const cooldownEndTime = renderTime + skill.getCooldown(skillLevel) * 100
     this.skills.started[index] = renderTime
-    this.skills.actives[index] = durationEndTime
     this.skills.cooldowns[index] = cooldownEndTime
-    skill.start(index, skillLevel, this, this.endSkill, target)
-
     if (this.isLocal) {
-      store.state.local.skills.actives.splice(index, 1, durationEndTime)
       store.state.local.skills.cooldowns.splice(index, 1, cooldownEndTime)
     }
+    if (!instantaneous) {
+      const durationEndTime = renderTime + skill.getDuration(skillLevel) * 100
+      this.skills.actives[index] = durationEndTime
+      if (this.isLocal) {
+        store.state.local.skills.actives.splice(index, 1, durationEndTime)
+      }
+    }
+
+    skill.start(index, skillLevel, this, this.endSkill, target)
   }
 
   levelup (index) {
@@ -229,10 +234,17 @@ class Ship extends Movable {
     for (let ai = 0; ai < 3; ai += 1) {
       let durationEnd = this.skills.actives[ai]
       if (durationEnd !== 0) {
-        if (!renderTime || renderTime >= durationEnd) {
+        const skill = this.skills.data[ai]
+        let endSkill = false
+        if (renderTime !== null) {
+          endSkill = renderTime >= durationEnd
+        } else {
+          endSkill = skill.endOnDeath
+        }
+        if (endSkill) {
           this.endSkill(ai)
         } else {
-          const update = this.skills.data[ai].update
+          const update = skill.update
           if (update) {
             const startTime = this.skills.started[ai]
             update(this, startTime, renderTime, durationEnd)
