@@ -39,6 +39,37 @@ export default {
 //PULTER
 
   pulter: [
+    {
+      name: `Fling`,
+      description: 'Hurls a large shell that explodes on impact for [[Damage]] to nearby enemies',
+      target: TARGET_GROUND,
+      isDisabledBy: null,
+      getEffectDamage: function (level) {
+        return levelMultiplier(100, level, 10)
+      },
+      getRange: function (level) {
+        return 200
+      },
+      getCooldown: function (level) {
+        return levelMultiplier(200, level, -5)
+      },
+      start: function (index, level, ship, cancel, target) {
+        const damage = this.getEffectDamage(level)
+        const maxRange = this.getRange(level)
+        const bulletData = {
+          bulletSize: 12,
+          bulletColor: 0x660066,
+          attackDamage: damage * 100,
+          attackPierce: 10,
+          attackMoveSpeed: 4,
+          maxRange: maxRange,
+          explosionRadius: 100,
+          collisionSize: 10 * 100,
+          firstCollision: false,
+        }
+        new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+      },
+    },
   ],
 
 //BOXY
