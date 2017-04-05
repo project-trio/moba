@@ -12,6 +12,29 @@ const createMeshes = function (name, team, top, base, ship) {
 //SHIPS
 
 export default {
+  beedle: {
+    split: true,
+
+    healthMax: [600, 10],
+    healthRegen: [30, 1],
+    armor: [10, 0],
+
+    sightRange: [160, 0],
+    attackRange: [160, 0],
+
+    attackDamage: [60, 3],
+    attackPierce: [0, 0],
+    attackCooldown: [20, 0],
+    attackMoveSpeed: 10,
+    bulletSize: 5,
+
+    moveSpeed: [14, 0],
+    turnSpeed: 5,
+    collision: 20,
+
+    create: createMeshes,
+  },
+
   proppy: {
     split: true,
     offsetTop: -12,

@@ -31,6 +31,11 @@ const isDisabledBy = function (actives) {
 
 export default {
 
+//BEEDLE
+
+  beedle: [
+  ],
+
 //PROPPY
 
   proppy: [
