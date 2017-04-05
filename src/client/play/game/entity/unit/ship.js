@@ -39,8 +39,7 @@ class Ship extends Movable {
     this.id = player.id
     this.player = player
     this.name = name
-    this.angleBase = statBase.split
-    this.angleTop = statBase.split && !statBase.lockTop
+    this.split = statBase.split
     this.reemergeAt = store.state.game.renderTime
 
     this.level = 1

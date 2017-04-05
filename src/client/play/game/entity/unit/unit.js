@@ -38,7 +38,7 @@ class Unit {
     this.requiresSightOfTarget = true
     this.bulletCount = 0
     this.height = 0
-    this.angleBase = false
+    this.split = false
     this.unattackable = unattackable
     this.untargetable = unattackable
     this.noTargeting = unattackable
@@ -422,16 +422,14 @@ class Unit {
     if (this.attackTarget) {
       aimTop = Util.angleBetween(this, this.attackTarget, true)
     }
-    let aimBase = this.moveTargetAngle
+    let aimBase = this.isMoving && this.moveTargetAngle
 
     if (!aimTop) {
       aimTop = aimBase
     }
-    if (this.angleBase) {
+    if (this.split) {
       if (!aimBase) {
         aimBase = aimTop
-      } else if (!this.angleTop) {
-        aimTop = aimBase
       }
       if (aimBase) {
         this.angleTo(this.base, aimBase)

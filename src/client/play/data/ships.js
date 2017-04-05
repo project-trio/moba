@@ -14,7 +14,6 @@ const createMeshes = function (name, team, top, base, ship) {
 export default {
   proppy: {
     split: true,
-    lockTop: true,
     offsetTop: -12,
     topOffset: [14, 0, 55],
 
@@ -39,7 +38,7 @@ export default {
     create: function (name, team, top, bottom, ship) {
       const propGroup = Render.group()
       propGroup.position.set(14, 0, 54)
-      top.add(propGroup)
+      bottom.add(propGroup)
       ship.propGroup = propGroup
       this.createMeshes(name, team, propGroup, bottom, ship)
     },
