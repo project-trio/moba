@@ -83,7 +83,6 @@ class Unit {
       this.stats.attackPierce = statBase.attackPierce[0] * 100
       this.stats.attackCooldown = statBase.attackCooldown[0]
       this.stats.attackMoveSpeed = statBase.attackMoveSpeed
-      this.stats.moveSpeed = statBase.moveSpeed[0]
       this.stats.turnSpeed = statBase.turnSpeed || 8
       this.stats.collision = statBase.collision * 100
       this.stats.bulletSize = statBase.bulletSize
@@ -91,7 +90,12 @@ class Unit {
 
       this.healthRemaining = this.stats.healthMax
       this.attackRangeCheck = Util.squared(this.stats.attackRange)
-      this.moveConstant = new Decimal(this.stats.moveSpeed).dividedBy(2000)
+
+      const moveSpeed = statBase.moveSpeed ? statBase.moveSpeed[0] : false
+      if (moveSpeed) {
+        this.stats.moveSpeed = moveSpeed
+        this.moveConstant = new Decimal(moveSpeed).dividedBy(2000)
+      }
 
       this.lastAttack = 0
 

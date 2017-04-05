@@ -352,7 +352,6 @@ class Ship extends Movable {
 
     this.stats.healthRegen += this.statBase.healthRegen[1]
     this.stats.armor += this.statBase.armor[1]
-    this.stats.moveSpeed += this.statBase.moveSpeed[1]
     this.stats.sightRange += this.statBase.sightRange[1]
     this.stats.attackRange += this.statBase.attackRange[1] * 100
     this.stats.attackDamage += this.statBase.attackDamage[1] * 100
@@ -361,6 +360,8 @@ class Ship extends Movable {
 
     this.sightRangeCheck = Util.squared(this.stats.sightRange)
     this.attackRangeCheck = Util.squared(this.stats.attackRange)
+
+    this.stats.moveSpeed += this.statBase.moveSpeed[1]
     this.moveConstant = new Decimal(this.stats.moveSpeed).dividedBy(2000)
 
     this.updateHealth()

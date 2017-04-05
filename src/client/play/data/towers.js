@@ -14,7 +14,7 @@ export default {
     bulletSize: 6,
     bulletColor: 0xff0000,
 
-    moveSpeed: [0, 0],
+    turnSpeed: 8,
     collision: 35,
     z: -5,
   },
@@ -34,7 +34,7 @@ export default {
     bulletSize: 5,
     bulletColor: 0x990000,
 
-    moveSpeed: [0, 0],
+    turnSpeed: 8,
     collision: 30,
     z: -15,
   },
@@ -54,7 +54,7 @@ export default {
     bulletSize: 5,
     bulletColor: 0x330000,
 
-    moveSpeed: [0, 0],
+    turnSpeed: 8,
     collision: 30,
     z: -25,
   },
