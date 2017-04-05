@@ -215,9 +215,15 @@ module.exports = {
     const name = client.name
     let player = clientPlayers[name]
     if (player) {
-      player.client.replaced = true
-      player.client.disconnect()
+      const oldClient = player.client
+      if (oldClient) {
+        oldClient.replaced = true
+        oldClient.disconnect()
+      } else {
+        playersOnline += 1
+      }
       player.client = client
+      player.id = client.id //TODO unecessary with acount registration
     } else {
       player = new Player(client)
       clientPlayers[name] = player
@@ -234,12 +240,18 @@ module.exports = {
 
     client.on('disconnect', () => {
       console.log('Disconnected', pid)
-      let games = undefined
-      if (player.leave()) {
+      let games
+      const removePlayerPermanently = player.leave()
+      if (removePlayerPermanently) {
         games = getGameList()
       }
       if (clientPlayers[name] && !client.replaced) {
-        delete clientPlayers[name]
+        if (removePlayerPermanently) {
+          delete clientPlayers[name]
+          player = null
+        } else {
+          player.client = null
+        }
         playersOnline -= 1
       }
       lobbyBroadcast({ online: playersOnline, games: games })

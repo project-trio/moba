@@ -59,6 +59,7 @@ export default {
   },
 
   created () {
+    store.state.chatMessages = []
     Local.gid = this.gid
     LobbyEvents.connect('join', { gid: this.gid }, (data) => {
       if (data.error) {

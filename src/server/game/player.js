@@ -42,7 +42,7 @@ module.exports = class Player {
     this.actions = []
     this.levelNext = null
     this.chatAt = null
-  },
+  }
 
   join (game) {
     this.game = game
@@ -52,8 +52,10 @@ module.exports = class Player {
 
   leave () {
     if (this.game) {
-      this.game.remove(this)
-      this.game = null
+      if (this.client) {
+        this.client.leave(this.game.id)
+      }
+      return this.game.remove(this)
     }
   }
 

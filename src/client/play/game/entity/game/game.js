@@ -254,26 +254,43 @@ export default function (gid, size, mapName) {
     return players[id]
   }
 
+  this.updatePlayer = function (gameData) {
+    const pid = gameData.pid
+    const player = players[pid]
+    const storePlayer = store.state.game.players[pid]
+    if (!player || !storePlayer) {
+      console.error('Updated player DNE', player, storePlayer, gameData, players)
+      return
+    }
+    console.log(gameData, store.state.game.players)
+    player.isActive = gameData.joined
+    storePlayer.isActive = gameData.joined
+    store.state.chatMessages.push({ name: player.name, team: player.team, active: player.isActive })
+  }
+
   this.updatePlayers = function (gameData) {
+    if (this.started) {
+      console.error('Cannot replace players for already started game')
+      return
+    }
     const serverPlayers = gameData.players
+    players = {}
+    for (let pid in serverPlayers) {
+      const playerInfo = serverPlayers[pid]
+      players[pid] = new Player(pid, playerInfo)
+      playerInfo.isActive = true
+    }
     store.state.game.players = serverPlayers
 
-    if (!this.started) { //TODO show disconnected players in game
-      if (gameData.updates !== undefined) {
-        updateDuration = gameData.updates
-        tickDuration = gameData.ticks
-        updatesUntilStart = gameData.updatesUntilStart
-      }
-      players = {}
-      for (let pid in serverPlayers) {
-        const playerInfo = serverPlayers[pid]
-        players[pid] = new Player(pid, playerInfo)
-      }
-      if (gameData.host) {
-        store.state.game.host = gameData.host
-      }
-      store.state.game.ready = gameData.ready
+    if (gameData.updates !== undefined) {
+      updateDuration = gameData.updates
+      tickDuration = gameData.ticks
+      updatesUntilStart = gameData.updatesUntilStart
     }
+    if (gameData.host) {
+      store.state.game.host = gameData.host
+    }
+    store.state.game.ready = gameData.ready
   }
 
 }

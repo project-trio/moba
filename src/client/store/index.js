@@ -10,7 +10,7 @@ let selectedUnit = null
 
 const defaultGameState = () => {
   return {
-    players: [],
+    players: {},
     host: null,
     ready: null,
     winningTeam: null,

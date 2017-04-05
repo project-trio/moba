@@ -74,14 +74,17 @@ class Game {
 
   add (player) {
     const pid = player.id
-    if (!this.players[pid]) {
+    if (this.players[pid]) {
+      player.isActive = true
+      this.broadcast('update player', { pid: pid, joined: true })
+    } else {
       if (this.state !== 'OPEN') {
         return { error: `Unable to join: ${this.state} game` }
       }
       if (!this.hostId) {
         this.hostId = pid
       }
-      const team = this.counts[0] < this.counts[1] ? 0 : 1
+      const team = this.counts[0] <= this.counts[1] ? 0 : 1
       const teamSize = this.counts[team]
       this.counts[team] += 1
       this.players[pid] = player
@@ -90,7 +93,7 @@ class Game {
       if (this.checkFull()) {
         this.state = 'FULL'
       }
-      this.broadcast('add player', { ready: this.canStart(), players: this.formattedPlayers() })
+      this.broadcast('players', { ready: this.canStart(), players: this.formattedPlayers() })
       player.join(this)
     }
     return { gid: this.id, host: this.hostId, size: this.size, map: this.map, ready: this.canStart(), players: this.formattedPlayers() }
@@ -101,6 +104,7 @@ class Game {
     this.started = false
     for (let pid in this.players) {
       const player = this.players[pid]
+      player.leave()
       player.game = null
     }
 
@@ -128,21 +132,23 @@ class Game {
       }
 
       console.log('Removed', this.id, this.activePlayerCount())
-      if (this.activePlayerCount() > 0) {
-        if (!this.started) {
-          this.state = 'OPEN'
-          for (let pid in this.players) {
-            const remainingPlayer = this.players[pid]
-            if (remainingPlayer.team === removePlayer.team && remainingPlayer.teamIndex > removePlayer.teamIndex) {
-              remainingPlayer.teamIndex -= 1
-            }
+      if (this.activePlayerCount() <= 0) {
+        this.destroy(null)
+        return true
+      }
+      if (!this.started) {
+        this.state = 'OPEN'
+        for (let pid in this.players) {
+          const remainingPlayer = this.players[pid]
+          if (remainingPlayer.team === removePlayer.team && remainingPlayer.teamIndex > removePlayer.teamIndex) {
+            remainingPlayer.teamIndex -= 1
           }
         }
-        this.broadcast('player left', { ready: this.canStart(), players: this.formattedPlayers() })
-      } else {
-        this.destroy(null)
+        this.broadcast('players', { ready: this.canStart(), players: this.formattedPlayers() })
+        return true
       }
-      return true
+
+      this.broadcast('update player', { pid: removeId, joined: false })
     }
   }
 

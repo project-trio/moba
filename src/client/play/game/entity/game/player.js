@@ -16,6 +16,7 @@ export default class Player {
     this.teamIndex = parseInt(data.teamIndex, 10)
     this.isLocal = pid === Local.playerId
     this.chatAt = 0
+    this.isActive = true
   }
 
 //MANAGE

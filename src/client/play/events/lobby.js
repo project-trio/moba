@@ -38,14 +38,22 @@ export default {
       }
     })
 
-    Bridge.on('add player', (data) => {
-      console.log('Add', data)
-      Local.game.updatePlayers(data)
+    Bridge.on('players', (data) => {
+      if (Local.game) {
+        console.log('players', data)
+        Local.game.updatePlayers(data)
+      } else {
+        console.log('No game for players', data)
+      }
     })
 
-    Bridge.on('player left', (data) => {
-      console.log('Left', data)
-      Local.game.updatePlayers(data)
+    Bridge.on('update player', (data) => {
+      if (Local.game) {
+        console.log('update player', data)
+        Local.game.updatePlayer(data)
+      } else {
+        console.log('No game for player update', data)
+      }
     })
 
     Bridge.on('start game', (data) => {
