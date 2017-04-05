@@ -68,7 +68,7 @@ export default {
 
     attackDamage: [60, 3],
     attackPierce: [0, 0],
-    attackCooldown: [15, 0],
+    attackCooldown: [20, 0],
     attackMoveSpeed: 8,
     bulletSize: 5,
 
@@ -82,21 +82,21 @@ export default {
   boxy: {
     split: true,
 
-    healthMax: [800, 40],
+    healthMax: [1000, 40],
     healthRegen: [40, 2],
     armor: [100, 5],
 
     sightRange: [160, 1],
-    attackRange: [140, 1],
+    attackRange: [120, 1],
 
-    attackDamage: [50, 1],
+    attackDamage: [40, 1],
     attackPierce: [0, 0],
     attackCooldown: [15, 0],
     attackMoveSpeed: 11,
     bulletSize: 4,
 
-    moveSpeed: [12, 0],
-    turnSpeed: 10,
+    moveSpeed: [9, 0],
+    turnSpeed: 6,
     collision: 24,
 
     create: createMeshes,
@@ -105,20 +105,20 @@ export default {
   glitch: {
     split: false,
 
-    healthMax: [700, 10],
+    healthMax: [600, 10],
     healthRegen: [40, 1],
     armor: [50, 0],
 
-    sightRange: [160, 0],
+    sightRange: [140, 0],
     attackRange: [120, 0],
 
-    attackDamage: [70, 3],
+    attackDamage: [60, 3],
     attackPierce: [0, 0],
     attackCooldown: [15, 0],
     attackMoveSpeed: 11,
     bulletSize: 4,
 
-    moveSpeed: [14, 0],
+    moveSpeed: [12, 0],
     turnSpeed: 12,
     collision: 20,
 
@@ -135,13 +135,13 @@ export default {
     sightRange: [160, 0],
     attackRange: [140, 0],
 
-    attackDamage: [40, 2],
+    attackDamage: [30, 2],
     attackPierce: [0, 0],
     attackCooldown: [15, 0],
     attackMoveSpeed: 11,
     bulletSize: 4,
 
-    moveSpeed: [12, 0],
+    moveSpeed: [10, 0],
     turnSpeed: 10,
     collision: 20,
 
