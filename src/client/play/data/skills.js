@@ -272,7 +272,7 @@ export default {
         }
       },
       end: function (ship) {
-        ship.model.z = 0
+        ship.model.position.z = 0
         ship.untargetable = false
         ship.noTargeting = false
 

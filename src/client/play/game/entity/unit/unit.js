@@ -74,7 +74,7 @@ class Unit {
       this.selectionIndicator = selectionRing
       this.selectionIndicator.visible = false
 
-      const clickCircle = Render.circle(statBase.collision + 8, { color: 0x000000, opacity: 0, parent: this.base })
+      const clickCircle = Render.circle(statBase.collision + 8, { color: 0x000000, opacity: 0, parent: this.container })
       clickCircle.position.z = 1
       clickCircle.owner = this
 
