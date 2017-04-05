@@ -12,7 +12,6 @@ class Game {
 
   constructor (size, map) {
     this.players = {}
-    this.isActive = false
     this.counts = [0, 0]
     this.id = Util.uid()
     this.size = size
@@ -82,13 +81,11 @@ class Game {
       if (!this.hostId) {
         this.hostId = pid
       }
-      const team = this.counts[1] < this.counts[0] ? 1 : 0
+      const team = this.counts[0] < this.counts[1] ? 0 : 1
       const teamSize = this.counts[team]
       this.counts[team] += 1
       this.players[pid] = player
-      player.isActive = true
-      player.team = team
-      player.teamIndex = teamSize
+      player.resetGame(team, teamSize)
 
       if (this.checkFull()) {
         this.state = 'FULL'

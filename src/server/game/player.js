@@ -2,17 +2,18 @@ module.exports = class Player {
 
   constructor (client) {
     this.client = client
-
     this.id = client.pid
+    this.name = client.name
+
     this.game = null
     this.team = null
     this.teamIndex = null
-    this.name = client.name
-    this.shipName = 'boxy'
-    this.switchUnit = null
+    this.isActive = false
 
-    this.serverUpdate = 0
-    this.actions = []
+    this.shipName = null
+    this.switchUnit = null
+    this.serverUpdate = null
+    this.actions = null
     this.levelNext = null
     this.chatAt = null
   }
@@ -30,8 +31,22 @@ module.exports = class Player {
     this.client.emit(name, message)
   }
 
+  resetGame (team, teamIndex) {
+    this.team = team
+    this.teamIndex = teamIndex
+
+    this.isActive = true
+    this.shipName = 'boxy'
+    this.switchUnit = null
+    this.serverUpdate = 0
+    this.actions = []
+    this.levelNext = null
+    this.chatAt = null
+  },
+
   join (game) {
     this.game = game
+
     this.client.join(game.id)
   }
 
