@@ -117,20 +117,26 @@ class Game {
     }
   }
 
-  remove (player) {
-    const pid = player.id
-    if (this.players[pid]) {
+  remove (removePlayer) {
+    const removeId = removePlayer.id
+    if (this.players[removeId]) {
       if (this.started) {
-        player.isActive = false
+        removePlayer.isActive = false
       } else {
-        this.counts[player.team] -= 1
-        delete this.players[pid]
+        this.counts[removePlayer.team] -= 1
+        delete this.players[removeId]
       }
 
       console.log('Removed', this.id, this.activePlayerCount())
       if (this.activePlayerCount() > 0) {
         if (!this.started) {
           this.state = 'OPEN'
+          for (let pid in this.players) {
+            const remainingPlayer = this.players[pid]
+            if (remainingPlayer.team === removePlayer.team && remainingPlayer.teamIndex > removePlayer.teamIndex) {
+              remainingPlayer.teamIndex -= 1
+            }
+          }
         }
         this.broadcast('player left', { ready: this.canStart(), players: this.formattedPlayers() })
       } else {
