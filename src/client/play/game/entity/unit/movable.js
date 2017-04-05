@@ -89,6 +89,7 @@ class Movable extends Unit {
   // Move
 
   blocked (bx, by) {
+    const collisionSize = this.stats.collision
     if (!bx) {
       bx = this.px
       by = this.py
@@ -96,7 +97,6 @@ class Movable extends Unit {
 
     // Walls
     const walls = Local.game.map.blockCheck(bx, by)
-    const collisionSize = this.stats.collision
     if (walls) {
       const ux1 = bx - collisionSize * 0.5
       const uy1 = by - collisionSize * 0.5

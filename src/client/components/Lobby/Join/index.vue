@@ -179,7 +179,7 @@ export default {
   box-sizing border-box
 
 .chat-input-container
-  position absolute
+  position fixed
   left 0
   right 0
   bottom 0
@@ -190,6 +190,7 @@ export default {
   width inherit
   font-size 1.5em
   padding 0 8px
+  background transparent
 
 .vertical
   display none

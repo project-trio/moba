@@ -15,8 +15,6 @@ import RenderMinimap from '@/play/render/minimap'
 import Mini from '@/play/game/entity/unit/mini'
 import Tower from '@/play/game/entity/unit/tower'
 
-//LAYOUTS
-
 //CONSTRUCTOR
 
 const GameMap = function (mapName, parent) {
