@@ -31,6 +31,11 @@ export default {
   pulsor: [
   ],
 
+//PULTER
+
+  pulter: [
+  ],
+
 //BOXY
 
   boxy: [

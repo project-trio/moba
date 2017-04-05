@@ -57,6 +57,29 @@ export default {
     },
   },
 
+  pulter: {
+    split: true,
+
+    healthMax: [600, 10],
+    healthRegen: [30, 1],
+    armor: [10, 0],
+
+    sightRange: [160, 0],
+    attackRange: [160, 0],
+
+    attackDamage: [60, 3],
+    attackPierce: [0, 0],
+    attackCooldown: [15, 0],
+    attackMoveSpeed: 8,
+    bulletSize: 5,
+
+    moveSpeed: [9, 0],
+    turnSpeed: 5,
+    collision: 20,
+
+    create: createMeshes,
+  },
+
   boxy: {
     split: true,
 
