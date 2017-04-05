@@ -31,9 +31,9 @@ const isDisabledBy = function (actives) {
 
 export default {
 
-//PULSOR
+//PROPPY
 
-  pulsor: [
+  proppy: [
   ],
 
 //PULTER

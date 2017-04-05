@@ -12,7 +12,7 @@ const createMeshes = function (name, team, top, base, ship) {
 //SHIPS
 
 export default {
-  pulsor: {
+  proppy: {
     split: true,
     lockTop: true,
     offsetTop: -12,
