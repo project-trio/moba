@@ -83,6 +83,20 @@ const GameMap = function (mapName, parent) {
     return [diffX, diffY]
   }
 
+  this.aoeRadiusIndicator = function (radius) {
+    if (this.aoeRing) {
+      Render.remove(this.aoeRing)
+      this.aoeRing = null
+    }
+    if (radius) {
+      this.aoeRing = Render.ring(radius, 2, {
+        color: 0xffffff,
+        opacity: 0.25,
+        parent: floorContainer,
+      })
+    }
+  }
+
   this.build = function () {
     // mapName = 'tiny' //SAMPLE
     layout = commonMaps[mapName]
@@ -92,6 +106,8 @@ const GameMap = function (mapName, parent) {
     Render.positionCamera(mapWidth / 2, mapHeight / 2)
 
     Mini.init(mapWidth, mapHeight)
+
+    this.aoeRing = null
 
     this.selectionRing = Render.ring(32, 4, {
       color: 0xff00dd,
@@ -121,8 +137,14 @@ const GameMap = function (mapName, parent) {
       if (showActivateGround) {
         const target = getTargetFromPoint(point)
         store.state.local.skills.groundTarget = target
-        this.selectionRing.position.x = target[0] / 100
-        this.selectionRing.position.y = target[1] / 100
+        const groundX = target[0] / 100
+        const groundY = target[1] / 100
+        this.selectionRing.position.x = groundX
+        this.selectionRing.position.y = groundY
+        if (this.aoeRing) {
+          this.aoeRing.position.x = groundX
+          this.aoeRing.position.y = groundY
+        }
       }
       this.selectionRing.visible = showActivateGround
     }

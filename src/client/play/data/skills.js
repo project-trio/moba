@@ -81,9 +81,12 @@ export default {
   pulter: [
     {
       name: `Fling`,
-      description: 'Hurls a large shell that explodes on impact for [[Damage]] to nearby enemies',
+      description: 'Hurls a large shell that explodes on impact for [[Damage]] to nearby enemies in [[Range]]',
       target: TARGET_GROUND,
       isDisabledBy: null,
+      getEffectRange: function (level) {
+        return levelMultiplier(100, level, 5)
+      },
       getEffectDamage: function (level) {
         return levelMultiplier(100, level, 10)
       },
@@ -94,6 +97,7 @@ export default {
         return levelMultiplier(200, level, -5)
       },
       start: function (index, level, ship, cancel, target) {
+        const aoeRange = this.getEffectRange(level)
         const damage = this.getEffectDamage(level)
         const maxRange = this.getRange(level)
         const bulletData = {
@@ -103,7 +107,7 @@ export default {
           attackPierce: 10,
           attackMoveSpeed: 4,
           maxRange: maxRange,
-          explosionRadius: 100,
+          explosionRadius: aoeRange,
           collisionSize: 10 * 100,
           firstCollision: false,
         }
@@ -197,6 +201,9 @@ export default {
       getRange: function (level) {
         return 200
       },
+      getEffectRange: function (level) {
+        return 60
+      },
       getEffectDamage: function (level) {
         return levelMultiplier(100, level, 10)
       },
@@ -206,6 +213,7 @@ export default {
       start: function (index, level, ship, cancel, target) {
         const damage = this.getEffectDamage(level)
         const maxRange = this.getRange(level)
+        const aoeRange = this.getEffectRange(level)
         const bulletData = {
           bulletSize: 9,
           bulletColor: 0xcc00ff,
@@ -213,7 +221,7 @@ export default {
           attackPierce: 10,
           attackMoveSpeed: 7,
           maxRange: maxRange,
-          explosionRadius: 60,
+          explosionRadius: aoeRange,
           collisionSize: 10 * 100,
           firstCollision: true,
         }

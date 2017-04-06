@@ -2,6 +2,8 @@ import Decimal from 'decimal.js'
 
 import store from '@/store'
 
+import Local from '@/play/local'
+
 import shipStats from '@/play/data/ships'
 import skillsData from '@/play/data/skills'
 
@@ -90,6 +92,7 @@ class Ship extends Movable {
     if (this.indicator) {
       Render.remove(this.indicator)
       this.indicator = null
+      Local.game.map.aoeRadiusIndicator(null)
     }
   }
 

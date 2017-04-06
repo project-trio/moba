@@ -204,9 +204,8 @@ export default {
         const skillIndex = this.index
         store.state.local.skills.active = skillIndex
         if (!this.disabled && !currentKey.modifier) {
-          if (this.skill.getRange) {
-            Local.player.unit.createIndicator(this.skill.getRange(this.level))
-          }
+          this.createRangeIndicator()
+
           if (this.skill.target > 1) {
             store.state.local.skills.activation = this.getActivation()
             if (this.skill.target === 2) {
@@ -254,6 +253,9 @@ export default {
     createRangeIndicator () {
       if (this.skill.getRange) {
         Local.player.unit.createIndicator(this.skill.getRange(this.level))
+        if (this.skill.getEffectRange) {
+          Local.game.map.aoeRadiusIndicator(this.skill.getEffectRange(this.level))
+        }
       }
     },
     removeRangeIndicator () {
