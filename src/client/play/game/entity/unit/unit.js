@@ -21,8 +21,6 @@ let targetingGround = false
 
 class Unit {
 
-  // Constructor
-
   constructor (team, statBase, unitScale, sx, sy, startAngle, isLocal, renderInBackground) {
     const unattackable = !statBase.healthMax
     this.team = team
@@ -584,8 +582,7 @@ Unit.update = function (renderTime, timeDelta, tweening) {
     }
   }
 
-  // Move
-
+  // Tween
   for (let idx = startIndex; idx >= 0; idx -= 1) {
     const unit = allUnits[idx]
     if (unit.updateAnimations) {
@@ -602,7 +599,7 @@ Unit.update = function (renderTime, timeDelta, tweening) {
     if (tweening && (!unit.isRendering || unit.isBlocked)) {
       continue
     }
-    if (unit.shouldMove(renderTime, tweening)) {
+    if (unit.shouldMove()) {
       unit.move(timeDelta, tweening)
     }
   }

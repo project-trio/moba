@@ -16,7 +16,6 @@ import Unit from '@/play/game/entity/unit/unit'
 
 export default function (gid, size, mapName) {
   let players = {}
-  let startTime
 
   let updateCount = 0
   let updateQueue = {}
@@ -52,6 +51,7 @@ export default function (gid, size, mapName) {
     const maxTicksToRender = ticksToRender > 9 ? Math.floor(Math.pow(ticksToRender, 0.67)) : 1
     while (ticksToRender > 0) {
       renderTime = ticksRendered * tickDuration
+
       if (ticksRendered % ticksPerUpdate === 0) {
         if (dequeueUpdate(renderTime)) {
           store.state.game.missingUpdate = false
@@ -235,8 +235,7 @@ export default function (gid, size, mapName) {
     console.log('STARTED', updateDuration, tickDuration, ticksPerUpdate, ticksRendered)
 
     // status = 'STARTED'
-    startTime = performance.now()
-    lastTickTime = startTime
+    lastTickTime = performance.now()
 
     this.map.build()
   }

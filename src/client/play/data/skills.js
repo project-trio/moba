@@ -260,7 +260,7 @@ export default {
   sinker: [
     {
       name: 'Torpedo',
-      description: 'Fires a torpedo that explodes on the first enemy hit for [[Damage]]',
+      description: 'Explodes on the first enemy hit, damaging within [[Range]] for [[Damage]]',
       target: TARGET_GROUND,
       disabledBy: [null, true, false],
       isDisabledBy: isDisabledBy,

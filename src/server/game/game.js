@@ -104,6 +104,7 @@ class Game {
     this.started = false
     for (let pid in this.players) {
       const player = this.players[pid]
+      delete this.players[pid]
       player.leave()
       player.game = null
     }

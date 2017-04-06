@@ -84,7 +84,7 @@ class Ship extends Movable {
   }
 
   allyNotLocal () {
-    return !this.isLocal && super.localAlly
+    return !this.isLocal && super.allyNotLocal()
   }
 
   // Ability indicator
