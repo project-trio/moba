@@ -105,29 +105,25 @@ export default {
           ship.endSkill(index)
         }
 
-        const duration = (endAt - startAt) / 2
-        const angleChange = Math.PI * 2.5
+        const duration = endAt - startAt
+        const angleChange = Math.PI * 2
         ship.queueAnimation('base', 'rotation', {
           child: 1,
           axis: 'x',
-          from: 0,
-          to: angleChange,
-          start: startAt + 100,
-          duration: duration * 2 - 100,
-        })
-
-        ship.queueAnimation('model', 'position', {
-          axis: 'z',
-          from: 0,
-          to: 100,
+          from: 0.5 * Math.PI,
+          to: 0.5 * Math.PI,
+          parabola: 2,
+          max: angleChange,
           start: startAt,
           duration: duration,
         })
         ship.queueAnimation('model', 'position', {
           axis: 'z',
-          from: 100,
+          from: 0,
           to: 0,
-          start: startAt + duration,
+          parabola: 2,
+          max: 50,
+          start: startAt,
           duration: duration,
         })
         ship.propGroup.visible = false
