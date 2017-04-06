@@ -139,12 +139,13 @@ class Ship extends Movable {
         closeEnough = Util.withinSquared(distance, targetSkill.range)
       }
       if (closeEnough) {
-        this.performSkill(renderTime, targetSkill.index, targetSkill.target)
-        if (!unitTarget && !skillData.continuesToDestination) {
-          this.reachedDestination(false)
+        if (this.performSkill(renderTime, targetSkill.index, targetSkill.target)) {
+          if (!unitTarget && !skillData.continuesToDestination) {
+            this.reachedDestination(false)
+          }
+          this.targetingSkill = null
+          return true
         }
-        this.targetingSkill = null
-        return true
       }
     }
     return false
@@ -152,53 +153,53 @@ class Ship extends Movable {
 
   trySkill (renderTime, index, targetData) {
     if (!targetData) {
-      this.performSkill(renderTime, index)
-    } else {
-      const skill = this.skills.data[index]
-      const skillLevel = this.skills.levels[index]
-      const skillRange = skill.getRange(skillLevel) * 100
-      if (typeof targetData === 'string') {
-        const target = this.setTargetId(targetData)
-        if (target) {
-          this.targetingSkill = {
-            index: index,
-            target: target,
-            range: skillRange,
-          }
-          console.log('Queueing unit target skill', renderTime, this.targetingSkill)
-        }
-      } else {
-        const destX = targetData[0]
-        const destY = targetData[1]
+      return this.performSkill(renderTime, index)
+    }
+    const skill = this.skills.data[index]
+    const skillLevel = this.skills.levels[index]
+    const skillRange = skill.getRange(skillLevel) * 100
+    if (typeof targetData === 'string') {
+      const target = this.setTargetId(targetData)
+      if (target) {
         this.targetingSkill = {
           index: index,
-          target: targetData,
-          px: destX, py: destY,
+          target: target,
           range: skillRange,
         }
-        console.log('Queueing ground target skill', renderTime, this.targetingSkill)
-        this.targetDestination(destX, destY)
+        console.log('Queueing unit target skill', renderTime, this.targetingSkill)
       }
+    } else {
+      const destX = targetData[0]
+      const destY = targetData[1]
+      this.targetingSkill = {
+        index: index,
+        target: targetData,
+        px: destX, py: destY,
+        range: skillRange,
+      }
+      console.log('Queueing ground target skill', renderTime, this.targetingSkill)
+      this.targetDestination(destX, destY)
     }
+    return true
   }
 
   performSkill (renderTime, index, target) {
     if (this.isDead) {
       console.log('Skill disabled during death', renderTime, this.id, index)
-      return
+      return false
     }
     if (target && target.isDead) {
       console.log('Skill canceled by dead target', renderTime, this.id, index)
-      return
+      return false
     }
     if (renderTime < this.skills.cooldowns[index]) {
       console.log('Skill still on cooldown', renderTime, this.id, index)
-      return
+      return false
     }
     const skill = this.skills.data[index]
     if (skill.isDisabledBy && skill.isDisabledBy(this.skills.actives)) {
       console.log('Skill disabled by another active', this.id, index, skill.disabledBy, this.skills.actives)
-      return
+      return false
     }
     const instantaneous = skill.getDuration === undefined
     const skillLevel = this.skills.levels[index]
@@ -219,6 +220,7 @@ class Ship extends Movable {
     }
 
     skill.start(index, skillLevel, this, target, renderTime, endAt)
+    return true
   }
 
   levelup (index) {
@@ -515,9 +517,10 @@ class Ship extends Movable {
 
       if (this.canInput()) {
         if (this.queueSkill !== null) {
-          this.trySkill(renderTime, this.queueSkill, this.queueTarget)
-          this.queueSkill = null
-          this.queueTarget = null
+          if (this.trySkill(renderTime, this.queueSkill, this.queueTarget)) {
+            this.queueSkill = null
+            this.queueTarget = null
+          }
         } else if (this.queueTarget !== null) {
           if (typeof this.queueTarget === 'string') {
             this.setTargetId(this.queueTarget)

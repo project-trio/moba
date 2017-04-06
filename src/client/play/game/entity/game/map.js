@@ -133,6 +133,9 @@ const GameMap = function (mapName, parent) {
     ground.onHover = () => {
     }
     ground.onMove = (point) => {
+      if (!Local.player.unit || Local.player.unit.isDying) {
+        return
+      }
       const showActivateGround = store.state.local.skills.getGroundTarget
       if (showActivateGround) {
         const target = getTargetFromPoint(point)
@@ -155,6 +158,9 @@ const GameMap = function (mapName, parent) {
     ground.onClick = (point) => {
       store.state.game.showPanel = null
 
+      if (!Local.player.unit || Local.player.unit.isDying) {
+        return
+      }
       const target = getTargetFromPoint(point)
 
       if (store.state.local.skills.getGroundTarget) {

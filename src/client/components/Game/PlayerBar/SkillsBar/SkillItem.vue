@@ -67,8 +67,11 @@ export default {
       return this.index + 49
     },
 
+    preventsActivation () {
+      return this.level === 0 || this.activated || this.cooldownRemaining > 200
+    },
     disabled () {
-      return this.level === 0 || this.activated || this.cooldownRemaining > 0 || this.disabledByOtherSkill || store.state.local.dead
+      return this.preventsActivation || this.cooldownRemaining > 0 || this.disabledByOtherSkill || store.state.local.dead
     },
 
     isAnySkillActive () {
@@ -203,7 +206,7 @@ export default {
         store.cancelActiveSkill()
         const skillIndex = this.index
         store.state.local.skills.active = skillIndex
-        if (!this.disabled && !currentKey.modifier) {
+        if (!this.preventsActivation && !currentKey.modifier) {
           this.createRangeIndicator()
 
           if (this.skill.target > 1) {
@@ -275,7 +278,7 @@ export default {
       if (this.skill.target === 0) {
         return
       }
-      if (this.disabled || this.cooldownRemaining > 100) {
+      if (this.preventsActivation) {
         return
       }
       const skillIndex = this.index
