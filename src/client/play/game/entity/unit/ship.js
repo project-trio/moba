@@ -44,8 +44,6 @@ class Ship extends Movable {
     this.split = statBase.split
     this.reemergeAt = store.state.game.renderTime
     this.uncontrollable = false
-    this.queueTarget = null
-    this.queueSkill = null
 
     this.level = 1
     this.levelExp = 0
@@ -56,6 +54,8 @@ class Ship extends Movable {
     this.selected = false
     this.requiresSightOfTarget = false
     this.reflectDamage = null
+    this.queueTarget = null
+    this.queueSkill = null
     this.targetingSkill = null
 
     const scores = { pid: player.id, level: this.level, kills: 0, deaths: 0, damage: 0 }
@@ -102,17 +102,24 @@ class Ship extends Movable {
   // Move
 
   canInput () {
-    return !this.uncontrollable && !this.isDying
+    return !this.isDying && !this.uncontrollable
   }
+
+  // Skills
 
   checkQueuedSkill (renderTime) {
     const targetSkill = this.targetingSkill
     if (targetSkill) {
       const unitTarget = !targetSkill.px
-      const distance = unitTarget ? this.distanceTo(targetSkill.target) : this.distanceToPoint(targetSkill.px, targetSkill.py)
-      if (Util.withinSquared(distance, targetSkill.range)) {
+      const skillData = this.skills.data[targetSkill.index]
+      let closeEnough = skillData.startsImmediately
+      if (!closeEnough) {
+        const distance = unitTarget ? this.distanceTo(targetSkill.target) : this.distanceToPoint(targetSkill.px, targetSkill.py)
+        closeEnough = Util.withinSquared(distance, targetSkill.range)
+      }
+      if (closeEnough) {
         this.performSkill(renderTime, targetSkill.index, targetSkill.target)
-        if (!unitTarget) {
+        if (!unitTarget && !skillData.continuesToDestination) {
           this.reachedDestination(false)
         }
         this.targetingSkill = null
@@ -122,10 +129,10 @@ class Ship extends Movable {
     return false
   }
 
-  // Skills
-
   trySkill (renderTime, index, targetData) {
-    if (targetData) {
+    if (!targetData) {
+      this.performSkill(renderTime, index)
+    } else {
       const skill = this.skills.data[index]
       const skillLevel = this.skills.levels[index]
       const skillRange = skill.getRange(skillLevel) * 100
@@ -151,9 +158,7 @@ class Ship extends Movable {
         console.log('Queueing ground target skill', renderTime, this.targetingSkill)
         this.targetDestination(destX, destY)
       }
-      return
     }
-    this.performSkill(renderTime, index)
   }
 
   performSkill (renderTime, index, target) {
@@ -269,6 +274,7 @@ class Ship extends Movable {
     this.reemergeAt = renderTime + waitToRespawn * 2 + 1000 * this.level
     this.queueTarget = null
     this.queueSkill = null
+    this.targetSkill = null
 
     super.die(renderTime)
 
