@@ -43,6 +43,9 @@ class Ship extends Movable {
     this.name = name
     this.split = statBase.split
     this.reemergeAt = store.state.game.renderTime
+    this.uncontrollable = false
+    this.queueTarget = null
+    this.queueSkill = null
 
     this.level = 1
     this.levelExp = 0
@@ -98,8 +101,8 @@ class Ship extends Movable {
 
   // Move
 
-  canMove () {
-    return !this.isDying
+  canInput () {
+    return !this.uncontrollable && !this.isDying
   }
 
   checkQueuedSkill (renderTime) {
@@ -477,8 +480,24 @@ class Ship extends Movable {
     } else {
       this.updateExperience()
       this.doRegenerate()
+
       super.update(renderTime, timeDelta)
-      this.checkQueuedSkill(renderTime)
+
+      if (this.canInput()) {
+        if (this.queueSkill !== null) {
+          this.trySkill(renderTime, this.queueSkill, this.queueTarget)
+          this.queueSkill = null
+          this.queueTarget = null
+        } else if (this.queueTarget !== null) {
+          if (typeof this.queueTarget === 'string') {
+            this.setTargetId(this.queueTarget)
+          } else {
+            this.targetDestination(this.queueTarget[0], this.queueTarget[1])
+          }
+          this.queueTarget = null
+        }
+        this.checkQueuedSkill(renderTime)
+      }
     }
   }
 

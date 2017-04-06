@@ -135,18 +135,18 @@ export default function (gid, size, mapName) {
           const target = action.target
           const skillIndex = action.skill
           ship.targetingSkill = null
+          ship.queueSkill = null
+          ship.queueTarget = null
           if (skillIndex !== undefined) {
             if (action.level) {
               ship.levelup(skillIndex)
             } else {
-              ship.trySkill(renderTime, skillIndex, target)
+              ship.queueSkill = skillIndex
+              ship.queueTarget = target
             }
-          } else if (target && ship.canMove()) {
-            if (typeof target === 'string') {
-              ship.setTargetId(target)
-            } else {
-              ship.targetDestination(target[0], target[1])
-            }
+          } else if (target) {
+            ship.queueSkill = null
+            ship.queueTarget = target
           }
         }
       }
