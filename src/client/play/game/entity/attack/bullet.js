@@ -248,6 +248,9 @@ Bullet.update = function (renderTime, timeDelta, tweening) {
       bullet.updateAim()
     }
     bullet.move(renderTime, timeDelta, tweening)
+    if (bullet.updateAnimations) {
+      bullet.updateAnimations(renderTime)
+    }
   }
 }
 

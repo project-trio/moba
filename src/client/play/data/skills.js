@@ -2,6 +2,9 @@ import Render from '@/play/render/render'
 
 import dataConstants from '@/play/data/constants'
 
+import Animate from '@/play/game/helpers/animate'
+import Util from '@/play/game/util'
+
 import AreaOfEffect from '@/play/game/entity/attack/aoe'
 import Bullet from '@/play/game/entity/attack/bullet'
 
@@ -163,22 +166,34 @@ export default {
       getCooldown: function (level) {
         return levelMultiplier(200, level, -5)
       },
-      start: function (index, level, ship, target) {
+      start: function (index, level, ship, target, startAt, endAt) {
         const aoeRange = this.getEffectRange(level)
         const damage = this.getEffectDamage(level)
         const maxRange = this.getRange(level)
+        const attackMoveSpeed = 4
         const bulletData = {
           bulletSize: 8,
           bulletColor: 0x660066,
           attackDamage: damage * 100,
           attackPierce: 10,
-          attackMoveSpeed: 4,
+          attackMoveSpeed: attackMoveSpeed,
           maxRange: maxRange,
           explosionRadius: aoeRange,
           collisionSize: 10 * 100,
           firstCollision: false,
         }
-        new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+        const flingBullet = new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+        Animate.apply(flingBullet)
+        const animationDuration = Math.sqrt(Util.pointDistance(ship.px, ship.py, target[0], target[1])) / flingBullet.moveConstant.toNumber() / 1000
+        flingBullet.queueAnimation('container', 'position', {
+          axis: 'z',
+          from: 0,
+          to: 0,
+          parabola: 2,
+          max: maxRange,
+          start: startAt,
+          duration: animationDuration,
+        })
       },
     },
   ],
@@ -332,21 +347,14 @@ export default {
           parent: ship.container,
         })
 
-        const animationDuration = 500
-        const depth = -31
         ship.queueAnimation('model', 'position', {
           axis: 'z',
           from: 0,
-          to: depth,
-          start: startAt,
-          duration: animationDuration,
-        })
-        ship.queueAnimation('model', 'position', {
-          axis: 'z',
-          from: depth,
           to: 0,
-          start: endAt - animationDuration,
-          duration: animationDuration,
+          parabola: 8,
+          max: -31,
+          start: startAt,
+          duration: endAt - startAt,
         })
       },
       end: function (ship) {

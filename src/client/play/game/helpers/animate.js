@@ -25,6 +25,10 @@ const update = function (renderTime) {
       if (renderTime >= startTime + duration) {
         this.animations.splice(idx, 1)
         currentValue = animation.to
+      } else if (animation.parabola) {
+        const halfDuration = duration / 2
+        const progress = 1 - Math.pow((timeElapsed - halfDuration) / halfDuration, animation.parabola)
+        currentValue = animation.from + (progress > 0.99 ? 1 : progress) * animation.max
       } else {
         currentValue = animation.from + timeElapsed * animation.change / duration
       }
