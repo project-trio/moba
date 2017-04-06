@@ -543,7 +543,7 @@ Unit.all = function () {
 }
 
 Unit.get = function (id) {
-  for (let idx = 0; idx < allUnits.length; idx += 1) {
+  for (let idx = allUnits.length - 1; idx >= 0; idx -= 1) {
     const unit = allUnits[idx]
     if (unit.id === id) {
       return unit
@@ -553,33 +553,29 @@ Unit.get = function (id) {
 }
 
 Unit.update = function (renderTime, timeDelta, tweening) {
-
+  let startIndex = allUnits.length - 1
   if (!tweening) {
-    // Update
-    for (let idx = 0; idx < allUnits.length; idx += 1) {
+    // Update before death
+    for (let idx = startIndex; idx >= 0; idx -= 1) {
       const unit = allUnits[idx]
       unit.update(renderTime, timeDelta)
-    }
-    // Attack
-    for (let idx = 0; idx < allUnits.length; idx += 1) {
-      const unit = allUnits[idx]
       if (!unit.isDead && unit.isAttackOffCooldown(renderTime)) {
         unit.checkAttack(renderTime)
       }
     }
     // Die
-    for (let idx = allUnits.length - 1; idx >= 0; idx -= 1) {
+    for (let idx = startIndex; idx >= 0; idx -= 1) {
       const unit = allUnits[idx]
       if (unit.isDying && !unit.isDead) {
         unit.die(renderTime)
         if (unit.remove) {
           allUnits.splice(idx, 1)
-          idx -= 1
+          startIndex -= 1
         }
       }
     }
-    // Target
-    for (let idx = 0; idx < allUnits.length; idx += 1) {
+    // Update after death
+    for (let idx = startIndex; idx >= 0; idx -= 1) {
       const unit = allUnits[idx]
       if (!unit.isDead && unit.movable) {
         unit.updateMoveTarget(renderTime)
@@ -590,7 +586,7 @@ Unit.update = function (renderTime, timeDelta, tweening) {
 
   // Move
 
-  for (let idx = 0; idx < allUnits.length; idx += 1) {
+  for (let idx = startIndex; idx >= 0; idx -= 1) {
     const unit = allUnits[idx]
     if (unit.isDying) {
       continue
@@ -620,7 +616,6 @@ Unit.update = function (renderTime, timeDelta, tweening) {
       targetRing.scale.y = newScale
     }
   }
-
 }
 
 export default Unit

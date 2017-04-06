@@ -224,33 +224,30 @@ Bullet.all = function () {
 }
 
 Bullet.update = function (renderTime, timeDelta, tweening) {
-  // Move
-  for (let idx = 0; idx < allBullets.length; idx += 1) {
-    const bullet = allBullets[idx]
-    if (bullet.unitTarget) {
-      bullet.updateAim()
-    }
-    bullet.move(renderTime, timeDelta, tweening)
-  }
+  let startIndex = allBullets.length - 1
 
   if (!tweening) {
     // Update
-    for (let idx = 0; idx < allBullets.length; idx += 1) {
+    for (let idx = startIndex; idx >= 0; idx -= 1) {
       const bullet = allBullets[idx]
       if (bullet.remove) {
         allBullets.splice(idx, 1)
-        idx -= 1
-      }
-    }
-    // Update
-    for (let idx = 0; idx < allBullets.length; idx += 1) {
-      const bullet = allBullets[idx]
-      if (bullet.unitTarget) {
+        startIndex -= 1
+      } else if (bullet.unitTarget) {
         bullet.setDestination(bullet.target.px, bullet.target.py, true)
       } else {
         //TODO Collision check
       }
     }
+  }
+
+  // Move
+  for (let idx = startIndex; idx >= 0; idx -= 1) {
+    const bullet = allBullets[idx]
+    if (bullet.unitTarget) {
+      bullet.updateAim()
+    }
+    bullet.move(renderTime, timeDelta, tweening)
   }
 }
 
