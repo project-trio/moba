@@ -51,7 +51,7 @@ export default {
       getCooldown: function (level) {
         return levelMultiplier(200, level, -5)
       },
-      start: function (index, level, ship, cancel, target) {
+      start: function (index, level, ship, target) {
         const damage = this.getEffectDamage(level)
         const stunDuration = this.getEffectDuration(level)
         const maxRange = this.getRange(level)
@@ -96,7 +96,7 @@ export default {
       getCooldown: function (level) {
         return levelMultiplier(200, level, -5)
       },
-      start: function (index, level, ship, cancel, target) {
+      start: function (index, level, ship, target) {
         const aoeRange = this.getEffectRange(level)
         const damage = this.getEffectDamage(level)
         const maxRange = this.getRange(level)
@@ -174,7 +174,7 @@ export default {
       getCooldown: function (level) {
         return levelMultiplier(400, level, -20)
       },
-      start: function (index, level, ship, cancel, target) {
+      start: function (index, level, ship, target) {
         const sightRange = this.getEffectRange(level)
         const stats = { sightRange: [sightRange, 0] }
         ship.eye = new Unit(ship.team, stats, null, target[0] / 100, target[1] / 100, null, false, true)
@@ -208,9 +208,9 @@ export default {
         return levelMultiplier(100, level, 10)
       },
       getCooldown: function (level) {
-        return 150
+        return 100
       },
-      start: function (index, level, ship, cancel, target) {
+      start: function (index, level, ship, target) {
         const damage = this.getEffectDamage(level)
         const maxRange = this.getRange(level)
         const aoeRange = this.getEffectRange(level)

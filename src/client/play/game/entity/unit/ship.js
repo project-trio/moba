@@ -191,7 +191,7 @@ class Ship extends Movable {
       }
     }
 
-    skill.start(index, skillLevel, this, this.endSkill, target)
+    skill.start(index, skillLevel, this, target)
   }
 
   levelup (index) {
@@ -267,6 +267,8 @@ class Ship extends Movable {
     this.opacity(0.5)
     this.respawned = false
     this.reemergeAt = renderTime + waitToRespawn * 2 + 1000 * this.level
+    this.queueTarget = null
+    this.queueSkill = null
 
     super.die(renderTime)
 
