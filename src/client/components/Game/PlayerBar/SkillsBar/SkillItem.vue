@@ -106,7 +106,7 @@ export default {
       let description = this.skill.description.replace(MATCH_BRACKET_FORMATTING, (match, substitution) => {
         const substitutionFunction = this.skill[`getEffect${substitution}`]
         const factor = substitution === 'Duration' ? 1000 : this.skill[`factor${substitution}`] || 1
-        const suffix = substitution === 'Duration' ? ' seconds' : (substitution === 'Damage' ? ' damage' : this.skill[`suffix${substitution}`] || '')
+        const suffix = substitution === 'Duration' ? ' seconds' : (substitution === 'Damage' ? ' damage' : (substitution === 'Range' ? ' range' : this.skill[`suffix${substitution}`] || ''))
 
         const valueForLevel = substitutionFunction(this.level === 0 ? 1 : this.level)
         let effectText = `${valueForLevel / factor}`

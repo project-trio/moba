@@ -35,7 +35,7 @@ export default {
 
   beedle: [
     {
-      name: `Electric sting`,
+      name: `Electric Sting`,
       description: 'Fires a bolt of electricity that stuns for [[Duration]], dealing [[Damage]]',
       target: TARGET_ENEMY,
       isDisabledBy: null,
@@ -161,8 +161,8 @@ export default {
       name: `Storm's Eye`,
       description: 'Reduces damage allies inside the effect take from attacks by [[Damage]]',
       target: TARGET_SELF,
-      endOnDeath: false,
       isDisabledBy: null,
+      endOnDeath: false,
       getEffectDamage: function (level) {
         return levelMultiplier(25, level, 2)
       },
@@ -196,10 +196,9 @@ export default {
     {
       name: 'Providence',
       description: 'Spawns a seeing-eye that reveals enemies within [[Range]]',
-      suffixRange: ' range',
       target: TARGET_GROUND,
-      endOnDeath: false,
       isDisabledBy: null,
+      endOnDeath: false,
       getRange: function (level) {
         return levelMultiplier(200, level, 30)
       },
@@ -272,8 +271,8 @@ export default {
       factorDps: 50, //TODO ticks
       suffixDps: ' dps',
       target: TARGET_SELF,
-      endOnDeath: true,
       isDisabledBy: null,
+      endOnDeath: true,
       getRange: function (level) {
         return 100
       },
@@ -331,9 +330,9 @@ export default {
       description: 'Bounce [[Strength]] of damage taken back on attackers',
       suffixStrength: '%',
       target: TARGET_SELF,
-      endOnDeath: true,
       disabledBy: [false, true, null],
       isDisabledBy: isDisabledBy,
+      endOnDeath: true,
       getEffectStrength: function (level) {
         return levelMultiplier(14, level, 2)
       },
@@ -361,13 +360,13 @@ export default {
 
   glitch: [
     {
-      name: 'Brute force',
+      name: 'Brute Force',
       description: 'Boosts attack speed by [[AttackSpeed]], while more vulnerable to damage',
       suffixAttackSpeed: '%',
       target: TARGET_SELF,
-      endOnDeath: true,
       disabledBy: [null, false, true],
       isDisabledBy: isDisabledBy,
+      endOnDeath: true,
       getEffectAttackSpeed: function (level) {
         return levelMultiplier(40, level, 3)
       },
@@ -395,9 +394,9 @@ export default {
       name: 'Encrypt',
       description: 'Turn invisible and untargetable to enemies',
       target: TARGET_SELF,
-      endOnDeath: true,
       disabledBy: [false, null, true],
       isDisabledBy: isDisabledBy,
+      endOnDeath: true,
       getDuration: function (level) {
         return levelMultiplier(40, level, 5)
       },
@@ -425,9 +424,9 @@ export default {
       factorRegen: 50 / 1000 * 100, //TODO ticks
       suffixRegen: ' hp / s',
       target: TARGET_SELF,
-      endOnDeath: true,
       disabledBy: [false, true, null],
       isDisabledBy: isDisabledBy,
+      endOnDeath: true,
       getEffectRegen: function (level) {
         return levelMultiplier(40, level, 4)
       },
