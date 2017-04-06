@@ -285,7 +285,7 @@ export default {
       getCooldown: function (level) {
         return levelMultiplier(200, level, -10)
       },
-      start: function (index, level, ship) {
+      start: function (index, level, ship, target, startAt, endAt) {
         ship.removeTarget()
         ship.untargetable = true
         ship.noTargeting = true
@@ -302,19 +302,23 @@ export default {
           attackPierce: 0,
           parent: ship.container,
         })
-      },
-      update: function (ship, start, current, end) {
-        const elapsed = current - start
-        const transitionTime = 500
-        const diveDepth = -30
-        if (elapsed <= transitionTime) {
-          ship.model.position.z = elapsed * diveDepth / transitionTime
-        } else {
-          const remaining = end - current
-          if (remaining <= transitionTime) {
-            ship.model.position.z = remaining * diveDepth / transitionTime
-          }
-        }
+
+        const animationDuration = 500
+        const depth = -31
+        ship.queueAnimation('model', 'position', {
+          axis: 'z',
+          from: 0,
+          to: depth,
+          start: startAt,
+          duration: animationDuration,
+        })
+        ship.queueAnimation('model', 'position', {
+          axis: 'z',
+          from: depth,
+          to: 0,
+          start: endAt - animationDuration,
+          duration: animationDuration,
+        })
       },
       end: function (ship) {
         ship.model.position.z = 0
