@@ -74,6 +74,44 @@ export default {
 //PROPPY
 
   proppy: [
+    {
+      name: 'Barrel Roll',
+      description: 'Burst forward while dodging out of incoming fire with this timeless aerial maneuver',
+      target: TARGET_GROUND,
+      isDisabledBy: null,
+      startsImmediately: true,
+      continuesToDestination: true,
+      getRange: function (level) {
+        return 100
+      },
+      getDuration: function (level) {
+        return levelMultiplier(10, level, 1)
+      },
+      getCooldown: function (level) {
+        return 200
+      },
+      start: function (index, level, ship, target) {
+        ship.uncontrollable = true
+        ship.untargetable = true
+        ship.unattackable = true
+        ship.noTargeting = true
+        ship.opacity(0.5)
+
+        ship.endBarrelRoll = function () {
+          console.log('cancel barrel roll')
+          ship.endSkill(index)
+        }
+      },
+      end: function (ship) {
+        ship.endBarrelRoll = null
+
+        ship.uncontrollable = false
+        ship.untargetable = false
+        ship.unattackable = false
+        ship.noTargeting = false
+        ship.opacity(1)
+      },
+    },
   ],
 
 //PULTER

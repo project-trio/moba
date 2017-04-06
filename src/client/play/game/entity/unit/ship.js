@@ -105,6 +105,24 @@ class Ship extends Movable {
     return !this.isDying && !this.uncontrollable
   }
 
+  move (timeDelta, tweening) {
+    super.move(timeDelta, tweening)
+
+    if (!tweening) {
+      if (this.isBlocked && this.endBarrelRoll) {
+        this.endBarrelRoll()
+      }
+    }
+  }
+
+  reachedDestination (needsNewDestination) {
+    if (this.endBarrelRoll) {
+      this.endBarrelRoll()
+    }
+
+    super.reachedDestination(needsNewDestination)
+  }
+
   // Skills
 
   checkQueuedSkill (renderTime) {
