@@ -1,5 +1,7 @@
 import Stats from 'stats.js'
 
+import store from '@/store'
+
 import Local from '@/play/local'
 
 import Render from '@/play/render/render'
@@ -9,6 +11,7 @@ import Bullet from '@/play/game/entity/attack/bullet'
 import Unit from '@/play/game/entity/unit/unit'
 
 let lastUpdate = 0
+let lastTickTime = 0
 
 let updatePanel, tickPanel, framePanel, animationId
 
@@ -40,10 +43,12 @@ const animate = function (timestamp) {
         tickPanel.end()
       }
     }
+    lastTickTime = timestamp
   } else if (isPlaying) { // Tween
     const tweenTimeDelta = timestamp - lastUpdate
-    Bullet.update(timestamp, tweenTimeDelta, true)
-    Unit.update(timestamp, tweenTimeDelta, true)
+    const renderTime = store.state.game.renderTime + (timestamp - lastTickTime)
+    Bullet.update(renderTime, tweenTimeDelta, true)
+    Unit.update(renderTime, tweenTimeDelta, true)
   }
 
   if (isPlaying) {

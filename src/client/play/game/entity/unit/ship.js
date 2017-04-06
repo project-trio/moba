@@ -528,8 +528,6 @@ class Ship extends Movable {
         }
         this.checkQueuedSkill(renderTime)
       }
-
-      this.updateAnimations(renderTime)
     }
   }
 

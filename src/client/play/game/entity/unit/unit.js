@@ -588,6 +588,9 @@ Unit.update = function (renderTime, timeDelta, tweening) {
 
   for (let idx = startIndex; idx >= 0; idx -= 1) {
     const unit = allUnits[idx]
+    if (unit.updateAnimations) {
+      unit.updateAnimations(renderTime)
+    }
     if (unit.isDying) {
       continue
     }
