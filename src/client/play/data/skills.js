@@ -90,20 +90,49 @@ export default {
       getCooldown: function (level) {
         return 200
       },
-      start: function (index, level, ship, target) {
+      start: function (index, level, ship, target, startAt, endAt) {
         ship.uncontrollable = true
         ship.untargetable = true
         ship.unattackable = true
         ship.noTargeting = true
-        ship.opacity(0.5)
+        ship.opacity(0.75)
 
         ship.endBarrelRoll = function () {
           console.log('cancel barrel roll')
           ship.endSkill(index)
         }
+
+        const duration = (endAt - startAt) / 2
+        const angleChange = Math.PI * 2.5
+        ship.queueAnimation('base', 'rotation', {
+          child: 1,
+          axis: 'x',
+          from: 0,
+          to: angleChange,
+          start: startAt + 100,
+          duration: duration * 2 - 100,
+        })
+
+        ship.queueAnimation('model', 'position', {
+          axis: 'z',
+          from: 0,
+          to: 100,
+          start: startAt,
+          duration: duration,
+        })
+        ship.queueAnimation('model', 'position', {
+          axis: 'z',
+          from: 100,
+          to: 0,
+          start: startAt + duration,
+          duration: duration,
+        })
+        ship.propGroup.visible = false
       },
       end: function (ship) {
         ship.endBarrelRoll = null
+        ship.propGroup.visible = true
+        ship.base.rotation.x = 0
 
         ship.uncontrollable = false
         ship.untargetable = false

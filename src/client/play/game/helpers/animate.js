@@ -28,7 +28,10 @@ const update = function (renderTime) {
       } else {
         currentValue = animation.from + timeElapsed * animation.change / duration
       }
-      const obj = this[animation.key]
+      let obj = this[animation.key]
+      if (animation.child !== undefined) {
+        obj = obj.children[animation.child]
+      }
       const axis = animation.axis
       if (axis !== undefined) {
         obj[animation.property][axis] = currentValue
