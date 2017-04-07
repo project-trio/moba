@@ -74,6 +74,8 @@ export default {
     {
       name: 'Caustic spray',
       description: 'Spit a toxic glob on the ground, dealing [[Dps]] to enemies inside for [[Duration]]',
+      factorDps: 50, //TODO ticks
+      suffixDps: ' dps',
       target: TARGET_GROUND,
       isDisabledBy: null,
       getRange: function (level) {
@@ -86,7 +88,7 @@ export default {
         return levelMultiplier(3000, level, 200)
       },
       getEffectDps: function (level) {
-        return levelMultiplier(600, level, 30)
+        return levelMultiplier(500, level, 50)
       },
       getCooldown: function (level) {
         return 200
