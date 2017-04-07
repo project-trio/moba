@@ -112,6 +112,40 @@ export default {
         new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
       },
     },
+    {
+      name: 'Enrage',
+      description: 'Boost attack damage [[AttackSpeed]], and movement speed [[MoveSpeed]]',
+      suffixAttackSpeed: '%',
+      suffixMoveSpeed: '%',
+      target: TARGET_SELF,
+      isDisabledBy: null,
+      endOnDeath: true,
+      getEffectAttackSpeed: function (level) {
+        return levelMultiplier(30, level, 3)
+      },
+      getEffectMoveSpeed: function (level) {
+        return levelMultiplier(20, level, 4)
+      },
+      getDuration: function (level) {
+        return 50
+      },
+      getCooldown: function (level) {
+        return levelMultiplier(150, level, -2)
+      },
+      start: function (index, level, ship) {
+        ship.attackCooldownModifier = 1 - this.getEffectAttackSpeed(level) / 100
+        ship.moveSpeedModifier = 1 + this.getEffectAttackSpeed(level) / 100
+        ship.enrageMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
+      },
+      end: function (ship) {
+        ship.attackCooldownModifier = null
+        ship.moveSpeedModifier = null
+        if (ship.enrageMesh) {
+          Render.remove(ship.enrageMesh)
+          ship.enrageMesh = null
+        }
+      },
+    },
   ],
 
 //PROPPY
