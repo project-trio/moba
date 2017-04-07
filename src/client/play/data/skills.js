@@ -159,15 +159,16 @@ export default {
       startsImmediately: true,
       continuesToDestination: true,
       getRange: function (level) {
-        return 100
+        return levelMultiplier(120, level, 10) //TODO calculate
       },
       getDuration: function (level) {
-        return levelMultiplier(15, level, 1)
+        return levelMultiplier(5, level, 1)
       },
       getCooldown: function (level) {
         return 200
       },
       start: function (index, level, ship, target, startAt, endAt) {
+        ship.moveSpeedModifier = 3
         ship.uncontrollable = true
         ship.untargetable = true
         ship.unattackable = true
@@ -179,7 +180,7 @@ export default {
           ship.endSkill(index)
         }
 
-        const duration = endAt - startAt
+        const duration = (endAt - startAt) - 100
         const angleChange = Math.PI * 2
         ship.queueAnimation('base', 'rotation', {
           child: 1,
@@ -203,6 +204,7 @@ export default {
         ship.propGroup.visible = false
       },
       end: function (ship) {
+        ship.moveSpeedModifier = null
         ship.endBarrelRoll = null
         ship.propGroup.visible = true
         ship.base.rotation.x = 0
