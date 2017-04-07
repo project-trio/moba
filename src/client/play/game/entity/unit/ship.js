@@ -512,25 +512,25 @@ class Ship extends Movable {
       }
     } else {
       this.doRegenerate()
+    }
 
-      super.update(renderTime, timeDelta)
+    super.update(renderTime, timeDelta)
 
-      if (this.canInput()) {
-        if (this.queueSkill !== null) {
-          if (this.trySkill(renderTime, this.queueSkill, this.queueTarget)) {
-            this.queueSkill = null
-            this.queueTarget = null
-          }
-        } else if (this.queueTarget !== null) {
-          if (typeof this.queueTarget === 'string') {
-            this.setTargetId(this.queueTarget)
-          } else {
-            this.targetDestination(this.queueTarget[0], this.queueTarget[1])
-          }
+    if (this.canInput()) {
+      if (this.queueSkill !== null) {
+        if (this.trySkill(renderTime, this.queueSkill, this.queueTarget)) {
+          this.queueSkill = null
           this.queueTarget = null
         }
-        this.checkQueuedSkill(renderTime)
+      } else if (this.queueTarget !== null) {
+        if (typeof this.queueTarget === 'string') {
+          this.setTargetId(this.queueTarget)
+        } else {
+          this.targetDestination(this.queueTarget[0], this.queueTarget[1])
+        }
+        this.queueTarget = null
       }
+      this.checkQueuedSkill(renderTime)
     }
   }
 

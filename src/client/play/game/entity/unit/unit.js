@@ -578,7 +578,7 @@ Unit.update = function (renderTime, timeDelta, tweening) {
     // Update after death
     for (let idx = startIndex; idx >= 0; idx -= 1) {
       const unit = allUnits[idx]
-      if (!unit.isDead && unit.movable) {
+      if (unit.movable && !unit.isDying) {
         unit.updateMoveTarget(renderTime)
       }
       unit.eyeShield = null
