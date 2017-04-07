@@ -91,7 +91,7 @@ const GameMap = function (mapName, parent) {
     if (radius) {
       this.aoeRing = Render.ring(radius, 2, {
         color: 0xffffff,
-        opacity: 0.25,
+        opacity: 0.5,
         parent: floorContainer,
       })
     }
@@ -110,7 +110,7 @@ const GameMap = function (mapName, parent) {
     this.aoeRing = null
 
     this.selectionRing = Render.ring(32, 4, {
-      color: 0xff00dd,
+      color: 0xff0000,
       opacity: 0.5,
       parent: floorContainer,
     })
@@ -142,14 +142,15 @@ const GameMap = function (mapName, parent) {
         store.state.local.skills.groundTarget = target
         const groundX = target[0] / 100
         const groundY = target[1] / 100
-        this.selectionRing.position.x = groundX
-        this.selectionRing.position.y = groundY
         if (this.aoeRing) {
           this.aoeRing.position.x = groundX
           this.aoeRing.position.y = groundY
+        } else {
+          this.selectionRing.position.x = groundX
+          this.selectionRing.position.y = groundY
         }
       }
-      this.selectionRing.visible = showActivateGround
+      this.selectionRing.visible = showActivateGround && !this.aoeRing
     }
     ground.onBlur = () => {
       this.selectionRing.visible = false
