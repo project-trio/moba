@@ -212,12 +212,14 @@ const GameMap = function (mapName, parent) {
           const mirroredMp = mirrored ? 1 : -1
           let segmentX = mirrored ? mapWidth - teamX : teamX
           let segmentY = teamY
-          for (let pidx = 0; pidx < wall.move.length; pidx += 1) {
+          createWallCap(segmentX, segmentY, radius * 2, team)
+
+          const moveCount = wall.move.length
+          for (let pidx = 0; pidx < moveCount; pidx += 1) {
             const point = wall.move[pidx]
             const dx = -point.dx * teamMp * mirroredMp
             const dy = point.dy * teamMp
             const vertical = dy !== 0
-            createWallCap(segmentX, segmentY, radius * 2, team)
 
             let wallX = segmentX
             let wallY = segmentY
@@ -232,7 +234,7 @@ const GameMap = function (mapName, parent) {
 
             segmentX += dx * 2
             segmentY += dy * 2
-            if (pidx + 1 === wall.move.length && wall.endCap) {
+            if (wall.endCap || pidx + 1 < moveCount) {
               createWallCap(segmentX, segmentY, radius * 2, team)
             }
           }

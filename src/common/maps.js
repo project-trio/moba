@@ -47,7 +47,7 @@ const maps = {}
 
   // Small
 
-  const SMALL_WIDTH = 900
+  const SMALL_WIDTH = 1000
   const SMALL_HEIGHT = 1400
   wH = SMALL_WIDTH / 2
   hH = SMALL_HEIGHT / 2
@@ -60,19 +60,36 @@ const maps = {}
 
     towers: [
       ['base', wH, 44, false],
-      ['tower', 190, 380, true],
+      ['tower', 210, 340, true],
       ['turret', wH + 80, hH - 100, false],
     ],
 
     walls: [
       {
-        start: { x: 190, y: 220 },
+        start: { x: 0, y: 250 },
         radius: wallRadius,
         move: [
-          { dx: 0, dy: 50 },
-          { dx: 50, dy: 0, },
+          { dx: 10, dy: 0, },
         ],
         mirror: true,
+        endCap: true,
+      },
+      {
+        start: { x: wH - 100, y: 330 },
+        radius: wallRadius,
+        move: [
+          { dx: 100, dy: 0, },
+        ],
+        mirror: false,
+        endCap: true,
+      },
+      {
+        start: { x: SMALL_WIDTH, y: hH - 80 },
+        radius: wallRadius,
+        move: [
+          { dx: -50, dy: 0, },
+        ],
+        mirror: false,
         endCap: true,
       },
     ],
