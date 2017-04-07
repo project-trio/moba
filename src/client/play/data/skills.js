@@ -72,7 +72,7 @@ export default {
       },
     },
     {
-      name: 'Caustic spray',
+      name: 'Acid Drop',
       description: 'Spit a toxic glob on the ground, dealing [[Dps]] to enemies inside for [[Duration]]',
       factorDps: 50, //TODO ticks
       suffixDps: ' dps',
@@ -470,7 +470,7 @@ export default {
   glitch: [
     {
       name: 'Brute Force',
-      description: 'Boosts attack speed by [[AttackSpeed]], while more vulnerable to damage',
+      description: 'Boosts attack speed [[AttackSpeed]], while more vulnerable to damage',
       suffixAttackSpeed: '%',
       target: TARGET_SELF,
       disabledBy: [null, false, true],
@@ -529,7 +529,7 @@ export default {
     },
     {
       name: 'Salvage',
-      description: 'Boost health regeneration by [[Regen]], while halving movement speed',
+      description: 'Boost health regeneration [[Regen]], while halving movement speed',
       factorRegen: 50 / 1000 * 100, //TODO ticks
       suffixRegen: ' hp / s',
       target: TARGET_SELF,
