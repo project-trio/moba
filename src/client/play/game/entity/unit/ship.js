@@ -131,15 +131,17 @@ class Ship extends Movable {
   checkQueuedSkill (renderTime) {
     const targetSkill = this.targetingSkill
     if (targetSkill) {
-      const unitTarget = !targetSkill.px
+      const unitTarget = targetSkill.px === undefined
       const skillData = this.skills.data[targetSkill.index]
       let closeEnough = skillData.startsImmediately
       if (!closeEnough) {
         const distance = unitTarget ? this.distanceTo(targetSkill.target) : this.distanceToPoint(targetSkill.px, targetSkill.py)
-        closeEnough = Util.withinSquared(distance, targetSkill.range)
+        closeEnough = distance <= targetSkill.rangeCheck
       }
       if (closeEnough) {
+        console.log('In range for queued skill', targetSkill)
         if (this.performSkill(renderTime, targetSkill.index, targetSkill.target)) {
+          console.log('Performed queued skill', targetSkill)
           if (!unitTarget && !skillData.continuesToDestination) {
             this.reachedDestination(false)
           }
@@ -157,14 +159,14 @@ class Ship extends Movable {
     }
     const skill = this.skills.data[index]
     const skillLevel = this.skills.levels[index]
-    const skillRange = skill.getRange(skillLevel) * 100
+    const skillRangeCheck = Util.squared(skill.getRange(skillLevel) * 100)
     if (typeof targetData === 'string') {
       const target = this.setTargetId(targetData)
       if (target) {
         this.targetingSkill = {
           index: index,
           target: target,
-          range: skillRange,
+          rangeCheck: skillRangeCheck,
         }
         console.log('Queueing unit target skill', renderTime, this.targetingSkill)
       }
@@ -175,7 +177,7 @@ class Ship extends Movable {
         index: index,
         target: targetData,
         px: destX, py: destY,
-        range: skillRange,
+        rangeCheck: skillRangeCheck,
       }
       console.log('Queueing ground target skill', renderTime, this.targetingSkill)
       this.targetDestination(destX, destY)

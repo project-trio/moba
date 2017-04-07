@@ -472,8 +472,9 @@ class Unit {
     return this.team == target.team
   }
 
-  inAttackRange (unit) {
-    return this.distanceTo(unit) < this.attackRangeCheck
+  inRangeFor (unit) {
+    const rangeCheck = this.targetingSkill ? this.targetingSkill.rangeCheck : this.attackRangeCheck
+    return this.distanceTo(unit) < rangeCheck
   }
 
   targetableStatus () {
@@ -484,7 +485,7 @@ class Unit {
   }
 
   // canAttack (unit) {
-  //   return this.attackableStatus(unit) && this.inAttackRange(unit)
+  //   return this.attackableStatus(unit) && this.inRangeFor(unit)
   // }
 
   attack (enemy, renderTime) {

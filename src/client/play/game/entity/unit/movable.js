@@ -162,7 +162,7 @@ class Movable extends Unit {
           this.setTarget(null)
           this.reachedDestination(false)
         } else {
-          this.isAttackingTarget = this.inAttackRange(this.attackTarget)
+          this.isAttackingTarget = this.inRangeFor(this.attackTarget)
           if (!this.isAttackingTarget) {
             this.setDestination(this.attackTarget.px, this.attackTarget.py, true)
           }
