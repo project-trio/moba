@@ -91,7 +91,7 @@ export default {
         return null
       }
       if (this.skill.target === 2) {
-        return 'Select a point on the ground to target'
+        return `Select a ground ${this.skill.getEffectRange ? 'area' : 'point'} to target`
       }
       if (this.skill.target === 3) {
         return 'Select an enemy to target'
