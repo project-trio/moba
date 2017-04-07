@@ -54,7 +54,7 @@ class Tower extends Unit {
         target = null
       }
     }
-    for (let idx = 0; idx < units.length; idx += 1) {
+    for (let idx = units.length - 1; idx >= 0; idx -= 1) {
       const unit = units[idx]
       if (!unit.movable || (target && unit.id === target.id)) {
         continue

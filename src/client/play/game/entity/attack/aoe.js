@@ -44,7 +44,7 @@ class AreaOfEffect {
 
   apply (renderTime, units) {
     const fromUnit = this.source
-    for (let idx = 0; idx < units.length; idx += 1) {
+    for (let idx = units.length - 1; idx >= 0; idx -= 1) {
       const target = units[idx]
       if (target.tower && !this.hitsTowers) {
         continue

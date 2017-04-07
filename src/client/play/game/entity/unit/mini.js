@@ -152,7 +152,7 @@ class Mini extends Movable {
   getAttackTarget (units) {
     let closest = this.sightRangeCheck
     let target = null
-    for (let idx = 0; idx < units.length; idx += 1) {
+    for (let idx = units.length - 1; idx >= 0; idx -= 1) {
       const unit = units[idx]
       if (this.attackableStatus(unit)) {
         const dist = this.distanceTo(unit)

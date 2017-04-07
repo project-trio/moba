@@ -83,7 +83,7 @@ export default {
 
   update (units) {
     const localTeam = Local.player.team
-    for (let idx = 0; idx < units.length; idx += 1) {
+    for (let idx = units.length - 1; idx >= 0; idx -= 1) {
       const unit = units[idx]
       let showing = true
       if (unit.isDying) {

@@ -47,7 +47,7 @@ export default {
   update (units, renderer, mmRenderer) {
     const localTeam = Local.player.team
     let clearRadius = 0
-    for (let idx = 0; idx < units.length; idx += 1) {
+    for (let idx = units.length - 1; idx >= 0; idx -= 1) {
       const unit = units[idx]
       if (unit.isDying) {
         clearRadius = 0

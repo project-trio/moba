@@ -556,7 +556,7 @@ Unit.get = function (id) {
 Unit.update = function (renderTime, timeDelta, tweening) {
   let startIndex = allUnits.length - 1
   if (!tweening) {
-    // Update before death
+    // Update before deaths
     for (let idx = startIndex; idx >= 0; idx -= 1) {
       const unit = allUnits[idx]
       unit.update(renderTime, timeDelta)
@@ -575,7 +575,7 @@ Unit.update = function (renderTime, timeDelta, tweening) {
         }
       }
     }
-    // Update after death
+    // Update after deaths
     for (let idx = startIndex; idx >= 0; idx -= 1) {
       const unit = allUnits[idx]
       if (unit.movable && !unit.isDying) {

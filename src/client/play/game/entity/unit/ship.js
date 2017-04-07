@@ -473,9 +473,9 @@ class Ship extends Movable {
       }
       target = null
     }
-    for (let idx = 0; idx < units.length; idx += 1) {
+    for (let idx = units.length - 1; idx >= 0; idx -= 1) {
       const unit = units[idx]
-      if (target && unit.id == target.id) {
+      if (target && unit.id === target.id) {
         continue
       }
       if (this.attackableStatus(unit)) {
@@ -536,7 +536,7 @@ class Ship extends Movable {
 
   updateVisibility () {
     const units = Unit.all()
-    for (let idx = 0; idx < units.length; idx += 1) {
+    for (let idx = units.length - 1; idx >= 0; idx -= 1) {
       const sightTarget = units[idx]
       let revealUnit = sightTarget.localAlly
       if (revealUnit) {
@@ -545,7 +545,7 @@ class Ship extends Movable {
         let isInSight = !sightTarget.invisible
         if (isInSight && sightTarget.bulletCount <= 0) {
           isInSight = false
-          for (let sidx = 0; sidx < units.length; sidx += 1) {
+          for (let sidx = units.length - 1; sidx >= 0; sidx -= 1) {
             const checkSightFromUnit = units[sidx]
             if (checkSightFromUnit.localAlly && checkSightFromUnit.hasSightOf(sightTarget)) {
               isInSight = true

@@ -62,7 +62,7 @@ const createGame = function(player, size, map, joining) {
     const mapData = commonMaps[map]
     if (!mapData) {
       response.error = 'Invalid map'
-    } else if (size < mapData.minSize) {
+    } else if (!joining && size < mapData.minSize) { //TODO remove joining
       response.error = 'Chosen map too big for game size'
     } else if (size > mapData.maxSize) {
       response.error = 'Chosen map too small for game size'
