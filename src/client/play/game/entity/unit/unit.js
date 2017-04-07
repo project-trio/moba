@@ -560,7 +560,7 @@ Unit.update = function (renderTime, timeDelta, tweening) {
     for (let idx = startIndex; idx >= 0; idx -= 1) {
       const unit = allUnits[idx]
       unit.update(renderTime, timeDelta)
-      if (!unit.isDead && unit.isAttackOffCooldown(renderTime)) {
+      if (!unit.isDead && unit.isAttackOffCooldown(renderTime)) { //TODO diff for minis?
         unit.checkAttack(renderTime)
       }
     }

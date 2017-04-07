@@ -3,6 +3,7 @@ import minisData from '@/play/data/minis'
 import Render from '@/play/render/render'
 
 import Movable from '@/play/game/entity/unit/movable'
+import Unit from '@/play/game/entity/unit/unit'
 
 //CLASS
 
@@ -120,8 +121,11 @@ class Mini extends Movable {
         return true
       }
     } else {
-      this.setDestination(this.currentDest[0], this.currentDest[1], false)
-      this.returningToPath = true
+      this.getAttackTarget(Unit.all())
+      if (!this.attackTarget) {
+        this.setDestination(this.currentDest[0], this.currentDest[1], false)
+        this.returningToPath = true
+      }
     }
   }
 
@@ -163,10 +167,8 @@ class Mini extends Movable {
 
   updateMoveTarget () {
     const hasTarget = super.updateMoveTarget()
-    if (hasTarget) {
-      if (this.pathing) {
-        this.pathing = false
-      }
+    if (hasTarget && this.pathing) {
+      this.pathing = false
     }
   }
 
