@@ -126,7 +126,7 @@ export default {
         return 100
       },
       getDuration: function (level) {
-        return levelMultiplier(10, level, 1)
+        return levelMultiplier(15, level, 1)
       },
       getCooldown: function (level) {
         return 200
@@ -159,8 +159,8 @@ export default {
           axis: 'z',
           from: 0,
           to: 0,
-          parabola: 2,
-          max: 50,
+          parabola: 4,
+          max: 60,
           start: startAt,
           duration: duration,
         })

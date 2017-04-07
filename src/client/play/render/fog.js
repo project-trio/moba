@@ -22,10 +22,10 @@ export default {
 
     fogScene = new THREE.Scene()
     fogScene.background = new THREE.Color(0xffffff)
-    fogTarget = new THREE.WebGLRenderTarget(mapWidth, mapHeight, {})
+    fogTarget = new THREE.WebGLRenderTarget(mapWidth, mapHeight, { depthBuffer: false, stencilBuffer: false })
 
     const fogGeometry = new THREE.PlaneBufferGeometry(mapWidth, mapHeight)
-    const fogMaterial = new THREE.MeshBasicMaterial({color: 0x000000, alphaMap: fogTarget.texture, depthTest: true, depthWrite: false})
+    const fogMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, alphaMap: fogTarget.texture, depthTest: true })
     fogMaterial.transparent = true
     fogMaterial.opacity = 0.3
     const fogPlane = new THREE.Mesh(fogGeometry, fogMaterial)

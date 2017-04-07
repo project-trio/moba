@@ -139,9 +139,7 @@ class Ship extends Movable {
         closeEnough = distance <= targetSkill.rangeCheck
       }
       if (closeEnough) {
-        console.log('In range for queued skill', targetSkill)
         if (this.performSkill(renderTime, targetSkill.index, targetSkill.target)) {
-          console.log('Performed queued skill', targetSkill)
           if (!unitTarget && !skillData.continuesToDestination) {
             this.reachedDestination(false)
           }

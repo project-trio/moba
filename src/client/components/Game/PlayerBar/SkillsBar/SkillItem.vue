@@ -6,7 +6,7 @@
       <div :class="`item-circle level-ring-${indexName}`"></div>
       <button @click="onSkill(false)" @mouseenter="overButton(true)" @mouseleave="overButton(false)" class="skill-button">{{ indexName }}</button>
       <div v-if="showingLevelupIndicator" @click="onLevelup" @mouseenter="overLevelup(true)" @mouseleave="overLevelup(false)" class="button-levelup interactive">
-        ⬆︎+1
+        ⬆︎
       </div>
     </div>
     <div class="skill-label">
