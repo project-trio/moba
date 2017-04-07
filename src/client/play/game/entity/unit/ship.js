@@ -493,6 +493,7 @@ class Ship extends Movable {
 
   update (renderTime, timeDelta) {
     this.updateSkills(renderTime)
+    this.updateExperience()
 
     if (this.isDead) {
       if (this.timeOfDeath) {
@@ -510,7 +511,6 @@ class Ship extends Movable {
         }
       }
     } else {
-      this.updateExperience()
       this.doRegenerate()
 
       super.update(renderTime, timeDelta)
