@@ -260,6 +260,10 @@ export default {
     if (options.parent) {
       options.parent.add(rectangle)
     }
+    if (options.noDepth) {
+      material.depthTest = false
+      rectangle.renderOrder = 999999999
+    }
     return rectangle
   },
 

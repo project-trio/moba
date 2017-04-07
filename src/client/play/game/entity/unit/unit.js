@@ -103,24 +103,23 @@ class Unit {
 
       // Health Bar
       let hpHeight, hpWidth
-      let hpOffsetZ
+      let hpOffsetZ = 0
       if (unitScale === 1) {
         hpHeight = 3
         hpWidth = 40
-        hpOffsetZ = 40
       } else if (unitScale === 2 || unitScale === 3) {
         hpHeight = 4
         hpWidth = 62
-        hpOffsetZ = 60
+        hpOffsetZ = 20
       } else {
         hpHeight = 5
         hpWidth = 72
-        hpOffsetZ = 80
+        hpOffsetZ = 40
       }
       this.healthWidth = hpWidth
       this.infoContainer = Render.group()
       this.infoContainer.position.y = 40
-      this.infoContainer.position.z = hpOffsetZ
+      this.infoContainer.position.z = 30 + hpOffsetZ
       this.hpHeight = hpHeight
       this.hpWidth = hpWidth
 
@@ -128,14 +127,17 @@ class Unit {
       Render.rectangle(0, 0, hpWidth + outlineWeight, hpHeight + outlineWeight, {
         color: 0x000000,
         parent: this.infoContainer,
+        noDepth: true,
       })
       Render.rectangle(0, 0, hpWidth, hpHeight, {
         color: 0xFF3333,
         parent: this.infoContainer,
+        noDepth: true,
       })
       this.healthBar = Render.rectangle(-hpWidth / 2, 0, hpWidth, hpHeight, {
         color: 0x33FF99,
         parent: this.infoContainer,
+        noDepth: true,
       })
       this.healthBar.geometry.translate(hpWidth / 2, 0, 0)
 
