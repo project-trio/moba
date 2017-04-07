@@ -28,7 +28,7 @@ class Bullet {
     source.bulletCount += 1
 
     this.maxRange = this.unitTarget ? null : data.maxRange
-    this.collisionSize = this.unitTarget ? target.stats.collision : data.collisionSize
+    this.collisionCheck = Util.squared((this.unitTarget ? target.stats.collision : data.collisionSize) || data.attackMoveSpeed * 100)
     this.explosionRadius = data.explosionRadius
     this.stunDuration = data.stunDuration
     this.color = data.bulletColor || 0x000000
@@ -183,8 +183,8 @@ class Bullet {
       } else {
         const distX = this.destX - cx
         const distY = this.destY - cy
-        if (Math.abs(distX) < this.collisionSize && Math.abs(distY) < this.collisionSize) {
-          reachedApproximate = Util.withinSquared(this.distanceToTarget(), this.collisionSize)
+        if (Math.abs(distX) < this.collisionCheck && Math.abs(distY) < this.collisionCheck) {
+          reachedApproximate = this.distanceToTarget() <= this.collisionCheck
         }
       }
       if (reachedApproximate) {

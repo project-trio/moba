@@ -65,7 +65,6 @@ export default {
           attackPierce: 10,
           attackMoveSpeed: 8,
           maxRange: maxRange,
-          collisionSize: 10 * 100,
           firstCollision: false,
           stunDuration: stunDuration,
         }
@@ -175,7 +174,6 @@ export default {
           attackMoveSpeed: attackMoveSpeed,
           maxRange: maxRange,
           explosionRadius: aoeRange,
-          collisionSize: 10 * 100,
           firstCollision: false,
         }
         const flingBullet = new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
@@ -299,7 +297,6 @@ export default {
           attackMoveSpeed: 7,
           maxRange: maxRange,
           explosionRadius: aoeRange,
-          collisionSize: 10 * 100,
           firstCollision: true,
         }
         new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
