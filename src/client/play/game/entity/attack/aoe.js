@@ -18,6 +18,7 @@ class AreaOfEffect {
     this.source = source
     this.withUnit = withUnit
     this.dot = data.dot
+    this.endAt = data.endAt
     this.active = true
     this.hitsTowers = data.hitsTowers
 
@@ -97,9 +98,14 @@ AreaOfEffect.update = function (renderTime, units) {
   for (let idx = 0; idx < areaofEffects.length; idx += 1) {
     const aoe = areaofEffects[idx]
     if (aoe.active) {
-      aoe.apply(renderTime, units)
-      if (!aoe.dot) {
+      if (aoe.endAt && renderTime >= aoe.endAt) {
         aoe.active = false
+        aoe.circle.material.opacity /= 1.5
+      } else {
+        aoe.apply(renderTime, units)
+        if (!aoe.dot) {
+          aoe.active = false
+        }
       }
     }
     if (!aoe.active) {

@@ -27,9 +27,11 @@ class Bullet {
     this.unitTarget = target.stats !== undefined
     source.bulletCount += 1
 
+    this.dot = data.dot
     this.maxRange = this.unitTarget ? null : data.maxRange
     this.collisionCheck = Util.squared((this.unitTarget ? target.stats.collision : data.collisionSize) || data.attackMoveSpeed * 100)
     this.explosionRadius = data.explosionRadius
+    this.effectDuration = data.effectDuration
     this.stunDuration = data.stunDuration
     this.color = data.bulletColor || 0x000000
 
@@ -112,7 +114,7 @@ class Bullet {
   reachedDestination (renderTime) {
     if (this.explosionRadius) {
       new AreaOfEffect(this.source, false, {
-        dot: false,
+        dot: this.dot,
         px: this.px,
         py: this.py,
         color: this.color,
@@ -120,6 +122,7 @@ class Bullet {
         radius: this.explosionRadius,
         attackDamage: this.attackDamage,
         attackPierce: this.attackPierce,
+        endAt: (this.effectDuration ? renderTime + this.effectDuration : null),
         parent: Local.game.map.floorContainer,
       })
     } else if (this.unitTarget) {

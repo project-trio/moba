@@ -71,6 +71,45 @@ export default {
         new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
       },
     },
+    {
+      name: 'Caustic spray',
+      description: 'Spit a toxic glob on the ground, dealing [[Dps]] to enemies inside for [[Duration]]',
+      target: TARGET_GROUND,
+      isDisabledBy: null,
+      getRange: function (level) {
+        return 200
+      },
+      getEffectRange: function (level) {
+        return 60
+      },
+      getEffectDuration: function (level) {
+        return levelMultiplier(3000, level, 200)
+      },
+      getEffectDps: function (level) {
+        return levelMultiplier(600, level, 30)
+      },
+      getCooldown: function (level) {
+        return 200
+      },
+      start: function (index, level, ship, target) {
+        const dps = this.getEffectDps(level)
+        const aoeRange = this.getEffectRange(level)
+        const effectDuration = this.getEffectDuration(level)
+        const bulletData = {
+          dot: true,
+          opacity: 0.5,
+          z: -4,
+          bulletSize: 9,
+          bulletColor: 0x00ff00,
+          attackDamage: dps,
+          attackPierce: 0,
+          attackMoveSpeed: 12,
+          explosionRadius: aoeRange,
+          effectDuration: effectDuration,
+        }
+        new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+      },
+    },
   ],
 
 //PROPPY
