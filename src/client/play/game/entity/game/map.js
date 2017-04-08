@@ -146,7 +146,7 @@ const GameMap = function (mapName, parent) {
     ground.onHover = () => {
     }
     ground.onMove = (point) => {
-      if (!Local.player.unit || Local.player.unit.isDying) {
+      if (!Local.unit || Local.unit.isDying) {
         return
       }
       const showActivateGround = store.state.local.skills.getGroundTarget
@@ -172,7 +172,7 @@ const GameMap = function (mapName, parent) {
     ground.onClick = (point) => {
       store.state.game.showPanel = null
 
-      if (!Local.player.unit || Local.player.unit.isDying) {
+      if (!Local.unit || Local.unit.isDying) {
         return
       }
       const target = getTargetFromPoint(point)
@@ -182,7 +182,7 @@ const GameMap = function (mapName, parent) {
       } else {
         store.cancelActiveSkill()
         Bridge.emit('action', { target })
-        store.setSelectedUnit(Local.player.unit)
+        store.setSelectedUnit(Local.unit)
 
         if (automateTimer) {
           clearInterval(automateTimer)

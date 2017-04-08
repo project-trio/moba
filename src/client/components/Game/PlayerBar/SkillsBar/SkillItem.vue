@@ -255,7 +255,7 @@ export default {
   methods: {
     createRangeIndicator () {
       if (this.skill.getRange) {
-        Local.player.unit.createIndicator(this.skill.getRange(this.level))
+        Local.unit.createIndicator(this.skill.getRange(this.level))
         if (this.skill.getEffectRange) {
           Local.game.map.aoeRadiusIndicator(this.skill.getEffectRange(this.level))
         }
@@ -263,7 +263,7 @@ export default {
     },
     removeRangeIndicator () {
       if (this.skill.getRange) {
-        Local.player.unit.removeIndicator()
+        Local.unit.removeIndicator()
       }
     },
 

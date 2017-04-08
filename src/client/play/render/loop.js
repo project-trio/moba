@@ -38,7 +38,7 @@ const animate = function (timestamp) {
     game.performTicks(ticksToRender, timestamp, updatePanel)
 
     if (isPlaying) {
-      Local.player.unit.updateVisibility()
+      Local.unit.updateVisibility()
       if (processUpdate) {
         tickPanel.end()
       }
@@ -52,7 +52,7 @@ const animate = function (timestamp) {
   }
 
   if (isPlaying) {
-    const position = Local.player.unit.container.position
+    const position = Local.unit.container.position
     game.map.track(position.x, position.y)
   }
   Render.render(Unit.all())

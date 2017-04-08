@@ -186,7 +186,8 @@ export default function (gid, size, mapName) {
         player.createShip()
       }
     }
-    store.setSelectedUnit(Local.player.unit)
+    Local.unit = Local.player.unit
+    store.setSelectedUnit(Local.unit)
 
     this.playing = true
     store.state.game.playing = true
@@ -202,7 +203,6 @@ export default function (gid, size, mapName) {
     this.map.destroy()
 
     Local.game = null
-    Local.player.game = null
     store.resetGameState()
   }
 

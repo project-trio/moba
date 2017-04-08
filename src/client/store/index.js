@@ -179,7 +179,7 @@ export default {
     this.state.local.skills.getUnitTarget = false
     this.state.local.skills.groundTarget = null
     this.state.local.skills.active = null
-    Local.player.unit.removeIndicator()
+    Local.unit.removeIndicator()
     if (cancelHighlight && this.state.local.skills.unitTarget) {
       const unitTarget = Unit.get(this.state.local.skills.unitTarget)
       if (unitTarget) {

@@ -22,7 +22,7 @@ export default {
     },
 
     skills () {
-      return store.state.game.playing ? Local.player.unit.skills.data : null
+      return store.state.game.playing ? Local.unit.skills.data : null
     },
   },
 }
