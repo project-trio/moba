@@ -1,4 +1,4 @@
-const THREE = require('three')
+import * as THREE from 'three'
 
 const raycaster = new THREE.Raycaster()
 const pointerLocation = new THREE.Vector2()
