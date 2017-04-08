@@ -10,6 +10,7 @@ export default window.local = {
   id: null,
   game: null,
   player: null,
+  tickDuration: null,
 
   shipSize: 44,
 

@@ -284,6 +284,7 @@ export default function (gid, size, mapName) {
     if (gameData.updates !== undefined) {
       updateDuration = gameData.updates
       tickDuration = gameData.ticks
+      Local.tickDuration = tickDuration
       updatesUntilStart = gameData.updatesUntilStart
     }
     if (gameData.host) {

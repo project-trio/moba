@@ -28,6 +28,7 @@ class Unit {
     this.startAngle = startAngle
     this.damagers = {}
     this.isLocal = isLocal
+    this.cacheMoveSpeed = 0
 
     this.renderInBackground = renderInBackground
     this.movable = false
@@ -105,7 +106,7 @@ class Unit {
       if (statBase.moveSpeed) {
         this.modifiers.moveSpeed = {}
         this.stats.moveSpeed = statBase.moveSpeed[0]
-        this.modify('Constant', 'moveSpeed', 'dividedBy', 2000)
+        this.modify('Constant', 'moveSpeed', 'times', new Decimal(Local.tickDuration).dividedBy(2000))
       }
       this.updateModifiers()
 
@@ -189,8 +190,15 @@ class Unit {
       const byValue = mod[1]
       result = result[mathMethod](byValue)
     }
-
-    this.current[statKey] = result.toNumber()
+    if (statKey === 'moveSpeed') {
+      this.current[statKey] = result
+      this.cacheMoveSpeed = result.toNumber() / Local.tickDuration
+    } else {
+      this.current[statKey] = result.toNumber()
+      if (Local.TESTING && !Number.isInteger(this.current[statKey])) { //TODO testing
+        console.log('NON-INTEGER', modifierName, statKey, result.toNumber())
+      }
+    }
     if (updatingModifier && this.selected) {
       store.modifierStats(this)
     }

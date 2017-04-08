@@ -189,16 +189,15 @@ class Movable extends Unit {
       cx = this.container.position.x * POSITION_MAGNITUDE_OFFSET
       cy = this.container.position.y * POSITION_MAGNITUDE_OFFSET
 
-      const tweenScalar = this.current.moveSpeed * timeDelta
+      const tweenScalar = this.cacheMoveSpeed * timeDelta
       moveByX = tweenScalar * this.moveX
       moveByY = tweenScalar * this.moveY
     } else {
       cx = this.px
       cy = this.py
 
-      const moveScalar = new Decimal(this.current.moveSpeed).times(timeDelta)
-      moveByX = moveScalar.times(this.moveX).round().toNumber()
-      moveByY = moveScalar.times(this.moveY).round().toNumber()
+      moveByX = this.current.moveSpeed.times(this.moveX).round().toNumber()
+      moveByY = this.current.moveSpeed.times(this.moveY).round().toNumber()
     }
 
     let movingToX = cx + moveByX

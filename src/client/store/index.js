@@ -168,7 +168,7 @@ export default {
     const stats = this.state.selectedStats
     stats.armor = unit.current.armor
     stats.dps = Math.round(unit.stats.attackDamage * (10 / unit.current.attackCooldown))
-    stats.moveSpeed = unit.current.moveSpeed * 2000
+    stats.moveSpeed = unit.cacheMoveSpeed ? Math.round(unit.cacheMoveSpeed * 2000) : 0
   },
 
   // Hotkeys
