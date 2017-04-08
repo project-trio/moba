@@ -22,10 +22,10 @@ const maps = {}
 
     walls: [
       {
-        start: { x: TINY_SIZE, y: wH - 130 },
+        start: { x: TINY_SIZE, y: TINY_SIZE / 3 },
         radius: wallRadius,
         move: [
-          { dx: -160, dy: 0, },
+          { dx: -wH / 3, dy: 0, },
         ],
         mirror: false,
         endCap: true,
