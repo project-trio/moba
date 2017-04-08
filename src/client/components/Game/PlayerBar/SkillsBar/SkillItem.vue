@@ -48,7 +48,6 @@ export default {
   props: {
     skill: Object,
     index: Number,
-    level: Number,
   },
 
   data () {

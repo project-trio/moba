@@ -52,8 +52,12 @@ const animate = function (timestamp) {
   }
 
   if (isPlaying) {
-    const position = Local.unit.container.position
-    game.map.track(position.x, position.y)
+    if (!store.state.manualCamera || store.state.trackCamera) {
+      const position = Local.unit.container.position
+      game.map.track(position.x, position.y, false)
+    } else if (store.state.trackX || store.state.trackY) {
+      game.map.trackDelta(store.state.trackX, store.state.trackY, 8)
+    }
   }
   Render.render(Unit.all())
 

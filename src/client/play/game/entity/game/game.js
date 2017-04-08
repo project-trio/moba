@@ -191,6 +191,9 @@ export default function (gid, size, mapName) {
 
     this.playing = true
     store.state.game.playing = true
+
+    const position = Local.unit.container.position
+    this.map.track(position.x, position.y, false)
   }
 
   // Setup

@@ -1,6 +1,6 @@
 <template>
 <div class="skills-bar">
-  <skill-item v-for="(skill, index) in skills" :index="index" :skill="skill" :level="skillLevels[index]" :key="skill.name"></skill-item>
+  <skill-item v-for="(skill, index) in skills" :index="index" :skill="skill" :key="skill.name"></skill-item>
 </div>
 </template>
 
@@ -17,10 +17,6 @@ export default {
   },
 
   computed: {
-    skillLevels () {
-      return store.state.local.skills.levels
-    },
-
     skills () {
       return store.state.game.playing ? Local.unit.skills.data : null
     },

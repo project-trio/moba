@@ -58,6 +58,11 @@ export default {
       loading: false,
     },
 
+    manualCamera: storage.getBool('manualCamera', true),
+    trackCamera: false,
+    trackX: 0,
+    trackY: 0,
+
     settings: {
       antialias: storage.getBool('antialias', true),
       resolution: storage.getInt('resolution', 2),

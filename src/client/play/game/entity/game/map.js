@@ -37,7 +37,9 @@ const GameMap = function (mapName, parent) {
 
 //LISTEN
 
-  let previousPositionX, previousPositionY, previousCameraX, previousCameraY
+  let previousPositionX = null
+  let previousPositionY = null
+  let previousCameraX, previousCameraY
 
   container.interactive = true
 
@@ -282,7 +284,14 @@ const GameMap = function (mapName, parent) {
     }
   }
 
-  this.track = function (cameraX, cameraY) {
+  this.trackDelta = function (deltaX, deltaY, speed) {
+    if (previousPositionX === null) {
+      return
+    }
+    this.track(previousPositionX + deltaX * speed, previousPositionY - deltaY * speed, true)
+  }
+
+  this.track = function (cameraX, cameraY, delta) {
     if (cameraX !== previousPositionX) {
       previousPositionX = cameraX
 
@@ -303,8 +312,11 @@ const GameMap = function (mapName, parent) {
         RenderMinimap.cameraOutlineX(previousCameraX)
       }
     }
+
     const ratio = layout.height / window.innerHeight
-    cameraY -= 16 * ratio
+    if (!delta) {
+      cameraY -= 16 * ratio
+    }
     if (cameraY !== previousPositionY) {
       previousPositionY = cameraY
 
