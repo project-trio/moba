@@ -92,8 +92,10 @@ const GameMap = function (mapName, parent) {
       this.aoeRing = Render.ring(radius, 2, {
         color: 0xffffff,
         opacity: 0.5,
+        segments: 64,
         parent: floorContainer,
       })
+      this.aoeRing.position.x = -9001
     }
   }
 
