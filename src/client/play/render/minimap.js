@@ -4,16 +4,17 @@ import Local from '@/play/local'
 
 import dataConstants from '@/play/data/constants'
 
-let renderer, scene, camera
+let renderer, scene, camera, cameraMesh
 
 let renderWidth, renderHeight, mapScale
+let startWidth, startHeight
 
 export default {
 
-  create (w, h) {
+  create (mapWidth, mapHeight) {
     renderHeight = 200
-    renderWidth = w / h * renderHeight
-    mapScale = renderHeight / h
+    renderWidth = mapWidth / mapHeight * renderHeight
+    mapScale = renderHeight / mapHeight
 
     const canvas = document.getElementById('minimap')
     renderer = new THREE.WebGLRenderer({
@@ -29,12 +30,49 @@ export default {
     scene.background = new THREE.Color(0xcccccc) // 0x448866
 
     camera = new THREE.OrthographicCamera(renderWidth / -2, renderWidth / 2, renderHeight / 2, renderHeight / -2, -1024, 1024)
+
+    const cameraOutlineGeometry = new THREE.PlaneBufferGeometry(renderWidth, renderHeight)
+    const cameraOutlineMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff })
+    cameraOutlineMaterial.transparent = true
+    cameraOutlineMaterial.opacity = 0.5
+    cameraMesh = new THREE.Mesh(cameraOutlineGeometry, cameraOutlineMaterial)
+    cameraMesh.position.z = -1
+    scene.add(cameraMesh)
+    this.drawCameraOutline(startWidth, startHeight)
+  },
+
+  destroy () {
+    renderer = null
+    scene = null
+    camera = null
+    cameraMesh = null
   },
 
   addFog (fogPlane) {
     fogPlane.scale.x = mapScale
     fogPlane.scale.y = mapScale
     scene.add(fogPlane)
+  },
+
+  drawCameraOutline (width, height) {
+    if (cameraMesh) {
+      cameraMesh.scale.x = (width * mapScale) / renderWidth
+      cameraMesh.scale.y = (height * mapScale) / renderHeight
+    } else {
+      startWidth = width
+      startHeight = height
+    }
+  },
+
+  cameraOutlineX (x) {
+    if (cameraMesh) {
+      cameraMesh.position.x = -(x * mapScale)
+    }
+  },
+  cameraOutlineY (y) {
+    if (cameraMesh) {
+      cameraMesh.position.y = -(y * mapScale)
+    }
   },
 
   add (unit, size) {

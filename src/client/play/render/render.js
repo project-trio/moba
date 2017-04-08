@@ -34,6 +34,11 @@ const resize = function () {
 
   gameCamera.aspect = width / height
   gameCamera.updateProjectionMatrix()
+
+  const visibleFOV = gameCamera.fov * Math.PI / 180
+  const visibleHeight = 2 * Math.tan(visibleFOV / 2) * 522
+  const visibleWidth = visibleHeight * gameCamera.aspect
+  RenderMinimap.drawCameraOutline(visibleWidth, visibleHeight)
 }
 
 //PUBLIC
@@ -102,6 +107,7 @@ export default {
     renderer = null
     pixelMultiplier = null
     voxelCache = null
+    RenderMinimap.destroy()
   },
 
   positionCamera (x, y) {

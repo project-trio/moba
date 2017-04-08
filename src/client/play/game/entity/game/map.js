@@ -297,9 +297,10 @@ const GameMap = function (mapName, parent) {
           cameraX = maxX
         }
       }
-      if (cameraX != previousCameraX) {
+      if (cameraX !== previousCameraX) {
         container.position.x = cameraX
         previousCameraX = cameraX
+        RenderMinimap.cameraOutlineX(previousCameraX)
       }
     }
     const ratio = layout.height / window.innerHeight
@@ -319,9 +320,10 @@ const GameMap = function (mapName, parent) {
           cameraY = maxY
         }
       }
-      if (cameraY != previousCameraY) {
+      if (cameraY !== previousCameraY) {
         container.position.y = cameraY
         previousCameraY = cameraY
+        RenderMinimap.cameraOutlineY(previousCameraY)
       }
     }
   }
