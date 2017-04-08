@@ -10,7 +10,7 @@
   <div class="row">
     <label>Antialias: <button @click="onAntialias" class="interactive">{{ antialias ? 'on' : 'off' }}</button></label>
   </div>
-  <div class="note">Antialias on takes effect next time you load. If using scaled resolution, only turn this off if your framerate is still unplayable.</div>
+  <div class="note">Antialias on takes effect on next page load. If using scaled resolution, only turn this off if your framerate is still unplayable.</div>
 </div>
 </template>
 

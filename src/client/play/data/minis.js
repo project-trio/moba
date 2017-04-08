@@ -12,7 +12,7 @@ export default {
     attackCooldown: [2, 0],
     attackMoveSpeed: 0,
 
-    moveSpeed: [12, 0],
+    moveSpeed: [11, 0],
     collision: 10,
   },
 
@@ -30,7 +30,7 @@ export default {
     attackMoveSpeed: 10,
     bulletSize: 3,
 
-    moveSpeed: [10, 0],
+    moveSpeed: [8, 0],
     collision: 10,
   },
 }

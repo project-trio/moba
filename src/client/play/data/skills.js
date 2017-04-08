@@ -81,7 +81,7 @@ export default {
       target: TARGET_GROUND,
       isDisabledBy: null,
       getRange: function (level) {
-        return 200
+        return 150
       },
       getEffectRange: function (level) {
         return 60
@@ -116,7 +116,7 @@ export default {
     },
     {
       name: 'Enrage',
-      description: 'Boost attack damage [[AttackSpeed]], and movement speed [[MoveSpeed]]',
+      description: 'Boost attack speed [[AttackSpeed]], and movement speed [[MoveSpeed]]',
       suffixAttackSpeed: '%',
       suffixMoveSpeed: '%',
       target: TARGET_SELF,

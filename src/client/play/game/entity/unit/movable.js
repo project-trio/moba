@@ -1,4 +1,3 @@
-import Decimal from 'decimal.js'
 import TrigCache from '@/play/external/trigcache'
 
 import Local from '@/play/local'
