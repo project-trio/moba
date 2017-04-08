@@ -150,14 +150,12 @@ export default {
     const stats = this.state.selectedStats
     stats.level = unit.level
     stats.healthMax = unit.stats.healthMax / 100
-    stats.armor = unit.stats.armor
-    stats.dps = Math.round(unit.stats.attackDamage / 100 * (10 / unit.stats.attackCooldown))
     stats.pierce = unit.stats.attackPierce
     stats.range = unit.stats.attackRange / 100
-    stats.moveSpeed = unit.stats.moveSpeed
     if (unit.maxLevel) {
       stats.levelProgress = null
     }
+    this.modifierStats(unit)
   },
   everyUpdateStats (unit) {
     const stats = this.state.selectedStats
@@ -165,6 +163,12 @@ export default {
       stats.levelProgress = Math.round(unit.levelExp * 100 / unit.expPerLevel)
     }
     stats.health = Math.ceil(unit.healthRemaining / 100)
+  },
+  modifierStats (unit) {
+    const stats = this.state.selectedStats
+    stats.armor = unit.current.armor
+    stats.dps = Math.round(unit.stats.attackDamage * (10 / unit.current.attackCooldown))
+    stats.moveSpeed = unit.current.moveSpeed * 2000
   },
 
   // Hotkeys

@@ -174,7 +174,8 @@ class Unit {
 
   modify (modifierName, statKey, method, value) {
     const statModifiers = this.modifiers[statKey]
-    if (modifierName !== null) {
+    const updatingModifier = modifierName !== null
+    if (updatingModifier) {
       if (method === null) {
         delete statModifiers[modifierName]
       } else {
@@ -190,6 +191,9 @@ class Unit {
     }
 
     this.current[statKey] = result.toNumber()
+    if (updatingModifier && this.selected) {
+      store.modifierStats(this)
+    }
   }
 
   // Render
