@@ -7,6 +7,7 @@ import Local from '@/play/local'
 
 import Render from '@/play/render/render'
 
+import Animate from '@/play/game/helpers/animate'
 import Util from '@/play/game/util'
 
 import Bullet from '@/play/game/entity/attack/bullet'
@@ -59,6 +60,8 @@ class Unit {
     this.model.add(this.top)
     this.container.add(this.model)
     Local.game.map.floorContainer.add(this.container)
+
+    Animate.apply(this)
 
     // Stats
 

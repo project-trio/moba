@@ -7,7 +7,6 @@ import skillsData from '@/play/data/skills'
 
 import Render from '@/play/render/render'
 
-import Animate from '@/play/game/helpers/animate'
 import Util from '@/play/game/util'
 
 import Movable from '@/play/game/entity/unit/movable'
@@ -26,8 +25,6 @@ class Ship extends Movable {
   constructor (name, player, team, x, y, angle, isLocal) {
     const statBase = shipStats[name]
     super(team, statBase, 2, x, y, angle, isLocal)
-
-    Animate.apply(this)
 
     this.skills = {
       data: skillsData[name],

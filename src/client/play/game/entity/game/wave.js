@@ -2,7 +2,7 @@ import Mini from '@/play/game/entity/unit/mini'
 
 export default {
 
-  spawn (waveData) {
+  spawn (waveData, renderTime) {
     waveData.forEach((minionData) => {
       const paths = minionData.paths
       const name = minionData.type
@@ -11,7 +11,15 @@ export default {
           const mirrored = mirror == 0
           for (let pi = 0; pi < paths.length; pi += 1) {
             const path = paths[pi]
-            Mini.spawn(team, name, path, mirrored)
+            const mini = Mini.spawn(team, name, path, mirrored)
+            mini.container.position.z = -10
+            mini.queueAnimation('container', 'position', {
+              axis: 'z',
+              from: -10,
+              to: 0,
+              start: renderTime,
+              duration: 1000,
+            })
           }
         }
       }

@@ -71,7 +71,7 @@ export default function (gid, size, mapName) {
 
         const spawnMinionWave = renderTime % 30000 === (Local.TESTING ? 5000 : 10000)
         if (spawnMinionWave) {
-          Wave.spawn(this.map.minionData())
+          Wave.spawn(this.map.minionData(), renderTime)
         }
       } else if (renderTime === 0) {
         this.startPlaying()
