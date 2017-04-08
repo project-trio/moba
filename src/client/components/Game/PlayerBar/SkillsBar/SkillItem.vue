@@ -4,7 +4,7 @@
     <div class="button-content">
       <div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`"></div>
       <div :class="`item-circle level-ring-${indexName}`"></div>
-      <button @click="onSkill(false)" @mouseenter="overButton(true)" @mouseleave="overButton(false)" class="skill-button">{{ indexName }}</button>
+      <button @click="onSkill(true)" @mouseenter="overButton(true)" @mouseleave="overButton(false)" class="skill-button">{{ indexName }}</button>
       <div v-if="showingLevelupIndicator" @click="onLevelup" @mouseenter="overLevelup(true)" @mouseleave="overLevelup(false)" class="button-levelup interactive">
         ⬆︎
       </div>
@@ -224,7 +224,7 @@ export default {
             if (currentKey.modifier) {
               this.onLevelup()
             } else {
-              this.onSkill(true)
+              this.onSkill(false)
             }
           } else {
             console.log('Cancel skill', this.indexName, currentKey)
@@ -274,14 +274,14 @@ export default {
       }
     },
 
-    onSkill (pressed) {
+    onSkill (clicked) {
       if (this.skill.target === 0) {
         return
       }
       if (this.preventsActivation) {
         return
       }
-      if (this.isActiveSkill) {
+      if (clicked && this.isActiveSkill) {
         store.cancelActiveSkill()
         return
       }
@@ -291,8 +291,16 @@ export default {
         Bridge.emit('action', { skill: skillIndex, target: null })
       } else {
         const groundTargeted = this.skill.target === 2
-        const activate = this.getActivation()
-        if (pressed) {
+        const activateBlock = this.getActivation()
+        if (clicked) {
+          store.state.local.skills.active = skillIndex
+          store.state.local.skills.activation = activateBlock
+          if (groundTargeted) {
+            store.state.local.skills.getGroundTarget = true
+          } else {
+            getUnitTarget(this.skill.target)
+          }
+        } else {
           const target = groundTargeted ? store.state.local.skills.groundTarget : store.state.local.skills.unitTarget
           if (target) {
             if (!groundTargeted) {
@@ -302,17 +310,9 @@ export default {
                 return
               }
             }
-            activate(target)
+            activateBlock(target)
           } else {
             store.cancelActiveSkill()
-          }
-        } else {
-          store.state.local.skills.active = skillIndex
-          store.state.local.skills.activation = activate
-          if (groundTargeted) {
-            store.state.local.skills.getGroundTarget = true
-          } else {
-            getUnitTarget(this.skill.target)
           }
         }
       }
