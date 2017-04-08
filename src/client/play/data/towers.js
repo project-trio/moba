@@ -32,7 +32,7 @@ export default {
     attackCooldown: [10, 0],
     attackMoveSpeed: 10,
     bulletSize: 5,
-    bulletColor: 0x990000,
+    bulletColor: 0xbb0000,
 
     turnSpeed: 8,
     collision: 30,
@@ -52,7 +52,7 @@ export default {
     attackCooldown: [10, 0],
     attackMoveSpeed: 10,
     bulletSize: 5,
-    bulletColor: 0x330000,
+    bulletColor: 0x770000,
 
     turnSpeed: 8,
     collision: 30,
