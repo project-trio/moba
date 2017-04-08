@@ -195,13 +195,30 @@ export default {
       return this.voxelMesh(mesh, team, options)
     }
     new Vox.Parser().parse(require(`@/assets/${name}.vox`)).then((voxelData) => {
-      let builder = new Vox.MeshBuilder(voxelData, { voxelSize: 2 }) //TODO cache
+      builder = new Vox.MeshBuilder(voxelData, { voxelSize: 2 })
       if (options.cache) {
         voxelCache[team][name] = builder
       }
       const mesh = builder.createMesh()
       mesh.material.color.setHex(dataConstants.teamColors[team])
       return this.voxelMesh(mesh, team, options)
+    })
+  },
+
+  generate (name, count, size, container, x, y, width, height, z) {
+    new Vox.Parser().parse(require(`@/assets/${name}.vox`)).then((voxelData) => {
+      const builder = new Vox.MeshBuilder(voxelData, { voxelSize: size })
+      for (let i = 0; i < count; i += 1) {
+        const mesh = builder.createMesh()
+        mesh.castShadow = true
+        mesh.receiveShadow = true
+        mesh.position.set(x + Math.random() * Math.random() * Math.random() * width, y + Math.random() * Math.random() * Math.random() * height, z)
+        // mesh.material.transparent = true
+        // mesh.material.opacity = 0.5
+        mesh.rotation.x = Math.PI / 2
+        mesh.rotation.y = Math.PI * 2 * Math.random()
+        container.add(mesh)
+      }
     })
   },
 

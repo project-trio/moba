@@ -128,6 +128,17 @@ const GameMap = function (mapName, parent) {
       floor: floorContainer,
       ceiling: fogContainer,
     })
+
+    const count = 4
+    const size = 3
+    const z = -5 - size
+    const ws = mapWidth / 2
+    const hs = mapHeight / 2
+    Render.generate('flower', Math.ceil(Math.sqrt(Math.random()) * count), size, floorContainer, 0, 0, ws, hs, z)
+    Render.generate('flower', Math.ceil(Math.sqrt(Math.random()) * count), size, floorContainer, mapWidth, 0, -ws, hs, z)
+    Render.generate('flower', Math.ceil(Math.sqrt(Math.random()) * count), size, floorContainer, 0, mapHeight, ws, -hs, z)
+    Render.generate('flower', Math.ceil(Math.sqrt(Math.random()) * count), size, floorContainer, mapWidth, mapHeight, -ws, -hs, z)
+
     ground.owner = ground
 
     ground.onHover = () => {
