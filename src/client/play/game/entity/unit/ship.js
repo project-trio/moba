@@ -1,5 +1,3 @@
-import Decimal from 'decimal.js'
-
 import store from '@/store'
 
 import Local from '@/play/local'
@@ -245,13 +243,7 @@ class Ship extends Movable {
   // Health
 
   doRegenerate () {
-    let regen = this.stats.healthRegen
-    if (this.healthRegenModifier) {
-      regen += this.healthRegenModifier
-      if (!Number.isInteger(regen)) {
-        console.error('regen', regen)
-      }
-    }
+    let regen = this.current.healthRegen
     this.addHealth(regen)
   }
 
@@ -344,6 +336,7 @@ class Ship extends Movable {
     this.respawned = true
     this.isBlocking = false
     this.isDying = false
+    this.modify('Death', 'moveSpeed', 'times', 0.5)
 
     const spawnAt = this.player.spawnLocation()
     this.setLocation(spawnAt[0], spawnAt[1])
@@ -355,6 +348,7 @@ class Ship extends Movable {
     this.timeOfDeath = null
     this.isBlocking = true
     this.opacity(1.0)
+    this.modify('Death', 'moveSpeed', null)
 
     this.infoContainer.visible = true
     if (this.isLocal) {
@@ -394,13 +388,14 @@ class Ship extends Movable {
     this.stats.attackRange += this.statBase.attackRange[1] * 100
     this.stats.attackDamage += this.statBase.attackDamage[1] * 100
     this.stats.attackPierce += this.statBase.attackPierce[1] * 100
-    this.stats.attackCooldown += this.statBase.attackCooldown[1]
+    this.stats.attackCooldown += this.statBase.attackCooldown[1] * 100
 
     this.sightRangeCheck = Util.squared(this.stats.sightRange)
     this.attackRangeCheck = Util.squared(this.stats.attackRange)
 
     this.stats.moveSpeed += this.statBase.moveSpeed[1]
-    this.moveConstant = new Decimal(this.stats.moveSpeed).dividedBy(2000)
+
+    this.updateModifiers()
 
     this.updateHealth()
 

@@ -1,3 +1,5 @@
+import Decimal from 'decimal.js'
+
 import Render from '@/play/render/render'
 
 import dataConstants from '@/play/data/constants'
@@ -133,13 +135,14 @@ export default {
         return levelMultiplier(150, level, -2)
       },
       start: function (index, level, ship) {
-        ship.attackCooldownModifier = 1 - this.getEffectAttackSpeed(level) / 100
-        ship.moveSpeedModifier = 1 + this.getEffectAttackSpeed(level) / 100
+        ship.modify('Enrage', 'attackCooldown', 'times', new Decimal(1).minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
+        ship.modify('Enrage', 'moveSpeed', 'times', new Decimal(1).plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
+
         ship.enrageMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
       },
       end: function (ship) {
-        ship.attackCooldownModifier = null
-        ship.moveSpeedModifier = null
+        ship.modify('Enrage', 'attackCooldown', null)
+        ship.modify('Enrage', 'moveSpeed', null)
         if (ship.enrageMesh) {
           Render.remove(ship.enrageMesh)
           ship.enrageMesh = null
@@ -168,7 +171,7 @@ export default {
         return 200
       },
       start: function (index, level, ship, target, startAt, endAt) {
-        ship.moveSpeedModifier = 3
+        ship.modify('Barrel Roll', 'moveSpeed', 'times', 3)
         ship.uncontrollable = true
         ship.untargetable = true
         ship.unattackable = true
@@ -204,7 +207,7 @@ export default {
         ship.propGroup.visible = false
       },
       end: function (ship) {
-        ship.moveSpeedModifier = null
+        ship.modify('Barrel Roll', 'moveSpeed', null)
         ship.endBarrelRoll = null
         ship.propGroup.visible = true
         ship.base.rotation.x = 0
@@ -488,13 +491,13 @@ export default {
         return 150
       },
       start: function (index, level, ship) {
-        ship.attackCooldownModifier = 1 - this.getEffectAttackSpeed(level) / 100
-        ship.armorModifier = 0.5
+        ship.modify('Brute Force', 'attackCooldown', 'times', new Decimal(1).minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
+        ship.modify('Brute Force', 'armor', 'times', 0.5)
         ship.bruteForceMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
       },
       end: function (ship) {
-        ship.attackCooldownModifier = null
-        ship.armorModifier = null
+        ship.modify('Brute Force', 'attackCooldown', null)
+        ship.modify('Brute Force', 'armor', null)
         if (ship.bruteForceMesh) {
           Render.remove(ship.bruteForceMesh)
           ship.bruteForceMesh = null
@@ -548,13 +551,15 @@ export default {
         return levelMultiplier(150, level, -2)
       },
       start: function (index, level, ship) {
-        ship.healthRegenModifier = this.getEffectRegen(level)
-        ship.moveSpeedModifier = 0.5
+        ship.modify('Salvage', 'healthRegen', 'add', this.getEffectRegen(level))
+        ship.modify('Salvage', 'moveSpeed', 'times', 0.5)
+
         ship.salvageMesh = Render.outline(ship.top.children[0], 0x00ff00, 1.07)
       },
       end: function (ship) {
-        ship.healthRegenModifier = null
-        ship.moveSpeedModifier = null
+        ship.modify('Salvage', 'healthRegen', null)
+        ship.modify('Salvage', 'moveSpeed', null)
+
         if (ship.salvageMesh) {
           Render.remove(ship.salvageMesh)
           ship.salvageMesh = null

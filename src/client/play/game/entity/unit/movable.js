@@ -1,4 +1,4 @@
-// import Decimal from 'decimal.js'
+import Decimal from 'decimal.js'
 import TrigCache from '@/play/external/trigcache'
 
 import Local from '@/play/local'
@@ -178,17 +178,6 @@ class Movable extends Unit {
     }
   }
 
-  calculateMoveSpeed () {
-    let moveSpeed = this.moveConstant
-    if (this.isDead) {
-      return moveSpeed.dividedBy(2)
-    }
-    if (this.moveSpeedModifier) {
-      return moveSpeed.times(this.moveSpeedModifier)
-    }
-    return moveSpeed
-  }
-
   move (timeDelta, tweening) {
     if (this.isAttackingTarget) {
       return
@@ -200,18 +189,14 @@ class Movable extends Unit {
       cx = this.container.position.x * POSITION_MAGNITUDE_OFFSET
       cy = this.container.position.y * POSITION_MAGNITUDE_OFFSET
 
-      const tweenScalar = this.currentSpeed * timeDelta
+      const tweenScalar = this.current.moveSpeed * timeDelta
       moveByX = tweenScalar * this.moveX
       moveByY = tweenScalar * this.moveY
     } else {
       cx = this.px
       cy = this.py
 
-      // Cache
-      const moveSpeed = this.calculateMoveSpeed()
-      this.currentSpeed = moveSpeed.toNumber()
-
-      const moveScalar = moveSpeed.times(timeDelta)
+      const moveScalar = new Decimal(this.current.moveSpeed).times(timeDelta)
       moveByX = moveScalar.times(this.moveX).round().toNumber()
       moveByY = moveScalar.times(this.moveY).round().toNumber()
     }

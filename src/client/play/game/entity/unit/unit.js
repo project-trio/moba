@@ -83,7 +83,7 @@ class Unit {
       this.stats.attackRange = statBase.attackRange[0] * 100
       this.stats.attackDamage = statBase.attackDamage[0] * 100
       this.stats.attackPierce = statBase.attackPierce[0] * 100
-      this.stats.attackCooldown = statBase.attackCooldown[0]
+      this.stats.attackCooldown = statBase.attackCooldown[0] * 100
       this.stats.attackMoveSpeed = statBase.attackMoveSpeed
       this.stats.turnSpeed = statBase.turnSpeed || 8
       this.stats.collision = statBase.collision * 100
@@ -93,13 +93,21 @@ class Unit {
       this.healthRemaining = this.stats.healthMax
       this.attackRangeCheck = Util.squared(this.stats.attackRange)
 
-      const moveSpeed = statBase.moveSpeed ? statBase.moveSpeed[0] : false
-      if (moveSpeed) {
-        this.stats.moveSpeed = moveSpeed
-        this.moveConstant = new Decimal(moveSpeed).dividedBy(2000)
-      }
-
       this.lastAttack = 0
+
+      // Modifiers
+      this.modifiers = {
+        healthRegen: {},
+        armor: {},
+        attackCooldown: {},
+      }
+      this.current = {}
+      if (statBase.moveSpeed) {
+        this.modifiers.moveSpeed = {}
+        this.stats.moveSpeed = statBase.moveSpeed[0]
+        this.modify('Constant', 'moveSpeed', 'dividedBy', 2000)
+      }
+      this.updateModifiers()
 
       // Health Bar
       let hpHeight, hpWidth
@@ -156,6 +164,32 @@ class Unit {
 
   allyNotLocal () {
     return this.localAlly
+  }
+
+  updateModifiers () {
+    for (let statKey in this.modifiers) {
+      this.modify(null, statKey)
+    }
+  }
+
+  modify (modifierName, statKey, method, value) {
+    const statModifiers = this.modifiers[statKey]
+    if (modifierName !== null) {
+      if (method === null) {
+        delete statModifiers[modifierName]
+      } else {
+        statModifiers[modifierName] = [method, value]
+      }
+    }
+    let result = new Decimal(this.stats[statKey])
+    for (let key in statModifiers) {
+      const mod = statModifiers[key]
+      const mathMethod = mod[0]
+      const byValue = mod[1]
+      result = result[mathMethod](byValue)
+    }
+
+    this.current[statKey] = result.toNumber()
   }
 
   // Render
@@ -311,15 +345,9 @@ class Unit {
   }
 
   takeDamage (source, renderTime, amount, pierce, reflected) {
-    let armor = Math.max(0, this.stats.armor - pierce)
+    let armor = Math.max(0, this.current.armor - pierce)
     if (this.eyeShield) {
       armor += this.eyeShield
-    }
-    if (this.armorModifier) {
-      armor *= this.armorModifier
-      if (!Number.isInteger(armor)) {
-        console.error('armor', armor)
-      }
     }
     const damage = Math.max(1, amount - armor * 10) //TODO percent
     const newHealth = Math.max(this.healthRemaining - damage, 0)
@@ -501,14 +529,7 @@ class Unit {
     if (this.unattackable) {
       return false
     }
-    let cooldown = this.stats.attackCooldown * 100
-    if (this.attackCooldownModifier) {
-      cooldown *= this.attackCooldownModifier
-      if (!Number.isInteger(cooldown)) {
-        console.error('cooldown', cooldown)
-      }
-    }
-    return renderTime - this.lastAttack > cooldown
+    return renderTime - this.lastAttack > this.current.attackCooldown
   }
 
   getAttackTarget (units) {
