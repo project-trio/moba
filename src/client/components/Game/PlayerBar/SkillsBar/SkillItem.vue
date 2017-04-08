@@ -281,6 +281,10 @@ export default {
       if (this.preventsActivation) {
         return
       }
+      if (this.isActiveSkill) {
+        store.cancelActiveSkill()
+        return
+      }
       const skillIndex = this.index
       if (this.skill.target === 1) {
         store.cancelActiveSkill()
@@ -324,9 +328,11 @@ export default {
 
     overButton (hovering) {
       if (hovering) {
-        this.createRangeIndicator()
+        if (!this.isAnySkillActive) {
+          this.createRangeIndicator()
+        }
       } else {
-        if (!this.isActiveSkill) {
+        if (!this.isAnySkillActive) {
           this.removeRangeIndicator()
         }
       }
