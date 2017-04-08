@@ -360,22 +360,25 @@ class Unit {
   }
 
   takeDamage (source, renderTime, amount, pierce, reflected) {
-    let armor = Math.max(0, this.current.armor - pierce)
-    if (this.eyeShield) {
-      armor += this.eyeShield
+    let damage = amount
+    if (!reflected) {
+      let armor = Math.max(0, this.current.armor - pierce)
+      if (this.eyeShield) {
+        armor += this.eyeShield
+      }
+      damage = Math.max(1, amount - armor * 10) //TODO percent
+
+      if (this.reflectDamageRatio) {
+        const reflectedDamage = Math.round((damage * this.reflectDamageRatio) / 100) //TODO desyncs?
+        // console.log(damage, reflectedDamage)
+        source.takeDamage(this, renderTime, reflectedDamage, 0, true)
+      }
     }
-    const damage = Math.max(1, amount - armor * 10) //TODO percent
     const newHealth = Math.max(this.healthRemaining - damage, 0)
     if (newHealth == 0) {
       this.isDying = true
     }
     this.updateHealth(newHealth)
-
-    if (!reflected && this.reflectDamageRatio) {
-      const reflectedDamage = Math.round((damage * this.reflectDamageRatio) / 100) //TODO desyncs?
-      // console.log(damage, reflectedDamage)
-      source.takeDamage(this, renderTime, reflectedDamage, 0, true)
-    }
 
     if (source.displayStats) {
       source.displayStats.damage += damage
