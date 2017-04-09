@@ -152,6 +152,14 @@ class Ship extends Movable {
       return this.performSkill(renderTime, index)
     }
     const skill = this.skills.data[index]
+    if (!skill) {
+      console.error('No queued skill for index', index, this.skills.data)
+      return true
+    }
+    if (!skill.getRange) {
+      console.error('No range for queued skill', index, this.skills.data)
+      return true
+    }
     const skillLevel = this.skills.levels[index]
     const skillRangeCheck = Util.squared(skill.getRange(skillLevel) * 100)
     if (typeof targetData === 'string') {
@@ -513,7 +521,7 @@ class Ship extends Movable {
           this.queueSkill = null
           this.queueTarget = null
         }
-      } else if (this.queueTarget !== null) {
+      } else if (this.queueTarget) {
         if (typeof this.queueTarget === 'string') {
           this.setTargetId(this.queueTarget)
         } else {

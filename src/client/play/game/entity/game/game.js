@@ -142,7 +142,9 @@ export default function (gid, size, mapName) {
               ship.levelup(skillIndex)
             } else {
               ship.queueSkill = skillIndex
-              ship.queueTarget = target
+              if (target) {
+                ship.queueTarget = target
+              }
             }
           } else if (target) {
             ship.queueSkill = null
