@@ -291,10 +291,6 @@ class Ship extends Movable {
 
     super.die(renderTime)
 
-    if (this.player) {
-      this.displayStats.deaths += 1
-    }
-
     const killData = {
       kill: this.player.name,
       damagers: [],
@@ -303,6 +299,7 @@ class Ship extends Movable {
     }
     let lastDamager = null
     let lastDamageAt = 0
+    let playerAssisted = false
     for (let did in this.damagers) {
       const enemyDamage = this.damagers[did]
       const damagedAt = enemyDamage.at
@@ -310,11 +307,16 @@ class Ship extends Movable {
         lastDamageAt = damagedAt
         lastDamager = did
       }
-      if (enemyDamage.unit.player && damagedAt > renderTime - 10 * 1000) {
-        this.displayStats.deaths += 1
-        enemyDamage.unit.kills += 1
-        killData.damagers.push(enemyDamage.unit.player.name)
+      const damageUnit = enemyDamage.unit
+      if (damageUnit.player && damagedAt > renderTime - 10 * 1000) {
+        playerAssisted = true
+        damageUnit.displayStats.kills += 1
+        damageUnit.awardExperience(1000)
+        killData.damagers.push(damageUnit.player.name)
       }
+    }
+    if (playerAssisted) {
+      this.displayStats.deaths += 1
     }
     if (!killData.damagers.length) {
       killData.damagers.push(lastDamager)
