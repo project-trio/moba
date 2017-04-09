@@ -27,7 +27,7 @@ export default {
     attackDamage: [20, 0],
     attackPierce: [0, 0],
     attackCooldown: [10, 0],
-    attackMoveSpeed: 8,
+    attackMoveSpeed: 10,
     bulletSize: 3,
     bulletColor: 0x888888,
 

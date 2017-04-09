@@ -16,21 +16,21 @@ export default {
     split: true,
 
     healthMax: [600, 10],
-    healthRegen: [30, 1],
+    healthRegen: [40, 1],
     armor: [10, 0],
 
-    sightRange: [160, 0],
-    attackRange: [160, 0],
+    sightRange: [140, 0],
+    attackRange: [140, 0],
 
     attackDamage: [30, 3],
     attackPierce: [0, 0],
     attackCooldown: [10, 0],
     attackMoveSpeed: 10,
-    bulletSize: 5,
+    bulletSize: 3,
 
-    moveSpeed: [14, 0],
-    turnSpeed: 5,
-    collision: 20,
+    moveSpeed: [9, 0],
+    turnSpeed: 8,
+    collision: 16,
 
     create: createMeshes,
   },
@@ -40,7 +40,7 @@ export default {
     offsetTop: -12,
     topOffset: [14, 0, 55],
 
-    healthMax: [800, 40],
+    healthMax: [700, 40],
     healthRegen: [40, 2],
     armor: [100, 5],
 
@@ -50,12 +50,12 @@ export default {
     attackDamage: [50, 1],
     attackPierce: [0, 0],
     attackCooldown: [10, 0],
-    attackMoveSpeed: 15,
+    attackMoveSpeed: 16,
     bulletSize: 4,
 
-    moveSpeed: [12, 0],
-    turnSpeed: 10,
-    collision: 24,
+    moveSpeed: [13, 0],
+    turnSpeed: 12,
+    collision: 20,
 
     createMeshes: createMeshes,
     create: function (name, team, top, bottom, ship) {
@@ -89,15 +89,15 @@ export default {
     sightRange: [160, 0],
     attackRange: [160, 0],
 
-    attackDamage: [60, 3],
+    attackDamage: [70, 3],
     attackPierce: [0, 0],
-    attackCooldown: [20, 0],
+    attackCooldown: [22, 0],
     attackMoveSpeed: 8,
     bulletSize: 5,
 
-    moveSpeed: [9, 0],
+    moveSpeed: [8, 0],
     turnSpeed: 5,
-    collision: 20,
+    collision: 22,
 
     create: createMeshes,
   },
@@ -114,7 +114,7 @@ export default {
 
     attackDamage: [40, 1],
     attackPierce: [0, 0],
-    attackCooldown: [15, 0],
+    attackCooldown: [18, 0],
     attackMoveSpeed: 11,
     bulletSize: 4,
 
@@ -128,22 +128,22 @@ export default {
   glitch: {
     split: false,
 
-    healthMax: [600, 10],
+    healthMax: [500, 10],
     healthRegen: [40, 1],
     armor: [50, 0],
 
     sightRange: [140, 0],
-    attackRange: [120, 0],
+    attackRange: [130, 0],
 
     attackDamage: [60, 3],
     attackPierce: [0, 0],
     attackCooldown: [15, 0],
-    attackMoveSpeed: 11,
+    attackMoveSpeed: 14,
     bulletSize: 4,
 
     moveSpeed: [12, 0],
     turnSpeed: 12,
-    collision: 20,
+    collision: 16,
 
     create: createMeshes,
   },
@@ -152,7 +152,7 @@ export default {
     split: true,
 
     healthMax: [900, 20],
-    healthRegen: [40, 1],
+    healthRegen: [60, 1],
     armor: [5, 1],
 
     sightRange: [160, 0],
@@ -160,13 +160,13 @@ export default {
 
     attackDamage: [30, 2],
     attackPierce: [0, 0],
-    attackCooldown: [15, 0],
+    attackCooldown: [16, 0],
     attackMoveSpeed: 11,
     bulletSize: 4,
 
     moveSpeed: [10, 0],
-    turnSpeed: 10,
-    collision: 20,
+    turnSpeed: 9,
+    collision: 18,
 
     create: createMeshes,
   },

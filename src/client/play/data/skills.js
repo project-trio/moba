@@ -90,7 +90,7 @@ export default {
         return levelMultiplier(3000, level, 200)
       },
       getEffectDps: function (level) {
-        return levelMultiplier(500, level, 50)
+        return levelMultiplier(600, level, 60)
       },
       getCooldown: function (level) {
         return 200
@@ -394,7 +394,7 @@ export default {
         return 100
       },
       getEffectDps: function (level) {
-        return levelMultiplier(300, level, 30)
+        return levelMultiplier(500, level, 50)
       },
       getDuration: function (level) {
         return levelMultiplier(35, level, 2)
