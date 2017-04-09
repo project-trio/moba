@@ -356,7 +356,7 @@ class Unit {
     if (this.selected) {
       store.everyUpdateStats(this)
     }
-    if (!this.isDead) {
+    if (!this.isDead && !this.unattackable) {
       this.doRegenerate()
       if (this.stunnedUntil > 0 && !this.checkStun(renderTime)) {
         this.stunnedUntil = 0
