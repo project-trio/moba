@@ -28,7 +28,9 @@ module.exports = class Player {
   }
 
   emit (name, message) {
-    this.client.emit(name, message)
+    if (this.client) {
+      this.client.emit(name, message)
+    }
   }
 
   resetGame (team, teamIndex) {
