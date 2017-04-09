@@ -40,7 +40,7 @@ export default {
 
   stitches: [
     {
-      name: `Repair Bots`,
+      name: `Repair Swarm`,
       description: 'Restores allies in range for [[Regen]] over [[Duration]]',
       factorRegen: 50 / 1000 * 100, //TODO ticks
       suffixRegen: ' hp / s',
@@ -48,7 +48,7 @@ export default {
       isDisabledBy: null,
       endOnDeath: false,
       getEffectRegen: function (level) {
-        return levelMultiplier(500, level, 100)
+        return levelMultiplier(300, level, 30)
       },
       getEffectDuration: function (level) {
         return 3000
@@ -69,7 +69,7 @@ export default {
           radius: this.getRange(level),
           allies: true,
           modify: {
-            name: 'Repair Bots',
+            name: this.name,
             stat: 'healthRegen',
             method: 'add',
             value: this.getEffectRegen(level),
@@ -111,12 +111,12 @@ export default {
           dot: true,
           opacity: 0.5,
           z: -4,
-          attackMoveSpeed: 20,
-          bulletSize: 9,
-          bulletColor: 0x000000,
+          attackMoveSpeed: 18,
+          bulletSize: 14,
+          bulletColor: 0x222222,
           allies: false,
           modify: {
-            name: 'Scrap Metal',
+            name: this.name,
             stat: 'moveSpeed',
             method: 'times',
             value: moveSpeed,
@@ -146,11 +146,11 @@ export default {
         return levelMultiplier(150, level, -2)
       },
       start: function (index, level, ship) {
-        ship.modify('Emergency', 'moveSpeed', 'times', new Decimal(1).plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
+        ship.modify(this.name, 'moveSpeed', 'times', new Decimal(1).plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
         ship.emergencyMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.07)
       },
       end: function (ship) {
-        ship.modify('Emergency', 'moveSpeed', null)
+        ship.modify(this.name, 'moveSpeed', null)
         if (ship.emergencyMesh) {
           Render.remove(ship.emergencyMesh)
           ship.emergencyMesh = null
@@ -258,14 +258,14 @@ export default {
         return levelMultiplier(150, level, -2)
       },
       start: function (index, level, ship) {
-        ship.modify('Enrage', 'attackCooldown', 'times', new Decimal(1).minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
-        ship.modify('Enrage', 'moveSpeed', 'times', new Decimal(1).plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
+        ship.modify(this.name, 'attackCooldown', 'times', new Decimal(1).minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
+        ship.modify(this.name, 'moveSpeed', 'times', new Decimal(1).plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
 
         ship.enrageMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
       },
       end: function (ship) {
-        ship.modify('Enrage', 'attackCooldown', null)
-        ship.modify('Enrage', 'moveSpeed', null)
+        ship.modify(this.name, 'attackCooldown', null)
+        ship.modify(this.name, 'moveSpeed', null)
         if (ship.enrageMesh) {
           Render.remove(ship.enrageMesh)
           ship.enrageMesh = null
@@ -294,7 +294,7 @@ export default {
         return 200
       },
       start: function (index, level, ship, target, startAt, endAt) {
-        ship.modify('Barrel Roll', 'moveSpeed', 'times', 3)
+        ship.modify(this.name, 'moveSpeed', 'times', 3)
         ship.uncontrollable = true
         ship.untargetable = true
         ship.unattackable = true
@@ -330,7 +330,7 @@ export default {
         ship.propGroup.visible = false
       },
       end: function (ship) {
-        ship.modify('Barrel Roll', 'moveSpeed', null)
+        ship.modify(this.name, 'moveSpeed', null)
         ship.endBarrelRoll = null
         ship.propGroup.visible = true
         ship.base.rotation.x = 0
@@ -620,13 +620,13 @@ export default {
         return 150
       },
       start: function (index, level, ship) {
-        ship.modify('Brute Force', 'attackCooldown', 'times', new Decimal(1).minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
-        ship.modify('Brute Force', 'armor', 'times', 0.5)
+        ship.modify(this.name, 'attackCooldown', 'times', new Decimal(1).minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
+        ship.modify(this.name, 'armor', 'times', 0.5)
         ship.bruteForceMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
       },
       end: function (ship) {
-        ship.modify('Brute Force', 'attackCooldown', null)
-        ship.modify('Brute Force', 'armor', null)
+        ship.modify(this.name, 'attackCooldown', null)
+        ship.modify(this.name, 'armor', null)
         if (ship.bruteForceMesh) {
           Render.remove(ship.bruteForceMesh)
           ship.bruteForceMesh = null
@@ -680,14 +680,14 @@ export default {
         return levelMultiplier(150, level, -2)
       },
       start: function (index, level, ship) {
-        ship.modify('Salvage', 'healthRegen', 'add', this.getEffectRegen(level))
-        ship.modify('Salvage', 'moveSpeed', 'times', 0.5)
+        ship.modify(this.name, 'healthRegen', 'add', this.getEffectRegen(level))
+        ship.modify(this.name, 'moveSpeed', 'times', 0.5)
 
         ship.salvageMesh = Render.outline(ship.top.children[0], 0x00ff00, 1.07)
       },
       end: function (ship) {
-        ship.modify('Salvage', 'healthRegen', null)
-        ship.modify('Salvage', 'moveSpeed', null)
+        ship.modify(this.name, 'healthRegen', null)
+        ship.modify(this.name, 'moveSpeed', null)
 
         if (ship.salvageMesh) {
           Render.remove(ship.salvageMesh)

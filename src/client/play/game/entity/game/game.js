@@ -203,7 +203,9 @@ export default function (gid, size, mapName) {
     Bullet.destroy()
     AreaOfEffect.destroy()
     Render.destroy()
-    this.map.destroy()
+    if (this.map) {
+      this.map.destroy()
+    }
 
     Local.game = null
     store.resetGameState()
