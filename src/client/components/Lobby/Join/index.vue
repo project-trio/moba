@@ -86,12 +86,6 @@ export default {
     })
   },
 
-  beforeDestroy () {
-    if (Local.game && !Local.game.starting) {
-      LobbyEvents.connect('leave game')
-    }
-  },
-
   computed: {
     gameSize () {
       return `${this.size} v ${this.size}`

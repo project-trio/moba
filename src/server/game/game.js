@@ -104,10 +104,10 @@ class Game {
     this.started = false
     for (let pid in this.players) {
       const player = this.players[pid]
-      delete this.players[pid]
-      player.leave()
+      player.leaveRoom()
       player.game = null
     }
+    this.players = {}
 
     if (withIndex === null) {
       for (let idx = games.length - 1; idx >= 0; idx -= 1) {

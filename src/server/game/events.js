@@ -338,6 +338,9 @@ module.exports = {
         if (player.game && data.leaving !== player.game.id) {
           callback({ gid: player.game.id })
         } else {
+          if (player.game && data.leaving) {
+            player.leave()
+          }
           client.join('lobby')
           callback({ online: playersOnline, games: getGameList() })
         }

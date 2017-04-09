@@ -50,12 +50,18 @@ module.exports = class Player {
     this.client.join(game.id)
   }
 
+  leaveRoom () {
+    if (this.game && this.client) {
+      this.client.leave(this.game.id)
+    }
+  }
+
   leave () {
     if (this.game) {
-      if (this.client) {
-        this.client.leave(this.game.id)
-      }
-      return this.game.remove(this)
+      this.leaveRoom()
+      const game = this.game
+      this.game = null //TODO temp
+      return game.remove(this)
     }
   }
 
