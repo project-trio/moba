@@ -9,6 +9,34 @@ let renderer, scene, camera, cameraMesh
 let renderWidth, renderHeight, mapScale
 let startWidth, startHeight
 
+//MOUSE
+
+let clickActive = false
+
+const track = function (event) {
+  const clickX = event.offsetX / mapScale
+  const clickY = (renderHeight - event.offsetY) / mapScale
+  Local.game.map.track(clickX, clickY, false)
+}
+
+const onMouseDown = function (event) {
+  clickActive = true
+  track(event)
+}
+
+const onMouseMove = function (event) {
+  if (!clickActive) {
+    return false
+  }
+  track(event)
+}
+
+const onMouseCancel = function (event) {
+  clickActive = false
+}
+
+//PUBLIC
+
 export default {
 
   create (mapWidth, mapHeight) {
@@ -17,6 +45,11 @@ export default {
     mapScale = renderHeight / mapHeight
 
     const canvas = document.getElementById('minimap')
+    canvas.addEventListener('mousedown', onMouseDown)
+    canvas.addEventListener('mousemove', onMouseMove)
+    canvas.addEventListener('mouseup', onMouseCancel)
+    canvas.addEventListener('mouseleave', onMouseCancel)
+
     renderer = new THREE.WebGLRenderer({
       antialias: true,
       canvas: canvas,
@@ -42,6 +75,12 @@ export default {
   },
 
   destroy () {
+    const canvas = document.getElementById('canvas')
+    canvas.removeEventListener('mousedown', onMouseDown)
+    canvas.removeEventListener('mousemove', onMouseMove)
+    canvas.removeEventListener('mouseup', onMouseCancel)
+    canvas.removeEventListener('mouseleave', onMouseCancel)
+
     renderer = null
     scene = null
     camera = null
