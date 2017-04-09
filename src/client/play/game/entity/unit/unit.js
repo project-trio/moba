@@ -42,7 +42,7 @@ class Unit {
     this.unattackable = unattackable
     this.untargetable = unattackable
     this.noTargeting = unattackable
-    this.isStunned = false
+    this.stunnedUntil = 0
 
     this.fogRadius = null
     this.fogCircle = null
@@ -332,6 +332,20 @@ class Unit {
     return Util.pointDistance(this.px, this.py, px, py)
   }
 
+  // Movement
+
+  stun (renderTime, duration) {
+    const stunEnd = renderTime + duration
+    if (stunEnd > this.stunnedUntil) {
+      console.log('Stun for', duration, stunEnd)
+      this.stunnedUntil = stunEnd
+    }
+  }
+
+  checkStun (renderTime) {
+    return renderTime < this.stunnedUntil
+  }
+
   shouldMove () {
     return false
   }
@@ -341,6 +355,9 @@ class Unit {
   update (renderTime, timeDelta) {
     if (this.selected) {
       store.everyUpdateStats(this)
+    }
+    if (this.stunnedUntil > 0 && !this.checkStun(renderTime)) {
+      this.stunnedUntil = 0
     }
   }
 
@@ -570,7 +587,7 @@ class Unit {
   }
 
   checkAttack (renderTime) {
-    if (this.isStunned) {
+    if (this.stunnedUntil > 0) {
       return
     }
     const attackForTick = this.getAttackTarget(allUnits)

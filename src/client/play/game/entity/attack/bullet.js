@@ -33,6 +33,7 @@ class Bullet {
     }
 
     this.dot = data.dot
+    this.hitsTowers = data.hitsTowers
     this.allies = data.allies
     this.modify = data.modify
     this.maxRange = this.unitTarget ? null : data.maxRange
@@ -144,7 +145,7 @@ class Bullet {
           new Bullet(this.target, this.source, { bulletColor: 0x00ff00, heal: heal, bulletSize: 8, attackMoveSpeed: 10 }, this.px, this.py, this.container.rotation.z)
         }
       }
-      if (this.stunDuration && this.target.stunnedUntil !== undefined) {
+      if (this.stunDuration && (this.hitsTowers || !this.target.tower)) {
         this.target.stun(renderTime, this.stunDuration)
       }
     }
