@@ -356,8 +356,11 @@ class Unit {
     if (this.selected) {
       store.everyUpdateStats(this)
     }
-    if (this.stunnedUntil > 0 && !this.checkStun(renderTime)) {
-      this.stunnedUntil = 0
+    if (!this.isDead) {
+      this.doRegenerate()
+      if (this.stunnedUntil > 0 && !this.checkStun(renderTime)) {
+        this.stunnedUntil = 0
+      }
     }
   }
 
@@ -391,6 +394,13 @@ class Unit {
 
     const newHealth = Math.min(this.healthRemaining + addedHealth, this.stats.healthMax)
     this.updateHealth(newHealth)
+  }
+
+  doRegenerate () {
+    const regen = this.current.healthRegen
+    if (regen !== 0) {
+      this.addHealth(regen)
+    }
   }
 
   takeDamage (source, renderTime, amount, pierce, reflected) {

@@ -1,7 +1,7 @@
 export default {
   base: {
     healthMax: [1500, 0],
-    healthRegen: [20, 0],
+    healthRegen: [10, 0],
     armor: [40, 0],
 
     sightRange: [200, 0],

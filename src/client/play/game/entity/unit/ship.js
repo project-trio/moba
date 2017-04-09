@@ -240,11 +240,6 @@ class Ship extends Movable {
 
   // Health
 
-  doRegenerate () {
-    let regen = this.current.healthRegen
-    this.addHealth(regen)
-  }
-
   endSkill (index) {
     this.skills.actives[index] = 0
     this.skills.data[index].end(this)
@@ -495,23 +490,19 @@ class Ship extends Movable {
     this.updateSkills(renderTime)
     this.awardExperience(2)
 
-    if (this.isDead) {
-      if (this.timeOfDeath) {
-        const deathDuration = renderTime - this.timeOfDeath
-        if (deathDuration >= waitToRespawn) {
-          if (!this.respawned) {
-            this.respawn()
-          } else if (renderTime >= this.reemergeAt) {
-            if (this.blocked()) {
-              //TODO warning
-            } else {
-              this.reemerge()
-            }
+    if (this.isDead && this.timeOfDeath) {
+      const deathDuration = renderTime - this.timeOfDeath
+      if (deathDuration >= waitToRespawn) {
+        if (!this.respawned) {
+          this.respawn()
+        } else if (renderTime >= this.reemergeAt) {
+          if (this.blocked()) {
+            //TODO warning
+          } else {
+            this.reemerge()
           }
         }
       }
-    } else {
-      this.doRegenerate()
     }
 
     super.update(renderTime, timeDelta)
