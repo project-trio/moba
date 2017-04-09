@@ -406,12 +406,15 @@ class Ship extends Movable {
     }
   }
 
-  updateExperience () {
+  awardExperience (amount) {
     if (this.maxLevel) {
       return
     }
-    const increment = this.isFiring ? 3 : 2
-    this.levelExp += increment
+    this.levelExp += amount
+    this.updateExperience()
+  }
+
+  updateExperience () {
     const leveledOver = this.levelExp - this.expPerLevel
     if (leveledOver >= 0) {
       this.levelUp(leveledOver)
@@ -485,7 +488,7 @@ class Ship extends Movable {
 
   update (renderTime, timeDelta) {
     this.updateSkills(renderTime)
-    this.updateExperience()
+    this.awardExperience(2)
 
     if (this.isDead) {
       if (this.timeOfDeath) {
