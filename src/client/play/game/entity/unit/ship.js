@@ -278,9 +278,6 @@ class Ship extends Movable {
   }
 
   die (renderTime) {
-    const killIndex = 1 - this.team
-    const oldKills = store.state.game.stats.kills[killIndex]
-    store.state.game.stats.kills.splice(killIndex, 1, oldKills + 1)
     this.updateSkills(null)
     this.opacity(0.5)
     this.respawned = false
@@ -290,6 +287,8 @@ class Ship extends Movable {
     this.targetSkill = null
 
     super.die(renderTime)
+
+    this.healthRemaining = 0
 
     const killData = {
       kill: this.player.name,
@@ -317,6 +316,9 @@ class Ship extends Movable {
     }
     if (playerAssisted) {
       this.displayStats.deaths += 1
+      const killIndex = 1 - this.team
+      const oldKills = store.state.game.stats.kills[killIndex]
+      store.state.game.stats.kills.splice(killIndex, 1, oldKills + 1)
     }
     if (!killData.damagers.length) {
       killData.damagers.push(lastDamager)
