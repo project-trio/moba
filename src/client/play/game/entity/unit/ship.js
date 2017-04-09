@@ -251,7 +251,7 @@ class Ship extends Movable {
 
   updateSkills (renderTime) {
     for (let ai = 0; ai < 3; ai += 1) {
-      let durationEnd = this.skills.actives[ai]
+      const durationEnd = this.skills.actives[ai]
       if (durationEnd !== 0) {
         const skill = this.skills.data[ai]
         let endSkill = false

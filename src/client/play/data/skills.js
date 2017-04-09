@@ -420,7 +420,7 @@ export default {
       },
       start: function (index, level, ship) {
         ship.rebound = new Decimal(this.getEffectRebound(level)).dividedBy(100)
-        ship.reboundMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.07)
+        ship.reboundMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.1)
       },
       end: function (ship) {
         ship.rebound = null
