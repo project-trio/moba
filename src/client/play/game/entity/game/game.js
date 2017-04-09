@@ -250,6 +250,15 @@ export default function (gid, size, mapName) {
     store.state.game.winningTeam = winningTeam
   }
 
+  this.killTower = function (byTeam) {
+    for (let pid in players) {
+      const player = players[pid]
+      if (player.team === byTeam) {
+        player.unit.awardExperience(1000)
+      }
+    }
+  }
+
   // Players
 
   this.player = function (id) {

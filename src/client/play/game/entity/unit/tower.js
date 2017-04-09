@@ -77,9 +77,9 @@ class Tower extends Unit {
   // Damage
 
   die (renderTime) {
-    const killIndex = 1 - this.team
-    const oldTowers = store.state.game.stats.towers[killIndex]
-    store.state.game.stats.towers.splice(killIndex, 1, oldTowers + 1)
+    const killTeamIndex = 1 - this.team
+    const oldTowers = store.state.game.stats.towers[killTeamIndex]
+    store.state.game.stats.towers.splice(killTeamIndex, 1, oldTowers + 1)
 
     Render.remove(this.infoContainer)
     Render.remove(this.top)
@@ -104,7 +104,9 @@ class Tower extends Unit {
     super.die(renderTime)
 
     if (this.name === 'base') {
-      Local.game.end(1 - this.team)
+      Local.game.end(killTeamIndex)
+    } else {
+      Local.game.killTower(killTeamIndex)
     }
 
     store.state.chatMessages.push({ tower: this.name, team: this.team })
