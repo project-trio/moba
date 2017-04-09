@@ -39,7 +39,6 @@ class AreaOfEffect {
     this.collisionSize = data.radius
     this.attackDamage = data.attackDamage
     this.attackPierce = data.attackPierce
-    this.eyeShield = data.eyeShield
 
     areaofEffects.push(this)
   }
@@ -58,11 +57,7 @@ class AreaOfEffect {
           target.modify(this.modify.name, this.modify.stat, this.modify.method, this.modify.value, renderTime + this.modify.expires)
         }
       }
-      if (isAlly) {
-        if (this.eyeShield) {
-          target.eyeShield = this.eyeShield
-        }
-      } else {
+      if (!isAlly) {
         if (this.attackDamage && !target.isDying && !target.untargetable) {
           let distance
           if (this.withUnit) {

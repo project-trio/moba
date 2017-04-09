@@ -400,11 +400,11 @@ export default {
   boxy: [
     {
       name: `Storm's Eye`,
-      description: 'Reduces damage allies inside the effect take from attacks by [[Damage]]',
+      description: 'Allies inside the eye gain [[Armor]]',
       target: TARGET_SELF,
       isDisabledBy: null,
       endOnDeath: false,
-      getEffectDamage: function (level) {
+      getEffectArmor: function (level) {
         return levelMultiplier(25, level, 2)
       },
       getRange: function (level) {
@@ -416,22 +416,28 @@ export default {
       getCooldown: function (level) {
         return levelMultiplier(200, level, -10)
       },
-      start: function (index, level, ship) {
+      start: function (index, level, ship, target, startAt, endAt) {
         const radius = this.getRange(level)
-        const shield = this.getEffectDamage(level)
-        ship.eyeCircle = new AreaOfEffect(ship, false, {
+        const armor = this.getEffectArmor(level)
+        new AreaOfEffect(ship, false, {
           dot: true,
           color: 0x0066aa,
           opacity: 0.5,
           px: ship.px, py: ship.py,
           z: -4,
           radius: radius,
-          eyeShield: shield,
+          allies: true,
+          modify: {
+            name: this.name,
+            stat: 'armor',
+            method: 'add',
+            value: armor * 50,
+            expires: 200,
+          },
+          endAt: endAt,
         })
       },
       end: function (ship) {
-        ship.eyeCircle.destroy()
-        ship.eyeCircle = null
       },
     },
     {

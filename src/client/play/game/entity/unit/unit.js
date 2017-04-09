@@ -42,7 +42,6 @@ class Unit {
     this.unattackable = unattackable
     this.untargetable = unattackable
     this.noTargeting = unattackable
-    this.eyeShield = null
     this.isStunned = false
 
     this.fogRadius = null
@@ -381,9 +380,6 @@ class Unit {
     let damage = amount
     if (!reflected) {
       let armor = Math.max(0, this.current.armor - pierce)
-      if (this.eyeShield) {
-        armor += this.eyeShield
-      }
       damage = Math.max(1, amount - armor * 10) //TODO percent
 
       if (this.reflectDamageRatio) {
@@ -639,7 +635,6 @@ Unit.update = function (renderTime, timeDelta, tweening) {
         unit.updateMoveTarget(renderTime)
       }
       unit.expireModifiers(renderTime)
-      unit.eyeShield = null
     }
   }
 
