@@ -1,5 +1,7 @@
 import * as THREE from 'three'
 
+import store from '@/store'
+
 import shipStats from '@/play/data/ships'
 
 import Render from '@/play/render/render'
@@ -118,6 +120,22 @@ export default {
     shipContainer.rotation.z = 0
 
     statBase = shipStats[name]
+    store.setSelectedUnit({
+      sample: true,
+      name: name,
+      maxLevel: true,
+      stats: {
+        healthMax: statBase.healthMax[0] * 100,
+        attackPierce: statBase.attackPierce[0] * 100,
+        attackRange: statBase.attackRange[0] * 100,
+        attackDamage: statBase.attackDamage[0],
+      },
+      current: {
+        armor: statBase.armor[0],
+        attackCooldown: statBase.attackCooldown[0],
+      },
+      cacheMoveSpeed: statBase.moveSpeed[0] / 2000,
+    })
 
     container.reemergeAt = performance.now() + 300
     statBase.create(name, team, shipContainer, shipContainer, container)

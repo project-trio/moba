@@ -1,8 +1,8 @@
 <template>
 <div class="player-bar">
   <chat-bar></chat-bar>
-  <player-info v-show="playing" class="bar-section"></player-info>
-  <skills-bar v-show="playing" class="bar-section"></skills-bar>
+  <player-info class="bar-section"></player-info>
+  <skills-bar class="bar-section"></skills-bar>
   <minimap v-show="playing" class="bar-section"></minimap>
 </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
 <div class="player-info">
   <div class="bold">{{ stats.name }}</div>
-  <div>{{ stats.health }} / {{ stats.healthMax }} hp</div>
+  <div>{{ healthDescription }}</div>
   <div v-if="this.stats.level">{{ levelProgress }}</div>
   <div>
     <span>{{ stats.dps }} dps</span>
@@ -28,6 +28,10 @@ export default {
 
     stats () {
       return store.state.selectedStats
+    },
+
+    healthDescription () {
+      return this.stats.health ? `${this.stats.health} / ${this.stats.healthMax} hp` : `${this.stats.healthMax} hp`
     },
   },
 }

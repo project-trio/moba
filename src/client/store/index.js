@@ -136,14 +136,14 @@ export default {
     if (unit === selectedUnit) {
       return
     }
-    if (selectedUnit) {
+    if (selectedUnit && !selectedUnit.sample) {
       selectedUnit.selected = false
       if (selectedUnit.allyNotLocal()) {
         selectedUnit.setSelection(null)
       }
     }
     selectedUnit = unit
-    if (unit.allyNotLocal()) {
+    if (!unit.sample && unit.allyNotLocal()) {
       unit.setSelection(0xffffff)
     }
     this.state.selectedStats.name = unit.name

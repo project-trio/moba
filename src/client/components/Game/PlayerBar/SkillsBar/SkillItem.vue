@@ -66,6 +66,10 @@ export default {
       return this.index + 49
     },
 
+    playing () {
+      return store.state.game.playing
+    },
+
     preventsActivation () {
       return this.level === 0 || this.activated || this.cooldownRemaining > 200
     },
@@ -154,7 +158,7 @@ export default {
     },
 
     showingLevelupIndicator () {
-      return !this.isAnySkillActive && this.levelupReady
+      return this.playing && !this.isAnySkillActive && this.levelupReady
     },
 
     levelupReady () {
@@ -255,7 +259,7 @@ export default {
 
   methods: {
     createRangeIndicator () {
-      if (this.skill.getRange) {
+      if (this.skill.getRange && Local.unit) {
         Local.unit.createIndicator(this.skill.getRange(this.level))
         if (this.skill.getEffectRange) {
           Local.game.map.aoeRadiusIndicator(this.skill.getEffectRange(this.level))
@@ -263,7 +267,7 @@ export default {
       }
     },
     removeRangeIndicator () {
-      if (this.skill.getRange) {
+      if (this.skill.getRange && Local.unit) {
         Local.unit.removeIndicator()
       }
     },

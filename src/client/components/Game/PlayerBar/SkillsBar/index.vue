@@ -7,6 +7,8 @@
 <script>
 import store from '@/store'
 
+import skillsData from '@/play/data/skills'
+
 import Local from '@/play/local'
 
 import SkillItem from '@/components/Game/PlayerBar/SkillsBar/SkillItem'
@@ -17,8 +19,12 @@ export default {
   },
 
   computed: {
+
+    localPlayer () {
+      return store.state.game.players[Local.playerId]
+    },
     skills () {
-      return store.state.game.playing ? Local.unit.skills.data : null
+      return Local.unit ? Local.unit.skills.data : (this.localPlayer && skillsData[this.localPlayer.shipName])
     },
   },
 }
