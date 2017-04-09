@@ -176,14 +176,32 @@ class Unit {
     }
   }
 
-  modify (modifierName, statKey, method, value) {
+  expireModifiers (renderTime) {
+    for (let statKey in this.modifiers) {
+      const statModifiers = this.modifiers[statKey]
+      let expired = false
+      for (let key in statModifiers) {
+        const mod = statModifiers[key]
+        const expiresAt = mod[2]
+        if (expiresAt && renderTime >= expiresAt) {
+          delete statModifiers[key]
+          expired = true
+        }
+      }
+      if (expired) {
+        this.modify(null, statKey)
+      }
+    }
+  }
+
+  modify (modifierName, statKey, method, value, ending) {
     const statModifiers = this.modifiers[statKey]
     const updatingModifier = modifierName !== null
     if (updatingModifier) {
       if (method === null) {
         delete statModifiers[modifierName]
       } else {
-        statModifiers[modifierName] = [method, value]
+        statModifiers[modifierName] = [method, value, ending]
       }
     }
     let result = new Decimal(this.stats[statKey])
@@ -620,6 +638,7 @@ Unit.update = function (renderTime, timeDelta, tweening) {
       if (unit.movable && !unit.isDying) {
         unit.updateMoveTarget(renderTime)
       }
+      unit.expireModifiers(renderTime)
       unit.eyeShield = null
     }
   }

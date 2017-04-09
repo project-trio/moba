@@ -21,6 +21,8 @@ class AreaOfEffect {
     this.endAt = data.endAt
     this.active = true
     this.hitsTowers = data.hitsTowers
+    this.allies = data.allies
+    this.modify = data.modify
 
     this.circle = Render.circle(data.radius, { color: data.color, opacity: data.opacity, parent: withUnit ? data.parent : Local.game.map.floorContainer })
 
@@ -51,6 +53,11 @@ class AreaOfEffect {
       }
       const isAlly = fromUnit.alliedTo(target)
 
+      if (isAlly === this.allies) {
+        if (this.modify) {
+          target.modify(this.modify.name, this.modify.stat, this.modify.method, this.modify.value, renderTime + this.modify.expires)
+        }
+      }
       if (isAlly) {
         if (this.eyeShield) {
           target.eyeShield = this.eyeShield

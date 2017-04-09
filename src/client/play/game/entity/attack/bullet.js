@@ -28,6 +28,8 @@ class Bullet {
     source.bulletCount += 1
 
     this.dot = data.dot
+    this.allies = data.allies
+    this.modify = data.modify
     this.maxRange = this.unitTarget ? null : data.maxRange
     this.collisionCheck = Util.squared((this.unitTarget ? target.stats.collision : data.collisionSize) || data.attackMoveSpeed * 100)
     this.explosionRadius = data.explosionRadius
@@ -119,6 +121,8 @@ class Bullet {
         py: this.py,
         color: this.color,
         opacity: 0.25,
+        allies: this.allies,
+        modify: this.modify,
         radius: this.explosionRadius,
         attackDamage: this.attackDamage,
         attackPierce: this.attackPierce,
