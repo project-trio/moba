@@ -41,7 +41,7 @@ export default {
   stitches: [
     {
       name: `Repair Swarm`,
-      description: 'Restores allies in range for [[Regen]] over [[Duration]]',
+      description: 'Repairs allies for [[Regen]] for [[Duration]]',
       factorRegen: 50 / 1000 * 100, //TODO ticks
       suffixRegen: ' hp / s',
       target: TARGET_SELF,
@@ -62,6 +62,7 @@ export default {
       start: function (index, level, ship) {
         new AreaOfEffect(ship, false, {
           dot: false,
+          hitsTowers: false,
           color: 0x00ccff,
           opacity: 0.5,
           px: ship.px, py: ship.py,
@@ -184,6 +185,7 @@ export default {
         const stunDuration = this.getEffectDuration(level)
         const maxRange = this.getRange(level)
         const bulletData = {
+          hitsTowers: true,
           bulletSize: 10,
           bulletColor: 0xdddd00,
           attackDamage: damage * 100,
@@ -224,6 +226,7 @@ export default {
         const effectDuration = this.getEffectDuration(level)
         const bulletData = {
           dot: true,
+          hitsTowers: true,
           opacity: 0.5,
           z: -4,
           bulletSize: 9,
@@ -370,6 +373,7 @@ export default {
         const maxRange = this.getRange(level)
         const attackMoveSpeed = 4
         const bulletData = {
+          hitsTowers: true,
           bulletSize: 8,
           bulletColor: 0x660066,
           attackDamage: damage * 100,
@@ -449,6 +453,7 @@ export default {
         const armor = this.getEffectArmor(level)
         new AreaOfEffect(ship, false, {
           dot: true,
+          hitsTowers: false,
           color: 0x0066aa,
           opacity: 0.5,
           px: ship.px, py: ship.py,
@@ -527,6 +532,7 @@ export default {
         const maxRange = this.getRange(level)
         const aoeRange = this.getEffectRange(level)
         const bulletData = {
+          hitsTowers: true,
           bulletSize: 9,
           bulletColor: 0xcc00ff,
           attackDamage: damage * 100,
@@ -551,7 +557,7 @@ export default {
         return 100
       },
       getEffectDps: function (level) {
-        return levelMultiplier(500, level, 50)
+        return levelMultiplier(300, level, 30)
       },
       getDuration: function (level) {
         return levelMultiplier(35, level, 2)
@@ -567,6 +573,7 @@ export default {
         const radius = this.getRange(level)
         const damage = this.getEffectDps(level)
         ship.diveCircle = new AreaOfEffect(ship, true, {
+          hitsTowers: true,
           dot: true,
           color: 0x0066aa,
           opacity: 0.5,
