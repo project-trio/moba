@@ -85,9 +85,21 @@ class Tower extends Unit {
     Render.remove(this.top)
 
     this.isBlocking = false
-    this.container.position.z = -44
-
-    this.opacity(0.5)
+    const fallDuration = 1000
+    this.queueAnimation('container', 'position', {
+      axis: 'z',
+      from: 0,
+      to: -45,
+      start: renderTime,
+      duration: fallDuration,
+    })
+    this.queueAnimation('base', 'opacity', {
+      child: 0,
+      from: 1,
+      to: 0.5,
+      start: renderTime,
+      duration: fallDuration,
+    })
 
     super.die(renderTime)
 
