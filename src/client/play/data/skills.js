@@ -36,6 +36,129 @@ const isDisabledBy = function (actives) {
 
 export default {
 
+//STITCHES
+
+  stitches: [
+    {
+      name: `Repair Bots`,
+      description: 'Restores allies in range for [[Regen]] over [[Duration]]',
+      factorRegen: 50 / 1000 * 100, //TODO ticks
+      suffixRegen: ' hp / s',
+      target: TARGET_SELF,
+      isDisabledBy: null,
+      endOnDeath: false,
+      getEffectRegen: function (level) {
+        return levelMultiplier(500, level, 100)
+      },
+      getEffectDuration: function (level) {
+        return 3000
+      },
+      getRange: function (level) {
+        return 100
+      },
+      getCooldown: function (level) {
+        return levelMultiplier(250, level, -10)
+      },
+      start: function (index, level, ship) {
+        new AreaOfEffect(ship, false, {
+          dot: false,
+          color: 0x00ccff,
+          opacity: 0.5,
+          px: ship.px, py: ship.py,
+          z: -4,
+          radius: this.getRange(level),
+          allies: true,
+          modify: {
+            name: 'Repair Bots',
+            stat: 'healthRegen',
+            method: 'add',
+            value: this.getEffectRegen(level),
+            expires: this.getEffectDuration(level),
+          },
+        })
+      },
+    },
+    {
+      name: 'Jetsam',
+      description: 'Toss repair debris overboard, slowing enemies that walk over it by [[MoveSpeed]] for [[Duration]]',
+      suffixMoveSpeed: '%',
+      target: TARGET_GROUND,
+      isDisabledBy: null,
+      getRange: function (level) {
+        return 120
+      },
+      getEffectRange: function (level) {
+        return 70
+      },
+      getEffectRemainsDuration: function (level) {
+        return levelMultiplier(3000, level, 200)
+      },
+      getEffectDuration: function (level) {
+        return levelMultiplier(1000, level, 200)
+      },
+      getEffectMoveSpeed: function (level) {
+        return levelMultiplier(50, level, 10)
+      },
+      getCooldown: function (level) {
+        return 220
+      },
+      start: function (index, level, ship, target) {
+        const moveSpeed = new Decimal(1).minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
+        const aoeRange = this.getEffectRange(level)
+        const effectDuration = this.getEffectDuration(level)
+        const effectRemainsDuration = this.getEffectRemainsDuration(level)
+        const bulletData = {
+          dot: true,
+          opacity: 0.5,
+          z: -4,
+          attackMoveSpeed: 20,
+          bulletSize: 9,
+          bulletColor: 0x000000,
+          allies: false,
+          modify: {
+            name: 'Scrap Metal',
+            stat: 'moveSpeed',
+            method: 'times',
+            value: moveSpeed,
+            expires: effectDuration,
+          },
+          explosionRadius: aoeRange,
+          effectDuration: effectRemainsDuration,
+        }
+        new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+      },
+    },
+    {
+      name: 'Emergency',
+      description: 'Expend a huge boost of [[MoveSpeed]] movement speed',
+      suffixAttackSpeed: '%',
+      suffixMoveSpeed: '%',
+      target: TARGET_SELF,
+      isDisabledBy: null,
+      endOnDeath: true,
+      getEffectMoveSpeed: function (level) {
+        return levelMultiplier(30, level, 15)
+      },
+      getDuration: function (level) {
+        return 40
+      },
+      getCooldown: function (level) {
+        return levelMultiplier(150, level, -2)
+      },
+      start: function (index, level, ship) {
+        ship.modify('Emergency', 'moveSpeed', 'times', new Decimal(1).plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
+        ship.emergencyMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.07)
+      },
+      end: function (ship) {
+        ship.modify('Emergency', 'moveSpeed', null)
+        if (ship.emergencyMesh) {
+          Render.remove(ship.emergencyMesh)
+          ship.emergencyMesh = null
+        }
+      },
+    },
+  ],
+
 //BEEDLE
 
   beedle: [

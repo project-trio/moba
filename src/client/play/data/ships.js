@@ -12,6 +12,29 @@ const createMeshes = function (name, team, top, base, ship) {
 //SHIPS
 
 export default {
+  stitches: {
+    split: true,
+
+    healthMax: [700, 10],
+    healthRegen: [10, 1],
+    armor: [0, 0],
+
+    sightRange: [180, 0],
+    attackRange: [180, 0],
+
+    attackDamage: [20, 3],
+    attackPierce: [0, 0],
+    attackCooldown: [15, 0],
+    attackMoveSpeed: 10,
+    bulletSize: 3,
+
+    moveSpeed: [10, 0],
+    turnSpeed: 8,
+    collision: 16,
+
+    create: createMeshes,
+  },
+
   beedle: {
     split: true,
 
@@ -86,8 +109,8 @@ export default {
     healthRegen: [30, 1],
     armor: [10, 0],
 
-    sightRange: [160, 0],
-    attackRange: [160, 0],
+    sightRange: [180, 0],
+    attackRange: [170, 0],
 
     attackDamage: [70, 3],
     attackPierce: [0, 0],
