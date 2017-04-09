@@ -71,7 +71,7 @@ const createGame = function(player, size, map, joining) {
       if (joining) {
         const joinData = game.add(player)
         if (joinData.error) {
-          game.destroy(null)
+          game.destroy()
           response.error = joinData.error
           response.backToLobby = true
         }
@@ -186,7 +186,7 @@ const loop = function() {
       } else if (game.idleCount > MAXIMUM_IDLE_UPDATES) {
         console.log(game.id, 'Game timed out due to inactivity')
         game.broadcast('closed')
-        game.destroy(idx)
+        game.destroy()
         continue
       } else {
         game.idleCount += 1

@@ -99,7 +99,7 @@ class Game {
     return { gid: this.id, host: this.hostId, size: this.size, map: this.map, ready: this.canStart(), players: this.formattedPlayers() }
   }
 
-  destroy (withIndex) {
+  destroy () {
     this.state = 'CLOSED'
     this.started = false
     for (let pid in this.players) {
@@ -109,17 +109,13 @@ class Game {
     }
     this.players = {}
 
-    if (withIndex === null) {
-      for (let idx = games.length - 1; idx >= 0; idx -= 1) {
-        if (games[idx].id === this.id) {
-          withIndex = idx
-          break
-        }
+    for (let idx = games.length - 1; idx >= 0; idx -= 1) {
+      if (games[idx].id === this.id) {
+        games.splice(idx, 1)
+        return
       }
     }
-    if (withIndex !== null) {
-      games.splice(withIndex, 1)
-    }
+    console.log('ERR unable to remove deleted game', this.id)
   }
 
   remove (removePlayer) {
@@ -134,7 +130,7 @@ class Game {
 
       console.log('Removed', this.id, this.activePlayerCount())
       if (this.activePlayerCount() <= 0) {
-        this.destroy(null)
+        this.destroy()
         return true
       }
       if (!this.started) {
