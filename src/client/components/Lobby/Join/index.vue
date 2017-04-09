@@ -5,7 +5,7 @@
   </div>
   <div v-else>
     <h1>{{ size }} v {{ size }}</h1>
-    <h3>{{ playerCount }} of {{ size * 2 }} players</h3>
+    <h2>{{ map }} map</h2>
     <div class="player-teams scrolls">
       <div class="team-players team-1">
         <h3 class="vertical">Team Blue</h3>
@@ -53,6 +53,7 @@ export default {
 
   data () {
     return {
+      map: null,
       size: null,
       draftMessage: '',
     }
@@ -72,6 +73,7 @@ export default {
         router.replace({ name: 'Lobby' })
       } else {
         this.size = data.size
+        this.map = data.map
         console.log('join', data)
         if (Local.game) {
           console.warn('Game already exists', data)
