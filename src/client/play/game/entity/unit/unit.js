@@ -409,6 +409,7 @@ class Unit {
         unit: source,
       }
     }
+    return damage
   }
 
   die (time) {

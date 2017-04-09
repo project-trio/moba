@@ -399,6 +399,34 @@ export default {
 
   boxy: [
     {
+      name: 'Rebound',
+      description: 'Basic attacks return to heal [[Rebound]] of damage dealt',
+      suffixRebound: '%',
+      target: TARGET_SELF,
+      isDisabledBy: null,
+      endOnDeath: true,
+      getEffectRebound: function (level) {
+        return levelMultiplier(200, level, 20)
+      },
+      getDuration: function (level) {
+        return levelMultiplier(40, level, 2)
+      },
+      getCooldown: function (level) {
+        return levelMultiplier(150, level, -2)
+      },
+      start: function (index, level, ship) {
+        ship.rebound = new Decimal(this.getEffectRebound(level)).dividedBy(100)
+        ship.reboundMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.07)
+      },
+      end: function (ship) {
+        ship.rebound = null
+        if (ship.reboundMesh) {
+          Render.remove(ship.reboundMesh)
+          ship.reboundMesh = null
+        }
+      },
+    },
+    {
       name: `Storm's Eye`,
       description: 'Allies inside the eye gain [[Armor]]',
       target: TARGET_SELF,

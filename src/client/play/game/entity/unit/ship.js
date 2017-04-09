@@ -42,6 +42,7 @@ class Ship extends Movable {
     this.split = statBase.split
     this.reemergeAt = store.state.game.renderTime
     this.uncontrollable = false
+    this.rebound = null
 
     this.level = 1
     this.levelExp = 0

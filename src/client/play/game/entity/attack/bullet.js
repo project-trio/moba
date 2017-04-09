@@ -26,6 +26,11 @@ class Bullet {
     this.target = target
     this.unitTarget = target.stats !== undefined
     source.bulletCount += 1
+    if (data.heal) {
+      this.heal = data.heal
+    } else {
+      this.rebound = source.rebound
+    }
 
     this.dot = data.dot
     this.allies = data.allies
@@ -35,7 +40,7 @@ class Bullet {
     this.explosionRadius = data.explosionRadius
     this.effectDuration = data.effectDuration
     this.stunDuration = data.stunDuration
-    this.color = data.bulletColor || 0x000000
+    this.color = this.rebound ? 0x0000ff : data.bulletColor || 0x000000
 
     this.container = Render.group()
     const ball = Render.sphere(data.bulletSize, { color: this.color })
@@ -129,9 +134,15 @@ class Bullet {
         endAt: (this.effectDuration ? renderTime + this.effectDuration : null),
         parent: Local.game.map.floorContainer,
       })
+    } else if (this.heal) {
+      this.target.addHealth(this.heal)
     } else if (this.unitTarget) {
       if (this.attackDamage) {
-        this.target.takeDamage(this.source, renderTime, this.attackDamage, this.attackPierce)
+        const damage = this.target.takeDamage(this.source, renderTime, this.attackDamage, this.attackPierce)
+        if (this.rebound) {
+          const heal = new Decimal(damage).times(this.rebound).round().toNumber()
+          new Bullet(this.target, this.source, { bulletColor: 0x00ff00, heal: heal, bulletSize: 8, attackMoveSpeed: 10 }, this.px, this.py, this.container.rotation.z)
+        }
       }
       if (this.stunDuration && this.target.stunnedUntil !== undefined) {
         this.target.stun(renderTime, this.stunDuration)
