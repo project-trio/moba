@@ -98,7 +98,7 @@ export default {
         return levelMultiplier(1000, level, 200)
       },
       getEffectMoveSpeed: function (level) {
-        return levelMultiplier(50, level, 10)
+        return levelMultiplier(50, level, 2)
       },
       getCooldown: function (level) {
         return 220
