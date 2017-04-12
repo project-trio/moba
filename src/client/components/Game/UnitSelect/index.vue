@@ -17,10 +17,10 @@
   <div class="player-teams scrolls">
     <h1>teams</h1>
     <div class="team-players team-1">
-      <div v-for="player in teamPlayers[0]" :player="player" class="player-ship animated" :class="{ selected: player.id === localId }" :key="player.id">{{ player.shipName }}</div>
+      <div v-for="player in teamPlayers[0]" :player="player" class="player-ship animated" :class="{ selected: player.id === localId }" :key="player">{{ player.shipName }}</div>
     </div>
     <div class="team-players team-2">
-      <div v-for="player in teamPlayers[1]" :player="player" class="player-ship animated" :class="{ selected: player.id === localId }" :key="player.id">{{ player.shipName }}</div>
+      <div v-for="player in teamPlayers[1]" :player="player" class="player-ship animated" :class="{ selected: player.id === localId }" :key="player">{{ player.shipName }}</div>
     </div>
   </div>
 </div>
@@ -75,11 +75,16 @@ export default {
       return store.state.game.players
     },
     teamPlayers () {
-      const result = this.size > 1 ? [Array(this.size), Array(this.size)] : [[], []]
+      const result = [Array(this.size), Array(this.size)]
+      let foundPlayer = false
       for (let pid in this.players) {
         const player = this.players[pid]
         player.id = pid
         result[player.team][player.teamIndex] = player
+        foundPlayer = true
+      }
+      if (!foundPlayer) {
+        return [[], []]
       }
       return result
     },

@@ -14,7 +14,7 @@ import Wave from '@/play/game/entity/game/wave'
 
 import Unit from '@/play/game/entity/unit/unit'
 
-export default function (gid, size, mapName) {
+export default function (gid, mode, size, mapName) {
   let players = {}
 
   let updateCount = 0

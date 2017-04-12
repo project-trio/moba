@@ -4,6 +4,13 @@
   <div v-if="loading">
   </div>
   <div v-else>
+    <h3>game type:</h3>
+    <div class="selection-container">
+      <button v-for="mode in gameModes" @click="onGameMode(mode)" class="selection interactive" :class="{ selected: mode === selectedMode }">{{ mode.name }}</button>
+      <div class="mode-description">
+        {{ this.selectedMode.description }}
+      </div>
+    </div>
     <h3>game size:</h3>
     <div class="selection-container">
       <button v-for="size in gameSizes" @click="onGameSize(size)" class="selection interactive" :class="{ selected: size === selectedSize }">{{ sizeLabel(size) }}</button>
@@ -31,14 +38,23 @@ export default {
   data () {
     return {
       loading: false,
+      selectedMode: CommonConsts.GAME_MODES[0],
       selectedSize: 0,
       selectedMap: null,
     }
   },
 
   computed: {
+    gameModes () {
+      return CommonConsts.GAME_MODES
+    },
+
+    pvpMode () {
+      return this.selectedMode === CommonConsts.GAME_MODES[0]
+    },
+
     gameSizes () {
-      return CommonConsts.GAME_SIZES
+      return this.pvpMode ? CommonConsts.GAME_SIZES : CommonConsts.GAME_SIZES.slice(0, 2)
     },
 
     mapsForSize () {
@@ -54,6 +70,22 @@ export default {
   },
 
   methods: {
+    onGameMode (mode) {
+      this.selectedMode = mode
+      if (!this.pvpMode) {
+        this.onGameSize(1)
+      }
+    },
+    onGameSize (size) {
+      this.selectedSize = size
+      if (this.mapsForSize.indexOf(this.selectedMap) === -1) {
+        this.onMap(this.mapsForSize[0])
+      }
+    },
+    onMap (name) {
+      this.selectedMap = name
+    },
+
     sizeLabel (size) {
       if (size === 0) {
         return '1p'
@@ -64,16 +96,8 @@ export default {
       return `${size} v ${size}`
     },
 
-    onGameSize (size) {
-      this.selectedSize = size
-    },
-
-    onMap (name) {
-      this.selectedMap = name
-    },
-
     onSubmit () {
-      LobbyEvents.connect('create', { size: this.selectedSize, map: this.selectedMap }, (data) => {
+      LobbyEvents.connect('create', { mode: this.selectedMode.name, size: this.selectedSize, map: this.selectedMap }, (data) => {
         console.log('create', data)
         if (data.error) {
           const errorMessage = `Unable to create game: ${data.error}`
@@ -115,4 +139,8 @@ export default {
 
 .selection.selected
   background #dd6677
+
+.mode-description
+  text-align center
+  margin auto
 </style>

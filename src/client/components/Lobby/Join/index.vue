@@ -78,7 +78,7 @@ export default {
         if (Local.game) {
           console.warn('Game already exists', data)
         } else {
-          const newGame = new Game(data.gid, data.size, data.map)
+          const newGame = new Game(data.gid, data.mode, data.size, data.map)
           newGame.updatePlayers(data)
           Local.game = newGame
         }

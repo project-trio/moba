@@ -58,6 +58,9 @@ export default {
 
   create () {
     canvas = document.getElementById('preview')
+    if (!canvas) {
+      return
+    }
     renderWidth = canvas.offsetWidth
     renderHeight = canvas.offsetHeight
 
@@ -146,9 +149,11 @@ export default {
     window.cancelAnimationFrame(animationId)
     animationId = null
 
-    scene.remove(container)
+    if (scene) {
+      scene.remove(container)
+      scene = null
+    }
     renderer = null
-    scene = null
     camera = null
     cameraTarget = null
     container = null

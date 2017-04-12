@@ -1,8 +1,9 @@
 const SocketIO = require('socket.io')
 
-const Config = require('./config')
-
 const Util = require.main.require('./utils/util')
+
+const Config = require('./config')
+const Player = require('./player')
 
 //CONSTRUCTOR
 
@@ -10,12 +11,16 @@ const games = []
 
 class Game {
 
-  constructor (size, map) {
+  constructor (mode, size, map, mapData) {
     this.players = {}
     this.counts = [0, 0]
     this.id = Util.uid()
+    this.mode = mode
+    this.botMode = mode === 'bots'
     this.size = size
     this.map = map
+    this.mapWidth = mapData.width
+    this.mapHeight = mapData.height
     this.game = null
     this.state = 'OPEN'
     this.serverUpdate = 0
@@ -25,6 +30,16 @@ class Game {
 
     console.log('Created game', this.id)
     games.push(this)
+
+    if (this.botMode) {
+      const botTeam = 1
+      this.counts[botTeam] = size
+      for (let teamIndex = 0; teamIndex < size; teamIndex += 1) {
+        const player = new Player(null)
+        this.players[player.id] = player
+        player.resetGame(botTeam, teamIndex)
+      }
+    }
   }
 
 //PRIVATE
@@ -33,7 +48,7 @@ class Game {
     let result = 0
     for (let pid in this.players) {
       const player = this.players[pid]
-      if (player.isActive) {
+      if (!player.bot && player.isActive) {
         result += 1
       }
     }
@@ -45,13 +60,13 @@ class Game {
   }
 
   checkFull () {
-    return this.playerCount() >= (this.size === 0 ? 1 : this.size * 2)
+    return this.playerCount() >= this.size * 2
   }
 
 //STATE
 
   canStart () {
-    if (this.size === 0) {
+    if (this.botMode) {
       return this.counts[0]
     }
     if (this.counts[0] === this.counts[1]) {
@@ -96,7 +111,7 @@ class Game {
       this.broadcast('players', { ready: this.canStart(), players: this.formattedPlayers() })
       player.join(this)
     }
-    return { gid: this.id, host: this.hostId, size: this.size, map: this.map, ready: this.canStart(), players: this.formattedPlayers() }
+    return { gid: this.id, host: this.hostId, mode: this.mode, size: this.size, map: this.map, ready: this.canStart(), players: this.formattedPlayers() }
   }
 
   destroy () {
@@ -154,6 +169,7 @@ class Game {
   start (updatesUntilStart) {
     this.broadcast('start game', {
       gid: this.id,
+      mode: this.mode,
       size: this.size,
       map: this.map,
       players: this.formattedPlayers(),

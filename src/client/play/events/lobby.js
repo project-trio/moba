@@ -62,7 +62,7 @@ export default {
         //   window.alert('Game not found')
         // }
         console.warn('Game not found', data)
-        Local.game = new Game(data.gid, data.size, data.map)
+        Local.game = new Game(data.gid, data.mode, data.size, data.map)
       } else {
         console.log('Start game', data)
       }

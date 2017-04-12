@@ -33,7 +33,7 @@ const startupRoute = function () {
   if (!Local.TESTING) {
     router.replace({ name: 'Lobby' })
   } else {
-    LobbyEvents.connect('quick', { size: 0, map: 'tiny' }, (response) => { //SAMPLE
+    LobbyEvents.connect('quick', { mode: 'bots', size: 1, map: 'tiny' }, (response) => { //SAMPLE
       if (response.error) {
         console.log('quick', response)
       } else {

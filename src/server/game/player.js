@@ -1,9 +1,21 @@
+const CommonConsts = require.main.require('../common/constants')
+const CommonUtils = require.main.require('../common/utils')
+
+const Util = require.main.require('./utils/util')
+
 module.exports = class Player {
 
   constructor (client) {
-    this.client = client
-    this.id = client.pid
-    this.name = client.name
+    this.bot = !client
+    if (client) {
+      this.client = client
+      this.id = client.pid
+      this.name = client.name
+    } else {
+      const botId = `bot-${Util.code()}`
+      this.id = botId
+      this.name = botId
+    }
 
     this.game = null
     this.team = null
@@ -12,7 +24,9 @@ module.exports = class Player {
 
     this.shipName = null
     this.switchUnit = null
+    this.actionUpdate = null
     this.serverUpdate = null
+    this.updatesUntilAuto = 0
     this.actions = null
     this.levelNext = null
     this.chatAt = null
@@ -38,8 +52,9 @@ module.exports = class Player {
     this.teamIndex = teamIndex
 
     this.isActive = true
-    this.shipName = 'boxy'
+    this.shipName = this.client ? 'boxy' : CommonUtils.randomItem(CommonConsts.SHIP_NAMES)
     this.switchUnit = null
+    this.actionUpdate = 0
     this.serverUpdate = 0
     this.actions = []
     this.levelNext = null
