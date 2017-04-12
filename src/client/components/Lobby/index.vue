@@ -7,7 +7,7 @@
   <router-link :to="{ name: 'Create' }" tag="button" class="big interactive">create game</router-link>
   <div>
     <router-link v-for="game in games" :to="{ name: 'Join', params: { gid: game.id } }" tag="div" class="list-game interactive" :key="game.id">
-      <div>{{ game.state }} game</div>
+      <div>{{ game.mode }} game - {{ game.state }}</div>
       <div>{{ Object.keys(game.players).length }} of {{ game.size * 2 }} players</div>
       <div>{{ game.map }} map</div>
     </router-link>

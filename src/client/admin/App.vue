@@ -4,6 +4,7 @@
   <div>{{ players.join(', ') }}</div>
   <h1>{{ games.length }} games</h1>
   <div v-for="game in games" class="game">
+    <div>Mode: {{ game.mode }}</div>
     <div>Status: {{ game.state }}</div>
     <div>Size: {{ game.size }}</div>
     <div>Update: {{ game.update }}</div>
@@ -40,5 +41,6 @@ export default {
 </script>
 
 <style lang="stylus">
-
+.game
+  margin-bottom 8px
 </style>
