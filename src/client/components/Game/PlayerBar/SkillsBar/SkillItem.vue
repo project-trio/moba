@@ -110,6 +110,11 @@ export default {
 
     descriptionHtml () {
       let description = this.skill.description.replace(MATCH_BRACKET_FORMATTING, (match, substitution) => {
+        const split = substitution.split(':')
+        if (split.length > 1) {
+          return `<span class="${split[1]}">${split[0]}</span>`
+        }
+
         const substitutionFunction = this.skill[`getEffect${substitution}`]
         const factor = substitution === 'Duration' ? 1000 : this.skill[`factor${substitution}`]
         const suffix = substitution === 'Duration' ? ' seconds' : (substitution === 'Damage' ? ' damage' : (substitution === 'Range' ? ' range' : this.skill[`suffix${substitution}`] || ''))
@@ -417,6 +422,10 @@ export default {
 
 .skill-item .description-text
   margin-bottom 2px
+
+.skill-item .poison
+  color #00cc00
+  font-weight 600
 
 .skill-item .skill-button
   padding 4px

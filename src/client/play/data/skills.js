@@ -164,25 +164,30 @@ export default {
 
   beedle: [
     {
-      name: `Electric Sting`,
-      description: 'Fires a bolt of electricity that stuns for [[Duration]], dealing [[Damage]]',
+      name: `Poison Sting`,
+      description: 'Slows the target by [[MoveSpeed]] for [[Duration]], dealing [[Damage]]. If target is [[poisoned:poison]], it stuns instead',
+      suffixMoveSpeed: '%',
       target: TARGET_ENEMY,
       isDisabledBy: null,
+      getEffectMoveSpeed: function (level) {
+        return levelMultiplier(50, level, 2)
+      },
       getEffectDuration: function (level) {
         return levelMultiplier(2000, level, 200)
       },
       getEffectDamage: function (level) {
-        return levelMultiplier(20, level, 5)
+        return levelMultiplier(40, level, 5)
       },
       getRange: function (level) {
-        return 150
+        return 120
       },
       getCooldown: function (level) {
-        return levelMultiplier(200, level, -5)
+        return levelMultiplier(250, level, -5)
       },
       start: function (index, level, ship, target) {
         const damage = this.getEffectDamage(level)
-        const stunDuration = this.getEffectDuration(level)
+        const moveSpeed = new Decimal(1).minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
+        const effectDuration = this.getEffectDuration(level)
         const maxRange = this.getRange(level)
         const bulletData = {
           hitsTowers: true,
@@ -192,38 +197,49 @@ export default {
           attackPierce: 10,
           attackMoveSpeed: 8,
           maxRange: maxRange,
-          firstCollision: false,
-          stunDuration: stunDuration,
+          modify: {
+            name: 'Poison',
+            stat: 'moveSpeed',
+            method: 'times',
+            value: moveSpeed,
+            expires: effectDuration,
+          },
+          stunDuration: effectDuration,
         }
         new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
       },
     },
     {
       name: 'Acid Drop',
-      description: 'Spit a toxic glob on the ground, dealing [[Dps]] to enemies inside for [[Duration]]',
+      description: 'Spit a toxic glob on the ground for [[Duration]], [[poisoning:poison]] for [[Dps]] and move speed [[MoveSpeed]]',
+      suffixMoveSpeed: '%',
       factorDps: 50, //TODO ticks
       suffixDps: ' dps',
       target: TARGET_GROUND,
       isDisabledBy: null,
       getRange: function (level) {
-        return 150
+        return 160
       },
       getEffectRange: function (level) {
         return 60
       },
       getEffectDuration: function (level) {
-        return levelMultiplier(3000, level, 200)
+        return levelMultiplier(1000, level, 100)
+      },
+      getEffectMoveSpeed: function (level) {
+        return levelMultiplier(25, level, 2)
       },
       getEffectDps: function (level) {
         return levelMultiplier(600, level, 60)
       },
       getCooldown: function (level) {
-        return 200
+        return 180
       },
       start: function (index, level, ship, target) {
         const dps = this.getEffectDps(level)
         const aoeRange = this.getEffectRange(level)
         const effectDuration = this.getEffectDuration(level)
+        const moveSpeed = new Decimal(1).minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
         const bulletData = {
           dot: true,
           hitsTowers: true,
@@ -236,6 +252,14 @@ export default {
           attackMoveSpeed: 12,
           explosionRadius: aoeRange,
           effectDuration: effectDuration,
+          allies: false,
+          modify: {
+            name: 'Poison',
+            stat: 'moveSpeed',
+            method: 'times',
+            value: moveSpeed,
+            expires: effectDuration,
+          },
         }
         new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
       },

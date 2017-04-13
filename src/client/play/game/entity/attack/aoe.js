@@ -54,7 +54,7 @@ class AreaOfEffect {
 
       if (isAlly === this.allies) {
         if (this.modify) {
-          target.modify(this.modify.name, this.modify.stat, this.modify.method, this.modify.value, renderTime + this.modify.expires)
+          target.modifyData(renderTime, this.modify)
         }
       }
       if (!isAlly) {

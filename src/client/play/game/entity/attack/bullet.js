@@ -145,8 +145,10 @@ class Bullet {
           new Bullet(this.target, this.source, { bulletColor: 0x00ff00, heal: heal, bulletSize: 8, attackMoveSpeed: 10 }, this.px, this.py, this.container.rotation.z)
         }
       }
-      if (this.stunDuration && (this.hitsTowers || !this.target.tower)) {
+      if (this.stunDuration && (this.hitsTowers || !this.target.tower) && this.target.hasModifier('moveSpeed', 'Poison')) {
         this.target.stun(renderTime, this.stunDuration)
+      } else if (this.modify) {
+        this.target.modifyData(renderTime, this.modify)
       }
     }
     this.destroy()

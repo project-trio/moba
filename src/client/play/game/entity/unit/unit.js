@@ -175,6 +175,12 @@ class Unit {
     }
   }
 
+  hasModifier (statName, key) {
+    const statModifiers = this.modifiers[statName]
+    console.log('hm', statName, key, statModifiers, statModifiers ? statModifiers[key] : null)
+    return statModifiers && statModifiers[key] !== undefined
+  }
+
   expireModifiers (renderTime) {
     for (let statKey in this.modifiers) {
       const statModifiers = this.modifiers[statKey]
@@ -193,8 +199,15 @@ class Unit {
     }
   }
 
+  modifyData (renderTime, data) {
+    this.modify(data.name, data.stat, data.method, data.value, renderTime + data.expires)
+  }
+
   modify (modifierName, statKey, method, value, ending) {
     const statModifiers = this.modifiers[statKey]
+    if (!statModifiers) {
+      return
+    }
     const updatingModifier = modifierName !== null
     if (updatingModifier) {
       if (method === null) {
