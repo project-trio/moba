@@ -167,6 +167,7 @@ export default {
       name: `Poison Sting`,
       description: 'Slows the target by [[MoveSpeed]] for [[Duration]], dealing [[Damage]]. If target is [[poisoned:poison]], it stuns instead',
       suffixMoveSpeed: '%',
+      hitsTowers: false,
       target: TARGET_ENEMY,
       isDisabledBy: null,
       getEffectMoveSpeed: function (level) {
@@ -190,7 +191,7 @@ export default {
         const effectDuration = this.getEffectDuration(level)
         const maxRange = this.getRange(level)
         const bulletData = {
-          hitsTowers: true,
+          hitsTowers: this.hitsTowers,
           bulletSize: 10,
           bulletColor: 0xdddd00,
           attackDamage: damage * 100,

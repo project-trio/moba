@@ -275,14 +275,10 @@ class Unit {
     if (this.isDying) {
       return false
     }
-    if (this.id !== store.state.local.skills.unitTarget) {
-      if (store.state.local.skills.getUnitTarget) {
-        store.state.local.skills.unitTarget = this.id
-        if (store.state.local.skills.withAlliance === this.localAlly) {
-          this.setSelection(0xff0000)
-        }
-      } else {
-        store.state.local.skills.unitTarget = this.id
+    if (this.id !== store.state.local.skills.unitTarget && (!this.tower || store.state.local.skills.hitsTowers)) {
+      store.state.local.skills.unitTarget = this.id
+      if (store.state.local.skills.getUnitTarget && store.state.local.skills.withAlliance === this.localAlly) {
+        this.setSelection(0xff0000)
       }
     }
     document.body.style.cursor = 'pointer'

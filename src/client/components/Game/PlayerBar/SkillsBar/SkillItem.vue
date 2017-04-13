@@ -29,8 +29,10 @@ import Bridge from '@/play/events/bridge'
 
 import Unit from '@/play/game/entity/unit/unit'
 
-const getUnitTarget = function (targetType) {
+const getUnitTarget = function (skillData) {
+  const targetType = skillData.target
   store.state.local.skills.getUnitTarget = true
+  store.state.local.skills.hitsTowers = skillData.hitsTowers
   store.state.local.skills.withAlliance = targetType === 3 ? false : targetType === 4 ? true : null
   if (store.state.local.skills.unitTarget) {
     const unitTarget = Unit.get(store.state.local.skills.unitTarget)
@@ -97,7 +99,7 @@ export default {
         return `Select a ground ${this.skill.getEffectRange ? 'area' : 'point'} to target`
       }
       if (this.skill.target === 3) {
-        return 'Select an enemy to target'
+        return `Select an enemy ${this.skill.hitsTowers ? '' : 'unit'} to target`
       }
       if (this.skill.target === 4) {
         return 'Select an ally to target'
@@ -224,7 +226,7 @@ export default {
             if (this.skill.target === 2) {
               store.state.local.skills.getGroundTarget = true
             } else {
-              getUnitTarget(this.skill.target)
+              getUnitTarget(this.skill)
             }
           }
         }
@@ -308,7 +310,7 @@ export default {
           if (groundTargeted) {
             store.state.local.skills.getGroundTarget = true
           } else {
-            getUnitTarget(this.skill.target)
+            getUnitTarget(this.skill)
           }
         } else {
           const target = groundTargeted ? store.state.local.skills.groundTarget : store.state.local.skills.unitTarget

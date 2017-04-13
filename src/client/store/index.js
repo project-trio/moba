@@ -38,6 +38,7 @@ const defaultLocalState = () => {
       active: null,
       groundTarget: null,
       unitTarget: null,
+      hitsTowers: false,
       activation: null,
 
       getGroundTarget: false,
