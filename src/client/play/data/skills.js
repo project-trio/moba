@@ -679,7 +679,7 @@ export default {
       getCooldown: function (level) {
         return 150
       },
-      start: function (index, level, ship) {
+      start: function (index, level, ship, target, startAt, endAt) {
         ship.modify(this.name, 'attackCooldown', 'times', new Decimal(1).minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
         ship.modify(this.name, 'armor', 'times', 0.5)
         ship.bruteForceMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
@@ -706,19 +706,34 @@ export default {
       getCooldown: function (level) {
         return levelMultiplier(200, level, -5)
       },
-      start: function (index, level, ship) {
+      start: function (index, level, ship, target, startAt, endAt) {
         ship.removeTarget()
         ship.invisible = true
-        ship.opacity(0.33)
+
+        const animDuration = 500
+        ship.queueAnimation(null, 'opacity', {
+          from: 1,
+          to: 0.4,
+          start: startAt,
+          duration: animDuration,
+        })
+        ship.queueAnimation(null, 'opacity', {
+          from: 0.4,
+          to: 1,
+          until: endAt,
+          duration: animDuration,
+        })
+
         ship.endInvisible = function () {
           console.log('cancel invisibility')
+          ship.cancelAnimation(null, 'opacity')
+          ship.opacity(1)
           ship.endSkill(index)
         }
       },
       end: function (ship) {
         ship.invisible = false
         ship.endInvisible = null
-        ship.opacity(1)
       },
     },
     {

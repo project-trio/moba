@@ -59,6 +59,15 @@ const update = function (renderTime) {
   }
 }
 
+const cancel = function (key, property) {
+  for (let idx = this.animations.length - 1; idx >= 0; idx -= 1) {
+    const animation = this.animations[idx]
+    if (animation.key === key && animation.property === property) {
+      this.animations.splice(idx, 1)
+    }
+  }
+}
+
 //PUBLIC
 
 export default {
@@ -67,6 +76,7 @@ export default {
     object.animations = []
     object.queueAnimation = queue
     object.updateAnimations = update
+    object.cancelAnimation = cancel
   },
 
 }
