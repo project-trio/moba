@@ -1,16 +1,17 @@
 <template>
-<div class="chat-bar">
-  <div class="chat-messages-container" :class="{ active: showingInput }">
+<div class="chat-bar" :class="{ active: showingInput }">
+  <div class="chat-messages-container">
     <div ref="chatScroll" class="chat-messages scrolls">
       <div v-for="msg in messages" class="msg">
         <div v-if="msg.active !== undefined"><span :class="`msg-from team-${msg.team + 1}`">{{ msg.name }}</span> {{ msg.active ? 'rejoined' : 'left' }} the game</div>
         <div v-else-if="msg.kill"><span :class="`msg-from team-${msg.team + 1}`">{{ msg.kill }}</span> killed by {{ msg.executed ? 'a' : null }} <span :class="`msg-from team-${1 - msg.team + 1}`">{{ msg.damagers.join(', ') }}</span></div>
         <div v-else-if="msg.tower"><span :class="`msg-from team-${msg.team + 1}`">{{ msg.tower }}</span> destroyed!</div>
-        <div v-else><span :class="`msg-from team-${msg.team + 1}`">{{ msg.from }}</span>: {{ msg.body }}</div>
+        <div v-else><span class="chat-all">{{ msg.all ? '[ALL] ' : null }}</span><span :class="`msg-from team-${msg.team + 1}`">{{ msg.from }}</span>: {{ msg.body }}</div>
       </div>
     </div>
   </div>
   <div class="chat-input-container">
+    <button v-show="showingInput" @click="onTeamVisibility" :class="chatVisibilityClass" class="chat-visibility-button interactive">{{ allChat ? 'ALL' : 'team' }}</button>
     <input ref="chatInput" v-model.trim="draftMessage" @focus="onFocusChat" @blur="onBlurChat" class="chat-input" :class="{ active: showingInput }"></input>
     <div v-if="!showingInput" class="chat-placeholder">press enter to chat</div>
   </div>
@@ -19,6 +20,8 @@
 
 <script>
 import store from '@/store'
+
+import Local from '@/play/local'
 
 import Bridge from '@/play/events/bridge'
 
@@ -30,6 +33,7 @@ export default {
     return {
       showingInput: false,
       draftMessage: '',
+      allChat: false,
     }
   },
 
@@ -42,6 +46,19 @@ export default {
     pressed () {
       return store.state.key.pressed
     },
+
+    localId () {
+      return Local.playerId
+    },
+    localPlayer () {
+      return store.state.game.players[this.localId]
+    },
+    localTeam () {
+      return this.localPlayer ? this.localPlayer.team : 0
+    },
+    chatVisibilityClass () {
+      return this.allChat ? 'team-all' : `team-${this.localTeam + 1}-bg`
+    },
   },
 
   watch: {
@@ -51,7 +68,7 @@ export default {
       } else if (key.code === KEY_ENTER) {
         if (this.showingInput) {
           if (this.draftMessage) {
-            Bridge.emit('chat', { team: true, body: this.draftMessage }, (response) => {
+            Bridge.emit('chat', { all: this.allChat, body: this.draftMessage }, (response) => {
               if (response.error) {
                 //TODO display throttle error
                 console.log('chat err', response)
@@ -62,6 +79,7 @@ export default {
           }
           this.toggleChat(false)
         } else {
+          this.setChatVisiblity(key.modifier)
           this.toggleChat(true)
         }
       }
@@ -71,7 +89,9 @@ export default {
   methods: {
     scrollToBottom (showing) {
       this.$nextTick(() => {
-        this.$refs.chatScroll.scrollTop = this.$refs.chatScroll.scrollHeight
+        if (this.$refs.chatScroll) {
+          this.$refs.chatScroll.scrollTop = this.$refs.chatScroll.scrollHeight
+        }
       })
     },
 
@@ -81,15 +101,31 @@ export default {
       } else {
         this.$refs.chatInput.blur()
       }
-      this.scrollToBottom()
     },
 
     onFocusChat () {
       this.showingInput = true
     },
 
-    onBlurChat () {
+    onBlurChat (event) {
+      if (event.relatedTarget) {
+        event.target.focus()
+        return false
+      }
       this.showingInput = false
+      this.scrollToBottom()
+    },
+
+    setChatVisiblity (enabled) {
+      this.allChat = enabled
+    },
+
+    onTeamVisibility () {
+      if (this.showingInput) {
+        this.setChatVisiblity(!this.allChat)
+      } else {
+        this.toggleChat(true)
+      }
     },
   },
 }
@@ -105,15 +141,18 @@ export default {
 
 .chat-input-container
   height 32px
-  width 256px
+  width 300px
   position relative
 .chat-input
-  height inherit
   width inherit
+  height inherit
+  padding-left 56px
   pointer-events auto
   color white
   background rgba(64, 64, 64, 0.5)
   opacity 0
+  // position absolute
+  // left 0
 .chat-input.active
   opacity 1
 
@@ -129,6 +168,15 @@ export default {
   line-height 1.5em
   color rgba(255, 255, 255, 0.5)
 
+.chat-visibility-button
+  position absolute
+  left 0
+  width 52px
+  height inherit
+  font-size 18px
+  z-index 1
+  pointer-events auto
+
 // Messages
 
 .chat-messages-container
@@ -137,7 +185,7 @@ export default {
   width 300px
   max-height 200px
   overflow hidden
-.chat-messages-container.active
+.active .chat-messages-container
   background rgba(96, 96, 96, 0.5)
   max-height 500px
 
@@ -155,6 +203,9 @@ export default {
 
 .msg
   margin 4px 0
+
+.chat-all
+  color #999
 
 .msg-from
   font-weight 500

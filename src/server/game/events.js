@@ -315,10 +315,10 @@ module.exports = {
           player.chatAt = updateTime
           data.id = player.id
           data.at = updateTime
-          if (data.team) {
-            player.game.teamBroadcast(player.team, 'msg', data)
-          } else {
+          if (data.all) {
             player.game.broadcast('msg', data)
+          } else {
+            player.game.teamBroadcast(player.team, 'msg', data)
           }
         }
       }
