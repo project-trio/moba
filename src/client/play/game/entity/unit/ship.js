@@ -555,7 +555,7 @@ class Ship extends Movable {
         sightTarget.isRendering = true
       } else {
         let isInSight = !sightTarget.invisible
-        if (isInSight && sightTarget.bulletCount <= 0) {
+        if (isInSight && (!sightTarget.attackTarget || !sightTarget.moveToTarget || !sightTarget.cacheAttackCheck)) {
           isInSight = false
           for (let sidx = units.length - 1; sidx >= 0; sidx -= 1) {
             const checkSightFromUnit = units[sidx]

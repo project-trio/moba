@@ -30,6 +30,8 @@ class Unit {
     this.damagers = {}
     this.isLocal = isLocal
     this.cacheMoveSpeed = 0
+    this.cacheAttackCheck = false
+    this.moveToTarget = true
 
     this.renderInBackground = renderInBackground
     this.movable = false
@@ -485,7 +487,7 @@ class Unit {
   }
 
   setTarget (target, distance) {
-    if (target != this.attackTarget) {
+    if (target !== this.attackTarget) {
       if (this.attackTarget && this.isLocal) {
         this.attackTarget.setSelection(null)
       }
