@@ -12,7 +12,7 @@
   },
   "engines": {
     "node": "^7.7.1",
-    "yarn": "^0.21.3"
+    "yarn": "^0.23.2"
   },
   "dependencies": {
     "express": "^4.14.1",
@@ -63,7 +63,7 @@
     "three": "^0.84.0",
     "url-loader": "^0.5.7",
     "vue-loader": "^11.1.4",
-    "vue-style-loader": "^2.0.0",
+    "vue-style-loader": "^3.0.0",
     "vue-template-compiler": "^2.2.1",
     "webpack": "^2.2.1",
     "webpack-bundle-analyzer": "^2.2.1",
