@@ -283,9 +283,22 @@ class Ship extends Movable {
 
   die (renderTime) {
     this.updateSkills(null)
-    this.opacity(0.5)
-    this.respawned = false
+
+    const animDuration = 500
+    this.queueAnimation(null, 'opacity', {
+      from: 1,
+      to: 0.5,
+      start: renderTime,
+      duration: animDuration,
+    })
     this.reemergeAt = renderTime + waitToRespawn * 2 + 1000 * this.level
+    this.queueAnimation(null, 'opacity', {
+      from: 0.5,
+      to: 1,
+      until: this.reemergeAt,
+      duration: animDuration,
+    })
+    this.respawned = false
     this.queueTarget = null
     this.queueSkill = null
     this.targetSkill = null

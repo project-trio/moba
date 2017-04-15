@@ -8,6 +8,9 @@ const queue = function (key, property, data) {
   } else {
     data.change = +(data.to - data.from)
   }
+  if (data.until) {
+    data.start = data.until - data.duration
+  }
   // if (!data.start) {
   //   data.start = store.state.game.renderTime
   // }
@@ -32,16 +35,23 @@ const update = function (renderTime) {
       } else {
         currentValue = animation.from + timeElapsed * animation.change / duration
       }
-      let obj = this[animation.key]
-      if (animation.child !== undefined) {
-        obj = obj.children[animation.child]
+      let obj = null
+      if (animation.key) {
+        obj = this[animation.key]
+        if (animation.child !== undefined) {
+          obj = obj.children[animation.child]
+        }
       }
       const axis = animation.axis
       if (axis !== undefined) {
         obj[animation.property][axis] = currentValue
       } else if (animation.property === 'opacity') {
-        obj.material.transparent = true
-        obj.material.opacity = currentValue
+        if (obj) {
+          obj.material.transparent = true
+          obj.material.opacity = currentValue
+        } else {
+          this.opacity(currentValue)
+        }
       } else {
         obj[animation.property] = currentValue
       }
