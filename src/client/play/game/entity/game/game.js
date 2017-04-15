@@ -30,6 +30,7 @@ export default function (gid, mode, size, mapName) {
   let tickOffsets = -4
 
   this.id = gid
+  this.size = size
   this.started = false
   this.playing = false
   this.finished = false

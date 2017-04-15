@@ -117,7 +117,11 @@ export default {
     },
 
     setChatVisiblity (enabled) {
-      this.allChat = enabled
+      if (Local.game && Local.game.size > 1) {
+        this.allChat = enabled
+      } else {
+        this.allChat = true
+      }
     },
 
     onTeamVisibility () {
