@@ -47,7 +47,7 @@ class AreaOfEffect {
     const fromUnit = this.source
     for (let idx = units.length - 1; idx >= 0; idx -= 1) {
       const target = units[idx]
-      if (target.tower && !this.hitsTowers) {
+      if (target.isDead || (target.tower && !this.hitsTowers)) {
         continue
       }
       const isAlly = fromUnit.alliedTo(target)
