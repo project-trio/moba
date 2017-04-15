@@ -89,7 +89,7 @@ export default {
         return 120
       },
       getEffectRange: function (level) {
-        return 70
+        return levelMultiplier(70, level, 2)
       },
       getEffectRemainsDuration: function (level) {
         return levelMultiplier(3000, level, 200)

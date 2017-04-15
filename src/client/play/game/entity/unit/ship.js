@@ -452,9 +452,9 @@ class Ship extends Movable {
     } else {
       if (this.moveToTarget) {
         this.targetingSkill = null
-        if (this.isLocal) {
-          console.warn('target canceled')
-        }
+        // if (this.isLocal) {
+        //   console.warn('target canceled')
+        // }
       }
       this.moveToTarget = false
     }
