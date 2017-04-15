@@ -57,11 +57,10 @@ class Bullet {
     }
     this.setLocation(x, y, source.height, startAngle)
     if (this.unitTarget) {
-      this.setDestination(this.target.px, this.target.py, true)
+      this.updateTarget()
     } else {
       this.setDestination(target[0], target[1], true)
     }
-
     allBullets.push(this)
   }
 
@@ -164,12 +163,6 @@ class Bullet {
     return Util.pointDistance(this.px, this.py, this.sx, this.sy)
   }
 
-  distanceToTarget () {
-    const targetX = this.unitTarget ? this.target.px : this.target[0]
-    const targetY = this.unitTarget ? this.target.py : this.target[1]
-    return Util.pointDistance(this.px, this.py, targetX, targetY)
-  }
-
   move (renderTime, timeDelta, tweening) {
     let cx, cy
     let moveByX, moveByY
@@ -202,10 +195,10 @@ class Bullet {
       if (this.maxRange && !Util.withinSquared(this.distanceToStart(), this.maxRange * 100)) {
         reachedApproximate = true
       } else {
-        const distX = this.destX - cx
-        const distY = this.destY - cy
+        const distX = this.destX - movingToX
+        const distY = this.destY - movingToY
         if (Math.abs(distX) < this.collisionCheck && Math.abs(distY) < this.collisionCheck) {
-          reachedApproximate = this.distanceToTarget() <= this.collisionCheck
+          reachedApproximate = Util.pointDistance(movingToX, movingToY, this.destX, this.destY) <= this.collisionCheck
         }
       }
       if (reachedApproximate) {
@@ -226,6 +219,14 @@ class Bullet {
   updateAim () {
     this.aimTargetAngle = Util.angleBetween(this, this.target, true)
     this.container.rotation.z = this.aimTargetAngle
+  }
+
+  updateTarget () {
+    if (this.target.isDead) {
+      this.unitTarget = false
+    } else {
+      this.setDestination(this.target.px, this.target.py, true)
+    }
   }
 
 }
@@ -255,9 +256,8 @@ Bullet.update = function (renderTime, timeDelta, tweening) {
         allBullets.splice(idx, 1)
         startIndex -= 1
       } else if (bullet.unitTarget) {
-        bullet.setDestination(bullet.target.px, bullet.target.py, true)
-      } else {
-        //TODO Collision check
+        bullet.updateTarget()
+      // } else { //TODO Collision check
       }
     }
   }
