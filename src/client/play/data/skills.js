@@ -370,6 +370,14 @@ export default {
         ship.opacity(1)
       },
     },
+    {
+      name: '[tbd]',
+      description: '',
+    },
+    {
+      name: '[tbd]',
+      description: '',
+    },
   ],
 
 //PULTER
@@ -421,6 +429,14 @@ export default {
           duration: animationDuration,
         })
       },
+    },
+    {
+      name: '[tbd]',
+      description: '',
+    },
+    {
+      name: '[tbd]',
+      description: '',
     },
   ],
 
