@@ -47,7 +47,7 @@ class AreaOfEffect {
     const fromUnit = this.source
     for (let idx = units.length - 1; idx >= 0; idx -= 1) {
       const target = units[idx]
-      if (target.isDead || (target.tower && !this.hitsTowers)) {
+      if (target.isDead || target.untargetable || (target.tower && !this.hitsTowers)) {
         continue
       }
       const isAlly = fromUnit.alliedTo(target)
@@ -57,18 +57,16 @@ class AreaOfEffect {
           target.modifyData(renderTime, this.modify)
         }
       }
-      if (!isAlly) {
-        if (this.attackDamage && !target.isDying && !target.untargetable) {
-          let distance
-          if (this.withUnit) {
-            distance = fromUnit.distanceTo(target)
-          } else {
-            distance = Util.pointDistance(this.px, this.py, target.px, target.py)
-          }
-          if (Util.withinSquared(distance, this.collisionSize * POSITION_MAGNITUDE_OFFSET + target.stats.collision)) {
-            if (this.attackDamage) {
-              target.takeDamage(fromUnit, renderTime, this.attackDamage, this.attackPierce)
-            }
+      if (!isAlly && this.attackDamage) {
+        let distance
+        if (this.withUnit) {
+          distance = fromUnit.distanceTo(target)
+        } else {
+          distance = Util.pointDistance(this.px, this.py, target.px, target.py)
+        }
+        if (Util.withinSquared(distance, this.collisionSize * POSITION_MAGNITUDE_OFFSET + target.stats.collision)) {
+          if (this.attackDamage) {
+            target.takeDamage(fromUnit, renderTime, this.attackDamage, this.attackPierce)
           }
         }
       }

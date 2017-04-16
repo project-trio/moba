@@ -23,7 +23,6 @@ let targetingGround = false
 class Unit {
 
   constructor (team, statBase, unitScale, sx, sy, startAngle, isLocal, renderInBackground) {
-    const unattackable = !statBase.healthMax
     this.team = team
     this.localAlly = Local.player && team === Local.player.team
     this.startAngle = startAngle
@@ -41,9 +40,9 @@ class Unit {
     this.bulletCount = 0
     this.height = 0
     this.split = false
-    this.unattackable = unattackable
-    this.untargetable = unattackable
-    this.noTargeting = unattackable
+    this.static = !statBase.healthMax
+    this.disableAttacking = this.static
+    this.untargetable = this.static
     this.stunnedUntil = 0
 
     this.fogRadius = null
@@ -71,7 +70,7 @@ class Unit {
     }
     this.sightRangeCheck = Util.squared(this.stats.sightRange)
 
-    if (!unattackable) {
+    if (!this.static) {
       const ringOffset = unitScale > 3 ? 2 : 6
       const selectionRing = Render.ring(statBase.collision + ringOffset, 4, { color: 0x000000, opacity: 0.5, parent: this.floor })
       this.selectionIndicator = selectionRing
@@ -367,7 +366,7 @@ class Unit {
     if (this.selected) {
       store.everyUpdateStats(this)
     }
-    if (!this.isDead && !this.unattackable) {
+    if (!this.isDead) {
       this.doRegenerate()
       if (this.stunnedUntil > 0 && !this.checkStun(renderTime)) {
         this.stunnedUntil = 0
@@ -597,7 +596,7 @@ class Unit {
   }
 
   isAttackOffCooldown (renderTime) {
-    if (this.unattackable) {
+    if (this.disableAttacking) {
       return false
     }
     return renderTime - this.lastAttack > this.current.attackCooldown
@@ -608,7 +607,7 @@ class Unit {
   }
 
   checkAttack (renderTime) {
-    if (this.stunnedUntil > 0) {
+    if (this.stunnedUntil > 0 || this.disableAttacking) {
       return
     }
     const attackForTick = this.getAttackTarget(allUnits)
@@ -651,6 +650,9 @@ Unit.update = function (renderTime, timeDelta, tweening) {
     // Update before deaths
     for (let idx = startIndex; idx >= 0; idx -= 1) {
       const unit = allUnits[idx]
+      if (unit.static) {
+        continue
+      }
       unit.update(renderTime, timeDelta)
       if (!unit.isDead && unit.isAttackOffCooldown(renderTime)) { //TODO diff for minis?
         unit.checkAttack(renderTime)

@@ -325,8 +325,7 @@ export default {
         ship.modify(this.name, 'moveSpeed', 'times', 3)
         ship.uncontrollable = true
         ship.untargetable = true
-        ship.unattackable = true
-        ship.noTargeting = true
+        ship.disableAttacking = true
         ship.opacity(0.75)
 
         ship.endBarrelRoll = function () {
@@ -365,8 +364,7 @@ export default {
 
         ship.uncontrollable = false
         ship.untargetable = false
-        ship.unattackable = false
-        ship.noTargeting = false
+        ship.disableAttacking = false
         ship.opacity(1)
       },
     },
@@ -474,6 +472,7 @@ export default {
     {
       name: `Storm's Eye`,
       description: 'Allies inside the eye gain [[Armor]]',
+      suffixArmor: ' armor',
       target: TARGET_SELF,
       isDisabledBy: null,
       endOnDeath: false,
@@ -609,7 +608,7 @@ export default {
       start: function (index, level, ship, target, startAt, endAt) {
         ship.removeTarget()
         ship.untargetable = true
-        ship.noTargeting = true
+        ship.disableAttacking = true
 
         const radius = this.getRange(level)
         const damage = this.getEffectDps(level)
@@ -638,7 +637,7 @@ export default {
       end: function (ship) {
         ship.model.position.z = 0
         ship.untargetable = false
-        ship.noTargeting = false
+        ship.disableAttacking = false
 
         ship.diveCircle.destroy()
         ship.diveCircle = null
