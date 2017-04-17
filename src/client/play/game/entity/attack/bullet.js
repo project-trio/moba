@@ -122,6 +122,7 @@ class Bullet {
     if (this.explosionRadius) {
       new AreaOfEffect(this.source, false, {
         dot: this.dot,
+        hitsTowers: this.hitsTowers,
         px: this.px,
         py: this.py,
         color: this.color,
