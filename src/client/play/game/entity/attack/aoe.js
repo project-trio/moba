@@ -21,7 +21,11 @@ class AreaOfEffect {
     this.endAt = data.endAt
     this.active = true
     this.hitsTowers = data.hitsTowers
-    this.allies = data.allies
+    if (data.allies !== undefined) {
+      this.allies = data.allies
+    } else {
+      this.allies = false
+    }
     this.modify = data.modify
 
     this.circle = Render.circle(data.radius, { color: data.color, opacity: data.opacity, parent: withUnit ? data.parent : Local.game.map.floorContainer })
@@ -36,7 +40,7 @@ class AreaOfEffect {
       this.circle.position.z = data.z
     }
 
-    this.collisionSize = data.radius
+    this.collisionSize = data.radius * POSITION_MAGNITUDE_OFFSET
     this.attackDamage = data.attackDamage
     this.attackPierce = data.attackPierce
 
@@ -51,23 +55,21 @@ class AreaOfEffect {
         continue
       }
       const isAlly = fromUnit.alliedTo(target)
-
-      if (isAlly === this.allies) {
+      if (isAlly !== this.allies) {
+        continue
+      }
+      let distance
+      if (this.withUnit) {
+        distance = fromUnit.distanceTo(target)
+      } else {
+        distance = Util.pointDistance(this.px, this.py, target.px, target.py)
+      }
+      if (Util.withinSquared(distance, this.collisionSize + target.stats.collision)) {
         if (this.modify) {
           target.modifyData(renderTime, this.modify)
         }
-      }
-      if (!isAlly && this.attackDamage) {
-        let distance
-        if (this.withUnit) {
-          distance = fromUnit.distanceTo(target)
-        } else {
-          distance = Util.pointDistance(this.px, this.py, target.px, target.py)
-        }
-        if (Util.withinSquared(distance, this.collisionSize * POSITION_MAGNITUDE_OFFSET + target.stats.collision)) {
-          if (this.attackDamage) {
-            target.takeDamage(fromUnit, renderTime, this.attackDamage, this.attackPierce)
-          }
+        if (!isAlly && this.attackDamage) {
+          target.takeDamage(fromUnit, renderTime, this.attackDamage, this.attackPierce)
         }
       }
     }
