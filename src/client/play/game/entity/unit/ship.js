@@ -354,6 +354,7 @@ class Ship extends Movable {
     this.respawned = true
     this.isBlocking = false
     this.isDying = false
+    this.stunnedUntil = 0
     this.modify('Death', 'moveSpeed', 'times', 0.5)
 
     const spawnAt = this.player.spawnLocation()
