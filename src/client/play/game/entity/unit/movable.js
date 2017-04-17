@@ -149,7 +149,11 @@ class Movable extends Unit {
         if (this.isLocal) {
           console.log('lost target')
         }
-        this.setTarget(null)
+        if (this.requiresSightOfTarget) {
+          this.removeTarget()
+        } else {
+          this.setTarget(null)
+        }
         this.reachedDestination(false)
       }
       return true
