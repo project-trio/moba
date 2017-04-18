@@ -30,7 +30,6 @@ class Unit {
     this.isLocal = isLocal
     this.cacheMoveSpeed = 0
     this.cacheAttackCheck = false
-    this.moveToTarget = true
 
     this.renderInBackground = renderInBackground
     this.movable = false
@@ -476,15 +475,6 @@ class Unit {
     this.attackTarget = null
   }
 
-  setTargetId (id) {
-    const target = Unit.get(id)
-    if (target && !target.isDead) {
-      const dist = this.distanceTo(target)
-      this.moveToTarget = true
-      return this.setTarget(target, dist, this.isLocal)
-    }
-  }
-
   setTarget (target, distance) {
     if (target !== this.attackTarget) {
       if (this.attackTarget && this.isLocal) {
@@ -504,6 +494,23 @@ class Unit {
       }
     }
     return target
+  }
+
+  checkLoseTarget () {
+    this.removeTarget()
+  }
+
+  checkUpdateTarget (renderTime) {
+  }
+
+  checkTarget (renderTime) {
+    if (this.attackTarget) {
+      if (!this.attackTarget.targetableStatus() || !this.canSee(this.attackTarget)) {
+        this.checkLoseTarget()
+      } else {
+        this.checkUpdateTarget(renderTime)
+      }
+    }
   }
 
   // Aim
@@ -672,8 +679,8 @@ Unit.update = function (renderTime, timeDelta, tweening) {
     // Update after deaths
     for (let idx = startIndex; idx >= 0; idx -= 1) {
       const unit = allUnits[idx]
-      if (unit.movable && !unit.isDying) {
-        unit.updateMoveTarget(renderTime)
+      if (!unit.isDying) {
+        unit.checkTarget(renderTime)
       }
       unit.expireModifiers(renderTime)
     }

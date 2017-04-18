@@ -22,7 +22,6 @@ class Movable extends Unit {
     super(team, statBase, unitScale, x, y, startAngle, isLocal)
 
     this.movable = true
-    this.moveToTarget = false
     this.moveTargetAngle = null
   }
 
@@ -133,33 +132,6 @@ class Movable extends Unit {
     this.isMoving = false
   }
 
-  updateMoveTarget (renderTime) {
-    if (this.attackTarget && this.moveToTarget) {
-      if (this.attackTarget.targetableStatus() && this.canSee(this.attackTarget)) {
-        if (this.checkQueuedSkill && this.checkQueuedSkill(renderTime)) {
-          this.setTarget(null)
-          this.reachedDestination(false)
-        } else {
-          this.isAttackingTarget = this.inRangeFor(this.attackTarget)
-          if (!this.isAttackingTarget) {
-            this.setDestination(this.attackTarget.px, this.attackTarget.py, true)
-          }
-        }
-      } else if (this.requiresSightOfTarget || this.attackTarget.isDying) {
-        if (this.isLocal) {
-          console.log('lost target')
-        }
-        if (this.requiresSightOfTarget) {
-          this.removeTarget()
-        } else {
-          this.setTarget(null)
-        }
-        this.reachedDestination(false)
-      }
-      return true
-    }
-  }
-
   move (timeDelta, tweening) {
     if (this.isAttackingTarget) {
       return
@@ -228,6 +200,21 @@ class Movable extends Unit {
     this.isMoving = false
 
     super.die(renderTime)
+  }
+
+  // Target
+
+  checkLoseTarget () {
+    super.checkLoseTarget()
+
+    this.reachedDestination(false)
+  }
+
+  checkUpdateTarget (renderTime) {
+    this.isAttackingTarget = this.inRangeFor(this.attackTarget)
+    if (!this.isAttackingTarget) {
+      this.setDestination(this.attackTarget.px, this.attackTarget.py, true)
+    }
   }
 
 }

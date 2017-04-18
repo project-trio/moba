@@ -122,6 +122,33 @@ class Ship extends Movable {
     super.reachedDestination(needsNewDestination)
   }
 
+  // Target
+
+  reachTarget () {
+    this.setTarget(null)
+    this.reachedDestination(false)
+  }
+
+  checkLoseTarget () {
+    if (this.attackTarget.isDying) {
+      if (this.isLocal) {
+        console.log('lost target')
+      }
+      this.reachTarget()
+    }
+  }
+
+  checkUpdateTarget (renderTime) {
+    if (!this.moveToTarget) {
+      return
+    }
+    if (this.checkQueuedSkill && this.checkQueuedSkill(renderTime)) {
+      this.reachTarget()
+    } else {
+      super.checkUpdateTarget(renderTime)
+    }
+  }
+
   // Skills
 
   checkQueuedSkill (renderTime) {
@@ -464,6 +491,15 @@ class Ship extends Movable {
       this.moveToTarget = false
     }
     return super.setTarget(target, distance)
+  }
+
+  setTargetId (id) {
+    const target = Unit.get(id)
+    if (target && !target.isDead) {
+      const dist = this.distanceTo(target)
+      this.moveToTarget = true
+      return this.setTarget(target, dist, this.isLocal)
+    }
   }
 
   getAttackTarget (units) {

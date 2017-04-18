@@ -19,7 +19,6 @@ class Mini extends Movable {
 
     this.type = type
     this.name = `${type} mini`
-    this.moveToTarget = true
     this.exactDestination = true
 
     this.setPath(path, mirrored)
@@ -165,9 +164,10 @@ class Mini extends Movable {
     return this.setTarget(target, closest)
   }
 
-  updateMoveTarget () {
-    const hasTarget = super.updateMoveTarget()
-    if (hasTarget && this.pathing) {
+  checkTarget (renderTime) {
+    super.checkTarget(renderTime)
+
+    if (this.attackTarget && this.pathing) {
       this.pathing = false
     }
   }
