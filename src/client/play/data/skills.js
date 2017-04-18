@@ -438,6 +438,36 @@ export default {
 
   pulter: [
     {
+      name: `Homer`,
+      description: 'Deals [[Damage]] to the target',
+      hitsTowers: true,
+      target: TARGET_ENEMY,
+      isDisabledBy: null,
+      getEffectDamage: function (level) {
+        return levelMultiplier(100, level, 10)
+      },
+      getRange: function (level) {
+        return 170
+      },
+      getCooldown: function (level) {
+        return levelMultiplier(100, level, -5)
+      },
+      start: function (index, level, ship, target) {
+        const damage = this.getEffectDamage(level)
+        const maxRange = this.getRange(level)
+        const bulletData = {
+          hitsTowers: this.hitsTowers,
+          bulletSize: 10,
+          bulletColor: 0x00dddd,
+          attackDamage: damage * 100,
+          attackPierce: 100,
+          attackMoveSpeed: 6,
+          maxRange: maxRange,
+        }
+        new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+      },
+    },
+    {
       name: `Fling`,
       description: 'Hurls a large shell that explodes on impact for [[Damage]] to nearby enemies in [[Range]]',
       target: TARGET_GROUND,
@@ -483,10 +513,6 @@ export default {
           duration: animationDuration,
         })
       },
-    },
-    {
-      name: '[tbd]',
-      description: '',
     },
     {
       name: '[tbd]',
