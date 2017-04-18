@@ -1,6 +1,6 @@
 export default {
   melee: {
-    healthMax: [400, 0],
+    healthMax: [300, 0],
     healthRegen: [0, 0],
     armor: [0, 0],
 
@@ -17,7 +17,7 @@ export default {
   },
 
   ranged: {
-    healthMax: [500, 0],
+    healthMax: [400, 0],
     healthRegen: [0, 0],
     armor: [0, 0],
 

@@ -70,7 +70,7 @@ export default {
     sightRange: [160, 1],
     attackRange: [140, 1],
 
-    attackDamage: [50, 1],
+    attackDamage: [40, 1],
     attackPierce: [0, 0],
     attackCooldown: [10, 0],
     attackMoveSpeed: 16,
