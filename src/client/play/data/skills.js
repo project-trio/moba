@@ -520,6 +520,9 @@ export default {
       target: TARGET_SELF,
       isDisabledBy: null,
       minLeveled: 1,
+      activatable: function () {
+        return store.state.local.skills.cooldowns[0] || store.state.local.skills.cooldowns[1]
+      },
       getEffectDuration: function (level) {
         return levelMultiplier(80, level, 20) * 100
       },

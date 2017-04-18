@@ -73,7 +73,7 @@ export default {
     },
 
     preventsActivation () {
-      return this.level === 0 || this.activated || this.cooldownRemaining > 200
+      return this.level === 0 || this.activated || this.cooldownRemaining > 200 || (this.skill.activatable && !this.skill.activatable())
     },
     disabled () {
       return this.preventsActivation || this.cooldownRemaining > 0 || this.disabledByOtherSkill || store.state.local.dead
