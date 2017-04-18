@@ -165,7 +165,7 @@ export default {
   beedle: [
     {
       name: `Poison Sting`,
-      description: 'Slows the target by [[MoveSpeed]] for [[Duration]], dealing [[Damage]]. If target is [[poisoned:poison]], it stuns instead',
+      description: 'Deals [[Damage]] to the target, and slowing by [[MoveSpeed]] for [[Duration]]. If target is [[poisoned:poison]], they are stunned instead.',
       suffixMoveSpeed: '%',
       hitsTowers: false,
       target: TARGET_ENEMY,
@@ -212,7 +212,7 @@ export default {
     },
     {
       name: 'Acid Drop',
-      description: 'Spit a toxic glob on the ground for [[Duration]], [[poisoning:poison]] for [[Dps]] and move speed [[MoveSpeed]]',
+      description: 'Spit a toxic glob on the ground for [[Duration]], [[poisoning:poison]] enemies for [[Dps]] and move speed by [[MoveSpeed]]',
       suffixMoveSpeed: '%',
       factorDps: 50, //TODO ticks
       suffixDps: ' dps',
