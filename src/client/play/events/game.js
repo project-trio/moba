@@ -12,7 +12,6 @@ export default {
   init () {
     Bridge.on('closed', () => {
       window.alert('Game closed due to inactivity')
-      Local.game.close()
       router.replace({ name: 'Lobby' })
     })
 

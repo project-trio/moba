@@ -76,10 +76,12 @@ export default {
 
   destroy () {
     const canvas = document.getElementById('canvas')
-    canvas.removeEventListener('mousedown', onMouseDown)
-    canvas.removeEventListener('mousemove', onMouseMove)
-    canvas.removeEventListener('mouseup', onMouseCancel)
-    canvas.removeEventListener('mouseleave', onMouseCancel)
+    if (canvas) {
+      canvas.removeEventListener('mousedown', onMouseDown)
+      canvas.removeEventListener('mousemove', onMouseMove)
+      canvas.removeEventListener('mouseup', onMouseCancel)
+      canvas.removeEventListener('mouseleave', onMouseCancel)
+    }
 
     renderer = null
     scene = null

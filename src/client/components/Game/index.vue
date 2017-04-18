@@ -40,7 +40,10 @@ export default {
     window.addEventListener('beforeunload', this.confirmExit)
   },
 
-  destroyed () {
+  beforeDestroy () {
+    if (Local.game) {
+      Local.game.close()
+    }
     Loop.stop()
     window.removeEventListener('beforeunload', this.confirmExit)
   },

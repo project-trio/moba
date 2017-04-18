@@ -44,9 +44,11 @@ export default {
     intersectContainer = null
 
     const canvas = document.getElementById('canvas')
-    canvas.removeEventListener('mousedown', onClick, false)
-    canvas.removeEventListener('mousemove', onMouseMove, false)
-    canvas.removeEventListener('contextmenu', onClick, false)
+    if (canvas) {
+      canvas.removeEventListener('mousedown', onClick, false)
+      canvas.removeEventListener('mousemove', onMouseMove, false)
+      canvas.removeEventListener('contextmenu', onClick, false)
+    }
   },
 
   reposition (camera) {
