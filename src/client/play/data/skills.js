@@ -47,6 +47,7 @@ export default {
       factorRegen: 50 / 1000 * 100, //TODO ticks
       suffixRegen: ' hp / s',
       target: TARGET_SELF,
+      hitsTowers: false,
       isDisabledBy: null,
       endOnDeath: false,
       getEffectRegen: function (level) {
@@ -64,7 +65,7 @@ export default {
       start: function (index, level, ship) {
         new AreaOfEffect(ship, false, {
           dot: false,
-          hitsTowers: false,
+          hitsTowers: this.hitsTowers,
           color: 0x00ccff,
           opacity: 0.5,
           px: ship.px, py: ship.py,
@@ -219,6 +220,7 @@ export default {
       factorDps: 50, //TODO ticks
       suffixDps: ' dps',
       target: TARGET_GROUND,
+      hitsTowers: true,
       isDisabledBy: null,
       getRange: function (level) {
         return 160
@@ -245,7 +247,7 @@ export default {
         const moveSpeed = new Decimal(1).minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
         const bulletData = {
           dot: true,
-          hitsTowers: true,
+          hitsTowers: this.hitsTowers,
           opacity: 0.5,
           z: -4,
           bulletSize: 9,
@@ -311,6 +313,7 @@ export default {
       name: 'Rocket',
       description: 'Strikes the first enemy hit for [[Damage]]',
       target: TARGET_GROUND,
+      hitsTowers: true,
       disabledBy: [null, false, true],
       isDisabledBy: isDisabledBy,
       getRange: function (level) {
@@ -327,7 +330,7 @@ export default {
         const maxRange = this.getRange(level)
         const bulletData = {
           toMaxRange: true,
-          hitsTowers: true,
+          hitsTowers: this.hitsTowers,
           bulletSize: 12,
           bulletColor: 0xcc0000,
           attackDamage: damage * 100,
@@ -471,6 +474,7 @@ export default {
       name: `Fling`,
       description: 'Hurls a large shell that explodes on impact for [[Damage]] to nearby enemies in [[Range]]',
       target: TARGET_GROUND,
+      hitsTowers: false,
       isDisabledBy: null,
       getEffectRange: function (level) {
         return levelMultiplier(100, level, 5)
@@ -490,7 +494,7 @@ export default {
         const maxRange = this.getRange(level)
         const attackMoveSpeed = 4
         const bulletData = {
-          hitsTowers: true,
+          hitsTowers: this.hitsTowers,
           bulletSize: 8,
           bulletColor: 0x660066,
           attackDamage: damage * 100,
@@ -575,6 +579,7 @@ export default {
       description: 'Allies inside the eye gain [[Armor]]',
       suffixArmor: ' armor',
       target: TARGET_SELF,
+      hitsTowers: false,
       isDisabledBy: null,
       endOnDeath: false,
       getEffectArmor: function (level) {
@@ -594,7 +599,7 @@ export default {
         const armor = this.getEffectArmor(level)
         new AreaOfEffect(ship, false, {
           dot: true,
-          hitsTowers: false,
+          hitsTowers: this.hitsTowers,
           color: 0x0066aa,
           opacity: 0.5,
           px: ship.px, py: ship.py,
@@ -654,6 +659,7 @@ export default {
       name: 'Torpedo',
       description: 'Explodes on the first enemy hit, damaging within [[Range]] for [[Damage]]',
       target: TARGET_GROUND,
+      hitsTowers: true,
       disabledBy: [null, true, false],
       isDisabledBy: isDisabledBy,
       getRange: function (level) {
@@ -673,7 +679,7 @@ export default {
         const maxRange = this.getRange(level)
         const aoeRange = this.getEffectRange(level)
         const bulletData = {
-          hitsTowers: true,
+          hitsTowers: this.hitsTowers,
           bulletSize: 9,
           bulletColor: 0xcc00ff,
           attackDamage: damage * 100,
@@ -692,6 +698,7 @@ export default {
       factorDps: 50, //TODO ticks
       suffixDps: ' dps',
       target: TARGET_SELF,
+      hitsTowers: false,
       isDisabledBy: null,
       endOnDeath: true,
       getRange: function (level) {
@@ -714,7 +721,7 @@ export default {
         const radius = this.getRange(level)
         const damage = this.getEffectDps(level)
         ship.diveCircle = new AreaOfEffect(ship, true, {
-          hitsTowers: true,
+          hitsTowers: this.hitsTowers,
           dot: true,
           color: 0x0066aa,
           opacity: 0.5,
