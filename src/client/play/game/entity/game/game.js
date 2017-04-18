@@ -52,6 +52,7 @@ export default function (gid, mode, size, mapName) {
     const maxTicksToRender = ticksToRender > 9 ? Math.floor(Math.pow(ticksToRender, 0.67)) : 1
     while (ticksToRender > 0) {
       renderTime = ticksRendered * tickDuration
+      store.state.game.renderTime = renderTime
 
       if (ticksRendered % ticksPerUpdate === 0) {
         if (dequeueUpdate(renderTime)) {
@@ -66,8 +67,6 @@ export default function (gid, mode, size, mapName) {
         }
       }
       if (renderTime > 0) {
-        store.state.game.renderTime = renderTime
-
         AreaOfEffect.update(renderTime, Unit.all())
         Bullet.update(renderTime, tickDuration, false)
         Unit.update(renderTime, tickDuration, false)

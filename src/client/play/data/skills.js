@@ -482,7 +482,7 @@ export default {
         return levelMultiplier(200, level, 10)
       },
       getCooldown: function (level) {
-        return 250
+        return 260
       },
       start: function (index, level, ship, target, startAt, endAt) {
         const aoeRange = this.getEffectRange(level)
@@ -524,10 +524,10 @@ export default {
         return store.state.local.skills.cooldowns[0] || store.state.local.skills.cooldowns[1]
       },
       getEffectDuration: function (level) {
-        return levelMultiplier(80, level, 20) * 100
+        return levelMultiplier(80, level, 50) * 100
       },
       getCooldown: function (level) {
-        return levelMultiplier(600, level, -30)
+        return levelMultiplier(600, level, -40)
       },
       start: function (index, level, ship) {
         const reduction = this.getEffectDuration(level)

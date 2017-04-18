@@ -66,7 +66,6 @@ export default {
       return this.localPlayer ? this.localPlayer.team : 0
     },
     chosenUnit () {
-      console.log(this.localPlayer)
       return this.localPlayer ? this.localPlayer.shipName : ''
     },
     shipNames () {
