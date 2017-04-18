@@ -8,6 +8,7 @@ import Render from '@/play/render/render'
 import Util from '@/play/game/util'
 
 import AreaOfEffect from '@/play/game/entity/attack/aoe'
+import Unit from '@/play/game/entity/unit/unit'
 
 //LOCAL
 
@@ -22,6 +23,7 @@ class Bullet {
   // Constructor
 
   constructor (source, target, data, x, y, startAngle) {
+    this.team = source.team
     this.source = source
     this.target = target
     this.unitTarget = target.stats !== undefined
@@ -33,6 +35,7 @@ class Bullet {
     }
 
     this.dot = data.dot
+    this.firstCollision = data.firstCollision
     this.hitsTowers = data.hitsTowers
     this.allies = data.allies
     this.modify = data.modify
@@ -215,6 +218,22 @@ class Bullet {
     }
   }
 
+  // Collision
+
+  checkCollision (renderTime, units) {
+    for (let idx = units.length - 1; idx >= 0; idx -= 1) {
+      const unit = units[idx]
+      if (unit.hittableStatus() && unit.team !== this.team && (!unit.tower || this.hitsTowers)) {
+        const dist = Util.pointDistance(this.px, this.py, unit.px, unit.py)
+        // if (Util.withinSquared(dist, this.collisionSize + unit.stats.collision)) { //TODO support bullet size
+        if (dist <= unit.collisionCheck * 2) {
+          this.reachedDestination(renderTime)
+          return true
+        }
+      }
+    }
+  }
+
   // Aim
 
   updateAim () {
@@ -251,14 +270,17 @@ Bullet.update = function (renderTime, timeDelta, tweening) {
 
   if (!tweening) {
     // Update
+    const units = Unit.all()
     for (let idx = startIndex; idx >= 0; idx -= 1) {
       const bullet = allBullets[idx]
+      if (bullet.unitTarget) {
+        bullet.updateTarget()
+      } else if (bullet.firstCollision) {
+        bullet.checkCollision(renderTime, units)
+      }
       if (bullet.remove) {
         allBullets.splice(idx, 1)
         startIndex -= 1
-      } else if (bullet.unitTarget) {
-        bullet.updateTarget()
-      // } else { //TODO Collision check
       }
     }
   }

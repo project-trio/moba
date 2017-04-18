@@ -90,6 +90,7 @@ class Unit {
       this.stats.attackMoveSpeed = statBase.attackMoveSpeed
       this.stats.turnSpeed = statBase.turnSpeed || 8
       this.stats.collision = statBase.collision * 100
+      this.collisionCheck = Util.squared(this.stats.collision)
       this.stats.bulletSize = statBase.bulletSize
       this.stats.bulletColor = statBase.bulletColor
 
@@ -587,8 +588,11 @@ class Unit {
     return this.distanceTo(unit) < rangeCheck
   }
 
+  hittableStatus () {
+    return !this.isDead && !this.untargetable
+  }
   targetableStatus () {
-    return !this.invisible && !this.isDead && !this.untargetable
+    return !this.invisible && this.hittableStatus()
   }
   attackableStatus (unit) {
     return unit.targetableStatus() && !unit.hasDied() && !this.alliedTo(unit)
