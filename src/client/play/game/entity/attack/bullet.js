@@ -40,6 +40,7 @@ class Bullet {
     this.allies = data.allies
     this.modify = data.modify
     this.maxRange = this.unitTarget ? null : data.maxRange
+    this.toMaxRange = data.toMaxRange === true
     this.collisionCheck = Util.squared((this.unitTarget ? target.stats.collision : data.collisionSize) || data.attackMoveSpeed * 100)
     this.explosionRadius = data.explosionRadius
     this.effectDuration = data.effectDuration
@@ -198,7 +199,7 @@ class Bullet {
       let reachedApproximate = false
       if (this.maxRange && !Util.withinSquared(this.distanceToStart(), this.maxRange * 100)) {
         reachedApproximate = true
-      } else {
+      } else if (!this.toMaxRange) {
         const distX = this.destX - movingToX
         const distY = this.destY - movingToY
         if (Math.abs(distX) < this.collisionCheck && Math.abs(distY) < this.collisionCheck) {
@@ -227,6 +228,10 @@ class Bullet {
         const dist = Util.pointDistance(this.px, this.py, unit.px, unit.py)
         // if (Util.withinSquared(dist, this.collisionSize + unit.stats.collision)) { //TODO support bullet size
         if (dist <= unit.collisionCheck * 2) {
+          if (!this.explosionRadius) {
+            this.unitTarget = unit
+            this.target = unit
+          }
           this.reachedDestination(renderTime)
           return true
         }

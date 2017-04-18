@@ -308,6 +308,38 @@ export default {
 
   proppy: [
     {
+      name: 'Rocket',
+      description: 'Strikes the first enemy hit for [[Damage]]',
+      target: TARGET_GROUND,
+      disabledBy: [null, false, true],
+      isDisabledBy: isDisabledBy,
+      getRange: function (level) {
+        return levelMultiplier(150, level, 5)
+      },
+      getEffectDamage: function (level) {
+        return levelMultiplier(120, level, 10)
+      },
+      getCooldown: function (level) {
+        return 60
+      },
+      start: function (index, level, ship, target) {
+        const damage = this.getEffectDamage(level)
+        const maxRange = this.getRange(level)
+        const bulletData = {
+          toMaxRange: true,
+          hitsTowers: true,
+          bulletSize: 12,
+          bulletColor: 0xcc0000,
+          attackDamage: damage * 100,
+          attackPierce: 10,
+          attackMoveSpeed: 12,
+          maxRange: maxRange,
+          firstCollision: true,
+        }
+        new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+      },
+    },
+    {
       name: 'Rebound',
       description: 'Basic attacks return to heal [[Rebound]] of damage dealt',
       suffixRebound: '%',
@@ -398,10 +430,6 @@ export default {
         ship.disableAttacking = false
         ship.opacity(1)
       },
-    },
-    {
-      name: '[tbd]',
-      description: '',
     },
   ],
 
