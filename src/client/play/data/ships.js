@@ -65,7 +65,7 @@ export default {
 
     healthMax: [700, 40],
     healthRegen: [40, 2],
-    armor: [100, 5],
+    armor: [0, 1],
 
     sightRange: [160, 1],
     attackRange: [140, 1],
@@ -130,7 +130,7 @@ export default {
 
     healthMax: [1000, 40],
     healthRegen: [40, 2],
-    armor: [100, 5],
+    armor: [20, 0],
 
     sightRange: [160, 1],
     attackRange: [120, 1],
@@ -153,7 +153,7 @@ export default {
 
     healthMax: [500, 10],
     healthRegen: [40, 1],
-    armor: [50, 0],
+    armor: [30, 0],
 
     sightRange: [140, 0],
     attackRange: [130, 0],
@@ -176,7 +176,7 @@ export default {
 
     healthMax: [900, 20],
     healthRegen: [60, 1],
-    armor: [5, 1],
+    armor: [10, 1],
 
     sightRange: [160, 0],
     attackRange: [140, 0],

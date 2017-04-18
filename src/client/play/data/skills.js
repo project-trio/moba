@@ -559,7 +559,7 @@ export default {
       isDisabledBy: null,
       endOnDeath: false,
       getEffectArmor: function (level) {
-        return levelMultiplier(25, level, 2)
+        return levelMultiplier(30, level, 2)
       },
       getRange: function (level) {
         return 150
@@ -586,7 +586,7 @@ export default {
             name: this.name,
             stat: 'armor',
             method: 'add',
-            value: armor * 50,
+            value: armor,
             expires: 200,
           },
           endAt: endAt,
@@ -743,7 +743,7 @@ export default {
         return levelMultiplier(150, level, -5)
       },
       start: function (index, level, ship) {
-        ship.reflectDamageRatio = this.getEffectStrength(level)
+        ship.reflectDamageRatio = new Decimal(this.getEffectStrength(level)).dividedBy(100)
         ship.effervesceMesh = Render.outline(ship.base.children[0], 0xff0000, 1.07)
       },
       end: function (ship) {

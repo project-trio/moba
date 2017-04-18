@@ -416,18 +416,19 @@ class Unit {
   takeDamage (source, renderTime, amount, pierce, reflected) {
     let damage = amount
     if (!reflected) {
-      let armor = Math.max(0, this.current.armor - pierce)
-      damage = Math.max(1, amount - armor * 10) //TODO percent
+      let armor = 100 - Math.max(0, this.current.armor - pierce)
+      const damageDecimal = new Decimal(damage).times(armor).dividedBy(100)
+      damage = damageDecimal.round().toNumber()
 
       if (this.reflectDamageRatio) {
-        const reflectedDamage = Math.round((damage * this.reflectDamageRatio) / 100) //TODO desyncs?
+        const reflectedDamage = damageDecimal.times(this.reflectDamageRatio).round().toNumber()
         // console.log(damage, reflectedDamage)
         source.takeDamage(this, renderTime, reflectedDamage, 0, true)
       }
       if (this.repair) {
         const duration = 2000
         const ticks = duration / Local.tickDuration
-        const healthPerTick = this.repair.times(damage).dividedBy(ticks).round().toNumber()
+        const healthPerTick = this.repair.times(damageDecimal).dividedBy(ticks).round().toNumber()
         this.modify(`${source.id}${renderTime}`, 'healthRegen', 'add', healthPerTick, renderTime + duration)
       }
     }
