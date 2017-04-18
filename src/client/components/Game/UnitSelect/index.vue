@@ -32,8 +32,6 @@ import CommonConsts from 'common/constants'
 
 import store from '@/store'
 
-import Local from '@/play/local'
-
 import Bridge from '@/play/events/bridge'
 
 import RenderPreview from '@/play/render/preview'
@@ -55,25 +53,26 @@ export default {
       return Math.round(-store.state.game.renderTime / 1000)
     },
 
+    players () {
+      return store.state.game.players
+    },
     localId () {
-      return Local.playerId
+      return store.state.playerId
     },
     localPlayer () {
-      return store.state.game.players[this.localId]
+      return this.players[this.localId]
     },
     localTeam () {
       return this.localPlayer ? this.localPlayer.team : 0
     },
     chosenUnit () {
+      console.log(this.localPlayer)
       return this.localPlayer ? this.localPlayer.shipName : ''
     },
     shipNames () {
       return CommonConsts.SHIP_NAMES
     },
 
-    players () {
-      return store.state.game.players
-    },
     teamPlayers () {
       const result = [Array(this.size), Array(this.size)]
       let foundPlayer = false
@@ -92,7 +91,9 @@ export default {
 
   watch: {
     chosenUnit (name) {
-      RenderPreview.load(name, this.localTeam)
+      if (name) {
+        RenderPreview.load(name, this.localTeam)
+      }
     },
   },
 

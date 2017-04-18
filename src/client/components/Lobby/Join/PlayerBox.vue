@@ -19,8 +19,6 @@ import store from '@/store'
 
 import Util from '@/helpers/util'
 
-import Local from '@/play/local'
-
 export default {
   props: {
     player: Object,
@@ -74,7 +72,7 @@ export default {
     },
 
     isLocal () {
-      return this.player && this.player.id === Local.playerId
+      return this.player && this.player.id === store.state.playerId
     },
 
     bottom () {

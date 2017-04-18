@@ -114,12 +114,11 @@ export default function (gid, mode, size, mapName) {
       const playerActions = nextUpdate[pid]
       if (onSelectionScreen) {
         if (playerActions.unit) {
-          player.shipName = playerActions.unit
           const storePlayer = store.state.game.players[pid]
           if (!storePlayer) {
             console.warn('Player not found for store', player, store.state.game.players)
           } else {
-            storePlayer.shipName = player.shipName
+            storePlayer.shipName = playerActions.unit
           }
         }
       } else {
@@ -229,7 +228,7 @@ export default function (gid, mode, size, mapName) {
     store.state.game.started = true
     store.state.game.winningTeam = null
 
-    Local.player = players[Local.playerId]
+    Local.player = players[store.state.playerId]
 
     TrigCache.prepare()
 

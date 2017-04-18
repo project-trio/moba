@@ -201,6 +201,10 @@ class Ship extends Movable {
       return false
     }
     const skill = this.skills.data[index]
+    if (!skill.getCooldown) {
+      console.warn('Invalid skill', this.name, index, skill)
+      return false
+    }
     if (skill.isDisabledBy && skill.isDisabledBy(this.skills.actives)) {
       console.log('Skill disabled by another active', this.id, index, skill.disabledBy, this.skills.actives)
       return false

@@ -1,3 +1,5 @@
+import store from '@/store'
+
 import Local from '@/play/local'
 import Ship from '@/play/game/entity/unit/ship'
 
@@ -10,11 +12,10 @@ export default class Player {
   constructor (pid, data) {
     this.id = pid
     this.unit = null
-    this.shipName = data.shipName
     this.name = data.name
     this.team = parseInt(data.team, 10)
     this.teamIndex = parseInt(data.teamIndex, 10)
-    this.isLocal = pid === Local.playerId
+    this.isLocal = pid === store.state.playerId
     this.chatAt = 0
     this.isActive = true
   }
@@ -34,7 +35,11 @@ export default class Player {
 
   createShip () {
     const position = this.spawnLocation()
-    this.unit = new Ship(this.shipName, this, this.team, position[0], position[1], null, this.isLocal)
+    const storeData = store.state.game.players[this.id]
+    if (!storeData) {
+      return console.error('No store data for player', this, store.state.game.players)
+    }
+    this.unit = new Ship(storeData.shipName, this, this.team, position[0], position[1], null, this.isLocal)
   }
 
   destroy () {

@@ -48,7 +48,7 @@ export default {
     },
 
     localId () {
-      return Local.playerId
+      return store.state.playerId
     },
     localPlayer () {
       return store.state.game.players[this.localId]

@@ -54,6 +54,8 @@ const defaultLocalState = () => {
 
 export default {
   state: {
+    playerId: null,
+
     signin: {
       username: storage.get('username'),
       loading: false,

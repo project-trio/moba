@@ -35,8 +35,8 @@ export default {
     socket = SocketIO(socketUrl, params)
 
     socket.on('connect', () => {
-      Local.playerId = socket.id
-      console.log('Connected', Local.playerId)
+      store.state.playerId = socket.id
+      console.log('Connected', store.state.playerId)
       store.state.signin.loading = false
 
       socket.on('auth', (data) => {

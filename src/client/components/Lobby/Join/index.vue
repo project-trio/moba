@@ -121,8 +121,8 @@ export default {
     },
 
     isHost () {
-      console.log(Local.playerId, store.state.game.host)
-      return Local.playerId === store.state.game.host
+      console.log(store.state.playerId, store.state.game.host)
+      return store.state.playerId === store.state.game.host
     },
     startText () {
       return this.readyToStart ? 'start!' : 'waiting...'
