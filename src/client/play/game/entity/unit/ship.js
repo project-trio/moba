@@ -222,7 +222,7 @@ class Ship extends Movable {
 
   performSkill (renderTime, index, target) {
     if (this.isDead) {
-      console.log('Skill disabled during death', renderTime, this.id, index)
+      // console.log('Skill disabled during death', renderTime, this.id, index)
       return false
     }
     if (target && target.isDead) {

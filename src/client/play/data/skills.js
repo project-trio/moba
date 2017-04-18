@@ -344,7 +344,8 @@ export default {
       description: 'Basic attacks return to heal [[Rebound]] of damage dealt',
       suffixRebound: '%',
       target: TARGET_SELF,
-      isDisabledBy: null,
+      disabledBy: [false, null, true],
+      isDisabledBy: isDisabledBy,
       endOnDeath: true,
       getEffectRebound: function (level) {
         return levelMultiplier(200, level, 20)
