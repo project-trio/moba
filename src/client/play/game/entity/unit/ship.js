@@ -480,6 +480,11 @@ class Ship extends Movable {
 
   // Aim
 
+  targetDestination (x, y) {
+    this.moveToTarget = false
+    super.targetDestination(x, y)
+  }
+
   setTarget (target, distance, highlight) {
     if (target) {
       if (highlight) {
@@ -488,11 +493,11 @@ class Ship extends Movable {
     } else {
       if (this.moveToTarget) {
         this.targetingSkill = null
+        this.moveToTarget = false
         // if (this.isLocal) {
         //   console.warn('target canceled')
         // }
       }
-      this.moveToTarget = false
     }
     return super.setTarget(target, distance)
   }
