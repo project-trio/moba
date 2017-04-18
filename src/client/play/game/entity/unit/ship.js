@@ -212,6 +212,14 @@ class Ship extends Movable {
     return true
   }
 
+  updateCooldown (index, startTime, cooldown) {
+    const cooldownEndTime = startTime + cooldown
+    this.skills.cooldowns[index] = cooldownEndTime
+    if (this.isLocal) {
+      store.state.local.skills.cooldowns.splice(index, 1, cooldownEndTime)
+    }
+  }
+
   performSkill (renderTime, index, target) {
     if (this.isDead) {
       console.log('Skill disabled during death', renderTime, this.id, index)
@@ -246,13 +254,10 @@ class Ship extends Movable {
         store.state.local.skills.actives.splice(index, 1, endDurationAt)
       }
     }
-    const cooldownEndTime = endDurationAt + skill.getCooldown(skillLevel) * 100
-    this.skills.cooldowns[index] = cooldownEndTime
-    if (this.isLocal) {
-      store.state.local.skills.cooldowns.splice(index, 1, cooldownEndTime)
-    }
+    const cooldownDuration = skill.getCooldown(skillLevel) * 100
+    this.updateCooldown(index, endDurationAt, cooldownDuration)
 
-    skill.start(index, skillLevel, this, target, renderTime, endDurationAt)
+    skill.start(index, skillLevel, this, target, renderTime, endDurationAt, cooldownDuration)
     return true
   }
 

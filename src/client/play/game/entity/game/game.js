@@ -66,6 +66,8 @@ export default function (gid, mode, size, mapName) {
         }
       }
       if (renderTime > 0) {
+        store.state.game.renderTime = renderTime
+
         AreaOfEffect.update(renderTime, Unit.all())
         Bullet.update(renderTime, tickDuration, false)
         Unit.update(renderTime, tickDuration, false)
@@ -89,9 +91,6 @@ export default function (gid, mode, size, mapName) {
     }
     if (ticksToRender === 0) {
       renderedSinceUpdate = true
-    }
-    if (renderTime) {
-      store.state.game.renderTime = renderTime
     }
     return true
   }

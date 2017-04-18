@@ -1,5 +1,7 @@
 import Decimal from 'decimal.js'
 
+import store from '@/store'
+
 import Render from '@/play/render/render'
 
 import dataConstants from '@/play/data/constants'
@@ -321,7 +323,7 @@ export default {
       getCooldown: function (level) {
         return 200
       },
-      start: function (index, level, ship, target, startAt, endAt) {
+      start: function (index, level, ship, target, startAt, endAt, cooldown) {
         ship.modify(this.name, 'moveSpeed', 'times', 3)
         ship.uncontrollable = true
         ship.untargetable = true
@@ -330,6 +332,7 @@ export default {
 
         ship.endBarrelRoll = function () {
           console.log('cancel barrel roll')
+          ship.updateCooldown(index, store.state.game.renderTime, cooldown)
           ship.endSkill(index)
         }
 
@@ -721,7 +724,7 @@ export default {
       getCooldown: function (level) {
         return levelMultiplier(200, level, -5)
       },
-      start: function (index, level, ship, target, startAt, endAt) {
+      start: function (index, level, ship, target, startAt, endAt, cooldown) {
         ship.removeTarget()
         ship.invisible = true
 
@@ -743,6 +746,7 @@ export default {
           console.log('cancel invisibility')
           ship.cancelAnimation(null, 'opacity')
           ship.opacity(1)
+          ship.updateCooldown(index, store.state.game.renderTime, cooldown)
           ship.endSkill(index)
         }
       },
