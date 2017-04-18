@@ -160,12 +160,18 @@ export default {
       return this.level / 10
     },
 
+    skillsLeveled () {
+      return store.state.local.skills.leveled
+    },
     higherLevelThanSkills () {
-      return store.state.local.level > store.state.local.skills.leveled
+      return store.state.local.level > this.skillsLeveled
     },
 
     showingLevelupIndicator () {
-      return this.playing && !this.isAnySkillActive && this.levelupReady
+      if (this.playing && !this.isAnySkillActive && this.levelupReady) {
+        return !this.skill.minLeveled || this.skillsLeveled >= this.skill.minLeveled
+      }
+      return false
     },
 
     levelupReady () {

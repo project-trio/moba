@@ -519,6 +519,7 @@ export default {
       description: 'Lowers the cooldown of other abilities by [[Duration]]',
       target: TARGET_SELF,
       isDisabledBy: null,
+      minLeveled: 1,
       getEffectDuration: function (level) {
         return levelMultiplier(80, level, 20) * 100
       },
