@@ -308,6 +308,34 @@ export default {
 
   proppy: [
     {
+      name: 'Rebound',
+      description: 'Basic attacks return to heal [[Rebound]] of damage dealt',
+      suffixRebound: '%',
+      target: TARGET_SELF,
+      isDisabledBy: null,
+      endOnDeath: true,
+      getEffectRebound: function (level) {
+        return levelMultiplier(200, level, 20)
+      },
+      getDuration: function (level) {
+        return levelMultiplier(50, level, 5)
+      },
+      getCooldown: function (level) {
+        return levelMultiplier(150, level, -5)
+      },
+      start: function (index, level, ship) {
+        ship.rebound = new Decimal(this.getEffectRebound(level)).dividedBy(100)
+        ship.reboundMesh = Render.outline(ship.base.children[1], 0x0000ff, 1.07)
+      },
+      end: function (ship) {
+        ship.rebound = null
+        if (ship.reboundMesh) {
+          Render.remove(ship.reboundMesh)
+          ship.reboundMesh = null
+        }
+      },
+    },
+    {
       name: 'Barrel Roll',
       description: 'Burst forward while dodging out of incoming fire with this timeless aerial maneuver',
       target: TARGET_GROUND,
@@ -370,10 +398,6 @@ export default {
         ship.disableAttacking = false
         ship.opacity(1)
       },
-    },
-    {
-      name: '[tbd]',
-      description: '',
     },
     {
       name: '[tbd]',
@@ -445,30 +469,30 @@ export default {
 
   boxy: [
     {
-      name: 'Rebound',
-      description: 'Basic attacks return to heal [[Rebound]] of damage dealt',
-      suffixRebound: '%',
+      name: 'Regen Shield',
+      description: 'Heal back [[Repair]] of damage received over 3 seconds',
+      suffixRepair: '%',
       target: TARGET_SELF,
       isDisabledBy: null,
       endOnDeath: true,
-      getEffectRebound: function (level) {
-        return levelMultiplier(200, level, 20)
+      getEffectRepair: function (level) {
+        return levelMultiplier(20, level, 4)
       },
       getDuration: function (level) {
-        return levelMultiplier(40, level, 2)
+        return levelMultiplier(50, level, 5)
       },
       getCooldown: function (level) {
-        return levelMultiplier(150, level, -2)
+        return levelMultiplier(150, level, -5)
       },
       start: function (index, level, ship) {
-        ship.rebound = new Decimal(this.getEffectRebound(level)).dividedBy(100)
-        ship.reboundMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.1)
+        ship.repair = new Decimal(this.getEffectRepair(level)).dividedBy(100)
+        ship.repairMesh = Render.outline(ship.base.children[0], 0x0000ff, 1.07)
       },
       end: function (ship) {
-        ship.rebound = null
-        if (ship.reboundMesh) {
-          Render.remove(ship.reboundMesh)
-          ship.reboundMesh = null
+        ship.repair = null
+        if (ship.repairMesh) {
+          Render.remove(ship.repairMesh)
+          ship.repairMesh = null
         }
       },
     },

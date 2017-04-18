@@ -423,6 +423,12 @@ class Unit {
         // console.log(damage, reflectedDamage)
         source.takeDamage(this, renderTime, reflectedDamage, 0, true)
       }
+      if (this.repair) {
+        const duration = 2000
+        const ticks = duration / Local.tickDuration
+        const healthPerTick = this.repair.times(damage).dividedBy(ticks).round().toNumber()
+        this.modify(`${source.id}${renderTime}`, 'healthRegen', 'add', healthPerTick, renderTime + duration)
+      }
     }
     const newHealth = Math.max(this.healthRemaining - damage, 0)
     if (newHealth == 0) {
