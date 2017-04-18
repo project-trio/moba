@@ -2,6 +2,8 @@
 
 import Decimal from 'decimal.js'
 
+import Local from '@/play/local'
+
 //CONSTANTS
 
 const PRECISION = new Decimal(1000)
@@ -53,8 +55,13 @@ const prepare = function () {
 //HELPERS
 
 const indexAngleFactor = function (angle, factor) {
-  if (angle.lessThan(0)) {
+  let count = 0
+  while (angle.lessThan(0)) {
     angle = angle.plus(PIPt2)
+    count += 1
+    if (count > 1 && Local.TESTING) {
+      console.error('Angle outside range', angle.toNumber())
+    }
   }
   return factor.times(angle).floor().toNumber() // (angle * factor) | 0
 }
@@ -65,13 +72,13 @@ export default {
 
   prepare: prepare,
 
-  cos (angle) {
-    const index = indexAngleFactor(angle, cosFactor)
+  indexFor (angle) {
+    return indexAngleFactor(angle, cosFactor)
+  },
+  cos (index) {
     return cosTable[index]
   },
-
-  sin (angle) {
-    const index = indexAngleFactor(angle, sinFactor)
+  sin (index) {
     return sinTable[index]
   },
 
@@ -79,7 +86,7 @@ export default {
     const index = new Decimal(y).dividedBy(x).plus(rangeAtan).times(atanFactor).floor().toNumber() // (y / x + rangeAtan) * atanFactor) | 0
     let angle
     if (index < 0) {
-      angle = PIPd2.times(-1)
+      angle = PIPd2.negated()
     } else if (index >= resolutionAtan) {
       angle = PIPd2
     } else {

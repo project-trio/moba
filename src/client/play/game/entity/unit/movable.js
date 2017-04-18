@@ -47,8 +47,9 @@ class Movable extends Unit {
       if (dx !== 0 || dy !== 0) {
         const moveAngle = Util.angleOf(dx, dy, false)
         this.moveTargetAngle = moveAngle.toNumber() / 1000
-        moveX = TrigCache.cos(moveAngle)
-        moveY = TrigCache.sin(moveAngle)
+        const angleIndex = TrigCache.indexFor(moveAngle)
+        moveX = TrigCache.cos(angleIndex)
+        moveY = TrigCache.sin(angleIndex)
       } else {
         moveX = 0
         moveY = 0
