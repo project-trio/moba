@@ -504,7 +504,7 @@ class Ship extends Movable {
 
   setTargetId (id) {
     const target = Unit.get(id)
-    if (target && !target.isDead) {
+    if (target && target.targetableStatus()) {
       const dist = this.distanceTo(target)
       this.moveToTarget = true
       return this.setTarget(target, dist, this.isLocal)

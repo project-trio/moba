@@ -214,6 +214,9 @@ export default {
 
   watch: {
     currentPress (currentKey) {
+      if (!Local.unit) {
+        return
+      }
       if (currentKey.code === this.keyCode) {
         store.cancelActiveSkill()
         const skillIndex = this.index

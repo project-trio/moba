@@ -209,6 +209,8 @@ export default function (gid, mode, size, mapName) {
     }
 
     Local.game = null
+    Local.unit = null
+    Local.player = null
     store.resetGameState()
   }
 
