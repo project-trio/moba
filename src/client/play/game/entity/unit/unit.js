@@ -535,8 +535,7 @@ class Unit {
     if (this.attackTarget) {
       aimTop = Util.angleBetween(this, this.attackTarget, true)
     }
-    let aimBase = this.isMoving && this.moveTargetAngle
-
+    let aimBase = !this.attackTarget || this.shouldMove() ? this.moveTargetAngle : null
     if (!aimTop) {
       aimTop = aimBase
     }

@@ -62,7 +62,7 @@ class Movable extends Unit {
     this.destX = x
     this.destY = y
 
-    this.isMoving = true
+    this.hasDestination = true
   }
 
   updatePosition (moveToX, moveToY) {
@@ -88,7 +88,7 @@ class Movable extends Unit {
     // Walls
     const walls = Local.game.map.blockCheck(bx, by)
     if (walls) {
-      const ux1 = bx - collisionSize * 0.5
+      const ux1 = bx - collisionSize * 0.5 //TODO validate integer
       const uy1 = by - collisionSize * 0.5
       const ux2 = ux1 + collisionSize
       const uy2 = uy1 + collisionSize
@@ -125,18 +125,14 @@ class Movable extends Unit {
   }
 
   shouldMove () {
-    return this.isMoving && this.stunnedUntil === 0
+    return this.hasDestination && !this.isAttackingTarget && this.stunnedUntil === 0
   }
 
   reachedDestination (needsNewDestination) {
-    this.isMoving = false
+    this.hasDestination = false
   }
 
   move (timeDelta, tweening) {
-    if (this.isAttackingTarget) {
-      return
-    }
-
     let cx, cy
     let moveByX, moveByY
     if (tweening) {
@@ -197,7 +193,7 @@ class Movable extends Unit {
   }
 
   die (renderTime) {
-    this.isMoving = false
+    this.hasDestination = false
 
     super.die(renderTime)
   }

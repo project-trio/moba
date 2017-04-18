@@ -124,17 +124,14 @@ class Ship extends Movable {
 
   // Target
 
-  reachTarget () {
-    this.setTarget(null)
-    this.reachedDestination(false)
-  }
-
   checkLoseTarget () {
     if (this.attackTarget.isDying) {
-      if (this.isLocal) {
-        console.log('lost target')
+      if (this.moveToTarget) {
+        this.removeTarget()
+        this.reachedDestination(false)
+      } else {
+        this.setTarget(null)
       }
-      this.reachTarget()
     }
   }
 
@@ -143,7 +140,8 @@ class Ship extends Movable {
       return
     }
     if (this.checkQueuedSkill && this.checkQueuedSkill(renderTime)) {
-      this.reachTarget()
+      this.setTarget(null)
+      this.reachedDestination(false)
     } else {
       super.checkUpdateTarget(renderTime)
     }
@@ -333,6 +331,7 @@ class Ship extends Movable {
     this.queueTarget = null
     this.queueSkill = null
     this.targetSkill = null
+    this.moveTargetAngle = null
 
     super.die(renderTime)
 
@@ -611,7 +610,7 @@ class Ship extends Movable {
             sightTarget.container.visible = isInSight
           }
         }
-        revealUnit = isInSight && (updatedVisibility || sightTarget.isMoving)
+        revealUnit = isInSight && (updatedVisibility || sightTarget.hasDestination)
       }
       if (revealUnit && sightTarget.movable) {
         sightTarget.updatePosition()
