@@ -450,7 +450,7 @@ export default {
         return 170
       },
       getCooldown: function (level) {
-        return levelMultiplier(100, level, -5)
+        return 100
       },
       start: function (index, level, ship, target) {
         const damage = this.getEffectDamage(level)
@@ -482,7 +482,7 @@ export default {
         return levelMultiplier(200, level, 10)
       },
       getCooldown: function (level) {
-        return levelMultiplier(200, level, -5)
+        return 250
       },
       start: function (index, level, ship, target, startAt, endAt) {
         const aoeRange = this.getEffectRange(level)
@@ -515,8 +515,23 @@ export default {
       },
     },
     {
-      name: '[tbd]',
-      description: '',
+      name: 'Rearm',
+      description: 'Lowers the cooldown of other abilities by [[Duration]]',
+      target: TARGET_SELF,
+      isDisabledBy: null,
+      getEffectDuration: function (level) {
+        return levelMultiplier(80, level, 20) * 100
+      },
+      getCooldown: function (level) {
+        return levelMultiplier(600, level, -30)
+      },
+      start: function (index, level, ship) {
+        const reduction = this.getEffectDuration(level)
+        for (let skillIndex = 0; skillIndex < 2; skillIndex += 1) {
+          const cooldownEnd = ship.skills.cooldowns[skillIndex]
+          ship.updateCooldown(skillIndex, cooldownEnd, -reduction)
+        }
+      },
     },
   ],
 
