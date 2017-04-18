@@ -237,22 +237,22 @@ class Ship extends Movable {
     const instantaneous = skill.getDuration === undefined
     const skillLevel = this.skills.levels[index]
 
-    const cooldownEndTime = renderTime + skill.getCooldown(skillLevel) * 100
     this.skills.started[index] = renderTime
+    let endDurationAt = renderTime
+    if (!instantaneous) {
+      endDurationAt += skill.getDuration(skillLevel) * 100
+      this.skills.actives[index] = endDurationAt
+      if (this.isLocal) {
+        store.state.local.skills.actives.splice(index, 1, endDurationAt)
+      }
+    }
+    const cooldownEndTime = endDurationAt + skill.getCooldown(skillLevel) * 100
     this.skills.cooldowns[index] = cooldownEndTime
     if (this.isLocal) {
       store.state.local.skills.cooldowns.splice(index, 1, cooldownEndTime)
     }
-    let endAt = renderTime
-    if (!instantaneous) {
-      endAt += skill.getDuration(skillLevel) * 100
-      this.skills.actives[index] = endAt
-      if (this.isLocal) {
-        store.state.local.skills.actives.splice(index, 1, endAt)
-      }
-    }
 
-    skill.start(index, skillLevel, this, target, renderTime, endAt)
+    skill.start(index, skillLevel, this, target, renderTime, endDurationAt)
     return true
   }
 
