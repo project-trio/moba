@@ -63,7 +63,7 @@ export default {
     offsetTop: -12,
     topOffset: [14, 0, 55],
 
-    healthMax: [700, 40],
+    healthMax: [600, 5],
     healthRegen: [40, 2],
     armor: [0, 1],
 
@@ -76,7 +76,7 @@ export default {
     attackMoveSpeed: 16,
     bulletSize: 4,
 
-    moveSpeed: [13, 0],
+    moveSpeed: [11, 0],
     turnSpeed: 12,
     collision: 20,
 
@@ -128,7 +128,7 @@ export default {
   boxy: {
     split: true,
 
-    healthMax: [1000, 40],
+    healthMax: [800, 40],
     healthRegen: [40, 2],
     armor: [20, 0],
 
@@ -174,7 +174,7 @@ export default {
   sinker: {
     split: true,
 
-    healthMax: [900, 20],
+    healthMax: [800, 20],
     healthRegen: [60, 1],
     armor: [10, 1],
 
