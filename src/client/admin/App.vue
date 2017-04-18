@@ -41,6 +41,26 @@ export default {
 </script>
 
 <style lang="stylus">
+html
+  height 100%
+  width 100%
+
+body
+  margin 0
+  background-color #fffffe
+  width inherit
+  height inherit
+
+#app
+  text-align center
+
+#app, button
+  font-family 'Avenir', Helvetica, Arial, sans-serif
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+  font-weight 400
+  color #111110
+
 .game
   margin-bottom 8px
 </style>
