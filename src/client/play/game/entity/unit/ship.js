@@ -230,7 +230,7 @@ class Ship extends Movable {
       return false
     }
     if (renderTime < this.skills.cooldowns[index]) {
-      p('Skill still on cooldown', renderTime, this.id, index)
+      // p('Skill still on cooldown', renderTime, this.id, index)
       return false
     }
     const skill = this.skills.data[index]
@@ -606,7 +606,7 @@ class Ship extends Movable {
         sightTarget.isRendering = true
       } else {
         let isInSight = !sightTarget.invisible
-        if (isInSight && (!sightTarget.attackTarget || !sightTarget.moveToTarget || !sightTarget.cacheAttackCheck)) {
+        if (isInSight && (!sightTarget.attackTarget || !sightTarget.cacheAttackCheck)) {
           isInSight = false
           for (let sidx = units.length - 1; sidx >= 0; sidx -= 1) {
             const checkSightFromUnit = units[sidx]

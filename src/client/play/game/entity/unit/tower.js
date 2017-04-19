@@ -45,7 +45,7 @@ class Tower extends Unit {
     if (target) {
       if (this.attackableStatus(target)) {
         const dist = this.distanceTo(target)
-        if (dist <= closest) {
+        if (dist < closest) {
           closest = this.targetedAt - minChange
           updateTarget = false
         } else {
