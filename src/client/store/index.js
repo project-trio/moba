@@ -69,6 +69,7 @@ export default {
     trackY: 0,
 
     settings: {
+      fpsCap: storage.getBool('fpsCap', false),
       antialias: storage.getBool('antialias', true),
       resolution: storage.getInt('resolution', 2),
       shadows: storage.getInt('shadows', 1),

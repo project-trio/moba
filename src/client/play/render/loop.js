@@ -15,6 +15,8 @@ let lastTickTime = 0
 
 let updatePanel, tickPanel, framePanel, animationId
 
+const storeSettings = store.state.settings
+
 //LOOP
 
 const animate = function (timestamp) {
@@ -45,6 +47,9 @@ const animate = function (timestamp) {
     }
     lastTickTime = timestamp
   } else if (isPlaying) { // Tween
+    if (storeSettings.fpsCap) {
+      return
+    }
     const tweenTimeDelta = timestamp - lastUpdate
     const renderTime = store.state.game.renderTime + (timestamp - lastTickTime)
     Bullet.update(renderTime, tweenTimeDelta, true)
