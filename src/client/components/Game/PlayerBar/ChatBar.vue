@@ -13,7 +13,7 @@
   <div class="chat-input-container">
     <button v-show="showingInput" @click="onTeamVisibility" :class="chatVisibilityClass" class="chat-visibility-button interactive">{{ allChat ? 'ALL' : 'team' }}</button>
     <input ref="chatInput" v-model.trim="draftMessage" @focus="onFocusChat" @blur="onBlurChat" class="chat-input" :class="{ active: showingInput }"></input>
-    <div v-if="!showingInput" class="chat-placeholder">press enter to chat</div>
+    <div v-if="!showingInput" class="chat-placeholder">{{ chatPlaceholder }}</div>
   </div>
 </div>
 </template>
@@ -41,6 +41,10 @@ export default {
     messages () {
       this.scrollToBottom()
       return store.state.chatMessages
+    },
+
+    chatPlaceholder () {
+      return store.state.windowWidth > 767 ? 'press enter to chat' : '💬'
     },
 
     pressed () {
@@ -213,4 +217,8 @@ export default {
 
 .msg-from
   font-weight 500
+
+@media (max-width: 767px)
+  .chat-messages-container
+    margin-bottom 64px
 </style>

@@ -56,6 +56,8 @@ export default {
   state: {
     playerId: null,
 
+    windowWidth: window.innerWidth,
+
     signin: {
       username: storage.get('username'),
       loading: false,
@@ -105,6 +107,10 @@ export default {
       count: 0,
       pressed: {},
     },
+  },
+
+  resizeWindow () {
+    this.state.windowWidth = window.innerWidth
   },
 
   // Reset

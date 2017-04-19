@@ -38,6 +38,7 @@ export default {
     Local.game.start()
     Loop.start()
     window.addEventListener('beforeunload', this.confirmExit)
+    window.addEventListener('touchmove', this.cancelZoom, false)
   },
 
   beforeDestroy () {
@@ -46,6 +47,7 @@ export default {
     }
     Loop.stop()
     window.removeEventListener('beforeunload', this.confirmExit)
+    window.removeEventListener('touchmove', this.cancelZoom, false)
   },
 
   computed: {
@@ -64,6 +66,15 @@ export default {
         return 'Game in progress. You will be left afk in the game and may be unable to join a new game due to leaving. Are you sure?'
       }
     },
+
+    cancelZoom (event) {
+      if (event.originalEvent) {
+        event = event.originalEvent
+      }
+      if (event.scale) {
+        event.preventDefault()
+      }
+    }
   },
 }
 </script>

@@ -479,4 +479,8 @@ export default {
   background rgba(170, 170, 170, 0.5)
 .skill-item:hover:active button
   transform scale(0.9)
+
+@media (max-width: 1023px)
+  .skill-item .skill-label
+    display none
 </style>

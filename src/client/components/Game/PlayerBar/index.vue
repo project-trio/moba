@@ -91,4 +91,13 @@ export default {
 
 .bar-section
   border-radius 4px 4px 0 0
+
+@media (max-width: 767px)
+  .minimap
+    display none
+@media (max-width: 1023px)
+  .skills-bar
+    background none
+  .player-info
+    display none
 </style>
