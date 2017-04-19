@@ -38,14 +38,15 @@ class Tower extends Unit {
   // Aim
 
   getAttackTarget (units) {
+    const minChange = 1000
     let closest = this.attackRangeCheck
     let target = this.attackTarget
     let updateTarget = true
     if (target) {
       if (this.attackableStatus(target)) {
         const dist = this.distanceTo(target)
-        if (dist < closest) {
-          closest = this.targetedAt
+        if (dist <= closest) {
+          closest = this.targetedAt - minChange
           updateTarget = false
         } else {
           target = null
@@ -63,7 +64,7 @@ class Tower extends Unit {
         const dist = this.distanceTo(unit)
         if (dist < closest) {
           target = unit
-          closest = dist
+          closest = dist - minChange
           updateTarget = true
         }
       }
