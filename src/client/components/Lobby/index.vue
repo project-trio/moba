@@ -33,7 +33,7 @@ export default {
         p('redirecting to game', data.gid)
         router.replace({ name: 'Join', params: { gid: data.gid } })
       } else {
-        p('joined lobby', data)
+        // p('joined lobby', data)
         store.state.lobby.onlineCount = data.online
         store.state.lobby.games = data.games
         Local.gid = null

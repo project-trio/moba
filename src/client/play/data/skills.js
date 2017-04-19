@@ -626,7 +626,7 @@ export default {
       isDisabledBy: null,
       endOnDeath: false,
       getRange: function (level) {
-        return levelMultiplier(200, level, 30)
+        return levelMultiplier(160, level, 30)
       },
       getEffectRange: function (level) {
         return levelMultiplier(140, level, 20)

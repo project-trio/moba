@@ -98,7 +98,6 @@ export default {
 
     onSubmit () {
       LobbyEvents.connect('create', { mode: this.selectedMode.name, size: this.selectedSize, map: this.selectedMap }, (data) => {
-        p('create', data)
         if (data.error) {
           const errorMessage = `Unable to create game: ${data.error}`
           if (Local.TESTING) {
