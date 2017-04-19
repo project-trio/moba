@@ -394,6 +394,10 @@ class Ship extends Movable {
 
     const spawnAt = this.player.spawnLocation()
     this.setLocation(spawnAt[0], spawnAt[1])
+
+    if (this.isLocal) {
+      Local.game.centerOnUnit()
+    }
   }
 
   reemerge () {

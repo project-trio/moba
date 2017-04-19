@@ -175,6 +175,11 @@ export default function (gid, mode, size, mapName) {
     }
   }
 
+  this.centerOnUnit = function () {
+    const position = Local.unit.container.position
+    this.map.track(position.x, position.y, false)
+  }
+
   this.startPlaying = function () {
     if (this.playing) {
       console.warn('game already playing')
@@ -192,8 +197,7 @@ export default function (gid, mode, size, mapName) {
     this.playing = true
     store.state.game.playing = true
 
-    const position = Local.unit.container.position
-    this.map.track(position.x, position.y, false)
+    this.centerOnUnit()
   }
 
   // Setup
