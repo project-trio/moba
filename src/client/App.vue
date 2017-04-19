@@ -75,6 +75,7 @@ body
   margin 0
   overflow hidden
   background-color #fffffe
+  -webkit-touch-callout none
 
 body, .inherit
   width inherit

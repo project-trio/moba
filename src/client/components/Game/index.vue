@@ -1,5 +1,5 @@
 <template>
-<div class="inherit">
+<div class="game-container inherit">
   <canvas id="canvas" class="inherit"></canvas>
 
   <unit-select v-if="!playing && winningTeam === null"></unit-select>
@@ -80,6 +80,9 @@ export default {
 </script>
 
 <style lang="stylus">
+.game-container
+  user-select none
+
 .ui-bar
   position absolute
   left 0
