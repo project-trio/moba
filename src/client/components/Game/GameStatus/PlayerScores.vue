@@ -3,7 +3,7 @@
   <table class="player-scores">
     <tr><th>name</th><th>level</th><th>ship</th><th>assists</th><th>deaths</th><th>damage</th></tr>
     <tr v-for="result in playerResults" :class="`team-${result.team + 1} ${result.active ? 'active' : 'inactive'}`">
-      <td>{{ result.name }}</td><td>{{ result.level }}</td><td>{{ result.ship }}</td><td>{{ result.kills }}</td><td>{{ result.deaths }}</td><td>{{ result.damage / 100 }}</td>
+      <td>{{ result.name }}</td><td>{{ result.level }}</td><td>{{ result.ship }}</td><td>{{ result.kills }}</td><td>{{ result.deaths }}</td><td>{{ Math.round(result.damage / 100) }}</td>
     </tr>
   </table>
 </div>

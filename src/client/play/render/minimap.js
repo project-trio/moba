@@ -120,7 +120,7 @@ export default {
     if (!size) {
       size = 1000
     }
-    const geometry = new THREE.CircleBufferGeometry(size * mapScale / 100 * 2, unit.isLocal ? 16 : 4)
+    const geometry = new THREE.CircleBufferGeometry(size * mapScale / 100 * 2, unit.isLocal ? 32 : 4)
     const color = unit.isLocal ? 0x222222 : dataConstants.teamColors[unit.team]
     const material = new THREE.MeshBasicMaterial({ color })
     const mesh = new THREE.Mesh(geometry, material)
@@ -151,7 +151,7 @@ export default {
   },
 
   addWallCap (x, y, r, team) {
-    const geometry = new THREE.CircleBufferGeometry(r * mapScale, 8)
+    const geometry = new THREE.CircleBufferGeometry(r * mapScale, 16)
     const material = new THREE.MeshBasicMaterial({ color: dataConstants.wallColors[team] })
     const mesh = new THREE.Mesh(geometry, material)
     mesh.position.x = x * mapScale - renderWidth / 2
