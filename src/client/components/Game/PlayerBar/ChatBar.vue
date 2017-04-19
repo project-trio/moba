@@ -4,7 +4,7 @@
     <div ref="chatScroll" class="chat-messages scrolls">
       <div v-for="msg in messages" class="msg">
         <div v-if="msg.active !== undefined"><span :class="`msg-from team-${msg.team + 1}`">{{ msg.name }}</span> {{ msg.active ? 'rejoined' : 'left' }} the game</div>
-        <div v-else-if="msg.kill"><span :class="`msg-from team-${msg.team + 1}`">{{ msg.kill }}</span> killed by {{ msg.executed ? 'a' : null }} <span :class="`msg-from team-${1 - msg.team + 1}`">{{ msg.damagers.join(', ') }}</span></div>
+        <div v-else-if="msg.kill"><span :class="`msg-from team-${msg.team + 1}`">{{ msg.kill }}</span> killed by {{ msg.executed ? (msg.damagers.indexOf('base') !== -1 ? 'the' : 'a') : null }} <span :class="`msg-from team-${1 - msg.team + 1}`">{{ msg.damagers.join(', ') }}</span></div>
         <div v-else-if="msg.tower"><span :class="`msg-from team-${msg.team + 1}`">{{ msg.tower }}</span> destroyed!</div>
         <div v-else><span class="chat-all">{{ msg.all ? '[ALL] ' : null }}</span><span :class="`msg-from team-${msg.team + 1}`">{{ msg.from }}</span>: {{ msg.body }}</div>
       </div>

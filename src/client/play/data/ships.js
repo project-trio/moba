@@ -73,7 +73,7 @@ export default {
     attackDamage: [40, 1],
     attackPierce: [0, 0],
     attackCooldown: [10, 0],
-    attackMoveSpeed: 16,
+    attackMoveSpeed: 14,
     bulletSize: 4,
 
     moveSpeed: [11, 0],
@@ -161,7 +161,7 @@ export default {
     attackDamage: [60, 3],
     attackPierce: [0, 0],
     attackCooldown: [15, 0],
-    attackMoveSpeed: 14,
+    attackMoveSpeed: 13,
     bulletSize: 4,
 
     moveSpeed: [12, 0],

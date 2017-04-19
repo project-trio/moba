@@ -522,7 +522,7 @@ class Unit {
 
   // Aim
 
-  angleTo (container, destAngle) {
+  angleTo (container, destAngle) { //TODO time diff
     let currAngle = container.rotation.z
     let newAngle
     let angleDiff = Util.distanceBetweenAngles(currAngle, destAngle)
@@ -542,7 +542,7 @@ class Unit {
     if (this.attackTarget) {
       aimTop = Util.angleBetween(this, this.attackTarget, true)
     }
-    let aimBase = !this.attackTarget || this.shouldMove() ? this.moveTargetAngle : null
+    let aimBase = (!this.attackTarget || this.shouldMove()) ? this.moveTargetAngle : null
     if (!aimTop) {
       aimTop = aimBase
     }
@@ -657,7 +657,7 @@ Unit.get = function (id) {
       return unit
     }
   }
-  console.error('Target id not found', id)
+  console.error('Target id not found', id, allUnits.map(unit => unit.id))
 }
 
 Unit.update = function (renderTime, timeDelta, tweening) {

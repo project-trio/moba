@@ -71,10 +71,8 @@ class Movable extends Unit {
       moveToX = this.px
       moveToY = this.py
     }
-    moveToX /= POSITION_MAGNITUDE_OFFSET
-    moveToY /= POSITION_MAGNITUDE_OFFSET
-    this.container.position.x = moveToX
-    this.container.position.y = moveToY
+    this.container.position.x = moveToX / POSITION_MAGNITUDE_OFFSET
+    this.container.position.y = moveToY / POSITION_MAGNITUDE_OFFSET
   }
 
   // Move
