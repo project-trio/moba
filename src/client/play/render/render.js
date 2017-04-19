@@ -10,7 +10,7 @@ import pointer from '@/play/render/pointer'
 import RenderFog from '@/play/render/fog'
 import RenderMinimap from '@/play/render/minimap'
 
-const WALL_HEIGHT = 60
+const WALL_HEIGHT = 80
 
 let gameScene, gameCamera, renderer
 let pixelMultiplier = null

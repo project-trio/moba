@@ -30,6 +30,15 @@ const maps = {}
         mirror: false,
         endCap: true,
       },
+      {
+        start: { x: TINY_SIZE - wH / 3, y: 0 },
+        radius: wallRadius,
+        move: [
+          { dx: 0, dy: wH / 3, },
+        ],
+        mirror: false,
+        endCap: false,
+      },
     ],
 
     minions: [
