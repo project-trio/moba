@@ -25,8 +25,8 @@ class Tower extends Unit {
     spawnCount += 1
     this.targetedAt = null
 
-    Render.voxel(team, 'turret-base', { receiveShadow: true, parent: this.base, owner: this })
-    Render.voxel(team, 'turret-top', { parent: this.top, owner: this })
+    Render.voxel(team, 'npcs', 'turret-base', { receiveShadow: true, parent: this.base, owner: this })
+    Render.voxel(team, 'npcs', 'turret-top', { parent: this.top, owner: this })
 
     this.isBlocking = true
 

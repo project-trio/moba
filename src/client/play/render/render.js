@@ -194,13 +194,13 @@ export default {
     return mesh
   },
 
-  voxel (team, name, options) {
+  voxel (team, type, name, options) {
     let builder = options.cache && voxelCache ? voxelCache[team][name] : null
     if (builder) {
       const mesh = builder.createMesh()
       return this.voxelMesh(mesh, team, options)
     }
-    new Vox.Parser().parse(require(`@/assets/${name}.vox`)).then((voxelData) => {
+    new Vox.Parser().parse(require(`@/assets/${type}/${name}.vox`)).then((voxelData) => {
       builder = new Vox.MeshBuilder(voxelData, { voxelSize: 2 })
       if (options.cache) {
         voxelCache[team][name] = builder
@@ -211,8 +211,8 @@ export default {
     })
   },
 
-  generate (name, count, size, container, x, y, width, height, z) {
-    new Vox.Parser().parse(require(`@/assets/${name}.vox`)).then((voxelData) => {
+  generate (type, name, count, size, container, x, y, width, height, z) {
+    new Vox.Parser().parse(require(`@/assets/${type}/${name}.vox`)).then((voxelData) => {
       const builder = new Vox.MeshBuilder(voxelData, { voxelSize: size })
       for (let i = 0; i < count; i += 1) {
         const mesh = builder.createMesh()

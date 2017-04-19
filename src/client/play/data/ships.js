@@ -3,9 +3,9 @@ import Render from '@/play/render/render'
 //HELPERS
 
 const createMeshes = function (name, team, top, base, ship) {
-  Render.voxel(team, `${name}-top`, { parent: top, z: this.offsetTop, owner: ship })
+  Render.voxel(team, 'ships', `${name}-top`, { parent: top, z: this.offsetTop, owner: ship })
   if (this.split) {
-    Render.voxel(team, `${name}-base`, { parent: base, owner: ship })
+    Render.voxel(team, 'ships', `${name}-base`, { parent: base, owner: ship })
   }
 }
 
