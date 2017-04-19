@@ -45,7 +45,7 @@ export default {
     sightRange: [160, 0],
     attackRange: [140, 0],
 
-    attackDamage: [30, 3],
+    attackDamage: [30, 4],
     attackPierce: [0, 0],
     attackCooldown: [10, 0],
     attackMoveSpeed: 10,
@@ -135,7 +135,7 @@ export default {
     sightRange: [160, 1],
     attackRange: [120, 1],
 
-    attackDamage: [40, 1],
+    attackDamage: [40, 2],
     attackPierce: [0, 0],
     attackCooldown: [18, 0],
     attackMoveSpeed: 11,
@@ -181,7 +181,7 @@ export default {
     sightRange: [160, 0],
     attackRange: [140, 0],
 
-    attackDamage: [30, 2],
+    attackDamage: [30, 3],
     attackPierce: [0, 0],
     attackCooldown: [16, 0],
     attackMoveSpeed: 11,
