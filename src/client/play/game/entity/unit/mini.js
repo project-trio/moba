@@ -1,3 +1,5 @@
+import Local from '@/play/local'
+
 import minisData from '@/play/data/minis'
 
 import Render from '@/play/render/render'
@@ -7,8 +9,7 @@ import Unit from '@/play/game/entity/unit/unit'
 
 //CLASS
 
-let mapWidth, mapHeight
-let spawnCount = 0
+let spawnCount
 
 class Mini extends Movable {
 
@@ -83,13 +84,13 @@ class Mini extends Movable {
       }
 
       if (this.mirrored) {
-        nextDest[0] = mapWidth - nextDest[0]
+        nextDest[0] = Local.game.map.width() - nextDest[0]
       }
       if (nextDest[2] && this.pathFlip === this.mirrored) {
         nextDest[2] = -nextDest[2]
       }
       if ((this.team === 0) != this.pathFlip) {
-        nextDest[1] = mapHeight - nextDest[1]
+        nextDest[1] = Local.game.map.height() - nextDest[1]
       }
       if (nextDest[3] && this.team === 1) {
         nextDest[3] = -nextDest[3]
@@ -187,13 +188,12 @@ Mini.spawn = function (team, type, path, mirrored) {
   return new Mini(team, type, path, mirrored)
 }
 
-Mini.init = function (_mapWidth, _mapHeight) {
+Mini.init = function () {
+  spawnCount = 0
   cache = {
     melee: [[], []],
     ranged: [[], []],
   }
-  mapWidth = _mapWidth
-  mapHeight = _mapHeight
 }
 
 Mini.destroy = function () {

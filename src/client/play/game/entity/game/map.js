@@ -109,7 +109,7 @@ const GameMap = function (mapName, parent) {
     const mapHeight = layout.height
     Render.positionCamera(mapWidth / 2, mapHeight / 2)
 
-    Mini.init(mapWidth, mapHeight)
+    Mini.init()
 
     this.aoeRing = null
 
