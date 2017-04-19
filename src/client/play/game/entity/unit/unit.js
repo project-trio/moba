@@ -178,7 +178,6 @@ class Unit {
 
   hasModifier (statName, key) {
     const statModifiers = this.modifiers[statName]
-    console.log('hm', statName, key, statModifiers, statModifiers ? statModifiers[key] : null)
     return statModifiers && statModifiers[key] !== undefined
   }
 
@@ -230,7 +229,7 @@ class Unit {
     } else {
       this.current[statKey] = result.toNumber()
       if (Local.TESTING && !Number.isInteger(this.current[statKey])) { //TODO testing
-        console.log('NON-INTEGER', modifierName, statKey, result.toNumber())
+        console.error('NON-INTEGER', modifierName, statKey, result.toNumber())
       }
     }
     if (updatingModifier && this.selected) {
@@ -347,7 +346,7 @@ class Unit {
   stun (renderTime, duration) {
     const stunEnd = renderTime + duration
     if (stunEnd > this.stunnedUntil) {
-      console.log('Stun for', duration, stunEnd)
+      // p('Stun for', duration, stunEnd)
       this.stunnedUntil = stunEnd
     }
   }
@@ -422,7 +421,7 @@ class Unit {
 
       if (this.reflectDamageRatio) {
         const reflectedDamage = damageDecimal.times(this.reflectDamageRatio).round().toNumber()
-        // console.log(damage, reflectedDamage)
+        // p(damage, reflectedDamage)
         source.takeDamage(this, renderTime, reflectedDamage, 0, true)
       }
       if (this.repair) {

@@ -74,10 +74,10 @@ export default {
       } else {
         this.size = data.size
         this.map = data.map
-        console.log('join', data)
         if (Local.game) {
           console.warn('Game already exists', data)
         } else {
+          // p('join', data)
           const newGame = new Game(data.gid, data.mode, data.size, data.map)
           newGame.updatePlayers(data)
           Local.game = newGame
@@ -121,7 +121,6 @@ export default {
     },
 
     isHost () {
-      console.log(store.state.playerId, store.state.game.host)
       return store.state.playerId === store.state.game.host
     },
     startText () {
@@ -143,7 +142,7 @@ export default {
           Bridge.emit('chat', { team: false, body: this.draftMessage }, (response) => {
             if (response.error) {
               //TODO display throttle error
-              console.log('chat err', response)
+              p('chat err', response)
             } else {
               this.draftMessage = ''
             }

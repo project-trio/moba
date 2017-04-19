@@ -12,6 +12,10 @@ module.exports = {
     'html'
   ],
 
+  globals: {
+    'p': false
+  },
+
   'rules': {
     'comma-dangle': 0,
     'spaced-comment': 0,

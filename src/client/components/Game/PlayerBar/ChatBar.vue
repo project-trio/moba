@@ -75,7 +75,7 @@ export default {
             Bridge.emit('chat', { all: this.allChat, body: this.draftMessage }, (response) => {
               if (response.error) {
                 //TODO display throttle error
-                console.log('chat err', response)
+                p('chat err', response)
               } else {
                 this.draftMessage = ''
               }

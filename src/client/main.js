@@ -11,6 +11,9 @@ import LobbyEvents from '@/play/events/lobby'
 
 // App
 
+window.p = console.log
+console.log = () => {}
+
 Vue.config.productionTip = false
 
 const hasSignin = store.state.signin.username !== null
@@ -35,7 +38,7 @@ const startupRoute = function () {
   } else {
     LobbyEvents.connect('quick', { mode: 'bots', size: 1, map: 'tiny' }, (response) => { //SAMPLE
       if (response.error) {
-        console.log('quick', response)
+        console.warn('quick', response)
       } else {
         router.push({ name: 'Join', params: { gid: response.gid } })
       }

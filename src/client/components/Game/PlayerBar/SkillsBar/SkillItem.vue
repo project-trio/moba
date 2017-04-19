@@ -37,7 +37,7 @@ const getUnitTarget = function (skillData) {
   if (store.state.local.skills.unitTarget) {
     const unitTarget = Unit.get(store.state.local.skills.unitTarget)
     if (!unitTarget || store.state.local.skills.withAlliance !== unitTarget.localAlly) {
-      console.log('target not for alliance', unitTarget)
+      p('target not for alliance', unitTarget)
     } else {
       unitTarget.setSelection(0xff0000)
     }
@@ -248,7 +248,7 @@ export default {
               this.onSkill(false)
             }
           } else {
-            console.log('Cancel skill', this.indexName, currentKey)
+            // p('Cancel skill', this.indexName, currentKey)
           }
           store.cancelActiveSkill(true)
         }
@@ -327,7 +327,7 @@ export default {
             if (!groundTargeted) {
               const unitTarget = Unit.get(target)
               if (!unitTarget || store.state.local.skills.withAlliance !== unitTarget.localAlly) {
-                console.log('target not for alliance', unitTarget)
+                p('target not for alliance', unitTarget)
                 return
               }
             }

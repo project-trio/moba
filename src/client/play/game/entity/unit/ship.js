@@ -195,7 +195,7 @@ class Ship extends Movable {
           target: target,
           rangeCheck: skillRangeCheck,
         }
-        console.log('Queueing unit target skill', renderTime, this.targetingSkill)
+        // p('Queueing unit target skill', renderTime, this.targetingSkill)
       }
     } else {
       const destX = targetData[0]
@@ -206,7 +206,7 @@ class Ship extends Movable {
         px: destX, py: destY,
         rangeCheck: skillRangeCheck,
       }
-      console.log('Queueing ground target skill', renderTime, this.targetingSkill)
+      // p('Queueing ground target skill', renderTime, this.targetingSkill)
       this.targetDestination(destX, destY)
     }
     return true
@@ -222,15 +222,15 @@ class Ship extends Movable {
 
   performSkill (renderTime, index, target) {
     if (this.isDead) {
-      // console.log('Skill disabled during death', renderTime, this.id, index)
+      // p('Skill disabled during death', renderTime, this.id, index)
       return false
     }
     if (target && target.isDead) {
-      console.log('Skill canceled by dead target', renderTime, this.id, index)
+      p('Skill canceled by dead target', renderTime, this.id, index)
       return false
     }
     if (renderTime < this.skills.cooldowns[index]) {
-      console.log('Skill still on cooldown', renderTime, this.id, index)
+      p('Skill still on cooldown', renderTime, this.id, index)
       return false
     }
     const skill = this.skills.data[index]
@@ -239,7 +239,7 @@ class Ship extends Movable {
       return false
     }
     if (skill.isDisabledBy && skill.isDisabledBy(this.skills.actives)) {
-      console.log('Skill disabled by another active', this.id, index, skill.disabledBy, this.skills.actives)
+      p('Skill disabled by another active', this.id, index, skill.disabledBy, this.skills.actives)
       return false
     }
     const instantaneous = skill.getDuration === undefined

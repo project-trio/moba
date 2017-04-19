@@ -366,7 +366,7 @@ export default {
         ship.opacity(0.75)
 
         ship.endBarrelRoll = function () {
-          console.log('cancel barrel roll')
+          p('cancel barrel roll')
           ship.updateCooldown(index, store.state.game.renderTime, cooldown)
           ship.endSkill(index)
         }
@@ -848,7 +848,7 @@ export default {
         })
 
         ship.endInvisible = function () {
-          console.log('cancel invisibility')
+          p('cancel invisibility')
           ship.cancelAnimation(null, 'opacity')
           ship.opacity(1)
           ship.updateCooldown(index, store.state.game.renderTime, cooldown)

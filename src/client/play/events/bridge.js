@@ -27,7 +27,6 @@ export default {
     if (socket) {
       return
     }
-    console.log('CONNECTING', Local.TESTING)
     store.state.signin.loading = true
     const socketUrl = Local.TESTING ? `http://localhost:${CommonConsts.PORT}` : window.location.origin
     const username = store.state.signin.username || 'test'
@@ -36,15 +35,15 @@ export default {
 
     socket.on('connect', () => {
       store.state.playerId = socket.id
-      console.log('Connected', store.state.playerId)
+      p('Connected', store.state.playerId)
       store.state.signin.loading = false
 
       socket.on('auth', (data) => {
-        // console.log('authed', data)
+        // p('authed', data)
       })
 
       socket.on('disconnect', (data) => {
-        console.log('disconnect', data)
+        p('disconnect', data)
         if (!Local.TESTING) {
           window.alert('Disconnected from the server. Reloading the page.')
         }

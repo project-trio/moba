@@ -67,7 +67,7 @@ class Mini extends Movable {
     //   const diffY = Math.round(Math.sin(moveAngle) * 1000)
     //   if (diffX !== moveX || diffY !== moveY) {
     //     const sourceDest = this.path[this.pathProgress]
-    //     console.log('Invalid fixed movement', [sourceDest[0], sourceDest[1]], [moveX, moveY], [diffX, diffY])
+    //     p('Invalid fixed movement', [sourceDest[0], sourceDest[1]], [moveX, moveY], [diffX, diffY])
     //   }
     // }
   }

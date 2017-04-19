@@ -30,10 +30,10 @@ export default {
   mounted () {
     LobbyEvents.connect('enter', { leaving: Local.gid }, (data) => {
       if (data.gid) {
-        console.log('redirecting to game', data.gid)
+        p('redirecting to game', data.gid)
         router.replace({ name: 'Join', params: { gid: data.gid } })
       } else {
-        console.log('joined lobby', data)
+        p('joined lobby', data)
         store.state.lobby.onlineCount = data.online
         store.state.lobby.games = data.games
         Local.gid = null

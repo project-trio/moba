@@ -32,7 +32,7 @@ export default {
     Bridge.on('auth', () => {
       Bridge.emit('admin', 'get', (response) => {
         this.games = response.games
-        console.log(response.games)
+        p(response.games)
         this.players = response.names
       })
     })

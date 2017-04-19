@@ -62,7 +62,7 @@ export default function (gid, mode, size, mapName) {
           if (ticksToRender > ticksPerUpdate) {
             store.state.game.missingUpdate = true
           }
-          console.log('Missing update', ticksToRender, tickOffsets)
+          // p('Missing update', ticksToRender, tickOffsets)
           break
         }
       }
@@ -170,7 +170,7 @@ export default function (gid, mode, size, mapName) {
       if (behindUpdates > 0) {
         tickOffsets -= behindUpdates
         renderedSinceUpdate = false
-        console.log('Catching up to server update', behindUpdates, tickOffsets)
+        p('Catching up to server update', behindUpdates, tickOffsets)
       }
     }
   }
@@ -239,7 +239,7 @@ export default function (gid, mode, size, mapName) {
 
     ticksPerUpdate = updateDuration / tickDuration
     ticksRendered = -updatesUntilStart * ticksPerUpdate
-    console.log('STARTED', updateDuration, tickDuration, ticksPerUpdate, ticksRendered)
+    // p('STARTED', updateDuration, tickDuration, ticksPerUpdate, ticksRendered)
 
     // status = 'STARTED'
     lastTickTime = performance.now()
@@ -277,7 +277,7 @@ export default function (gid, mode, size, mapName) {
       console.error('Updated player DNE', player, storePlayer, gameData, players)
       return
     }
-    console.log(gameData, store.state.game.players)
+    // p(gameData, store.state.game.players)
     player.isActive = gameData.joined
     storePlayer.isActive = gameData.joined
     store.state.chatMessages.push({ name: player.name, team: player.team, active: player.isActive })

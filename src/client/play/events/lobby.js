@@ -19,7 +19,7 @@ export default {
 
   init () {
     Bridge.on('lobby', (data) => {
-      console.log('lobby', data)
+      // p('lobby', data)
       if (data.online) {
         store.state.lobby.onlineCount = data.online
       }
@@ -29,7 +29,7 @@ export default {
     })
 
     Bridge.on('join game', (data) => {
-      console.log('join game', data)
+      // p('join game', data)
       const routeObject = { name: 'Join', params: { gid: data.gid } }
       if (router.currentRoute.name === 'Create') {
         router.replace(routeObject)
@@ -40,19 +40,19 @@ export default {
 
     Bridge.on('players', (data) => {
       if (Local.game) {
-        console.log('players', data)
+        // p('players', data)
         Local.game.updatePlayers(data)
       } else {
-        console.log('No game for players', data)
+        console.warn('No game for players', data)
       }
     })
 
     Bridge.on('update player', (data) => {
       if (Local.game) {
-        console.log('update player', data)
+        // p('update player', data)
         Local.game.updatePlayer(data)
-      } else {
-        console.log('No game for player update', data)
+      } else if (!Local.TESTING) {
+        console.warn('No game for player update', data)
       }
     })
 
@@ -64,14 +64,14 @@ export default {
         console.warn('Game not found', data)
         Local.game = new Game(data.gid, data.mode, data.size, data.map)
       } else {
-        console.log('Start game', data)
+        // p('Start game', data)
       }
       Local.game.updatePlayers(data)
       if (Local.game.player(store.state.playerId)) {
         router.replace({ name: 'Game' })
       } else {
         window.alert('Local player not found. You may be connected on another page. Please refresh and try again.')
-        console.log(store.state.playerId, Local.game)
+        console.warn(store.state.playerId, Local.game)
         router.replace({ name: 'Lobby' })
       }
     })

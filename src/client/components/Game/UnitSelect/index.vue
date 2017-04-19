@@ -98,12 +98,7 @@ export default {
 
   methods: {
     onUnit (name) {
-      Bridge.emit('switch unit', { name }, (response) => {
-        console.log('su', response)
-        if (response.error) {
-          alert(`Invalid unit: ${response.error}`)
-        }
-      })
+      Bridge.emit('switch unit', { name })
     },
   },
 }
