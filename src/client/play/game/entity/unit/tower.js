@@ -10,7 +10,7 @@ import Unit from '@/play/game/entity/unit/unit'
 
 //CLASS
 
-let spawnCount = 0
+let spawnCount
 
 class Tower extends Unit {
 
@@ -113,6 +113,10 @@ class Tower extends Unit {
     store.state.chatMessages.push({ tower: this.name, team: this.team })
   }
 
+}
+
+Tower.init = function () {
+  spawnCount = 0
 }
 
 export default Tower

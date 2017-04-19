@@ -110,6 +110,7 @@ const GameMap = function (mapName, parent) {
     Render.positionCamera(mapWidth / 2, mapHeight / 2)
 
     Mini.init()
+    Tower.init()
 
     this.aoeRing = null
 
