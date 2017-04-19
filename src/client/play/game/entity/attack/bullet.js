@@ -61,9 +61,9 @@ class Bullet {
     }
     this.setLocation(x, y, source.height, startAngle)
     if (this.unitTarget) {
-      this.updateTarget()
+      this.updateTarget(true)
     } else {
-      this.setDestination(target[0], target[1], true)
+      this.setDestination(target[0], target[1])
     }
     allBullets.push(this)
   }
@@ -83,28 +83,20 @@ class Bullet {
 
   // Move
 
-  setDestination (x, y, preadjusted, moveX, moveY) {
-    if (!preadjusted) {
-      x *= POSITION_MAGNITUDE_OFFSET
-      y *= POSITION_MAGNITUDE_OFFSET
-    }
-
+  setDestination (x, y) {
     const dx = x - this.px
     const dy = y - this.py
-    if (moveX === undefined) {
-      if (dx !== 0 || dy !== 0) {
-        const moveAngle = Util.angleOf(dx, dy, false)
-        this.aimTargetAngle = moveAngle.toNumber() / 1000
-        const angleIndex = TrigCache.indexFor(moveAngle)
-        moveX = TrigCache.cos(angleIndex)
-        moveY = TrigCache.sin(angleIndex)
-      } else { //TODO workaround
-        moveX = 0
-        moveY = 0
-        // console.warn('Bullet at destination', this.px, this.py)
-      }
-    } else {
-      this.aimTargetAngle = Math.atan2(dy, dx)
+    let moveX, moveY
+    if (dx !== 0 || dy !== 0) {
+      const moveAngle = Util.angleOf(dx, dy, false)
+      this.aimTargetAngle = moveAngle.toNumber() / 1000
+      const angleIndex = TrigCache.indexFor(moveAngle)
+      moveX = TrigCache.cos(angleIndex)
+      moveY = TrigCache.sin(angleIndex)
+    } else { //TODO workaround
+      moveX = 0
+      moveY = 0
+      // console.warn('Bullet at destination', this.px, this.py)
     }
     this.moveX = moveX
     this.moveY = moveY
@@ -247,12 +239,12 @@ class Bullet {
     this.container.rotation.z = this.aimTargetAngle
   }
 
-  updateTarget () {
-    if (this.target.isDead) {
+  updateTarget (force) {
+    if (!force && this.target.isDead) {
       this.unitTarget = false
-    } else {
-      this.setDestination(this.target.px, this.target.py, true)
+      return
     }
+    this.setDestination(this.target.px, this.target.py)
   }
 
 }
@@ -280,7 +272,7 @@ Bullet.update = function (renderTime, timeDelta, tweening) {
     for (let idx = startIndex; idx >= 0; idx -= 1) {
       const bullet = allBullets[idx]
       if (bullet.unitTarget) {
-        bullet.updateTarget()
+        bullet.updateTarget(false)
       } else if (bullet.firstCollision) {
         bullet.checkCollision(renderTime, units)
       }
