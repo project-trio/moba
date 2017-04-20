@@ -11,6 +11,8 @@ import pointer from '@/play/render/pointer'
 import RenderFog from '@/play/render/fog'
 import RenderMinimap from '@/play/render/minimap'
 
+THREE.Cache.enabled = true
+
 const WALL_HEIGHT = 80
 
 let gameScene, gameCamera, renderer, outlineEffect
