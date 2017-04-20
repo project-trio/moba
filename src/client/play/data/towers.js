@@ -16,7 +16,7 @@ export default {
 
     turnSpeed: 8,
     collision: 35,
-    z: -5,
+    z: 0,
   },
 
   tower: {
@@ -36,7 +36,7 @@ export default {
 
     turnSpeed: 8,
     collision: 30,
-    z: -15,
+    z: -5,
   },
 
   turret: {
@@ -56,6 +56,6 @@ export default {
 
     turnSpeed: 8,
     collision: 30,
-    z: -25,
+    z: -10,
   },
 }

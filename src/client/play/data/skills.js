@@ -643,7 +643,7 @@ export default {
         ship.eye = new Unit(ship.team, stats, null, target[0] / 100, target[1] / 100, null, false, true)
         const color = dataConstants.teamColors[ship.team]
         const sphere = Render.sphere(12, { parent: ship.eye.top, color: color, segments: 16 })
-        sphere.position.z = levelMultiplier(70, level, 4)
+        sphere.position.z = levelMultiplier(60, level, 5)
       },
       end: function (ship) {
         ship.eye.isDying = true

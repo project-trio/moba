@@ -32,8 +32,7 @@ class Tower extends Unit {
     this.healthRemaining = this.stats.healthMax
 
     this.isBlocking = true
-    this.container.position.z = stats.z
-    this.floor.position.z = -stats.z
+    this.model.position.z = stats.z
     this.height = 50 + stats.z
   }
 
@@ -88,8 +87,8 @@ class Tower extends Unit {
     Render.remove(this.top)
 
     this.isBlocking = false
-    const fallDuration = 1000
-    this.queueAnimation('container', 'position', {
+    const fallDuration = 1500
+    this.queueAnimation('container', 'position', { //TODO ease
       axis: 'z',
       from: 0,
       to: -45,

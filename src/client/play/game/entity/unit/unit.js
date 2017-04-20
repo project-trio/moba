@@ -114,11 +114,11 @@ class Unit {
       this.updateModifiers()
 
       // Health Bar
-      let hpHeight, hpWidth
-      let hpOffsetZ = 0
+      let hpHeight, hpWidth, hpOffsetZ
       if (unitScale === 1) {
         hpHeight = 3
         hpWidth = 40
+        hpOffsetZ = 0
       } else if (unitScale === 2 || unitScale === 3) {
         hpHeight = 4
         hpWidth = 62

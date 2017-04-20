@@ -128,13 +128,12 @@ const GameMap = function (mapName, parent) {
 
     const count = 4
     const size = 3
-    const z = -5 - size
     const ws = mapWidth / 2
     const hs = mapHeight / 2
-    Render.generate('decorations', 'flower', Math.ceil(Math.sqrt(Math.random()) * count), size, floorContainer, 0, 0, ws, hs, z)
-    Render.generate('decorations', 'flower', Math.ceil(Math.sqrt(Math.random()) * count), size, floorContainer, mapWidth, 0, -ws, hs, z)
-    Render.generate('decorations', 'flower', Math.ceil(Math.sqrt(Math.random()) * count), size, floorContainer, 0, mapHeight, ws, -hs, z)
-    Render.generate('decorations', 'flower', Math.ceil(Math.sqrt(Math.random()) * count), size, floorContainer, mapWidth, mapHeight, -ws, -hs, z)
+    Render.generate('decorations', 'flower', Math.ceil(Math.sqrt(Math.random()) * count), size, floorContainer, 0, 0, ws, hs)
+    Render.generate('decorations', 'flower', Math.ceil(Math.sqrt(Math.random()) * count), size, floorContainer, mapWidth, 0, -ws, hs)
+    Render.generate('decorations', 'flower', Math.ceil(Math.sqrt(Math.random()) * count), size, floorContainer, 0, mapHeight, ws, -hs)
+    Render.generate('decorations', 'flower', Math.ceil(Math.sqrt(Math.random()) * count), size, floorContainer, mapWidth, mapHeight, -ws, -hs)
 
     ground.owner = ground
 

@@ -13,7 +13,7 @@ import RenderMinimap from '@/play/render/minimap'
 
 THREE.Cache.enabled = true
 
-const WALL_HEIGHT = 80
+const WALL_HEIGHT = 60
 
 let gameScene, gameCamera, renderer, outlineEffect
 let audioListener, gameSound, audioLoader
@@ -251,7 +251,7 @@ export default {
     })
   },
 
-  generate (type, name, count, size, container, x, y, width, height, z) {
+  generate (type, name, count, size, container, x, y, width, height) {
     new Vox.Parser().parse(require(`@/assets/${type}/${name}.vox`)).then((voxelData) => {
       const builder = new Vox.MeshBuilder(voxelData, { voxelSize: size })
       for (let i = 0; i < count; i += 1) {
@@ -261,7 +261,7 @@ export default {
         }
         mesh.castShadow = true
         mesh.receiveShadow = true
-        mesh.position.set(x + Math.random() * Math.random() * Math.random() * width, y + Math.random() * Math.random() * Math.random() * height, z)
+        mesh.position.set(x + Math.random() * Math.random() * Math.random() * width, y + Math.random() * Math.random() * Math.random() * height, 0)
         // mesh.material.transparent = true
         // mesh.material.opacity = 0.5
         mesh.rotation.x = Math.PI / 2
@@ -280,7 +280,7 @@ export default {
       color: new THREE.Color(dataConstants.darkColors[team]),
     }
     const wall = new THREE.Mesh(geometry, material)
-    wall.position.set(x, y, 0)
+    wall.position.set(x, y, WALL_HEIGHT / 2)
     wall.castShadow = true
     wall.receiveShadow = true
     parent.add(wall)
@@ -297,21 +297,21 @@ export default {
     wall.rotation.set(Math.PI / 2, 0, 0)
     wall.castShadow = true
     wall.receiveShadow = false
-    wall.position.set(x, y, 0)
+    wall.position.set(x, y, WALL_HEIGHT / 2)
     parent.add(wall)
     return wall
   },
 
   ground (width, height, options) {
-    const geometry = new THREE.BoxBufferGeometry(width, height, 10)
-    const material = new THREE.MeshLambertMaterial({color: options.color})
+    const geometry = new THREE.PlaneBufferGeometry(width, height)
+    const material = new THREE.MeshLambertMaterial({ color: options.color })
     material.outlineParameters = {
       visible: false,
     }
     const rectangle = new THREE.Mesh(geometry, material)
     rectangle.castShadow = false
     rectangle.receiveShadow = true
-    rectangle.position.set(width / 2, height / 2, -10)
+    rectangle.position.set(width / 2, height / 2, 0)
 
     options.floor.add(rectangle)
 

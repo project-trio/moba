@@ -29,7 +29,7 @@ export default {
     fogMaterial.transparent = true
     fogMaterial.opacity = 0.3
     const fogPlane = new THREE.Mesh(fogGeometry, fogMaterial)
-    fogPlane.position.set(mapWidth / 2, mapHeight / 2, -5)
+    fogPlane.position.set(mapWidth / 2, mapHeight / 2, 1)
     parent.add(fogPlane)
     const fogPlaneMinimap = new THREE.Mesh(fogGeometry, fogMaterial)
     RenderMinimap.addFog(fogPlaneMinimap)
