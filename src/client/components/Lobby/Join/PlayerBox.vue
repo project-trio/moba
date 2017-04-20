@@ -64,7 +64,7 @@ export default {
       const now = Util.seconds()
       for (let idx = this.cachedMessages.length - 1; idx >= 0; idx -= 1) {
         const message = this.cachedMessages[idx]
-        if (now - message.at > 10) {
+        if (now - message.at > 15) {
           this.cachedMessages.splice(idx, 1)
         }
       }

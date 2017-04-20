@@ -244,7 +244,7 @@ class Ship extends Movable {
       return false
     }
     if (skill.isDisabledBy && skill.isDisabledBy(this.skills.actives)) {
-      p('Skill disabled by another active', this.id, index, skill.disabledBy, this.skills.actives)
+      // p('Skill disabled by another active', this.id, index, skill.disabledBy, this.skills.actives)
       return false
     }
     const instantaneous = skill.getDuration === undefined

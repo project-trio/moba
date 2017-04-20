@@ -1,5 +1,5 @@
 <template>
-<div class="skill-item" :class="{ selected: !disabled && isActiveSkill, disabled: disabled, cooldown: cooldownTime, showsLevelup: showingLevelupIndicator }">
+<div class="skill-item" :class="{ selected: !disabled && isActiveSkill, disabled: disabled, cooldown: cooldownTime, showsLevelup: levelupReady }">
   <div class="skill-content">
     <div class="button-content">
       <div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`"></div>
@@ -168,14 +168,14 @@ export default {
     },
 
     showingLevelupIndicator () {
-      if (this.playing && !this.isAnySkillActive && this.levelupReady) {
+      if (this.playing && this.levelupProgress < 1 && !this.isAnySkillActive && this.levelupReady) {
         return !this.skill.minLeveled || this.skillsLeveled >= this.skill.minLeveled
       }
       return false
     },
 
     levelupReady () {
-      return !this.submittedLevelup && this.levelupProgress < 1 && this.higherLevelThanSkills
+      return !this.submittedLevelup && this.higherLevelThanSkills
     },
 
     activeDuration () {

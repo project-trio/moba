@@ -91,7 +91,7 @@ class Tower extends Unit {
     this.queueAnimation('container', 'position', { //TODO ease
       axis: 'z',
       from: 0,
-      to: -45,
+      to: -35,
       start: renderTime,
       duration: fallDuration,
     })

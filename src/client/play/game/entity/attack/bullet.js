@@ -137,7 +137,7 @@ class Bullet {
     } else if (this.unitTarget) {
       if (this.attackDamage) {
         const damage = this.target.takeDamage(this.source, renderTime, this.attackDamage, this.attackPierce)
-        if (this.rebound) {
+        if (this.rebound && !this.source.isDead) {
           const heal = new Decimal(damage).times(this.rebound).round().toNumber()
           new Bullet(this.target, this.source, { bulletColor: 0x00ff00, heal: heal, bulletSize: 8, attackMoveSpeed: 10 }, this.px, this.py, this.container.rotation.z)
         }
