@@ -63,7 +63,7 @@ export default {
     }
 
     outlineEffect = new OutlineEffect(renderer, {
-      defaultThickness: 0.001,
+      defaultThickness: 0.0015,
       defaultKeepAlive: false,
     })
 
@@ -368,6 +368,11 @@ export default {
   sphere (radius, options) {
     const geometry = new THREE.SphereBufferGeometry(radius, options.segments, options.segments && options.segments * 2 / 3)
     const material = new THREE.MeshStandardMaterial({color: options.color})
+    if (options.hideOutline) {
+      material.outlineParameters = {
+        visible: false,
+      }
+    }
     const sphere = new THREE.Mesh(geometry, material)
     sphere.castShadow = true
 
