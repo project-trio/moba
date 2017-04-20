@@ -34,13 +34,13 @@ export default {
   created () {
     window.addEventListener('keydown', this.keydown)
     window.addEventListener('keyup', this.keyup)
-    window.addEventListener('mousewheel', this.scroll, true)
+    window.addEventListener('wheel', this.scroll, true)
   },
 
   destroyed () {
     window.removeEventListener('keydown', this.keydown)
     window.removeEventListener('keyup', this.keyup)
-    window.removeEventListener('mousewheel', this.scroll, true)
+    window.removeEventListener('wheel', this.scroll, true)
   },
 
   computed: {
@@ -77,7 +77,8 @@ export default {
         const game = Local.game
         if (game) {
           store.state.manualCamera = true
-          game.map.trackDelta(event.deltaX, event.deltaY, 0.75)
+          const multiplier = event.deltaMode === WheelEvent.DOM_DELTA_PIXEL ? 0.75 : event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 25 : 100
+          game.map.trackDelta(event.deltaX, event.deltaY, multiplier)
         }
       }
     },

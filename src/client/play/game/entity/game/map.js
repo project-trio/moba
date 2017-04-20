@@ -281,7 +281,7 @@ const GameMap = function (mapName, parent) {
     if (previousPositionX === null) {
       return
     }
-    this.track(previousPositionX + deltaX * speed, previousPositionY - deltaY * speed, true)
+    this.track(Math.ceil(previousPositionX + deltaX * speed), Math.ceil(previousPositionY - deltaY * speed), true)
   }
 
   this.track = function (cameraX, cameraY, delta) {
