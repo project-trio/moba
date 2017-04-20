@@ -101,7 +101,7 @@ export default {
         if (data.error) {
           const errorMessage = `Unable to create game: ${data.error}`
           if (Local.TESTING) {
-            console.warn(errorMessage)
+            warn(errorMessage)
           } else {
             window.alert(errorMessage)
           }

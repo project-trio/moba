@@ -43,7 +43,7 @@ export default {
         // p('players', data)
         Local.game.updatePlayers(data)
       } else {
-        console.warn('No game for players', data)
+        warn('No game for players', data)
       }
     })
 
@@ -52,7 +52,7 @@ export default {
         // p('update player', data)
         Local.game.updatePlayer(data)
       } else if (!Local.TESTING) {
-        console.warn('No game for player update', data)
+        warn('No game for player update', data)
       }
     })
 
@@ -61,7 +61,7 @@ export default {
         // if (Local.TESTING) { //TODO remove backfilling
         //   window.alert('Game not found')
         // }
-        console.warn('Game not found', data)
+        warn('Game not found', data)
         Local.game = new Game(data.gid, data.mode, data.size, data.map)
       } else {
         // p('Start game', data)
@@ -71,7 +71,7 @@ export default {
         router.replace({ name: 'Game' })
       } else {
         window.alert('Local player not found. You may be connected on another page. Please refresh and try again.')
-        console.warn(store.state.playerId, Local.game)
+        p(store.state.playerId, Local.game)
         router.replace({ name: 'Lobby' })
       }
     })

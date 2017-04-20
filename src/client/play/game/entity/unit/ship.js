@@ -235,7 +235,7 @@ class Ship extends Movable {
     }
     const skill = this.skills.data[index]
     if (!skill.getCooldown) {
-      console.warn('Invalid skill', this.name, index, skill)
+      console.error('Invalid skill', this.name, index, skill)
       return false
     }
     if (skill.isDisabledBy && skill.isDisabledBy(this.skills.actives)) {
@@ -499,7 +499,7 @@ class Ship extends Movable {
         this.targetingSkill = null
         this.moveToTarget = false
         // if (this.isLocal) {
-        //   console.warn('target canceled')
+        //   p('target canceled')
         // }
       }
     }

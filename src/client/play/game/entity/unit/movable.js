@@ -53,7 +53,7 @@ class Movable extends Unit {
       } else {
         moveX = 0
         moveY = 0
-        // console.warn('Moveable at destination', this.px, this.py)
+        // warn('Moveable at destination', this.px, this.py)
       }
     } else {
       this.moveTargetAngle = Math.atan2(dy, dx)

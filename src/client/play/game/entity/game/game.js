@@ -114,7 +114,7 @@ export default function (gid, mode, size, mapName) {
         if (playerActions.unit) {
           const storePlayer = store.state.game.players[pid]
           if (!storePlayer) {
-            console.warn('Player not found for store', player, store.state.game.players)
+            console.error('Player not found for store', player, store.state.game.players)
           } else {
             storePlayer.shipName = playerActions.unit
           }
@@ -182,7 +182,7 @@ export default function (gid, mode, size, mapName) {
 
   this.startPlaying = function () {
     if (this.playing) {
-      console.warn('game already playing')
+      console.error('game already playing')
       return
     }
     for (let pid in players) {
@@ -219,7 +219,7 @@ export default function (gid, mode, size, mapName) {
 
   this.start = function () {
     if (this.started) {
-      console.warn('game already started')
+      console.error('game already started')
       return
     }
 
@@ -249,6 +249,7 @@ export default function (gid, mode, size, mapName) {
     lastTickTime = performance.now()
 
     let playerCount = 0
+    // eslint-disable-next-line
     for (let pid in players) {
       playerCount += 1
     }

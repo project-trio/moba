@@ -68,14 +68,14 @@ export default {
         if (Local.TESTING) {
           window.alert(errorMessage)
         } else {
-          console.warn(errorMessage)
+          warn(errorMessage)
         }
         router.replace({ name: 'Lobby' })
       } else {
         this.size = data.size
         this.map = data.map
         if (Local.game) {
-          console.warn('Game already exists', data)
+          warn('Game already exists', data)
         } else {
           // p('join', data)
           const newGame = new Game(data.gid, data.mode, data.size, data.map)

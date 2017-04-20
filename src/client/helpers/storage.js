@@ -47,7 +47,7 @@ export default {
       try {
         return JSON.parse(raw)
       } catch (e) {
-        console.warn('Invalid json', key, raw)
+        console.error('Invalid json', key, raw, e)
         storage.removeItem(key)
       }
     }

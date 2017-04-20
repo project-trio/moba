@@ -13,10 +13,11 @@ module.exports = {
   ],
 
   globals: {
-    'p': false
+    'p': false,
+    'warn': false,
   },
 
-  'rules': {
+  rules: {
     'comma-dangle': 0,
     'spaced-comment': 0,
     'eqeqeq': 0,

@@ -164,7 +164,7 @@ export default function ( renderer, parameters ) {
 			if ( ! /attribute\s+vec3\s+position\s*;/.test( originalVertexShader ) ||
 			     ! /attribute\s+vec3\s+normal\s*;/.test( originalVertexShader ) ) {
 
-				console.warn( 'THREE.OutlineEffect requires both vec3 position and normal attributes in vertex shader, ' +
+				console.error( 'THREE.OutlineEffect requires both vec3 position and normal attributes in vertex shader, ' +
 				              'does not draw outline for ' + originalMaterial.name + '(uuid:' + originalMaterial.uuid + ') material.' );
 
 				return createInvisibleMaterial();

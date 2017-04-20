@@ -96,7 +96,7 @@ class Bullet {
     } else { //TODO workaround
       moveX = 0
       moveY = 0
-      // console.warn('Bullet at destination', this.px, this.py)
+      // warn('Bullet at destination', this.px, this.py)
     }
     this.moveX = moveX
     this.moveY = moveY
