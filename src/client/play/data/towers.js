@@ -1,6 +1,6 @@
 export default {
   base: {
-    healthMax: [1500, 0],
+    healthMax: [1000, 0],
     healthRegen: [10, 0],
     armor: [40, 0],
 
@@ -20,7 +20,7 @@ export default {
   },
 
   tower: {
-    healthMax: [1200, 0],
+    healthMax: [700, 0],
     healthRegen: [0, 0],
     armor: [20, 0],
 
@@ -40,7 +40,7 @@ export default {
   },
 
   turret: {
-    healthMax: [1000, 0],
+    healthMax: [500, 0],
     healthRegen: [0, 0],
     armor: [10, 0],
 

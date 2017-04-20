@@ -248,7 +248,11 @@ export default function (gid, mode, size, mapName) {
     // status = 'STARTED'
     lastTickTime = performance.now()
 
-    this.map.build()
+    let playerCount = 0
+    for (let pid in players) {
+      playerCount += 1
+    }
+    this.map.build(playerCount)
   }
 
   this.end = function (winningTeam) {

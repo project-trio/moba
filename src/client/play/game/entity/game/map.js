@@ -93,7 +93,7 @@ const GameMap = function (mapName, parent) {
     }
   }
 
-  this.build = function () {
+  this.build = function (playerCount) {
     // mapName = 'tiny' //SAMPLE
     layout = commonMaps[mapName]
 
@@ -102,7 +102,7 @@ const GameMap = function (mapName, parent) {
     Render.positionCamera(mapWidth / 2, mapHeight / 2)
 
     Mini.init()
-    Tower.init()
+    Tower.init(playerCount)
 
     this.aoeRing = null
 

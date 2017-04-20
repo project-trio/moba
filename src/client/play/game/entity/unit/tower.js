@@ -10,7 +10,7 @@ import Unit from '@/play/game/entity/unit/unit'
 
 //CLASS
 
-let spawnCount
+let spawnCount, extraHealth
 
 class Tower extends Unit {
 
@@ -28,8 +28,10 @@ class Tower extends Unit {
     Render.voxel(team, 'npcs', 'turret-base', { receiveShadow: true, parent: this.base, owner: this })
     Render.voxel(team, 'npcs', 'turret-top', { parent: this.top, owner: this })
 
-    this.isBlocking = true
+    this.stats.healthMax += extraHealth
+    this.healthRemaining = this.stats.healthMax
 
+    this.isBlocking = true
     this.container.position.z = stats.z
     this.floor.position.z = -stats.z
     this.height = 50 + stats.z
@@ -115,8 +117,9 @@ class Tower extends Unit {
 
 }
 
-Tower.init = function () {
+Tower.init = function (playerCount) {
   spawnCount = 0
+  extraHealth = Math.min(1000, Math.pow(Math.floor(playerCount / 2), 2) * 50) * 100
 }
 
 export default Tower
