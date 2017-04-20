@@ -152,9 +152,13 @@ class Bullet {
   }
 
   destroy () {
-    this.source.bulletCount -= 1
-    Render.remove(this.container)
-    this.remove = true
+    if (!this.remove) {
+      this.source.bulletCount -= 1
+      if (this.container.parent) {
+        Render.remove(this.container)
+      }
+      this.remove = true
+    }
   }
 
   distanceToStart () {
