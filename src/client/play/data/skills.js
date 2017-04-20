@@ -69,7 +69,6 @@ export default {
           color: 0x00ccff,
           opacity: 0.5,
           px: ship.px, py: ship.py,
-          z: -4,
           radius: this.getRange(level),
           allies: true,
           modify: {
@@ -114,7 +113,6 @@ export default {
         const bulletData = {
           dot: true,
           opacity: 0.5,
-          z: -4,
           attackMoveSpeed: 18,
           bulletSize: 14,
           bulletColor: 0x222222,
@@ -249,7 +247,6 @@ export default {
           dot: true,
           hitsTowers: this.hitsTowers,
           opacity: 0.5,
-          z: -4,
           bulletSize: 9,
           bulletColor: 0x00ff00,
           attackDamage: dps,
@@ -603,7 +600,6 @@ export default {
           color: 0x0066aa,
           opacity: 0.5,
           px: ship.px, py: ship.py,
-          z: -4,
           radius: radius,
           allies: true,
           modify: {
@@ -725,7 +721,6 @@ export default {
           dot: true,
           color: 0x0066aa,
           opacity: 0.5,
-          z: -4,
           radius: radius,
           attackDamage: damage,
           attackPierce: 0,
@@ -737,7 +732,7 @@ export default {
           from: 0,
           to: 0,
           parabola: 8,
-          max: -31,
+          max: -26,
           start: startAt,
           duration: endAt - startAt,
         })
