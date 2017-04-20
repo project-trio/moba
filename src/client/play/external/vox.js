@@ -417,7 +417,7 @@ export default vox;
      */
     vox.MeshBuilder.prototype.build = function() {
         this.geometry = new THREE.Geometry();
-        this.material = new THREE.MeshPhongMaterial();
+        this.material = new THREE.MeshPhongMaterial({ specular: 0x333333, shininess: 5 });
 
         // 隣接ボクセル検索用ハッシュテーブル
         this.hashTable = createHashTable(this.voxelData.voxels);
