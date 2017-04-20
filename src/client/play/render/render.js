@@ -14,6 +14,7 @@ import RenderMinimap from '@/play/render/minimap'
 const WALL_HEIGHT = 80
 
 let gameScene, gameCamera, renderer, outlineEffect
+let audioListener, gameSound, audioLoader
 let pixelMultiplier = null
 
 let font
@@ -103,6 +104,11 @@ export default {
     // const helper = new THREE.CameraHelper(light.shadow.camera)
     // gameScene.add(helper)
 
+    audioListener = new THREE.AudioListener()
+    gameCamera.add(audioListener)
+    gameSound = new THREE.Audio(audioListener)
+    audioLoader = new THREE.AudioLoader()
+
     this.createRenderer()
     window.addEventListener('resize', resize)
   },
@@ -114,7 +120,18 @@ export default {
     renderer = null
     pixelMultiplier = null
     voxelCache = null
+
+    audioListener = null
+    gameSound = null
+    audioLoader = null
     RenderMinimap.destroy()
+  },
+
+  playSound (name) {
+    audioLoader.load(`${name}.mp3`, (buffer) => {
+      gameSound.setBuffer(buffer)
+      gameSound.play()
+    })
   },
 
   positionCamera (x, y) {
@@ -202,6 +219,11 @@ export default {
     mesh.castShadow = true
     mesh.receiveShadow = true
     mesh.owner = options.owner
+    if (options.audio) {
+      const audio = new THREE.PositionalAudio(audioListener)
+      mesh.add(audio)
+      mesh.owner.audio = audio
+    }
     return mesh
   },
 
