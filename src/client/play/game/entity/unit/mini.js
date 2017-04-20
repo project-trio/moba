@@ -144,9 +144,11 @@ class Mini extends Movable {
     this.invisible = true
     this.removeTarget()
 
-    setTimeout(() => {
-      cache[this.type][this.team].push(this)
-    }, 0)
+    setTimeout(() => { //TODO wait until next update
+      if (cache) {
+        cache[this.type][this.team].push(this)
+      }
+    }, 200)
   }
 
   // Aim
