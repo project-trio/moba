@@ -5,6 +5,7 @@ import store from '@/store'
 import dataConstants from '@/play/data/constants'
 
 import Vox from '@/play/external/vox'
+import OutlineEffect from '@/play/external/OutlineEffect'
 
 import pointer from '@/play/render/pointer'
 import RenderFog from '@/play/render/fog'
@@ -12,7 +13,7 @@ import RenderMinimap from '@/play/render/minimap'
 
 const WALL_HEIGHT = 80
 
-let gameScene, gameCamera, renderer
+let gameScene, gameCamera, renderer, outlineEffect
 let pixelMultiplier = null
 
 let font
@@ -57,6 +58,12 @@ export default {
     if (shadowQuality >= 2) {
       renderer.shadowMap.type = THREE.PCFSoftShadowMap
     }
+
+    outlineEffect = new OutlineEffect(renderer, {
+      defaultThickness: 0.001,
+      defaultKeepAlive: false,
+    })
+
     resize()
   },
 
@@ -118,7 +125,7 @@ export default {
   render (units) {
     pointer.reposition(gameCamera)
 
-    renderer.render(gameScene, gameCamera)
+    outlineEffect.render(gameScene, gameCamera)
 
     const mmRenderer = RenderMinimap.update(units)
     RenderFog.update(units, renderer, mmRenderer)
@@ -154,7 +161,11 @@ export default {
         bevelSize: 0,
         bevelSegments: 0,
       })
-      const material = new THREE.MeshLambertMaterial({color: options.color})
+      const material = new THREE.MeshBasicMaterial({color: options.color})
+      material.outlineParameters = {
+        // visible: false,
+        color: new THREE.Color(0x000000),
+      }
       const mesh = new THREE.Mesh(geometry, material)
       options.parent.add(mesh)
       mesh.position.set(x, y, 0)
@@ -206,7 +217,12 @@ export default {
         voxelCache[team][name] = builder
       }
       const mesh = builder.createMesh()
-      mesh.material.color.setHex(dataConstants.teamColors[team])
+      const teamColor = dataConstants.teamColors[team]
+      const darkColor = dataConstants.darkColors[team]
+      mesh.material.color.setHex(teamColor)
+      mesh.material.outlineParameters = {
+        color: new THREE.Color(darkColor),
+      }
       return this.voxelMesh(mesh, team, options)
     })
   },
@@ -216,6 +232,9 @@ export default {
       const builder = new Vox.MeshBuilder(voxelData, { voxelSize: size })
       for (let i = 0; i < count; i += 1) {
         const mesh = builder.createMesh()
+        mesh.material.outlineParameters = {
+          visible: false,
+        }
         mesh.castShadow = true
         mesh.receiveShadow = true
         mesh.position.set(x + Math.random() * Math.random() * Math.random() * width, y + Math.random() * Math.random() * Math.random() * height, z)
@@ -230,36 +249,41 @@ export default {
 
   // Map
 
-  wall (x, y, w, h, options) {
+  wall (team, x, y, w, h, parent) {
     const geometry = new THREE.BoxBufferGeometry(w, h, WALL_HEIGHT)
-    const material = new THREE.MeshLambertMaterial({color: options.color || 0x888888})
+    const material = new THREE.MeshLambertMaterial({ color: dataConstants.wallColors[team] })
+    material.outlineParameters = {
+      color: new THREE.Color(dataConstants.darkColors[team]),
+    }
     const wall = new THREE.Mesh(geometry, material)
     wall.position.set(x, y, 0)
     wall.castShadow = true
     wall.receiveShadow = true
-    if (options.parent) {
-      options.parent.add(wall)
-    }
+    parent.add(wall)
     return wall
   },
 
-  wallCap (x, y, radius, options) {
-    const geometry = new THREE.CylinderBufferGeometry(radius, radius, WALL_HEIGHT, 16)
-    const material = new THREE.MeshLambertMaterial({color: options.color || 0x888888})
+  wallCap (team, x, y, radius, parent) {
+    const geometry = new THREE.CylinderBufferGeometry(radius, radius, WALL_HEIGHT, 32)
+    const material = new THREE.MeshLambertMaterial({ color: dataConstants.wallColors[team] })
+    material.outlineParameters = {
+      color: new THREE.Color(dataConstants.darkColors[team]),
+    }
     const wall = new THREE.Mesh(geometry, material)
     wall.rotation.set(Math.PI / 2, 0, 0)
     wall.castShadow = true
     wall.receiveShadow = false
     wall.position.set(x, y, 0)
-    if (options.parent) {
-      options.parent.add(wall)
-    }
+    parent.add(wall)
     return wall
   },
 
   ground (width, height, options) {
     const geometry = new THREE.BoxBufferGeometry(width, height, 10)
     const material = new THREE.MeshLambertMaterial({color: options.color})
+    material.outlineParameters = {
+      visible: false,
+    }
     const rectangle = new THREE.Mesh(geometry, material)
     rectangle.castShadow = false
     rectangle.receiveShadow = true

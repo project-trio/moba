@@ -4,9 +4,11 @@ import store from '@/store'
 
 import shipStats from '@/play/data/ships'
 
+import OutlineEffect from '@/play/external/OutlineEffect'
+
 import Render from '@/play/render/render'
 
-let renderer, scene, camera, cameraTarget, container, shipContainer, canvas, animationId
+let renderer, outlineEffect, scene, camera, cameraTarget, container, shipContainer, canvas, animationId
 let renderWidth, renderHeight
 let statBase = null
 
@@ -49,7 +51,7 @@ function animate (time) {
   }
 
   camera.lookAt(cameraTarget)
-  renderer.render(scene, camera)
+  outlineEffect.render(scene, camera)
 }
 
 //PUBLIC
@@ -81,6 +83,10 @@ export default {
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFSoftShadowMap
     renderer.setPixelRatio(window.devicePixelRatio)
+
+    outlineEffect = new OutlineEffect(renderer, {
+      defaultKeepAlive: false,
+    })
 
     scene = new THREE.Scene()
 

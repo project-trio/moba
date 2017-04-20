@@ -4,8 +4,6 @@ import store from '@/store'
 
 import Local from '@/play/local'
 
-import dataConstants from '@/play/data/constants'
-
 import Bridge from '@/play/events/bridge'
 
 import pointer from '@/play/render/pointer'
@@ -62,10 +60,7 @@ const GameMap = function (mapName, parent) {
     walls.push([(x - w / 2) * 100, (y - h / 2) * 100, w * 100, h * 100])
 
     RenderMinimap.addWall(x, y, w, h, team)
-    Render.wall(x, y, w, h, {
-      color: dataConstants.wallColors[team],
-      parent: wallContainer,
-    })
+    Render.wall(team, x, y, w, h, wallContainer)
   }
 
   const createWallCap = function (x, y, radius, team) {
@@ -73,10 +68,7 @@ const GameMap = function (mapName, parent) {
     walls.push([x * 100, y * 100, radius * 100])
 
     RenderMinimap.addWallCap(x, y, radius, team)
-    Render.wallCap(x, y, radius, {
-      color: dataConstants.wallColors[team],
-      parent: wallContainer,
-    })
+    Render.wallCap(team, x, y, radius, wallContainer)
   }
 
   const getTargetFromPoint = function (point) {
