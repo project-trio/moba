@@ -2,8 +2,6 @@
 
 import Decimal from 'decimal.js'
 
-import Local from '@/play/local'
-
 //CONSTANTS
 
 const PRECISION = new Decimal(1000)
@@ -55,13 +53,8 @@ const prepare = function () {
 //HELPERS
 
 const indexAngleFactor = function (angle, factor) {
-  let count = 0
-  while (angle.lessThan(0)) {
+  if (angle.lessThan(0)) {
     angle = angle.plus(PIPt2)
-    count += 1
-    if (count > 1 && Local.TESTING) {
-      console.error('Angle outside range', angle.toNumber())
-    }
   }
   return factor.times(angle).floor().toNumber() // (angle * factor) | 0
 }
