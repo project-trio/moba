@@ -139,7 +139,7 @@ export default {
         })
 
         if (this.draftMessage) {
-          Bridge.emit('chat', { team: false, body: this.draftMessage }, (response) => {
+          Bridge.emit('chat', { all: true, body: this.draftMessage }, (response) => {
             if (response.error) {
               //TODO display throttle error
               p('chat err', response)
