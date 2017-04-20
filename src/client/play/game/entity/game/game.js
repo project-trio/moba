@@ -36,7 +36,6 @@ export default function (gid, mode, size, mapName) {
   this.finished = false
   this.serverUpdate = -1
 
-  store.state.game.started = false
   store.state.game.playing = false
 
   // Update
@@ -222,6 +221,7 @@ export default function (gid, mode, size, mapName) {
       console.error('game already started')
       return
     }
+    store.state.game.active = true
 
     Render.create()
     Unit.init()
@@ -229,7 +229,6 @@ export default function (gid, mode, size, mapName) {
     AreaOfEffect.init()
 
     this.started = true
-    store.state.game.started = true
     store.state.game.winningTeam = null
 
     Local.player = players[store.state.playerId]
@@ -259,6 +258,7 @@ export default function (gid, mode, size, mapName) {
   this.end = function (winningTeam) {
     this.finished = true
     this.playing = false
+    store.state.game.active = false
     store.state.game.playing = false
     store.state.game.winningTeam = winningTeam
   }

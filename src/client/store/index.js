@@ -14,7 +14,7 @@ const defaultGameState = () => {
     host: null,
     ready: null,
     winningTeam: null,
-    started: false,
+    active: false,
     playing: false,
     missingUpdate: false,
     showPanel: null,

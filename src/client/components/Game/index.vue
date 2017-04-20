@@ -37,7 +37,8 @@ export default {
     }
     Local.game.start()
     Loop.start()
-    window.addEventListener('beforeunload', this.confirmExit)
+
+    window.onbeforeunload = this.confirmExit
     window.addEventListener('touchmove', this.cancelZoom, false)
   },
 
@@ -46,7 +47,8 @@ export default {
       Local.game.close()
     }
     Loop.stop()
-    window.removeEventListener('beforeunload', this.confirmExit)
+
+    window.onbeforeunload = null
     window.removeEventListener('touchmove', this.cancelZoom, false)
   },
 
@@ -61,9 +63,14 @@ export default {
   },
 
   methods: {
-    confirmExit () {
-      if (!Local.TESTING) {
-        return 'Game in progress. You will be left afk in the game and may be unable to join a new game due to leaving. Are you sure?'
+    confirmExit (event) {
+      if (store.state.game.active) {
+        if (Local.TESTING) {
+          return
+        }
+        const message = 'Game in progress. You will be left afk in the game and may be unable to join a new game due to leaving. Are you sure?'
+        event.returnValue = message
+        return message
       }
     },
 
