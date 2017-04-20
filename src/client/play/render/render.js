@@ -40,7 +40,7 @@ const resize = function () {
   gameCamera.updateProjectionMatrix()
 
   const visibleFOV = gameCamera.fov * Math.PI / 180
-  const visibleHeight = 2 * Math.tan(visibleFOV / 2) * 522
+  const visibleHeight = 2 * Math.tan(visibleFOV / 2) * 512
   const visibleWidth = visibleHeight * gameCamera.aspect
   RenderMinimap.drawCameraOutline(visibleWidth, visibleHeight)
 }

@@ -49,7 +49,7 @@ export default function (gid, mode, size, mapName) {
   this.performTicks = function (ticksToRender, currentTime) {
     let renderTime
     let ticksRenderedForFrame = 0
-    const maxTicksToRender = ticksToRender > 9 ? Math.floor(Math.pow(ticksToRender, 0.67)) : 1
+    const maxTicksToRender = ticksToRender > 9 ? Math.floor(Math.pow(ticksToRender, 0.75)) : 1
     while (ticksToRender > 0) {
       renderTime = ticksRendered * tickDuration
       store.state.game.renderTime = renderTime
