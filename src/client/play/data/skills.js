@@ -139,7 +139,7 @@ export default {
       isDisabledBy: null,
       endOnDeath: true,
       getEffectMoveSpeed: function (level) {
-        return levelMultiplier(30, level, 15)
+        return levelMultiplier(25, level, 10)
       },
       getDuration: function (level) {
         return 40
@@ -233,10 +233,10 @@ export default {
         return levelMultiplier(25, level, 2)
       },
       getEffectDps: function (level) {
-        return levelMultiplier(600, level, 60)
+        return levelMultiplier(400, level, 50)
       },
       getCooldown: function (level) {
-        return 180
+        return levelMultiplier(180, level, -5)
       },
       start: function (index, level, ship, target) {
         const dps = this.getEffectDps(level)
