@@ -339,7 +339,8 @@ export default {
   },
 
   circle (radius, options) {
-    const geometry = new THREE.CircleBufferGeometry(radius, 32)
+    const segments = Math.ceil(radius / 21) * 8
+    const geometry = new THREE.CircleBufferGeometry(radius, segments)
     const material = new THREE.MeshBasicMaterial({ color: options.color })
     if (options.opacity != null) {
       material.transparent = true
@@ -352,7 +353,8 @@ export default {
     return mesh
   },
   ring (innerRadius, size, options) {
-    const geometry = new THREE.RingBufferGeometry(innerRadius, innerRadius + size, options.segments || 32)
+    const segments = options.segments || Math.ceil(innerRadius / 16) * 8
+    const geometry = new THREE.RingBufferGeometry(innerRadius, innerRadius + size, segments)
     const material = new THREE.MeshBasicMaterial({ color: options.color })
     if (options.opacity != null) {
       material.transparent = true

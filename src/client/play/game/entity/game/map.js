@@ -86,7 +86,6 @@ const GameMap = function (mapName, parent) {
       this.aoeRing = Render.ring(radius, 2, {
         color: 0xffffff,
         opacity: 0.5,
-        segments: 64,
         parent: floorContainer,
       })
       this.aoeRing.position.x = -9001
@@ -109,6 +108,7 @@ const GameMap = function (mapName, parent) {
     this.selectionRing = Render.ring(32, 4, {
       color: 0xff0000,
       opacity: 0.5,
+      segments: 32,
       parent: floorContainer,
     })
     this.selectionRing.visible = false
@@ -116,6 +116,7 @@ const GameMap = function (mapName, parent) {
     this.targetRing = Render.ring(32, 4, {
       color: 0xff0000,
       opacity: 0.5,
+      segments: 32,
       parent: floorContainer,
     })
     this.targetRing.visible = false

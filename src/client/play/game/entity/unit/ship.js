@@ -87,7 +87,12 @@ class Ship extends Movable {
 
   createIndicator (radius) {
     this.removeIndicator()
-    this.indicator = Render.ring(radius - 1, 2, { color: 0xffffff, opacity: 0.33, parent: this.floor, segments: 64 })
+    this.indicator = Render.ring(radius - 1, 2, {
+      color: 0xffffff,
+      opacity: 0.33,
+      // segments: 32,
+      parent: this.floor,
+    })
   }
 
   removeIndicator () {
