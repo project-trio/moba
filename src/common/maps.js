@@ -6,38 +6,43 @@ const maps = {}
 
   // Tiny
 
-  const TINY_SIZE = 900
-  wH = TINY_SIZE / 2
+
+  const TINY_WIDTH = 900
+  const TINY_HEIGHT = 800
+  wH = TINY_WIDTH / 2
+  hH = TINY_HEIGHT / 2
   maps.tiny = {
     minSize: 0,
     maxSize: 2,
 
-    width: TINY_SIZE,
-    height: TINY_SIZE,
+    width: TINY_WIDTH,
+    height: TINY_HEIGHT,
 
     towers: [
       ['base', wH, 44, false],
-      ['turret', wH - 90, wH - 90, false],
+      ['turret', wH - 70, hH - 90, false],
     ],
 
     walls: [
       {
-        start: { x: TINY_SIZE, y: TINY_SIZE / 3 },
+        start: { x: TINY_WIDTH, y: TINY_HEIGHT / 5 },
         radius: wallRadius,
         move: [
-          { dx: -wH / 3, dy: 0, },
+          { dx: -wH / 6, dy: 0 },
+          { dx: 0, dy: -hH / 5 },
         ],
         mirror: false,
         endCap: true,
       },
       {
-        start: { x: TINY_SIZE - wH / 3, y: 0 },
+        start: { x: 0, y: TINY_HEIGHT / 5 },
         radius: wallRadius,
         move: [
-          { dx: 0, dy: wH / 3, },
+          { dx: wH / 6, dy: 0 },
+          { dx: 0, dy: -hH / 5 },
         ],
         mirror: false,
-        endCap: false,
+        endCap: true,
       },
     ],
 
@@ -45,9 +50,9 @@ const maps = {}
       {
         type: 'ranged',
         paths: [
-          [[wH - 40, 74, 0, 0], [wH - 40, wH, 0, -1000]],
-          [[wH, 80, 0, 0], [wH, wH, 0, -1000]],
-          [[wH + 40, 74, 0, 0], [wH + 40, wH, 0, -1000]],
+          [[wH - 40, 74, 0, 0], [wH - 40, hH, 0, -1000]],
+          [[wH, 80, 0, 0], [wH, hH, 0, -1000]],
+          [[wH + 40, 74, 0, 0], [wH + 40, hH, 0, -1000]],
         ],
         mirror: false,
       },
