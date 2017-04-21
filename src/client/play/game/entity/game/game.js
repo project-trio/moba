@@ -127,25 +127,19 @@ export default function (gid, mode, size, mapName) {
           }
           continue
         }
+        for (let idx = ship.queuedForActivation.length - 1; idx >= 0; idx -= 1) {
+          ship.queuedForActivation[idx] = false
+        }
         for (let ai = playerActions.length - 1; ai >= 0; ai -= 1) {
           const action = playerActions[ai]
-          const target = action.target
           const skillIndex = action.skill
-          ship.targetingSkill = null
-          ship.queueSkill = null
-          ship.queueTarget = null
-          if (skillIndex !== undefined) {
-            if (action.level) {
-              ship.levelup(skillIndex)
-            } else {
-              ship.queueSkill = skillIndex
-              if (target) {
-                ship.queueTarget = target
-              }
+          if (action.level) {
+            ship.levelup(skillIndex)
+          } else {
+            const target = action.target
+            if (target || skillIndex !== undefined) {
+              ship.enqueue(skillIndex, target)
             }
-          } else if (target) {
-            ship.queueSkill = null
-            ship.queueTarget = target
           }
         }
       }

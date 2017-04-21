@@ -53,8 +53,9 @@ class Ship extends Movable {
     this.selected = false
     this.requiresSightOfTarget = false
     this.reflectDamage = null
-    this.queueTarget = null
-    this.queueSkill = null
+
+    this.queuedForActivation = [false, false, false]
+    this.queuedForTarget = null
     this.targetingSkill = null
 
     const scores = { pid: player.id, level: this.level, kills: 0, deaths: 0, damage: 0 }
@@ -278,7 +279,7 @@ class Ship extends Movable {
           store.state.local.skills.levels.splice(index, 1, currentLevel + 1)
         }
       } else {
-        console.error('Skill already maxed', index, currentLevel)
+        // p('Skill already maxed', index, currentLevel)
       }
     } else {
       console.error('levelup not ready', index, this.skills.leveled, this.level)
@@ -320,6 +321,15 @@ class Ship extends Movable {
     }
   }
 
+  enqueue (skill, target) {
+    if (target) {
+      this.targetingSkill = null
+      this.queuedForTarget = [skill !== undefined ? skill : null, target]
+    } else {
+      this.queuedForActivation[skill] = true
+    }
+  }
+
   die (renderTime) {
     this.updateSkills(null)
 
@@ -338,10 +348,11 @@ class Ship extends Movable {
       duration: animDuration,
     })
     this.respawned = false
-    this.queueTarget = null
-    this.queueSkill = null
-    this.targetSkill = null
     this.moveTargetAngle = null
+
+    this.targetingSkill = null
+    this.queuedForTarget = null
+    this.queuedForActivation = [false, false, false]
 
     super.die(renderTime)
 
@@ -501,7 +512,6 @@ class Ship extends Movable {
       }
     } else {
       if (this.moveToTarget) {
-        this.targetingSkill = null
         this.moveToTarget = false
         // if (this.isLocal) {
         //   p('target canceled')
@@ -585,19 +595,30 @@ class Ship extends Movable {
     super.update(renderTime, timeDelta)
 
     if (this.canInput()) {
-      if (this.queueSkill !== null) {
-        if (this.trySkill(renderTime, this.queueSkill, this.queueTarget)) {
-          this.queueSkill = null
-          this.queueTarget = null
-        }
-      } else if (this.queueTarget) {
-        if (typeof this.queueTarget === 'string') {
-          this.setTargetId(this.queueTarget)
+      if (this.queuedForTarget) {
+        const skill = this.queuedForTarget[0]
+        const target = this.queuedForTarget[1]
+        if (skill !== null) {
+          if (this.trySkill(renderTime, skill, target)) {
+            p(this.queuedForTarget)
+            this.queuedForTarget = null
+          }
         } else {
-          this.targetDestination(this.queueTarget[0], this.queueTarget[1])
+          if (typeof target === 'string') {
+            this.setTargetId(target)
+          } else {
+            this.targetDestination(target[0], target[1])
+          }
+          this.queuedForTarget = null
         }
-        this.queueTarget = null
       }
+      for (let skillIndex = this.queuedForActivation.length - 1; skillIndex >= 0; skillIndex -= 1) {
+        if (this.queuedForActivation[skillIndex]) {
+          this.performSkill(renderTime, skillIndex)
+          this.queuedForActivation[skillIndex] = false
+        }
+      }
+
       this.checkQueuedSkill(renderTime)
     }
   }
