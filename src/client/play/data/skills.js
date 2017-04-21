@@ -317,7 +317,7 @@ export default {
         return levelMultiplier(150, level, 5)
       },
       getEffectDamage: function (level) {
-        return levelMultiplier(120, level, 10)
+        return levelMultiplier(80, level, 15)
       },
       getCooldown: function (level) {
         return 60
@@ -412,7 +412,7 @@ export default {
       isDisabledBy: isDisabledBy,
       endOnDeath: true,
       getEffectRebound: function (level) {
-        return levelMultiplier(50, level, 10)
+        return levelMultiplier(40, level, 5)
       },
       getDuration: function (level) {
         return levelMultiplier(50, level, 5)
