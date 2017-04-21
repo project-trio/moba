@@ -311,7 +311,7 @@ export default {
       description: 'Strikes the first enemy hit for [[Damage]]',
       target: TARGET_GROUND,
       hitsTowers: true,
-      disabledBy: [null, false, true],
+      disabledBy: [null, true, false],
       isDisabledBy: isDisabledBy,
       getRange: function (level) {
         return levelMultiplier(150, level, 5)
@@ -408,7 +408,7 @@ export default {
       description: 'Basic attacks return to heal [[Rebound]] of damage dealt',
       suffixRebound: '%',
       target: TARGET_SELF,
-      disabledBy: [false, null, true],
+      disabledBy: [false, true, null],
       isDisabledBy: isDisabledBy,
       endOnDeath: true,
       getEffectRebound: function (level) {
