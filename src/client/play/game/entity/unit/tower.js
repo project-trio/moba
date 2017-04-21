@@ -88,9 +88,8 @@ class Tower extends Unit {
 
     this.isBlocking = false
     const fallDuration = 1500
-    this.queueAnimation('container', 'position', { //TODO ease
+    this.queueAnimation('model', 'position', { //TODO ease
       axis: 'z',
-      from: 0,
       to: -35,
       start: renderTime,
       duration: fallDuration,

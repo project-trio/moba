@@ -3,6 +3,14 @@
 const queue = function (key, property, data) {
   data.key = key
   data.property = property
+  if (data.from === undefined) {
+    let obj = this[key]
+    if (data.child !== undefined) {
+      obj = obj.children[data.child]
+    }
+    data.from = data.axis ? obj[property][data.axis] : obj[property]
+    // p('infer from', key, property, data, data.from)
+  }
   if (data.from > data.to) {
     data.change = -(data.from - data.to)
   } else {
