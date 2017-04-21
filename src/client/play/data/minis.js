@@ -12,7 +12,7 @@ export default {
     attackCooldown: [2, 0],
     attackMoveSpeed: 0,
 
-    moveSpeed: [11, 0],
+    moveSpeed: [10, 0],
     collision: 10,
   },
 
@@ -31,7 +31,7 @@ export default {
     bulletSize: 3,
     bulletColor: 0x888888,
 
-    moveSpeed: [8, 0],
+    moveSpeed: [7, 0],
     collision: 10,
   },
 }
