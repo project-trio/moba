@@ -25,13 +25,17 @@ export default {
     fogTarget = new THREE.WebGLRenderTarget(mapWidth, mapHeight, { depthBuffer: false, stencilBuffer: false })
 
     const fogGeometry = new THREE.PlaneBufferGeometry(mapWidth, mapHeight)
-    const fogMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, alphaMap: fogTarget.texture, depthTest: true })
+    const fogMaterial = new THREE.MeshBasicMaterial({ color: 0x111111, alphaMap: fogTarget.texture, depthTest: true })
     fogMaterial.transparent = true
     fogMaterial.opacity = 0.3
     const fogPlane = new THREE.Mesh(fogGeometry, fogMaterial)
     fogPlane.position.set(mapWidth / 2, mapHeight / 2, 1)
     parent.add(fogPlane)
-    const fogPlaneMinimap = new THREE.Mesh(fogGeometry, fogMaterial)
+
+    const fogMinimapMaterial = new THREE.MeshBasicMaterial({ color: 0x111111, alphaMap: fogTarget.texture, depthTest: true })
+    fogMinimapMaterial.transparent = true
+    fogMinimapMaterial.opacity = 0.2
+    const fogPlaneMinimap = new THREE.Mesh(fogGeometry, fogMinimapMaterial)
     RenderMinimap.addFog(fogPlaneMinimap)
 
     fogCamera = new THREE.OrthographicCamera(mapWidth / -2, mapWidth / 2, mapHeight / 2, mapHeight / -2, -1024, 1024)

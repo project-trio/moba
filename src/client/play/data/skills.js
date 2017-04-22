@@ -4,8 +4,6 @@ import store from '@/store'
 
 import Render from '@/play/render/render'
 
-import dataConstants from '@/play/data/constants'
-
 import Animate from '@/play/game/helpers/animate'
 import Util from '@/play/game/util'
 
@@ -637,8 +635,7 @@ export default {
         const sightRange = this.getEffectRange(level)
         const stats = { sightRange: [sightRange, 0] }
         ship.eye = new Unit(ship.team, stats, null, target[0] / 100, target[1] / 100, null, false, true)
-        const color = dataConstants.teamColors[ship.team]
-        const sphere = Render.sphere(12, { parent: ship.eye.top, color: color, segments: 16 })
+        const sphere = Render.sphere(12, { parent: ship.eye.top, team: ship.team, segments: 16 })
         sphere.position.z = levelMultiplier(60, level, 5)
       },
       end: function (ship) {

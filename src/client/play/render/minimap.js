@@ -53,6 +53,7 @@ export default {
     renderer = new THREE.WebGLRenderer({
       antialias: true,
       canvas: canvas,
+      alpha: true,
     })
     renderer.setPixelRatio(window.devicePixelRatio)
 
@@ -60,14 +61,14 @@ export default {
     canvas.style.height = `${renderHeight}px`
 
     scene = new THREE.Scene()
-    scene.background = new THREE.Color(0xcccccc) // 0x448866
+    // scene.background = new THREE.Color(0xcccccc) // 0x448866
 
     camera = new THREE.OrthographicCamera(renderWidth / -2, renderWidth / 2, renderHeight / 2, renderHeight / -2, -1024, 1024)
 
     const cameraOutlineGeometry = new THREE.PlaneBufferGeometry(renderWidth, renderHeight)
     const cameraOutlineMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff })
     cameraOutlineMaterial.transparent = true
-    cameraOutlineMaterial.opacity = 0.5
+    cameraOutlineMaterial.opacity = 0.1
     cameraMesh = new THREE.Mesh(cameraOutlineGeometry, cameraOutlineMaterial)
     cameraMesh.position.z = -1
     scene.add(cameraMesh)

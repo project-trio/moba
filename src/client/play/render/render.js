@@ -369,10 +369,15 @@ export default {
 
   sphere (radius, options) {
     const geometry = new THREE.SphereBufferGeometry(radius, options.segments, options.segments && options.segments * 2 / 3)
-    const material = new THREE.MeshStandardMaterial({color: options.color})
+    const color = options.team !== undefined ? dataConstants.teamColors[options.team] : options.color
+    const material = new THREE.MeshStandardMaterial({ color })
     if (options.hideOutline) {
       material.outlineParameters = {
         visible: false,
+      }
+    } else {
+      material.outlineParameters = {
+        color: new THREE.Color(dataConstants.darkColors[options.team]),
       }
     }
     const sphere = new THREE.Mesh(geometry, material)
