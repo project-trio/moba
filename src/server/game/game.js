@@ -1,5 +1,7 @@
 const SocketIO = require('socket.io')
 
+const CommonConsts = require.main.require('../common/constants')
+
 const Util = require.main.require('./utils/util')
 
 const Config = require('./config')
@@ -32,12 +34,21 @@ class Game {
     games.push(this)
 
     if (this.botMode) {
-      const botTeam = 1
+      let botTeam = 1
       this.counts[botTeam] = size
       for (let teamIndex = 0; teamIndex < size; teamIndex += 1) {
         const player = new Player(null)
         this.players[player.id] = player
         player.resetGame(botTeam, teamIndex)
+      }
+      if (CommonConsts.TESTING) {
+        botTeam = 0
+        this.counts[botTeam] = size - 1
+        for (let teamIndex = 0; teamIndex < size - 1; teamIndex += 1) {
+          const player = new Player(null)
+          this.players[player.id] = player
+          player.resetGame(botTeam, teamIndex)
+        }
       }
     }
   }
