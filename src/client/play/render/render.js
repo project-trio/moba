@@ -28,8 +28,7 @@ const resize = function () {
   const width = window.innerWidth
   const height = window.innerHeight
 
-  const resolution = store.state.settings.resolution
-  let newPixelMultiplier = window.devicePixelRatio / (resolution === 0 ? 4 : resolution === 1 ? 2 : 1)
+  let newPixelMultiplier = window.devicePixelRatio / (store.state.settings.fullResolution ? 1 : 2)
   if (newPixelMultiplier !== pixelMultiplier) {
     pixelMultiplier = newPixelMultiplier
     renderer.setPixelRatio(newPixelMultiplier)

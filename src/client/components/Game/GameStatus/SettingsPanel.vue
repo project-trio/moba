@@ -7,7 +7,7 @@
       <div class="label">FPS Cap</div>
     </div>
     <div class="setting">
-      <button @click="onResolution" class="interactive">{{ pixelResolution }}x</button>
+      <button @click="onResolution" class="interactive">{{ fullResolution ? 'full' : 'low' }}</button>
       <div class="label">Resolution</div>
     </div>
     <div class="setting">
@@ -19,7 +19,6 @@
       <div class="label">Antialias</div>
     </div>
   </div>
-  <div class="note">Antialias on takes effect on next page load. If using scaled resolution, only turn this off if your framerate is still unplayable.</div>
 </div>
 </template>
 
@@ -38,12 +37,8 @@ export default {
       return store.state.settings.fpsCap
     },
 
-    pixelResolution () {
-      return window.devicePixelRatio / (this.resolution === 0 ? 4 : this.resolution === 1 ? 2 : 1)
-    },
-
-    resolution () {
-      return store.state.settings.resolution
+    fullResolution () {
+      return store.state.settings.fullResolution
     },
 
     shadows () {
@@ -61,7 +56,7 @@ export default {
     },
 
     onResolution () {
-      store.applySetting('resolution', (this.resolution + 1) % 3, true)
+      store.applySetting('fullResolution', !this.fullResolution, true)
     },
 
     onShadows () {

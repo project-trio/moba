@@ -71,7 +71,7 @@ export default {
     settings: {
       fpsCap: storage.getBool('fpsCap', false),
       antialias: storage.getBool('antialias', true),
-      resolution: storage.getInt('resolution', 2),
+      fullResolution: storage.getInt('fullResolution', true),
       shadows: storage.getInt('shadows', 1),
     },
 
