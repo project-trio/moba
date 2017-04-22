@@ -90,7 +90,7 @@ class Tower extends Unit {
     const fallDuration = 1500
     this.queueAnimation('model', 'position', { //TODO ease
       axis: 'z',
-      to: -45,
+      to: -43,
       start: renderTime,
       duration: fallDuration,
     })

@@ -17,10 +17,10 @@
   <div class="player-teams scrolls">
     <h1>teams</h1>
     <div class="team-players team-1">
-      <div v-for="player in teamPlayers[0]" :player="player" class="player-ship animated" :class="{ selected: player.id === localId }" :key="player">{{ player.shipName }}</div>
+      <div v-for="player in teamPlayers[0]" :player="player" class="player-ship animated" :class="{ selected: player && player.id === localId }" :key="player">{{ player && player.shipName }}</div>
     </div>
     <div class="team-players team-2">
-      <div v-for="player in teamPlayers[1]" :player="player" class="player-ship animated" :class="{ selected: player.id === localId }" :key="player">{{ player.shipName }}</div>
+      <div v-for="player in teamPlayers[1]" :player="player" class="player-ship animated" :class="{ selected: player && player.id === localId }" :key="player">{{ player && player.shipName }}</div>
     </div>
   </div>
 </div>

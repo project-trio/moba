@@ -600,7 +600,6 @@ class Ship extends Movable {
         const target = this.queuedForTarget[1]
         if (skill !== null) {
           if (this.trySkill(renderTime, skill, target)) {
-            p(this.queuedForTarget)
             this.queuedForTarget = null
           }
         } else {

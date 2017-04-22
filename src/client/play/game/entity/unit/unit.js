@@ -628,7 +628,7 @@ class Unit {
   }
 
   checkAttack (renderTime) {
-    if (this.stunnedUntil > 0 || this.disableAttacking) {
+    if (this.stunnedUntil > 0) {
       return
     }
     const attackForTick = this.getAttackTarget(allUnits)
@@ -671,10 +671,12 @@ Unit.update = function (renderTime, timeDelta, tweening) {
     // Update before deaths
     for (let idx = startIndex; idx >= 0; idx -= 1) {
       const unit = allUnits[idx]
-      if (unit.static) {
-        continue
+      if (!unit.static) {
+        unit.update(renderTime, timeDelta)
       }
-      unit.update(renderTime, timeDelta)
+    }
+    for (let idx = startIndex; idx >= 0; idx -= 1) {
+      const unit = allUnits[idx]
       if (!unit.isDead && unit.isAttackOffCooldown(renderTime)) { //TODO diff for minis?
         unit.checkAttack(renderTime)
       }
