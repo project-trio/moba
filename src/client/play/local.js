@@ -13,6 +13,4 @@ export default window.local = {
   unit: null,
   tickDuration: null,
 
-  shipSize: 44,
-
 }

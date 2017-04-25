@@ -28,7 +28,7 @@ export default class Player {
 
     const mapWidthHalf = Local.game.map.centerX()
     const mapHeightHalf = Local.game.map.centerY()
-    const offset = Local.shipSize * 2 - 12
+    const offset = 76
     const sx = mapWidthHalf + offset * (Math.floor(this.teamIndex / 2) + 1) * indexMp * teamMp
     const sy = (mapHeightHalf - PLAYER_INSET) * teamMp + mapHeightHalf
     return [sx, sy]
