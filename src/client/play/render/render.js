@@ -13,7 +13,10 @@ import RenderMinimap from '@/play/render/minimap'
 
 THREE.Cache.enabled = true
 
-const WALL_HEIGHT = 60
+const WALL_HEIGHT = 50
+
+const CAMERA_FOV = 60
+const CAMERA_HEIGHT = 256 / (CAMERA_FOV / 180)
 
 let gameScene, gameCamera, renderer, outlineEffect
 let audioListener, gameSound, audioLoader
@@ -39,7 +42,7 @@ const resize = function () {
   gameCamera.updateProjectionMatrix()
 
   const visibleFOV = gameCamera.fov * Math.PI / 180
-  const visibleHeight = 2 * Math.tan(visibleFOV / 2) * 512
+  const visibleHeight = 2 * Math.tan(visibleFOV / 2) * gameCamera.position.z
   const visibleWidth = visibleHeight * gameCamera.aspect
   RenderMinimap.drawCameraOutline(visibleWidth, visibleHeight)
 }
@@ -75,8 +78,9 @@ export default {
     // Scene
 
     gameScene = new THREE.Scene()
-    gameCamera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight)
-    gameCamera.position.z = 512
+    gameCamera = new THREE.PerspectiveCamera(CAMERA_FOV)
+    // gameCamera = new THREE.OrthographicCamera(window.innerWidth / -2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / -2, -CAMERA_HEIGHT, CAMERA_HEIGHT)
+    gameCamera.position.z = CAMERA_HEIGHT
 
     const ambientLight = new THREE.AmbientLight(0x666666, 1)
     gameScene.add(ambientLight)
