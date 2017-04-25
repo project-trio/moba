@@ -17,15 +17,13 @@
   "dependencies": {
     "express": "^4.14.1",
     "pg": "^6.1.0",
-    "socket.io": "^1.5.1",
-    "vue": "^2.2.1",
-    "vue-router": "^2.2.0"
+    "socket.io": "^1.5.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.1.1",
-    "babel-loader": "^6.2.10",
+    "babel-loader": "^7.0.0",
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-preset-env": "^1.2.1",
     "babel-preset-stage-2": "^6.22.0",
@@ -60,9 +58,11 @@
     "stats.js": "^0.17.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "three": "^0.84.0",
+    "three": "^0.85.0",
     "url-loader": "^0.5.7",
+    "vue": "^2.2.1",
     "vue-loader": "^11.1.4",
+    "vue-router": "^2.2.0",
     "vue-style-loader": "^3.0.0",
     "vue-template-compiler": "^2.2.1",
     "webpack": "^2.2.1",

@@ -76,7 +76,6 @@ export default {
 
     gameScene = new THREE.Scene()
     gameCamera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight)
-    gameCamera.lookAt(gameScene)
     gameCamera.position.z = 512
 
     const ambientLight = new THREE.AmbientLight(0x666666, 1)
