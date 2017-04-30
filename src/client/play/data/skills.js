@@ -36,6 +36,23 @@ const isDisabledBy = function (actives) {
 
 export default {
 
+//TEMPEST
+
+    tempest: [
+      {
+        name: '[TBD]',
+        description: '',
+      },
+      {
+        name: '[TBD]',
+        description: '',
+      },
+      {
+        name: '[TBD]',
+        description: '',
+      },
+    ],
+
 //STITCHES
 
   stitches: [

@@ -1,10 +1,11 @@
+import * as THREE from 'three'
 import Render from '@/play/render/render'
 
 //HELPERS
 
 const createMeshes = function (name, team, top, base, ship) {
   Render.voxel(team, 'ships', `${name}-top`, { parent: top, z: this.offsetTop, owner: ship })
-  if (this.split) {
+  if (this.split && !this.noBaseModel) {
     Render.voxel(team, 'ships', `${name}-base`, { parent: base, owner: ship })
   }
 }
@@ -12,6 +13,64 @@ const createMeshes = function (name, team, top, base, ship) {
 //SHIPS
 
 export default {
+  tempest: {
+    healthMax: [600, 10],
+    healthRegen: [40, 1],
+    armor: [10, 0],
+
+    sightRange: [160, 0],
+    attackRange: [140, 0],
+
+    attackDamage: [30, 4],
+    attackPierce: [0, 0],
+    attackCooldown: [10, 0],
+    attackMoveSpeed: 10,
+    bulletSize: 3,
+
+    moveSpeed: [10, 0],
+    turnSpeed: 4,
+    collision: 12,
+
+    createMeshes: createMeshes,
+    create: function (name, team, top, bottom, ship) {
+      const cloudGroup = Render.group()
+      cloudGroup.noAlpha = true
+      const sphereCount = 6
+      const sphereDist = 19
+      const sphereSize = 14
+
+      const material = new THREE.MeshPhongMaterial({ color: 0xffffff, shininess: 0 })
+      material.outlineParameters = { visible: false }
+      material.transparent = true
+      material.opacity = 0.5
+      const geometry = new THREE.SphereBufferGeometry(sphereSize)
+      for (let idx = 0; idx < sphereCount; idx += 1) {
+        const sphere = new THREE.Mesh(geometry, material)
+        sphere.castShadow = false
+        sphere.receiveShadow = false
+        const angle = Math.PI / (sphereCount / 2) * idx + Math.PI / sphereCount
+        sphere.position.set(Math.cos(angle) * sphereDist, Math.sin(angle) * sphereDist, 0)
+        sphere.renderOrder = idx / sphereCount
+        sphere.fixedTransparency = true
+        cloudGroup.add(sphere)
+      }
+
+      bottom.add(cloudGroup)
+      ship.cloudGroup = cloudGroup
+      this.createMeshes(name, team, top, bottom, ship)
+    },
+
+    tween: function (renderTime) {
+      // this.cloudGroup.position.z = 8 + Math.cos(renderTime) * 3
+      const clouds = this.cloudGroup.children
+      const speed = renderTime / 1000
+      for (let idx = clouds.length - 1; idx >= 0; idx -= 1) {
+        const cloud = clouds[idx]
+        cloud.position.z = 16 + Math.cos(speed + idx) * 4
+      }
+    },
+  },
+
   stitches: {
     split: true,
 
