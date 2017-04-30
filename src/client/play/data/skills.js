@@ -44,8 +44,81 @@ export default {
         description: '',
       },
       {
-        name: '[TBD]',
-        description: '',
+        name: 'Scud',
+        description: 'Jump a long distance with the power of the wind',
+        target: TARGET_GROUND,
+        isDisabledBy: null,
+        startsImmediately: false,
+        getRange: function (level) {
+          return levelMultiplier(110, level, 10)
+        },
+        getDuration: function (level) {
+          return 3
+        },
+        getCooldown: function (level) {
+          return levelMultiplier(300, level, -10)
+        },
+        start: function (index, level, ship, target, startAt, endAt, cooldown) {
+          ship.customPosition = true
+          ship.uncontrollable = true
+          ship.untargetable = true
+          ship.disableAttacking = true
+
+          let destX = target[0]
+          let destY = target[1]
+          while (ship.blocked(destX, destY)) { //TODO prevent going backwards
+            // p('Blocked', destX, destY, ship.moveX, ship.moveY)
+            destX -= ship.moveX
+            destY -= ship.moveY
+          }
+
+          const duration = endAt - startAt
+          ship.queueAnimation('container', 'position', {
+            axis: 'x',
+            from: ship.px / 100,
+            to: destX / 100,
+            pow: 2,
+            start: startAt,
+            duration: duration,
+          })
+          ship.queueAnimation('container', 'position', {
+            axis: 'y',
+            from: ship.py / 100,
+            to: destY / 100,
+            pow: 2,
+            start: startAt,
+            duration: duration,
+          })
+
+          ship.px = destX
+          ship.py = destY
+
+          ship.queueAnimation('top', 'position', {
+            child: 0,
+            axis: 'z',
+            from: 0,
+            to: 0,
+            parabola: 4,
+            max: 768,
+            start: startAt,
+            duration: duration - 50,
+          })
+          ship.queueAnimation('top', 'opacity', {
+            child: 0,
+            from: 1,
+            to: 1,
+            parabola: 4,
+            max: -1,
+            start: startAt,
+            duration: duration - 50,
+          })
+        },
+        end: function (ship) {
+          ship.customPosition = false
+          ship.uncontrollable = false
+          ship.untargetable = false
+          ship.disableAttacking = false
+        },
       },
       {
         name: '[TBD]',

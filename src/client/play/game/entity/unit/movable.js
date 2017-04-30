@@ -22,6 +22,7 @@ class Movable extends Unit {
     super(team, statBase, unitScale, x, y, startAngle, isLocal)
 
     this.movable = true
+    this.customPosition = false
     this.moveTargetAngle = null
   }
 

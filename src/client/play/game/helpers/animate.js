@@ -50,7 +50,11 @@ const update = function (renderTime) {
         const progress = 1 - Math.pow((timeElapsed - halfDuration) / halfDuration, animation.parabola)
         currentValue = animation.from + (progress > 0.999 ? 1 : progress) * animation.max
       } else {
-        currentValue = animation.from + timeElapsed * animation.change / duration
+        let progress = timeElapsed / duration
+        if (animation.pow) {
+          progress = 1 - Math.pow(1 - progress, animation.pow)
+        }
+        currentValue = animation.from + progress * animation.change
       }
       let obj = null
       if (animation.key) {
