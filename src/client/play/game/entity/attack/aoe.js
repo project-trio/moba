@@ -2,6 +2,7 @@ import Local from '@/play/local'
 
 import Render from '@/play/render/render'
 
+import Animate from '@/play/game/helpers/animate'
 import Util from '@/play/game/util'
 
 const POSITION_MAGNITUDE_OFFSET = 100
@@ -18,6 +19,7 @@ class AreaOfEffect {
     this.source = source
     this.withUnit = withUnit
     this.dot = data.dot
+    this.startAt = data.time + data.delay
     this.endAt = data.endAt
     this.active = true
     this.hitsTowers = data.hitsTowers
@@ -28,7 +30,8 @@ class AreaOfEffect {
     }
     this.modify = data.modify
 
-    this.circle = Render.circle(data.radius, { color: data.color, opacity: data.opacity, parent: withUnit ? data.parent : Local.game.map.floorContainer })
+    const startingOpacity = this.startAt ? 0 : data.opacity
+    this.circle = Render.circle(data.radius, { color: data.color, opacity: startingOpacity, parent: withUnit ? data.parent : Local.game.map.floorContainer })
 
     if (data.px) {
       this.px = data.px
@@ -45,6 +48,17 @@ class AreaOfEffect {
     this.attackPierce = data.attackPierce
 
     areaofEffects.push(this)
+    Animate.apply(this)
+
+    if (this.startAt) {
+      this.queueAnimation('circle', 'opacity', {
+        from: 0,
+        to: 0.1,
+        final: data.opacity,
+        start: data.time,
+        duration: data.delay,
+      })
+    }
   }
 
   apply (renderTime, units) {
@@ -80,6 +94,19 @@ class AreaOfEffect {
     this.remove = true
   }
 
+  deactivate (renderTime) {
+    this.active = false
+    this.queueAnimation('circle', 'opacity', {
+      from: this.circle.material.opacity / 1.5,
+      to: 0,
+      start: renderTime,
+      duration: 300,
+      onComplete: () => {
+        this.destroy()
+      },
+    })
+  }
+
 }
 
 //STATIC
@@ -97,30 +124,23 @@ AreaOfEffect.all = function () {
 }
 
 AreaOfEffect.update = function (renderTime, units) {
-  for (let idx = 0; idx < areaofEffects.length; idx += 1) {
+  for (let idx = areaofEffects.length - 1; idx >= 0; idx -= 1) {
     const aoe = areaofEffects[idx]
-    if (aoe.active) {
-      if (aoe.endAt && renderTime >= aoe.endAt) {
-        aoe.active = false
-        aoe.circle.material.opacity /= 1.5
-      } else {
-        aoe.apply(renderTime, units)
-        if (!aoe.dot) {
-          aoe.active = false
-        }
-      }
-    }
-    if (!aoe.active) {
-      const currentOpacity = aoe.circle.material.opacity
-      if (currentOpacity < 0.01) {
-        aoe.destroy()
-      } else {
-        aoe.circle.material.opacity -= 0.01
-      }
-    }
+    aoe.updateAnimations(renderTime)
     if (aoe.remove) {
       areaofEffects.splice(idx, 1)
-      idx -= 1
+      continue
+    }
+    if (!aoe.active || (aoe.startAt && renderTime < aoe.startAt)) {
+      continue
+    }
+    if (aoe.endAt && renderTime >= aoe.endAt) {
+      aoe.deactivate(renderTime)
+    } else {
+      aoe.apply(renderTime, units)
+      if (!aoe.dot) {
+        aoe.deactivate(renderTime)
+      }
     }
   }
 }
