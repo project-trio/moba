@@ -40,8 +40,45 @@ export default {
 
     tempest: [
       {
-        name: '[TBD]',
-        description: '',
+        name: 'Bolt',
+        description: 'Strike enemies inside after [[Duration]] for [[Damage]]',
+        target: TARGET_GROUND,
+        hitsTowers: false,
+        disabledBy: [null, true, false],
+        isDisabledBy: isDisabledBy,
+        endOnDeath: false,
+        getEffectDuration: function (level) {
+          return 500
+        },
+        getEffectRange: function (level) {
+          return 60
+        },
+        getEffectDamage: function (level) {
+          return levelMultiplier(60, level, 10)
+        },
+        getRange: function (level) {
+          return levelMultiplier(80, level, 5)
+        },
+        getCooldown: function (level) {
+          return levelMultiplier(150, level, -5)
+        },
+        start: function (index, level, ship, target, startAt) {
+          const delay = this.getEffectDuration(level)
+          const damage = this.getEffectDamage(level)
+          const aoeRange = this.getEffectRange(level)
+          new AreaOfEffect(ship, false, {
+            dot: false,
+            hitsTowers: this.hitsTowers,
+            color: 0xffff00,
+            opacity: 0.9,
+            px: target[0], py: target[1],
+            radius: aoeRange,
+            time: startAt,
+            delay: delay,
+            attackDamage: damage * 100,
+            attackPierce: 0,
+          })
+        },
       },
       {
         name: 'Scud',
