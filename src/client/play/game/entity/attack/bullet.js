@@ -25,7 +25,6 @@ class Bullet {
   constructor (source, target, data, x, y, startAngle) {
     this.team = source.team
     this.source = source
-    this.target = target
     this.unitTarget = target.stats !== undefined
     source.bulletCount += 1
     if (data.heal) {
@@ -41,10 +40,14 @@ class Bullet {
     this.modify = data.modify
     this.maxRange = this.unitTarget ? null : data.maxRange
     this.toMaxRange = data.toMaxRange === true
-    this.collisionCheck = Util.squared((this.unitTarget ? target.stats.collision : data.collisionSize) || data.attackMoveSpeed * 100)
     this.explosionRadius = data.explosionRadius
     this.effectDuration = data.effectDuration
     this.stunDuration = data.stunDuration
+
+    this.propagated = 0
+    this.propagates = data.propagates
+    this.propagateRange = data.propagateRange
+    this.targeted = []
     this.color = this.rebound ? 0x0000ff : data.bulletColor || 0x000000
 
     this.container = Render.group()
@@ -59,13 +62,24 @@ class Bullet {
     if (source.height) {
       this.dropRate = 1400000 * this.moveConstant.toNumber() / Math.sqrt(source.distanceTo(target))
     }
+    if (!this.unitTarget) {
+      this.collisionCheck = Util.squared(data.collisionSize || data.attackMoveSpeed * 100)
+    }
     this.setLocation(x, y, source.height, startAngle)
+    this.setTarget(target)
+
+    allBullets.push(this)
+  }
+
+  setTarget (target) {
+    this.target = target
+    this.collisionCheck = Util.squared(target.stats.collision)
     if (this.unitTarget) {
+      this.targeted.push(target.id)
       this.updateTarget(true)
     } else {
       this.setDestination(target[0], target[1])
     }
-    allBullets.push(this)
   }
 
   // Geometry
@@ -148,6 +162,29 @@ class Bullet {
         this.target.modifyData(renderTime, this.modify)
       }
     }
+
+    if (this.propagates && this.propagated < this.propagates) {
+      const units = Unit.all()
+      const targetTeam = this.target.team
+      let nearestUnit
+      let nearestDistance = Util.squared(this.propagateRange * 100)
+      for (let idx = units.length - 1; idx >= 0; idx -= 1) {
+        const unit = units[idx]
+        if (unit.team === targetTeam && unit.targetableStatus() && unit.id !== this.target.id && this.targeted.indexOf(unit.id) === -1) {
+          const distance = unit.distanceTo(this.target)
+          if (distance < nearestDistance) {
+            nearestDistance = distance
+            nearestUnit = unit
+          }
+        }
+      }
+      if (nearestUnit) {
+        this.propagated += 1
+        this.setTarget(nearestUnit)
+        return
+      }
+    }
+
     this.destroy()
   }
 

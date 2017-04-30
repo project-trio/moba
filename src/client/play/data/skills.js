@@ -158,8 +158,37 @@ export default {
         },
       },
       {
-        name: '[TBD]',
-        description: '',
+        name: 'Chain strike',
+        description: 'Lightning propagates to enemies within [[Range]], dealing [[Damage]] to each',
+        hitsTowers: true,
+        disabledBy: [false, true, null],
+        isDisabledBy: isDisabledBy,
+        getEffectRange: function (level) {
+          return 70
+        },
+        getEffectDamage: function (level) {
+          return levelMultiplier(70, level, 5)
+        },
+        getRange: function (level) {
+          return 140
+        },
+        getCooldown: function (level) {
+          return levelMultiplier(200, level, -5)
+        },
+        start: function (index, level, ship, target) {
+          const damage = this.getEffectDamage(level)
+          const bulletData = {
+            hitsTowers: this.hitsTowers,
+            bulletSize: 10,
+            bulletColor: 0xdddd00,
+            attackDamage: damage * 100,
+            attackPierce: 10,
+            attackMoveSpeed: 7,
+            propagates: 3,
+            propagateRange: this.getEffectRange(level),
+          }
+          new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+        },
       },
     ],
 
