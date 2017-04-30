@@ -4,6 +4,8 @@ import store from '@/store'
 
 import shipStats from '@/play/data/ships'
 
+import Animate from '@/play/game/helpers/animate'
+
 import OutlineEffect from '@/play/external/OutlineEffect'
 
 import Render from '@/play/render/render'
@@ -22,6 +24,8 @@ function animate (time) {
     return
   }
   animationId = window.requestAnimationFrame(animate)
+
+  container.updateAnimations(time)
 
   if (statBase) {
     let rotateContainer = false
@@ -118,6 +122,7 @@ export default {
     pointLight.castShadow = true
 
     scene.add(container)
+    Animate.apply(container)
 
     animate()
   },
@@ -146,9 +151,14 @@ export default {
       cacheMoveSpeed: statBase.moveSpeed[0] / 2000,
     })
 
-    container.reemergeAt = performance.now() + 300
+    const renderTime = performance.now()
+    container.reemergeAt = renderTime + 300
     statBase.create(name, team, shipContainer, shipContainer, container)
     container.tween = statBase.tween
+    if (statBase.onRespawn) {
+      container.onRespawn = statBase.onRespawn
+      container.onRespawn(renderTime)
+    }
   },
 
   destroy () {

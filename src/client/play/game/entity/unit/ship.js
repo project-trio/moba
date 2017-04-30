@@ -35,6 +35,9 @@ class Ship extends Movable {
       leveled: 0,
     }
     this.tween = statBase.tween || null
+    this.onDeath = statBase.onDeath || null
+    this.onRespawn = statBase.onRespawn || null
+
     this.statBase = statBase
     this.id = player.id
     this.player = player
@@ -331,6 +334,9 @@ class Ship extends Movable {
   }
 
   die (renderTime) {
+    if (this.onDeath) {
+      this.onDeath(renderTime)
+    }
     this.updateSkills(null)
 
     const animDuration = 500
@@ -400,7 +406,11 @@ class Ship extends Movable {
     }
   }
 
-  respawn () {
+  respawn (renderTime) {
+    if (this.onRespawn) {
+      this.onRespawn(renderTime)
+    }
+
     this.damagers = {}
     this.respawned = true
     this.isBlocking = false
@@ -581,7 +591,7 @@ class Ship extends Movable {
       const deathDuration = renderTime - this.timeOfDeath
       if (deathDuration >= waitToRespawn) {
         if (!this.respawned) {
-          this.respawn()
+          this.respawn(renderTime)
         } else if (renderTime >= this.reemergeAt) {
           if (this.blocked()) {
             //TODO warning

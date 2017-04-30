@@ -69,6 +69,26 @@ export default {
         cloud.position.z = 16 + Math.cos(speed + idx) * 4
       }
     },
+
+    onDeath: function (renderTime) {
+      this.queueAnimation('cloudGroup', 'position', {
+        axis: 'z',
+        from: 0,
+        to: -50,
+        start: renderTime,
+        duration: 900,
+      })
+    },
+    onRespawn: function (renderTime) {
+      this.queueAnimation('cloudGroup', 'position', {
+        axis: 'z',
+        from: -50,
+        to: 0,
+        pow: 2,
+        start: renderTime,
+        duration: 900,
+      })
+    },
   },
 
   stitches: {
