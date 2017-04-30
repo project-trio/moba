@@ -1,3 +1,5 @@
+// import store from '@/store'
+
 //LOCAL
 
 const queue = function (key, property, data) {
@@ -8,8 +10,12 @@ const queue = function (key, property, data) {
     if (data.child !== undefined) {
       obj = obj.children[data.child]
     }
-    data.from = data.axis ? obj[property][data.axis] : obj[property]
-    // p('infer from', key, property, data, data.from)
+    if (property === 'opacity') {
+      data.from = obj.material[property]
+    } else {
+      data.from = data.axis ? obj[property][data.axis] : obj[property]
+    }
+    // p('infer from', data.from, key, property, obj, data)
   }
   if (data.from > data.to) {
     data.change = -(data.from - data.to)
@@ -35,7 +41,10 @@ const update = function (renderTime) {
       let currentValue
       if (renderTime >= startTime + duration) {
         this.animations.splice(idx, 1)
-        currentValue = animation.to
+        currentValue = animation.final !== undefined ? animation.final : animation.to
+        if (animation.onComplete) {
+          animation.onComplete()
+        }
       } else if (animation.parabola) {
         const halfDuration = duration / 2
         const progress = 1 - Math.pow((timeElapsed - halfDuration) / halfDuration, animation.parabola)
