@@ -145,7 +145,7 @@ const GameMap = function (mapName, parent) {
         return
       }
       const showActivateGround = store.state.local.skills.getGroundTarget
-      if (showActivateGround) {
+      if (showActivateGround || this.aoeRing) {
         const target = getTargetFromPoint(point)
         store.state.local.skills.groundTarget = target
         const groundX = target[0] / 100
