@@ -228,7 +228,7 @@ export default {
         const skillIndex = this.index
         store.state.local.skills.active = skillIndex
         if (!this.preventsActivation && !currentKey.modifier) {
-          this.createRangeIndicator()
+          this.createRangeIndicator(this.level)
 
           if (this.skill.target > 1) {
             store.state.local.skills.activation = this.getActivation()
@@ -274,11 +274,11 @@ export default {
   },
 
   methods: {
-    createRangeIndicator () {
+    createRangeIndicator (forLevel) {
       if (this.skill.getRange && Local.unit) {
-        Local.unit.createIndicator(this.skill.getRange(this.level))
+        Local.unit.createIndicator(this.skill.getRange(forLevel))
         if (this.skill.getEffectRange) {
-          Local.game.map.aoeRadiusIndicator(this.skill.getEffectRange(this.level))
+          Local.game.map.aoeRadiusIndicator(this.skill.getEffectRange(forLevel))
         }
       }
     },
@@ -350,7 +350,7 @@ export default {
     overButton (hovering) {
       if (hovering) {
         if (!this.isAnySkillActive) {
-          this.createRangeIndicator()
+          this.createRangeIndicator(this.level)
         }
       } else {
         if (!this.isAnySkillActive) {
@@ -361,6 +361,15 @@ export default {
 
     overLevelup (hovering) {
       this.isOverLevelup = hovering
+      if (hovering) {
+        if (!this.isAnySkillActive) {
+          this.createRangeIndicator(this.level + 1)
+        }
+      } else {
+        if (!this.isAnySkillActive) {
+          this.removeRangeIndicator()
+        }
+      }
     },
   },
 
