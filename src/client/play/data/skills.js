@@ -54,7 +54,7 @@ export default {
           return 60
         },
         getEffectDamage: function (level) {
-          return levelMultiplier(60, level, 10)
+          return levelMultiplier(80, level, 10)
         },
         getRange: function (level) {
           return levelMultiplier(80, level, 5)
@@ -82,7 +82,7 @@ export default {
       },
       {
         name: 'Scud',
-        description: 'Jump a long distance with the power of the wind',
+        description: 'Fly by the power of the wind',
         target: TARGET_GROUND,
         isDisabledBy: null,
         startsImmediately: false,
@@ -159,12 +159,16 @@ export default {
       },
       {
         name: 'Chain strike',
-        description: 'Lightning propagates to enemies within [[Range]], dealing [[Damage]] to each',
+        description: 'Lightning passes through up to [[Propagates]] enemies within [[Range]], dealing [[Damage]] to each',
+        target: TARGET_ENEMY,
         hitsTowers: true,
         disabledBy: [false, true, null],
         isDisabledBy: isDisabledBy,
         getEffectRange: function (level) {
           return 70
+        },
+        getEffectPropagates: function (level) {
+          return 5
         },
         getEffectDamage: function (level) {
           return levelMultiplier(70, level, 5)
@@ -184,7 +188,7 @@ export default {
             attackDamage: damage * 100,
             attackPierce: 10,
             attackMoveSpeed: 7,
-            propagates: 3,
+            propagates: this.getEffectPropagates(level),
             propagateRange: this.getEffectRange(level),
           }
           new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)

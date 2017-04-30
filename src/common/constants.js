@@ -10,7 +10,7 @@ module.exports = {
 
   GAME_SIZES: [1, 2, 4, 6, 8, 10, 25],
 
-  SHIP_NAMES: ['tempest', 'boxy', 'sinker', 'glitch', 'proppy', 'pulter', 'beedle', 'stitches'],
+  SHIP_NAMES: ['boxy', 'sinker', 'glitch', 'proppy', 'pulter', 'beedle', 'stitches', 'tempest'],
 
   GAME_MODES: [
     { name: 'PvP', description: 'Team up to defend your base and destroy your opponents' },

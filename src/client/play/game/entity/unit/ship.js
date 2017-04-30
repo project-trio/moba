@@ -647,6 +647,7 @@ class Ship extends Movable {
           sightTarget.isRendering = isInSight
           if (!sightTarget.renderInBackground) {
             sightTarget.container.visible = isInSight
+            // sightTarget.container.visible = true //SAMPLE
           }
         }
         revealUnit = isInSight && (updatedVisibility || sightTarget.hasDestination)

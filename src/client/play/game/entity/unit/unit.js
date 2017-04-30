@@ -600,7 +600,7 @@ class Unit {
     return !this.invisible && this.hittableStatus()
   }
   attackableStatus (unit) {
-    return unit.targetableStatus() && !unit.hasDied() && !this.alliedTo(unit)
+    return unit.targetableStatus() && !this.alliedTo(unit)
   }
 
   // canAttack (unit) {

@@ -29,6 +29,17 @@ import Bridge from '@/play/events/bridge'
 
 import Unit from '@/play/game/entity/unit/unit'
 
+const checkTarget = function (target) {
+  if (!target) {
+    return false
+  }
+  if (store.state.local.skills.withAlliance !== target.localAlly) {
+    p('target not for alliance', store.state.local.skills.withAlliance, target.localAlly)
+    return false
+  }
+  return true
+}
+
 const getUnitTarget = function (skillData) {
   const targetType = skillData.target
   store.state.local.skills.getUnitTarget = true
@@ -36,9 +47,7 @@ const getUnitTarget = function (skillData) {
   store.state.local.skills.withAlliance = targetType === 3 ? false : targetType === 4 ? true : null
   if (store.state.local.skills.unitTarget) {
     const unitTarget = Unit.get(store.state.local.skills.unitTarget)
-    if (!unitTarget || store.state.local.skills.withAlliance !== unitTarget.localAlly) {
-      p('target not for alliance', unitTarget)
-    } else {
+    if (checkTarget(unitTarget)) {
       unitTarget.setSelection(0xff0000)
     }
   }
@@ -326,8 +335,7 @@ export default {
           if (target) {
             if (!groundTargeted) {
               const unitTarget = Unit.get(target)
-              if (!unitTarget || store.state.local.skills.withAlliance !== unitTarget.localAlly) {
-                p('target not for alliance', unitTarget)
+              if (!checkTarget(unitTarget)) {
                 return
               }
             }

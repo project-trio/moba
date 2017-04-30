@@ -148,7 +148,7 @@ class Bullet {
       })
     } else if (this.heal) {
       this.target.addHealth(this.heal)
-    } else if (this.unitTarget) {
+    } else if (this.unitTarget && !this.target.isDead) {
       if (this.attackDamage) {
         const damage = this.target.takeDamage(this.source, renderTime, this.attackDamage, this.attackPierce)
         if (this.rebound && !this.source.isDead) {
@@ -170,7 +170,7 @@ class Bullet {
       let nearestDistance = Util.squared(this.propagateRange * 100)
       for (let idx = units.length - 1; idx >= 0; idx -= 1) {
         const unit = units[idx]
-        if (unit.team === targetTeam && unit.targetableStatus() && unit.id !== this.target.id && this.targeted.indexOf(unit.id) === -1) {
+        if (unit.team === targetTeam && unit.targetableStatus() && this.targeted.indexOf(unit.id) === -1) {
           const distance = unit.distanceTo(this.target)
           if (distance < nearestDistance) {
             nearestDistance = distance
@@ -180,6 +180,7 @@ class Bullet {
       }
       if (nearestUnit) {
         this.propagated += 1
+        this.unitTarget = true
         this.setTarget(nearestUnit)
         return
       }

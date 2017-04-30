@@ -59,7 +59,7 @@ module.exports = {
       },
       {
         test: /\.(vox|json)$/,
-        loader: 'url-loader?limit=1',
+        loader: 'url-loader',
         query: {
           limit: 1,
         }
