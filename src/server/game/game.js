@@ -4,8 +4,8 @@ const CommonConsts = require.main.require('../common/constants')
 
 const Util = require.main.require('./utils/util')
 
-const Config = require('./config')
-const Player = require('./player')
+const Config = require.main.require('./game/config')
+const Player = require.main.require('./game/player')
 
 //CONSTRUCTOR
 
@@ -177,7 +177,7 @@ class Game {
 
 //METHODS
 
-  start (updatesUntilStart) {
+  start () {
     this.broadcast('start game', {
       gid: this.id,
       mode: this.mode,
@@ -186,7 +186,7 @@ class Game {
       players: this.formattedPlayers(),
       updates: Config.updateDuration,
       ticks: Config.tickDuration,
-      updatesUntilStart: updatesUntilStart,
+      updatesUntilStart: Config.updatesUntilStart,
     })
     this.state = 'STARTED'
     this.started = true
@@ -209,5 +209,22 @@ class Game {
 }
 
 Game.all = games
+
+Game.getList = function () {
+  const result = []
+  for (let idx = games.length - 1; idx >= 0; idx -= 1) {
+    const game = games[idx]
+    result.push({
+      id: game.id,
+      players: game.formattedPlayers(),
+      state: game.state,
+      mode: game.mode,
+      size: game.size,
+      map: game.map,
+      update: game.serverUpdate,
+    })
+  }
+  return result
+}
 
 module.exports = Game

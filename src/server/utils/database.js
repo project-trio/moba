@@ -10,7 +10,7 @@ const connectURL = process.env.DATABASE_URL || 'postgres://kiko@localhost/three'
 
 //HELPERS
 
-const query = function(statement, params, callback) {
+const query = function (statement, params, callback) {
   Postgres.connect(connectURL, (err, client, done) => {
     if (!client) {
       console.log(err, client, done)
@@ -30,7 +30,7 @@ const query = function(statement, params, callback) {
   })
 }
 
-const queryOne = function(statement, params, callback) {
+const queryOne = function (statement, params, callback) {
   query(statement, params, (result) => {
     if (callback) {
       callback(result[0])
@@ -38,11 +38,11 @@ const queryOne = function(statement, params, callback) {
   })
 }
 
-const fetch = function(columns, table, where, params, callback) {
+const fetch = function (columns, table, where, params, callback) {
   queryOne('SELECT ' + columns + ' FROM ' + table + ' WHERE ' + where + ' LIMIT 1', params, callback)
 }
 
-const property = function(column, table, where, params, callback) {
+const property = function (column, table, where, params, callback) {
   fetch(column, table, where, params, (result) => {
     callback(result[column])
   })

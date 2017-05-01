@@ -1,292 +1,32 @@
 const SocketIO = require('socket.io')
 
 const CommonConsts = require.main.require('../common/constants')
-const CommonMaps = require.main.require('../common/maps')
+
+const lobby = require.main.require('./app/lobby')
 
 const Util = require.main.require('./utils/util')
 
-const Config = require('./config')
-const Game = require('./game')
-const Player = require('./player')
-
-const MAXIMUM_IDLE_UPDATES = CommonConsts.TESTING ? 1000 : 1000
-
-const clientPlayers = {}
-let playersOnline = 0
-
-const startTime = process.hrtime()
-const updateDuration = Config.updateDuration
-const updatesUntilStart = (CommonConsts.TESTING ? 5 : 30) * 1000 / updateDuration
-
-//LOCAL
-
-const lobbyBroadcast = (data) => {
-  SocketIO.io.to('lobby').emit('lobby', data)
-}
-const lobbyBroadcastGames = () => {
-  lobbyBroadcast({games: getGameList()})
-}
-
-const getPlayerNames = function() {
-  return Object.keys(clientPlayers)
-}
-
-const getGameList = function() {
-  const result = []
-  const games = Game.all
-  for (let idx = games.length - 1; idx >= 0; idx -= 1) {
-    const game = games[idx]
-    result.push({
-      id: game.id,
-      players: game.formattedPlayers(),
-      state: game.state,
-      mode: game.mode,
-      size: game.size,
-      map: game.map,
-      update: game.serverUpdate,
-    })
-  }
-  return result
-}
-
-const createGame = function(player, mode, size, map, joining) {
-  const response = {}
-  if (player.game) {
-    response.error = 'Already in a game'
-  } else if (CommonConsts.GAME_MODES.map((mode) => mode.name).indexOf(mode) === -1) {
-    response.error = 'Invalid game mode'
-  } else if (CommonConsts.GAME_SIZES.indexOf(size) === -1) {
-    response.error = 'Invalid game size'
-  } else if (mode !== 'bots' && size > 1 && !CommonConsts.TESTING && player.name !== 'kiko ') {
-    response.error = 'You need to register before creating a game larger than 1v1'
-  } else if (!map) {
-    response.error = 'Please choose a map'
-  } else {
-    const mapData = CommonMaps[map]
-    if (!mapData) {
-      response.error = 'Invalid map'
-    } else if (!joining && size < mapData.minSize) { //TODO remove joining
-      response.error = 'Chosen map too big for game size'
-    } else if (!joining && size > mapData.maxSize) {
-      response.error = 'Chosen map too small for game size'
-    } else {
-      const game = new Game(mode, size, map, mapData)
-      if (joining) {
-        const joinData = game.add(player)
-        if (joinData.error) {
-          game.destroy()
-          response.error = joinData.error
-          response.backToLobby = true
-        }
-      }
-      if (!response.error) {
-        lobbyBroadcastGames()
-        response.gid = game.id
-      }
-    }
-  }
-  return response
-}
-
-const join = function(player, gid, callback) {
-  const games = Game.all
-  for (let idx = games.length - 1; idx >= 0; idx -= 1) {
-    const game = games[idx]
-    if (game.id === gid) {
-      const gameData = game.add(player)
-      if (gameData.error) {
-        callback({ error: gameData.error })
-        return false
-      }
-      callback(gameData)
-      return true
-    }
-  }
-  callback({error: "Game doesn't exist"})
-}
-
-const quickJoin = function(player, mode, size, map) {
-  const games = Game.all
-  for (let idx = games.length - 1; idx >= 0; idx -= 1) {
-    const game = games[idx]
-    if (game.mode === game && game.size === size && game.map === map) {
-      const gameData = game.add(player)
-      if (!gameData.error) {
-        return { gid: game.id }
-      }
-    }
-  }
-  return createGame(player, mode, size, map, true)
-}
-
-const startGame = function (game) {
-  game.start(updatesUntilStart)
-  lobbyBroadcastGames()
-}
-
-//UPDATE
-
-let loopCount = 0
-
-const loop = function() {
-  const games = Game.all
-  for (let idx = games.length - 1; idx >= 0; idx -= 1) {
-    const game = games[idx]
-    if (game.started) {
-      let actionFound = false
-      const actionData = {}
-      const currentUpdate = game.serverUpdate
-      const onSelectionScreen = currentUpdate <= updatesUntilStart
-      for (let pid in game.players) {
-        const player = game.players[pid]
-        if (onSelectionScreen) {
-          if (player.switchUnit) {
-            player.shipName = player.switchUnit
-            actionData[pid] = { unit: player.shipName }
-            player.switchUnit = null
-          }
-        } else {
-          const playerActions = []
-          const submittingSkills = [false, false, false]
-
-          if (player.bot) {
-            if (currentUpdate - player.actionUpdate > player.updatesUntilAuto) {
-              const clickX = Math.round(Math.random() * 100 * game.mapWidth)
-              const clickY = Math.round(Math.random() * 100 * game.mapHeight)
-              playerActions[0] = { target: [clickX, clickY] }
-              player.updatesUntilAuto = Math.ceil(Math.random() * 50)
-            }
-          } else {
-            const levelupIndex = player.levelNext
-            if (levelupIndex !== null) {
-              playerActions.push({ skill: levelupIndex, level: true })
-              player.levelNext = null
-              submittingSkills[levelupIndex] = true
-            }
-
-            const pendingActionCount = player.actions.length
-            if (pendingActionCount) {
-              let hasTarget = false
-              for (let ai = pendingActionCount - 1; ai >= 0; ai -= 1) {
-                const action = player.actions[ai]
-                const target = action.target
-                if (target) {
-                  if (hasTarget) {
-                    continue
-                  }
-                  hasTarget = true
-                }
-                const skillIndex = action.skill
-                if (skillIndex !== undefined) {
-                  if (submittingSkills[skillIndex]) {
-                    continue
-                  }
-                  submittingSkills[skillIndex] = true
-                }
-                playerActions.push(action)
-              }
-              player.actions = []
-            }
-          }
-          if (playerActions.length > 0) {
-            if (player.bot) {
-              player.actionUpdate = currentUpdate
-            } else {
-              actionFound = true
-            }
-            actionData[pid] = playerActions
-          }
-        }
-      }
-      if (actionFound) {
-        game.idleCount = 0
-      } else if (game.idleCount > MAXIMUM_IDLE_UPDATES) {
-        console.log(game.id, 'Game timed out due to inactivity')
-        game.broadcast('closed')
-        game.destroy()
-        continue
-      } else {
-        game.idleCount += 1
-      }
-      game.broadcast('update', { update: currentUpdate, actions: actionData })
-      game.serverUpdate = currentUpdate + 1
-    } else if (CommonConsts.TESTING && game.checkFull()) {
-      startGame(game)
-    }
-  }
-
-  const diff = process.hrtime(startTime)
-  const msSinceStart = diff[0] * 1000 + diff[1] / 1000000
-  loopCount += 1
-  setTimeout(loop, updateDuration * loopCount - msSinceStart)
-}
-
-loop()
+const Config = require.main.require('./game/config')
+const Game = require.main.require('./game/game')
 
 //PUBLIC
 
 module.exports = {
 
-  register (client) {
-    const pid = client.pid
-    const name = client.name
-    let player = clientPlayers[name]
-    if (player) {
-      const oldClient = player.client
-      if (oldClient) {
-        oldClient.replaced = true
-        oldClient.disconnect()
-      } else {
-        playersOnline += 1
-      }
-      player.client = client
-      player.id = client.id //TODO unecessary with acount registration
-    } else {
-      player = new Player(client)
-      clientPlayers[name] = player
-      playersOnline += 1
-      lobbyBroadcast({ online: playersOnline })
-    }
-
-    client.on('admin', (data, callback) => {
-      if (CommonConsts.TESTING || name === 'kiko ') {
-        console.log('Admin', pid, getGameList())
-        callback({ names: getPlayerNames(), games: getGameList() })
-      }
-    })
-
-    client.on('disconnect', () => {
-      console.log('Disconnected', pid)
-      let games
-      const removePlayerPermanently = player.leave()
-      if (removePlayerPermanently) {
-        games = getGameList()
-      }
-      if (clientPlayers[name] && !client.replaced) {
-        if (removePlayerPermanently) {
-          delete clientPlayers[name]
-          player = null
-        } else {
-          player.client = null
-        }
-        playersOnline -= 1
-      }
-      lobbyBroadcast({ online: playersOnline, games: games })
-    })
-
-    client.on('switch unit', (data) => {
+  register (socket, player) {
+    socket.on('switch unit', (data) => {
       const newShip = data.name
       if (CommonConsts.SHIP_NAMES.indexOf(newShip) !== -1) {
         player.switchUnit = newShip
       }
     })
 
-    client.on('action', (data) => {
+    socket.on('action', (data) => {
       if (!player.game) {
         console.log('Action ERR: No game for player')
         return
       }
-      if (player.game.serverUpdate < updatesUntilStart) {
+      if (player.game.serverUpdate < Config.updatesUntilStart) {
         console.log('Action ERR: Game not started yet')
         return
       }
@@ -303,7 +43,7 @@ module.exports = {
       player.actions.push(data)
     })
 
-    client.on('chat', (data, callback) => {
+    socket.on('chat', (data, callback) => {
       const response = {}
       if (!player.game) {
         response.error = 'Not in game'
@@ -325,58 +65,9 @@ module.exports = {
       callback(response)
     })
 
-    client.on('updated', (data) => {
+    socket.on('updated', (data) => {
       player.serverUpdate = data.update
     })
-
-    client.on('start game', (data, callback) => {
-      const game = player.game
-      const response = {}
-      if (game) {
-        if (game.hostId === pid) {
-          if (game.canStart()) {
-            startGame(game)
-          } else {
-            response.error = 'Waiting for players to join'
-          }
-        } else {
-          response.error = 'You are not the host'
-        }
-      } else {
-        response.error = 'Game not found'
-      }
-      callback(response)
-    })
-
-    client.on('lobby action', (data, callback) => {
-      console.log('lobby action', data)
-
-      if (data.action === 'enter') {
-        if (player.game && data.leaving !== player.game.id) {
-          callback({ gid: player.game.id })
-        } else {
-          if (player.game && data.leaving) {
-            player.leave()
-          }
-          client.join('lobby')
-          callback({ online: playersOnline, games: getGameList() })
-        }
-      } else if (data.action === 'leave') {
-        client.leave('lobby')
-      } else if (data.action === 'leave game') {
-        player.leave()
-      } else if (data.action === 'quick') {
-        const gameResponse = quickJoin(player, data.mode, data.size, data.map)
-        callback(gameResponse)
-      } else if (data.action === 'create') {
-        const gameResponse = createGame(player, data.mode, data.size, data.map, false)
-        callback(gameResponse)
-      } else if (data.action === 'join') {
-        join(player, data.gid, callback)
-      } else {
-        client.join('lobby')
-      }
-    })
-  }
+  },
 
 }
