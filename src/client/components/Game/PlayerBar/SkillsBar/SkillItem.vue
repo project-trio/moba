@@ -127,8 +127,24 @@ export default {
         }
 
         const substitutionFunction = this.skill[`getEffect${substitution}`]
-        const factor = substitution === 'Duration' ? 1000 : this.skill[`factor${substitution}`]
-        const suffix = substitution === 'Duration' ? ' seconds' : (substitution === 'Damage' ? ' damage' : (substitution === 'Range' ? ' range' : this.skill[`suffix${substitution}`] || ''))
+        let factor, suffix
+        if (substitution === 'Damage') {
+          suffix = ' damage'
+        } else if (substitution === 'Range') {
+          suffix = ' range'
+        } else if (substitution === 'Dps') {
+          factor = Local.tickDuration
+          suffix = ' dps'
+        } else if (substitution === 'Regen') {
+          factor = Local.tickDuration / 10
+          suffix = ' hp / s'
+        } else if (substitution === 'Duration') {
+          factor = 1000
+          suffix = ' seconds'
+        } else {
+          // factor = this.skill[`factor${substitution}`]
+          suffix = this.skill[`suffix${substitution}`] || ''
+        }
 
         const valueForLevel = substitutionFunction(this.level === 0 ? 1 : this.level)
         let effectText = `${!factor ? valueForLevel : (valueForLevel / factor)}`

@@ -202,8 +202,6 @@ export default {
     {
       name: `Repair Swarm`,
       description: 'Repairs allies for [[Regen]] for [[Duration]]',
-      factorRegen: 50 / 1000 * 100, //TODO ticks
-      suffixRegen: ' hp / s',
       target: TARGET_SELF,
       hitsTowers: false,
       isDisabledBy: null,
@@ -373,8 +371,6 @@ export default {
       name: 'Acid Drop',
       description: 'Spit a toxic glob on the ground for [[Duration]], [[poisoning:poison]] enemies for [[Dps]] and move speed by [[MoveSpeed]]',
       suffixMoveSpeed: '%',
-      factorDps: 50, //TODO ticks
-      suffixDps: ' dps',
       target: TARGET_GROUND,
       hitsTowers: true,
       isDisabledBy: null,
@@ -848,8 +844,6 @@ export default {
     {
       name: 'Dive',
       description: 'Dive down to safety, dealing [[Dps]] to enemies around you',
-      factorDps: 50, //TODO ticks
-      suffixDps: ' dps',
       target: TARGET_SELF,
       hitsTowers: false,
       isDisabledBy: null,
@@ -1015,8 +1009,6 @@ export default {
     {
       name: 'Salvage',
       description: 'Boost health regeneration [[Regen]], while halving movement speed',
-      factorRegen: 50 / 1000 * 100, //TODO ticks
-      suffixRegen: ' hp / s',
       target: TARGET_SELF,
       disabledBy: [false, true, null],
       isDisabledBy: isDisabledBy,
