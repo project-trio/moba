@@ -14,7 +14,16 @@ export default {
       data = {}
     }
     data.action = name
-    Bridge.emit('lobby action', data, callback)
+
+    Bridge.emit('lobby action', data, (response) => {
+      const existingGid = response.reenter
+      if (existingGid) {
+        p('redirecting to game', existingGid)
+        router.replace({ name: 'Join', params: { gid: existingGid } })
+      } else if (callback) {
+        callback(response)
+      }
+    })
   },
 
   init () {

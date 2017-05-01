@@ -121,30 +121,31 @@ const lobby = {
 
     socket.on('lobby action', (data, callback) => {
       console.log('lobby action', data)
+      if (player.game && data.leaving !== player.game.id) {
+        callback({ reenter: player.game.id })
+        return
+      }
       if (data.action === 'enter') {
-        if (player.game && data.leaving !== player.game.id) {
-          callback({ gid: player.game.id })
-        } else {
-          if (player.game && data.leaving) {
-            player.leave()
-          }
-          socket.join('lobby')
-          callback({ online: lobby.playerCount, games: Game.getList() })
+        if (player.game && data.leaving) {
+          player.leave()
         }
-      } else if (data.action === 'leave') {
-        socket.leave('lobby')
-      } else if (data.action === 'leave game') {
-        player.leave()
-      } else if (data.action === 'quick') {
-        const gameResponse = quickJoin(player, data.mode, data.size, data.map)
-        callback(gameResponse)
-      } else if (data.action === 'create') {
-        const gameResponse = createGame(player, data.mode, data.size, data.map, false)
-        callback(gameResponse)
-      } else if (data.action === 'join') {
-        join(player, data.gid, callback)
-      } else {
         socket.join('lobby')
+        callback({ online: lobby.playerCount, games: Game.getList() })
+      } else {
+        socket.leave('lobby')
+        if (data.action === 'leave game') {
+          player.leave()
+        } else if (data.action === 'quick') {
+          const gameResponse = quickJoin(player, data.mode, data.size, data.map)
+          callback(gameResponse)
+        } else if (data.action === 'create') {
+          const gameResponse = createGame(player, data.mode, data.size, data.map, false)
+          callback(gameResponse)
+        } else if (data.action === 'join') {
+          join(player, data.gid, callback)
+        } else {
+          console.error('Unknown lobby action', data)
+        }
       }
     })
   }

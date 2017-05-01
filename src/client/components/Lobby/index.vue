@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import router from '@/router'
 import store from '@/store'
 
 import util from '@/helpers/util'
@@ -30,15 +29,10 @@ import LobbyEvents from '@/play/events/lobby'
 export default {
   mounted () {
     LobbyEvents.connect('enter', { leaving: Local.gid }, (data) => {
-      if (data.gid) {
-        p('redirecting to game', data.gid)
-        router.replace({ name: 'Join', params: { gid: data.gid } })
-      } else {
-        // p('joined lobby', data)
-        store.state.lobby.onlineCount = data.online
-        store.state.lobby.games = data.games
-        Local.gid = null
-      }
+      // p('joined lobby', data)
+      store.state.lobby.onlineCount = data.online
+      store.state.lobby.games = data.games
+      Local.gid = null
     })
   },
 
