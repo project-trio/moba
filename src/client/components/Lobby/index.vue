@@ -4,6 +4,7 @@
   <h1>moba lobby</h1>
   <h3>hello {{ username }}!</h3>
   <div>{{ playersOnline }} online</div>
+  <router-link :to="{ name: 'Queue' }" tag="button" class="big interactive">enter queue</router-link>
   <router-link :to="{ name: 'Create' }" tag="button" class="big interactive">create game</router-link>
   <div>
     <router-link v-for="game in games" :to="{ name: 'Join', params: { gid: game.id } }" tag="div" class="list-game interactive" :key="game.id">

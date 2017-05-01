@@ -5,20 +5,18 @@
   </div>
   <div v-else>
     <h3>game type:</h3>
-    <div class="selection-container">
+    <selection-group>
       <button v-for="mode in gameModes" @click="onGameMode(mode)" class="selection interactive" :class="{ selected: mode === selectedMode }">{{ mode.name }}</button>
       <div class="mode-description">
         {{ this.selectedMode.description }}
       </div>
-    </div>
+    </selection-group>
     <h3>game size:</h3>
-    <div class="selection-container">
-      <button v-for="size in gameSizes" @click="onGameSize(size)" class="selection interactive" :class="{ selected: size === selectedSize }">{{ sizeLabel(size) }}</button>
-    </div>
+    <game-sizes @onGameSize="onGameSize" :gameSizes="gameSizes" :selectedSize="selectedSize"></game-sizes>
     <h3>map:</h3>
-    <div class="selection-container">
+    <selection-group>
       <button v-for="map in mapsForSize" @click="onMap(map)" class="selection interactive" :class="{ selected: map === selectedMap }">{{ map }}</button>
-    </div>
+    </selection-group>
     <button @click="onSubmit" class="big interactive">confirm</button>
   </div>
 </div>
@@ -34,7 +32,15 @@ import Local from '@/play/local'
 
 import LobbyEvents from '@/play/events/lobby'
 
+import SelectionGroup from '@/components/Lobby/SelectionGroup'
+import GameSizes from '@/components/Lobby/SelectionGroup/GameSizes'
+
 export default {
+  components: {
+    GameSizes,
+    SelectionGroup,
+  },
+
   data () {
     return {
       loading: false,
@@ -86,16 +92,6 @@ export default {
       this.selectedMap = name
     },
 
-    sizeLabel (size) {
-      if (size === 0) {
-        return '1p'
-      }
-      if (size > 10) {
-        return `${size * 2}p`
-      }
-      return `${size} v ${size}`
-    },
-
     onSubmit () {
       LobbyEvents.connect('create', { mode: this.selectedMode.name, size: this.selectedSize, map: this.selectedMap }, (data) => {
         if (data.error) {
@@ -118,27 +114,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.selection-container
-  margin auto
-  width 480px
-  max-width 100%
-  display flex
-  flex-wrap wrap
-
-.selection
-  margin 4px
-  height 56px
-  flex-grow 1
-  flex-basis 16%
-  box-sizing border-box
-  border-radius 1px
-
-.selection
-  background #ddd
-
-.selection.selected
-  background #dd6677
-
 .mode-description
   text-align center
   margin auto
