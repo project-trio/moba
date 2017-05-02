@@ -10,8 +10,17 @@
       <button @click="onReady" class="ready-button big interactive" :class="{ selected: readyRequested }">{{ readyRequested ? 'ready!' : `ready? (${15 - readyAt})` }}</button>
     </div>
     <div v-else>
-      <h2>waiting for {{ waitingForSize }} players...</h2>
+      <h2>waiting for {{ pluralize(waitingForSize, 'player') }}...</h2>
       <p v-if="enoughWithOneMore">Reduce size to <span class="highlight">{{ enoughWithOneMore }} v {{ enoughWithOneMore }}</span> to start now!</p>
+    </div>
+  </div>
+  <div v-if="notificationPermission !== 'granted'" class="queue-notification">
+    <div v-if="notificationPermission === 'unavailable'">
+      (Notifications are unavailable in your browser.)
+    </div>
+    <div v-else>
+      <button @click="onNotifications" class="big interactive" :class="{ selected: readyRequested }">{{ notificationPermission === 'denied' ? 'Notifications disabled' : 'Enable notifications!' }}</button>
+      Lets you know when a game is available while the page is in the background.
     </div>
   </div>
 </div>
@@ -22,6 +31,8 @@
 
 import store from '@/store'
 import router from '@/router'
+
+import util from '@/helpers/util'
 
 import Bridge from '@/play/events/bridge'
 import LobbyEvents from '@/play/events/lobby'
@@ -39,6 +50,7 @@ export default {
       readyRequested: false,
       readyAt: 0,
       readyInterval: null,
+      notificationPermission: null,
     }
   },
 
@@ -87,7 +99,6 @@ export default {
     },
 
     availableSizes (sizes) {
-      p(sizes)
       if (!this.enoughPlayersForGame) {
         this.readyRequested = false
       }
@@ -102,15 +113,39 @@ export default {
   },
 
   methods: {
-    setReadyTimer (enabled) {
+    pluralize: util.pluralize,
+
+    cancelTimer () {
+      if (this.notification) {
+        this.notification.close()
+        this.notification = null
+      }
       if (this.readyTimer) {
         window.clearInterval(this.readyTimer)
+        this.readyTimer = null
       }
+    },
+
+    setReadyTimer (enabled) {
+      this.cancelTimer()
+
       if (enabled) {
+        if (this.notificationPermission === 'granted' && !document.hasFocus()) {
+          this.notification = new Notification('moba queue ready!', {
+            icon: require('@/assets/icon.png'),
+          })
+          this.notification.onclick = () => {
+            if (window.parent) {
+              parent.focus()
+            }
+            window.focus()
+            this.notification.close()
+          }
+        }
         this.readyAt = 0
         this.readyTimer = window.setInterval(() => {
           if (this.readyAt >= 15) {
-            window.clearInterval(this.readyTimer)
+            this.cancelTimer()
             if (!this.readyRequested) {
               router.replace({ name: 'Lobby' })
               window.alert('Removed from the queue due to inactivity')
@@ -133,9 +168,16 @@ export default {
       this.setReadyTimer(this.enoughPlayersForGame)
       Bridge.emit('queue', { size: this.selectedSize, ready: this.readyRequested })
     },
+
+    onNotifications () {
+      Notification.requestPermission((permission) => {
+        this.notificationPermission = permission
+      })
+    },
   },
 
   mounted () {
+    this.notificationPermission = window.Notification ? Notification.permission : 'unavailable'
     LobbyEvents.connect('queue', { size: this.selectedSize, ready: false })
   },
 
