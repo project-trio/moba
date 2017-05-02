@@ -4,6 +4,7 @@ const CommonConsts = require.main.require('../common/constants')
 const CommonMaps = require.main.require('../common/maps')
 
 const connection = require.main.require('./app/connection')
+const queue = require.main.require('./app/queue')
 
 const Game = require.main.require('./game/game')
 
@@ -20,7 +21,7 @@ const broadcastWith = function (withPlayers, withGames) {
   Socket.io.to('lobby').emit('lobby', data)
 }
 
-const createGame = function (player, mode, size, map, joining) {
+const createGame = function (player, mode, size, map, joining, autoStart) {
   const response = {}
   if (player.game) {
     response.error = 'Already in a game'
@@ -41,7 +42,7 @@ const createGame = function (player, mode, size, map, joining) {
     } else if (!joining && size > mapData.maxSize) {
       response.error = 'Chosen map too small for game size'
     } else {
-      const game = new Game(mode, size, map, mapData)
+      const game = new Game(mode, size, map, autoStart)
       if (joining) {
         const joinData = game.add(player)
         if (joinData.error) {
@@ -87,7 +88,7 @@ const quickJoin = function (player, mode, size, map) {
       }
     }
   }
-  return createGame(player, mode, size, map, true)
+  return createGame(player, mode, size, map, true, true)
 }
 
 //PUBLIC
@@ -125,21 +126,26 @@ const lobby = {
         callback({ reenter: player.game.id })
         return
       }
+      if (data.action !== 'queue') {
+        queue.remove(player)
+      }
       if (data.action === 'enter') {
         if (player.game && data.leaving) {
-          player.leave()
+          player.leaveGame()
         }
         socket.join('lobby')
         callback({ online: lobby.playerCount, games: Game.getList() })
       } else {
         socket.leave('lobby')
-        if (data.action === 'leave game') {
-          player.leave()
+        if (data.action === 'queue') {
+          queue.add(player, data)
+        } else if (data.action === 'leave game') {
+          player.leaveGame()
         } else if (data.action === 'quick') {
           const gameResponse = quickJoin(player, data.mode, data.size, data.map)
           callback(gameResponse)
         } else if (data.action === 'create') {
-          const gameResponse = createGame(player, data.mode, data.size, data.map, false)
+          const gameResponse = createGame(player, data.mode, data.size, data.map, false, false)
           callback(gameResponse)
         } else if (data.action === 'join') {
           join(player, data.gid, callback)
@@ -147,6 +153,10 @@ const lobby = {
           console.error('Unknown lobby action', data)
         }
       }
+    })
+
+    socket.on('queue', (data, callback) => {
+      player.updateQueue(data)
     })
   }
 }

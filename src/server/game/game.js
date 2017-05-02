@@ -1,6 +1,7 @@
 const SocketIO = require('socket.io')
 
 const CommonConsts = require.main.require('../common/constants')
+const CommonMaps = require.main.require('../common/maps')
 
 const Util = require.main.require('./utils/util')
 
@@ -13,7 +14,8 @@ const games = []
 
 class Game {
 
-  constructor (mode, size, map, mapData) {
+  constructor (mode, size, map, autoStart) {
+    const mapData = CommonMaps[map]
     this.players = {}
     this.counts = [0, 0]
     this.id = Util.uid()
@@ -29,6 +31,7 @@ class Game {
     this.idleCount = 0
     this.started = false
     this.hostId = null
+    this.autoStart = autoStart
 
     console.log('Created game', this.id)
     games.push(this)
@@ -120,7 +123,7 @@ class Game {
         this.state = 'FULL'
       }
       this.broadcast('players', { ready: this.canStart(), players: this.formattedPlayers() })
-      player.join(this)
+      player.joinGame(this)
     }
     return { gid: this.id, host: this.hostId, mode: this.mode, size: this.size, map: this.map, ready: this.canStart(), players: this.formattedPlayers() }
   }
@@ -130,7 +133,7 @@ class Game {
     this.started = false
     for (let pid in this.players) {
       const player = this.players[pid]
-      player.leaveRoom()
+      player.leaveGameRoom()
       player.game = null
     }
     this.players = {}

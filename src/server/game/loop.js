@@ -95,7 +95,7 @@ const loop = function () {
       }
       game.broadcast('update', { update: currentUpdate, actions: actionData })
       game.serverUpdate = currentUpdate + 1
-    } else if (CommonConsts.TESTING && game.checkFull()) {
+    } else if (game.autoStart && game.checkFull()) {
       game.start()
       lobby.broadcastWith(false, true)
     }

@@ -7,6 +7,16 @@ import Local from '@/play/local'
 
 import Game from '@/play/game/entity/game/game'
 
+const joinGame = function (gid) {
+  const routeObject = { name: 'Join', params: { gid: gid } }
+  if (router.currentRoute.name === 'Create' || router.currentRoute.name === 'Queue') {
+    router.replace(routeObject)
+  } else {
+    p('join from', router.currentRoute.name)
+    router.push(routeObject)
+  }
+}
+
 export default {
 
   connect (name, data, callback) {
@@ -37,14 +47,19 @@ export default {
       }
     })
 
+    Bridge.on('queue', (data) => {
+      // p('queue', data)
+      const gid = data.gid
+      if (gid) {
+        joinGame(gid)
+      } else {
+        store.state.lobby.queue = data
+      }
+    })
+
     Bridge.on('join game', (data) => {
       // p('join game', data)
-      const routeObject = { name: 'Join', params: { gid: data.gid } }
-      if (router.currentRoute.name === 'Create') {
-        router.replace(routeObject)
-      } else {
-        router.push(routeObject)
-      }
+      joinGame(data.gid)
     })
 
     Bridge.on('players', (data) => {

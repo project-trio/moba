@@ -5,6 +5,7 @@ import Start from '@/components/Start'
 import Lobby from '@/components/Lobby'
 import LobbyCreate from '@/components/Lobby/Create'
 import LobbyJoin from '@/components/Lobby/Join'
+import LobbyQueue from '@/components/Lobby/Queue'
 import Game from '@/components/Game'
 
 Vue.use(Router)
@@ -23,12 +24,17 @@ export default new Router({
       component: Lobby,
     },
     {
+      path: '/lobby/queue',
+      name: 'Queue',
+      component: LobbyQueue,
+    },
+    {
       path: '/lobby/create',
       name: 'Create',
       component: LobbyCreate,
     },
     {
-      path: '/lobby/join/:gid',
+      path: '/join/:gid',
       props: true,
       name: 'Join',
       component: LobbyJoin,

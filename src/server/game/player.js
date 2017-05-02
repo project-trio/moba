@@ -1,6 +1,8 @@
 const CommonConsts = require.main.require('../common/constants')
 const CommonUtils = require.main.require('../common/utils')
 
+const queue = require.main.require('./app/queue')
+
 const Util = require.main.require('./utils/util')
 
 module.exports = class Player {
@@ -30,6 +32,10 @@ module.exports = class Player {
     this.actions = null
     this.levelNext = null
     this.chatAt = null
+
+    this.queueing = false
+    this.queueReady = false
+    this.queueMin = 1
   }
 
   data () {
@@ -61,25 +67,63 @@ module.exports = class Player {
     this.chatAt = null
   }
 
-  join (game) {
-    this.game = game
+  // Rooms
 
-    this.client.join(game.id)
-  }
-
-  leaveRoom () {
-    if (this.game && this.client) {
-      this.client.leave(this.game.id)
+  join (room) {
+    if (this.client) {
+      this.client.join(room)
     }
   }
 
-  leave () {
+  leave (room) {
+    if (this.client) {
+      this.client.leave(room)
+    }
+  }
+
+  // Game
+
+  joinGame (game) {
+    this.game = game
+
+    this.join(game.id)
+  }
+
+  leaveGameRoom () {
     if (this.game) {
-      this.leaveRoom()
+      this.leave(this.game.id)
+    }
+  }
+
+  leaveGame () {
+    if (this.game) {
+      this.leaveGameRoom()
       const game = this.game
       this.game = null //TODO temp
       return game.remove(this)
     }
   }
 
+  // Queue
+
+  updateQueue (data) {
+    this.queueReady = data.ready
+    this.queueMin = data.size
+  
+    queue.update()
+  }
+
+  queueEnter () {
+    this.join('queue')
+  }
+
+  queueLeave () {
+    this.leave('queue')
+  }
+
+  disconnect () {
+    queue.remove(this)
+
+    return this.leaveGame()
+  }
 }

@@ -67,7 +67,8 @@ module.exports = {
 
       socket.on('disconnect', () => {
         console.log('Disconnected', socket.id)
-        const removePlayerPermanently = player.leave()
+
+        const removePlayerPermanently = player.disconnect()
         if (clientPlayers[name] && !socket.replaced) {
           if (removePlayerPermanently) {
             delete clientPlayers[name]
