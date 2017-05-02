@@ -44,8 +44,8 @@ export default {
     healthRegen: [0, 0],
     armor: [10, 0],
 
-    sightRange: [190, 0],
-    attackRange: [190, 0],
+    sightRange: [180, 0],
+    attackRange: [180, 0],
 
     attackDamage: [100, 0],
     attackPierce: [6, 0],

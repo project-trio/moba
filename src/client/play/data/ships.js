@@ -14,14 +14,14 @@ const createMeshes = function (name, team, top, base, ship) {
 
 export default {
   tempest: {
-    healthMax: [600, 10],
+    healthMax: [600, 5],
     healthRegen: [40, 1],
-    armor: [10, 0],
+    armor: [10, 1],
 
     sightRange: [160, 0],
     attackRange: [140, 0],
 
-    attackDamage: [30, 4],
+    attackDamage: [40, 2],
     attackPierce: [0, 0],
     attackCooldown: [10, 0],
     attackMoveSpeed: 10,
@@ -126,7 +126,7 @@ export default {
 
     attackDamage: [30, 4],
     attackPierce: [0, 0],
-    attackCooldown: [10, 0],
+    attackCooldown: [12, 0],
     attackMoveSpeed: 10,
     bulletSize: 3,
 

@@ -73,7 +73,9 @@ class Bullet {
 
   setTarget (target) {
     this.target = target
-    this.collisionCheck = Util.squared(target.stats.collision)
+    if (this.unitTarget) {
+      this.collisionCheck = Util.squared(target.stats.collision)
+    }
     if (this.unitTarget) {
       this.targeted.push(target.id)
       this.updateTarget(true)

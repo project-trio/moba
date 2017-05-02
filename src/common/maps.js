@@ -20,7 +20,7 @@ const maps = {}
 
     towers: [
       ['base', wH, 44, false],
-      ['turret', wH - 70, hH - 90, false],
+      ['turret', wH - 70, hH - 95, false],
     ],
 
     walls: [

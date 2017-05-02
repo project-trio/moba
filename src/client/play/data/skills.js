@@ -201,7 +201,7 @@ export default {
   stitches: [
     {
       name: `Repair Swarm`,
-      description: 'Repairs allies for [[Regen]] for [[Duration]]',
+      description: 'Repairs allies in range by [[Regen]] for [[Duration]]',
       target: TARGET_SELF,
       hitsTowers: false,
       isDisabledBy: null,
