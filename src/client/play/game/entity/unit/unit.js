@@ -527,11 +527,11 @@ class Unit {
 
   // Aim
 
-  angleTo (container, destAngle) { //TODO time diff
+  angleTo (container, destAngle, timeDelta) {
     let currAngle = container.rotation.z
     let newAngle
     let angleDiff = Util.distanceBetweenAngles(currAngle, destAngle)
-    let turnSpeed = this.stats.turnSpeed / 100
+    let turnSpeed = this.stats.turnSpeed * timeDelta / 2000
     if (Math.abs(angleDiff) < turnSpeed) {
       newAngle = destAngle
     } else {
@@ -542,7 +542,7 @@ class Unit {
     return newAngle
   }
 
-  updateAim () {
+  updateAim (timeDelta) {
     let aimTop
     if (this.attackTarget) {
       aimTop = Util.angleBetween(this, this.attackTarget, true)
@@ -556,11 +556,11 @@ class Unit {
         aimBase = aimTop
       }
       if (aimBase) {
-        this.angleTo(this.base, aimBase)
+        this.angleTo(this.base, aimBase, timeDelta)
       }
     }
     if (aimTop) {
-      this.angleTo(this.top, aimTop)
+      this.angleTo(this.top, aimTop, timeDelta)
     }
   }
 
@@ -714,7 +714,7 @@ Unit.update = function (renderTime, timeDelta, tweening) {
     if (unit.tween) {
       unit.tween(renderTime)
     }
-    unit.updateAim()
+    unit.updateAim(timeDelta)
 
     if (tweening && (!unit.isRendering || unit.isBlocked)) {
       continue
