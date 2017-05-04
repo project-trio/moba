@@ -6,6 +6,7 @@
 
 <script>
 import store from '@/store'
+import util from '@/helpers/util'
 
 const KEY_TAB = 9
 const KEY_ESCAPE = 27
@@ -33,15 +34,15 @@ const validKeyEvent = (event) => {
 
 export default {
   created () {
-    window.addEventListener('keydown', this.keydown)
-    window.addEventListener('keyup', this.keyup)
-    window.addEventListener('contextmenu', this.onRightClick)
+    util.addListener(window, 'keydown', this.keydown, true)
+    util.addListener(window, 'keyup', this.keyup, true)
+    util.addListener(window, 'contextmenu', this.onRightClick, true)
   },
 
   destroyed () {
-    window.removeEventListener('keydown', this.keydown)
-    window.removeEventListener('keyup', this.keyup)
-    window.removeEventListener('contextmenu', this.onRightClick)
+    util.removeListener(window, 'keydown', this.keydown, true)
+    util.removeListener(window, 'keyup', this.keyup, true)
+    util.removeListener(window, 'contextmenu', this.onRightClick, true)
   },
 
   methods: {

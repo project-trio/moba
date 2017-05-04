@@ -9,6 +9,7 @@
 
 <script>
 import store from '@/store'
+import util from '@/helpers/util'
 
 import ChatBar from '@/components/Game/PlayerBar/ChatBar'
 import Minimap from '@/components/Game/PlayerBar/Minimap'
@@ -32,15 +33,15 @@ export default {
   },
 
   created () {
-    window.addEventListener('keydown', this.keydown)
-    window.addEventListener('keyup', this.keyup)
-    window.addEventListener('wheel', this.scroll, true)
+    util.addListener(window, 'keydown', this.keydown)
+    util.addListener(window, 'keyup', this.keyup)
+    util.addListener(window, 'wheel', this.scroll)
   },
 
   destroyed () {
-    window.removeEventListener('keydown', this.keydown)
-    window.removeEventListener('keyup', this.keyup)
-    window.removeEventListener('wheel', this.scroll, true)
+    util.removeListener(window, 'keydown', this.keydown)
+    util.removeListener(window, 'keyup', this.keyup)
+    util.removeListener(window, 'wheel', this.scroll)
   },
 
   computed: {

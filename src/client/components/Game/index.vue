@@ -13,6 +13,7 @@
 
 <script>
 import store from '@/store'
+import util from '@/helpers/util'
 
 import Local from '@/play/local'
 
@@ -39,7 +40,7 @@ export default {
     Loop.start()
 
     window.onbeforeunload = this.confirmExit
-    window.addEventListener('touchmove', this.cancelZoom, false)
+    util.addListener(window, 'touchmove', this.cancelZoom, true)
   },
 
   beforeDestroy () {
@@ -49,7 +50,7 @@ export default {
     Loop.stop()
 
     window.onbeforeunload = null
-    window.removeEventListener('touchmove', this.cancelZoom, false)
+    util.removeListener(window, 'touchmove', this.cancelZoom, true)
   },
 
   computed: {

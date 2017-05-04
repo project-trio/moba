@@ -3,6 +3,7 @@ import App from './App'
 import router from '@/router'
 
 import store from '@/store'
+import util from '@/helpers/util'
 
 import Local from '@/play/local'
 
@@ -21,6 +22,8 @@ const hasSignin = store.state.signin.username !== null
 if (hasSignin) {
   Events.init()
 }
+
+util.addListener(document.body, 'touchstart', () => {})
 
 /* eslint-disable no-new */
 new Vue({

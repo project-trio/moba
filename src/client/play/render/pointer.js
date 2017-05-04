@@ -1,5 +1,7 @@
 import * as THREE from 'three'
 
+import util from '@/helpers/util'
+
 const raycaster = new THREE.Raycaster()
 const pointerLocation = new THREE.Vector2()
 
@@ -33,9 +35,9 @@ export default {
 
     hovering = {}
     const canvas = document.getElementById('canvas')
-    canvas.addEventListener('mousedown', onClick, false)
-    canvas.addEventListener('mousemove', onMouseMove, false)
-    canvas.addEventListener('contextmenu', onClick, false)
+    util.addListener(canvas, 'mousedown', onClick)
+    util.addListener(canvas, 'mousemove', onMouseMove)
+    util.addListener(canvas, 'contextmenu', onClick)
   },
 
   destroy () {
@@ -45,9 +47,9 @@ export default {
 
     const canvas = document.getElementById('canvas')
     if (canvas) {
-      canvas.removeEventListener('mousedown', onClick, false)
-      canvas.removeEventListener('mousemove', onMouseMove, false)
-      canvas.removeEventListener('contextmenu', onClick, false)
+      util.removeListener(canvas, 'mousedown', onClick)
+      util.removeListener(canvas, 'mousemove', onMouseMove)
+      util.removeListener(canvas, 'contextmenu', onClick)
     }
   },
 

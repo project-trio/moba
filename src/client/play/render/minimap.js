@@ -1,5 +1,7 @@
 import * as THREE from 'three'
 
+import util from '@/helpers/util'
+
 import Local from '@/play/local'
 
 import dataConstants from '@/play/data/constants'
@@ -45,10 +47,11 @@ export default {
     mapScale = renderHeight / mapHeight
 
     const canvas = document.getElementById('minimap')
-    canvas.addEventListener('mousedown', onMouseDown)
-    canvas.addEventListener('mousemove', onMouseMove)
-    canvas.addEventListener('mouseup', onMouseCancel)
-    canvas.addEventListener('mouseleave', onMouseCancel)
+
+    util.addListener(canvas, 'mousedown', onMouseDown)
+    util.addListener(canvas, 'mousemove', onMouseMove)
+    util.addListener(canvas, 'mouseup', onMouseCancel)
+    util.addListener(canvas, 'mouseleave', onMouseCancel)
 
     renderer = new THREE.WebGLRenderer({
       antialias: true,
@@ -78,10 +81,10 @@ export default {
   destroy () {
     const canvas = document.getElementById('canvas')
     if (canvas) {
-      canvas.removeEventListener('mousedown', onMouseDown)
-      canvas.removeEventListener('mousemove', onMouseMove)
-      canvas.removeEventListener('mouseup', onMouseCancel)
-      canvas.removeEventListener('mouseleave', onMouseCancel)
+      util.removeListener(canvas, 'mousedown', onMouseDown)
+      util.removeListener(canvas, 'mousemove', onMouseMove)
+      util.removeListener(canvas, 'mouseup', onMouseCancel)
+      util.removeListener(canvas, 'mouseleave', onMouseCancel)
     }
 
     renderer = null

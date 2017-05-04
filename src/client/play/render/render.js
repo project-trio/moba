@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 
 import store from '@/store'
+import util from '@/helpers/util'
 
 import dataConstants from '@/play/data/constants'
 
@@ -114,11 +115,11 @@ export default {
     audioLoader = new THREE.AudioLoader()
 
     this.createRenderer()
-    window.addEventListener('resize', resize)
+    util.addListener(window, 'resize', resize)
   },
 
   destroy () {
-    window.removeEventListener('resize', resize)
+    util.removeListener(window, 'resize', resize)
     gameScene = null
     gameCamera = null
     renderer = null
