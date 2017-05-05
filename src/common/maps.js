@@ -25,21 +25,19 @@ const maps = {}
 
     walls: [
       {
-        start: { x: TINY_WIDTH, y: TINY_HEIGHT / 5 },
+        start: { x: TINY_WIDTH / 5, y: TINY_HEIGHT / 5 },
         radius: wallRadius,
         move: [
-          { dx: -wH / 6, dy: 0 },
           { dx: 0, dy: -hH / 5 },
         ],
-        mirror: false,
+        mirror: true,
         endCap: true,
       },
       {
-        start: { x: 0, y: TINY_HEIGHT / 5 },
+        start: { x: TINY_WIDTH, y: hH },
         radius: wallRadius,
         move: [
-          { dx: wH / 6, dy: 0 },
-          { dx: 0, dy: -hH / 5 },
+          { dx: -15, dy: 0 },
         ],
         mirror: false,
         endCap: true,
