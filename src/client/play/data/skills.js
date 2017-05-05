@@ -36,6 +36,23 @@ const isDisabledBy = function (actives) {
 
 export default {
 
+//CHARGER
+
+  charger: [
+    {
+      name: '[TBD]',
+      description: '',
+    },
+    {
+      name: '[TBD]',
+      description: '',
+    },
+    {
+      name: '[TBD]',
+      description: '',
+    },
+  ],
+
 //TEMPEST
 
     tempest: [

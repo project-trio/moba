@@ -13,6 +13,28 @@ const createMeshes = function (name, team, top, base, ship) {
 //SHIPS
 
 export default {
+
+  charger: {
+    healthMax: [800, 10],
+    healthRegen: [30, 1],
+    armor: [10, 1],
+
+    sightRange: [180, 0],
+    attackRange: [170, 0],
+
+    attackDamage: [70, 3],
+    attackPierce: [0, 0],
+    attackCooldown: [22, 0],
+    attackMoveSpeed: 8,
+    bulletSize: 5,
+
+    moveSpeed: [8, 0],
+    turnSpeed: 5,
+    collision: 24,
+
+    create: createMeshes,
+  },
+
   tempest: {
     healthMax: [600, 5],
     healthRegen: [40, 1],
