@@ -127,8 +127,34 @@ export default {
       },
     },
     {
-      name: '[TBD]',
-      description: '',
+      name: 'Rebound',
+      description: 'Heal for [[Strength]] of damage taken, and deal half that amount back as damage to attackers',
+      suffixStrength: '%',
+      target: TARGET_SELF,
+      disabledBy: [false, true, null],
+      isDisabledBy: isDisabledBy,
+      endOnDeath: true,
+      getEffectStrength: function (level) {
+        return levelMultiplier(30, level, 2)
+      },
+      getDuration: function (level) {
+        return 50
+      },
+      getCooldown: function (level) {
+        return levelMultiplier(150, level, -5)
+      },
+      start: function (index, level, ship) {
+        ship.repairRatio = new Decimal(this.getEffectStrength(level)).dividedBy(100)
+        ship.reflectDamageRatio = ship.repairRatio.dividedBy(2)
+        ship.reboundMesh = Render.outline(ship.base.children[0], 0xff0000, 1.1)
+      },
+      end: function (ship) {
+        ship.reflectDamageRatio = null
+        if (ship.reboundMesh) {
+          Render.remove(ship.reboundMesh)
+          ship.reboundMesh = null
+        }
+      },
     },
   ],
 
@@ -994,33 +1020,8 @@ export default {
       },
     },
     {
-      name: 'Effervesce',
-      description: 'Bounce [[Strength]] of damage taken back on attackers',
-      suffixStrength: '%',
-      target: TARGET_SELF,
-      disabledBy: [false, true, null],
-      isDisabledBy: isDisabledBy,
-      endOnDeath: true,
-      getEffectStrength: function (level) {
-        return levelMultiplier(14, level, 2)
-      },
-      getDuration: function (level) {
-        return 50
-      },
-      getCooldown: function (level) {
-        return levelMultiplier(150, level, -5)
-      },
-      start: function (index, level, ship) {
-        ship.reflectDamageRatio = new Decimal(this.getEffectStrength(level)).dividedBy(100)
-        ship.effervesceMesh = Render.outline(ship.base.children[0], 0xff0000, 1.07)
-      },
-      end: function (ship) {
-        ship.reflectDamageRatio = null
-        if (ship.effervesceMesh) {
-          Render.remove(ship.effervesceMesh)
-          ship.effervesceMesh = null
-        }
-      },
+      name: '[TBD]',
+      description: '',
     },
   ],
 
