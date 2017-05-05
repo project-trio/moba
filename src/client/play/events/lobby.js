@@ -29,10 +29,12 @@ export default {
 
     Bridge.emit('lobby action', data, (response) => {
       const existingGid = response.reenter
-      if (existingGid && redirectingTo !== existingGid) {
-        redirectingTo = existingGid
-        p('redirecting to game', existingGid, router.currentRoute)
-        router.replace({ name: 'Join', params: { gid: existingGid } })
+      if (existingGid) {
+        if (redirectingTo !== existingGid && redirectingTo !== Local.gid) {
+          redirectingTo = existingGid
+          p('redirecting to game', router.currentRoute)
+          router.replace({ name: 'Join', params: { gid: existingGid } })
+        }
       } else if (callback) {
         callback(response)
       }

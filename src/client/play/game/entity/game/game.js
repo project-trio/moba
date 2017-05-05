@@ -163,7 +163,7 @@ export default function (gid, mode, size, mapName) {
       if (behindUpdates > 0) {
         tickOffsets -= behindUpdates
         renderedSinceUpdate = false
-        p('Catching up to server update', behindUpdates, tickOffsets)
+        p('Catching up to server update', [behindUpdates, tickOffsets])
       }
     }
   }
