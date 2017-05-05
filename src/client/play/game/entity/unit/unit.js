@@ -84,6 +84,7 @@ class Unit {
       clickCircle.position.z = 1
       clickCircle.owner = this
 
+      this.stats.shield = 0
       this.stats.healthMax = statBase.healthMax[0] * 100
       this.stats.healthRegen = statBase.healthRegen[0]
       this.stats.armor = statBase.armor[0]
@@ -106,6 +107,7 @@ class Unit {
 
       // Modifiers
       this.modifiers = {
+        shield: {},
         healthRegen: {},
         armor: {},
         attackCooldown: {},
@@ -176,8 +178,8 @@ class Unit {
   }
 
   updateModifiers () {
-    for (let statKey in this.modifiers) {
-      this.modify(null, statKey)
+    for (let statName in this.modifiers) {
+      this.modify(null, statName)
     }
   }
 
@@ -186,20 +188,41 @@ class Unit {
     return statModifiers && statModifiers[key] !== undefined
   }
 
+  cancelModifiers (statName) {
+    const statModifiers = this.modifiers[statName]
+    let canceled = false
+    for (let key in statModifiers) {
+      canceled = true
+      const mod = statModifiers[key]
+      const callback = mod[3]
+      if (callback) {
+        callback()
+      }
+      delete statModifiers[key]
+    }
+    if (canceled) {
+      this.modify(null, statName)
+    }
+  }
+
   expireModifiers (renderTime) {
-    for (let statKey in this.modifiers) {
-      const statModifiers = this.modifiers[statKey]
+    for (let statName in this.modifiers) {
+      const statModifiers = this.modifiers[statName]
       let expired = false
       for (let key in statModifiers) {
         const mod = statModifiers[key]
         const expiresAt = mod[2]
         if (expiresAt && renderTime >= expiresAt) {
-          delete statModifiers[key]
           expired = true
+          const callback = mod[3]
+          if (callback) {
+            callback()
+          }
+          delete statModifiers[key]
         }
       }
       if (expired) {
-        this.modify(null, statKey)
+        this.modify(null, statName)
       }
     }
   }
@@ -208,33 +231,40 @@ class Unit {
     this.modify(data.name, data.stat, data.method, data.value, renderTime + data.expires)
   }
 
-  modify (modifierName, statKey, method, value, ending) {
-    const statModifiers = this.modifiers[statKey]
+  modify (modifierKey, statName, method, value, ending, callback) {
+    const statModifiers = this.modifiers[statName]
     if (!statModifiers) {
       return
     }
-    const updatingModifier = modifierName !== null
+    const updatingModifier = modifierKey !== null
     if (updatingModifier) {
       if (method === null) {
-        delete statModifiers[modifierName]
+        const mod = statModifiers[modifierKey]
+        if (mod) {
+          const callback = mod[3]
+          if (callback) {
+            callback()
+          }
+          delete statModifiers[modifierKey]
+        }
       } else {
-        statModifiers[modifierName] = [method, value, ending]
+        statModifiers[modifierKey] = [method, value, ending, callback]
       }
     }
-    let result = new Decimal(this.stats[statKey])
+    let result = new Decimal(this.stats[statName])
     for (let key in statModifiers) {
       const mod = statModifiers[key]
       const mathMethod = mod[0]
       const byValue = mod[1]
       result = result[mathMethod](byValue)
     }
-    if (statKey === 'moveSpeed') {
-      this.current[statKey] = result
+    if (statName === 'moveSpeed') {
+      this.current[statName] = result
       this.cacheMoveSpeed = result.toNumber() / Local.tickDuration
     } else {
-      this.current[statKey] = result.toNumber()
-      if (Local.TESTING && !Number.isInteger(this.current[statKey])) { //TODO testing
-        console.error('NON-INTEGER', modifierName, statKey, result.toNumber())
+      this.current[statName] = result.toNumber()
+      if (Local.TESTING && !Number.isInteger(this.current[statName])) { //TODO testing
+        console.error('NON-INTEGER', modifierKey, statName, result.toNumber())
       }
     }
     if (updatingModifier && this.selected) {
@@ -445,7 +475,18 @@ class Unit {
         this.modify(`${source.id}${renderTime}`, 'healthRegen', 'add', healthPerTick, renderTime + duration)
       }
     }
-    const newHealth = Math.max(this.healthRemaining - damage, 0)
+    let dealDamage = damage
+    if (this.current.shield) {
+      this.current.shield -= dealDamage
+      if (this.current.shield <= 0) {
+        dealDamage = -this.current.shield
+        this.current.shield = 0
+        this.cancelModifiers('shield')
+      } else {
+        dealDamage = 0
+      }
+    }
+    const newHealth = Math.max(this.healthRemaining - dealDamage, 0)
     if (newHealth == 0) {
       this.isDying = true
     }

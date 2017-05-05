@@ -820,30 +820,33 @@ export default {
 
   boxy: [
     {
-      name: 'Absorb Shield',
-      description: 'Heal back [[Repair]] of damage received over 3 seconds',
-      suffixRepair: '%',
+      name: 'Box Shield',
+      description: 'Shields you from up to [[Damage]] while active',
       target: TARGET_SELF,
       isDisabledBy: null,
       endOnDeath: true,
-      getEffectRepair: function (level) {
-        return levelMultiplier(20, level, 4)
+      getEffectDamage: function (level) {
+        return levelMultiplier(200, level, 30)
       },
       getDuration: function (level) {
-        return levelMultiplier(50, level, 5)
+        return levelMultiplier(40, level, 2)
       },
       getCooldown: function (level) {
         return levelMultiplier(150, level, -5)
       },
-      start: function (index, level, ship) {
-        ship.repair = new Decimal(this.getEffectRepair(level)).dividedBy(100)
-        ship.repairMesh = Render.outline(ship.base.children[0], 0x0000ff, 1.07)
+      start: function (index, level, ship, target, startAt, endAt) {
+        const popShield = function () {
+          // p('cancel shield')
+          ship.endSkill(index)
+        }
+        const shieldDamage = this.getEffectDamage(level) * 100
+        ship.modify(`${ship.id}${this.name}`, 'shield', 'add', shieldDamage, endAt, popShield)
+        ship.cubeMesh = Render.sphere(ship.stats.collision / 100 * 1.75, { parent: ship.container, color: 0xeeeeee, opacity: 0.33 })
       },
       end: function (ship) {
-        ship.repair = null
-        if (ship.repairMesh) {
-          Render.remove(ship.repairMesh)
-          ship.repairMesh = null
+        if (ship.cubeMesh) {
+          Render.remove(ship.cubeMesh)
+          ship.cubeMesh = null
         }
       },
     },

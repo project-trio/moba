@@ -375,13 +375,15 @@ export default {
     const color = options.team !== undefined ? dataConstants.teamColors[options.team] : options.color
     const material = new THREE.MeshStandardMaterial({ color })
     if (options.hideOutline) {
-      material.outlineParameters = {
-        visible: false,
-      }
+      material.outlineParameters = { visible: false }
     } else {
       material.outlineParameters = {
         color: new THREE.Color(dataConstants.darkColors[options.team]),
       }
+    }
+    if (options.opacity) {
+      material.transparent = true
+      material.opacity = options.opacity
     }
     const sphere = new THREE.Mesh(geometry, material)
     sphere.castShadow = true
