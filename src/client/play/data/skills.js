@@ -53,10 +53,10 @@ export default {
         return 80
       },
       getEffectDamage: function (level) {
-        return levelMultiplier(50, level, 10)
+        return levelMultiplier(70, level, 10)
       },
       getCooldown: function (level) {
-        return 200
+        return levelMultiplier(150, level, -5)
       },
       start: function (index, level, ship, target, startAt, endAt, cooldown) {
         ship.modify(this.name, 'moveSpeed', 'times', 5)
@@ -104,7 +104,7 @@ export default {
         return 500
       },
       getEffectDuration: function (level) {
-        return levelMultiplier(1000, level, 100)
+        return levelMultiplier(10, level, 1) * 100
       },
       getCooldown: function (level) {
         return 200
@@ -332,7 +332,7 @@ export default {
         return levelMultiplier(300, level, 30)
       },
       getEffectDuration: function (level) {
-        return 3000
+        return 30 * 100
       },
       getRange: function (level) {
         return 100
@@ -372,10 +372,10 @@ export default {
         return levelMultiplier(70, level, 2)
       },
       getEffectRemainsDuration: function (level) {
-        return levelMultiplier(3000, level, 200)
+        return levelMultiplier(30, level, 2) * 100
       },
       getEffectDuration: function (level) {
-        return levelMultiplier(1000, level, 200)
+        return levelMultiplier(10, level, 2) * 100
       },
       getEffectMoveSpeed: function (level) {
         return levelMultiplier(50, level, 2)
@@ -452,7 +452,7 @@ export default {
         return levelMultiplier(50, level, 2)
       },
       getEffectDuration: function (level) {
-        return levelMultiplier(2000, level, 200)
+        return levelMultiplier(20, level, 2) * 100
       },
       getEffectDamage: function (level) {
         return levelMultiplier(40, level, 5)
@@ -502,7 +502,7 @@ export default {
         return 60
       },
       getEffectDuration: function (level) {
-        return levelMultiplier(1000, level, 100)
+        return levelMultiplier(10, level, 1) * 100
       },
       getEffectMoveSpeed: function (level) {
         return levelMultiplier(25, level, 2)
@@ -592,7 +592,7 @@ export default {
         return levelMultiplier(150, level, 5)
       },
       getEffectDamage: function (level) {
-        return levelMultiplier(80, level, 15)
+        return levelMultiplier(100, level, 15)
       },
       getCooldown: function (level) {
         return 60
@@ -834,18 +834,18 @@ export default {
         return levelMultiplier(150, level, -5)
       },
       start: function (index, level, ship, target, startAt, endAt) {
-        const popShield = function () {
+        const shieldDamage = this.getEffectDamage(level) * 100
+        ship.modify(`${ship.id}${this.name}`, 'shield', 'add', shieldDamage, endAt, () => {
           // p('cancel shield')
           ship.endSkill(index)
-        }
-        const shieldDamage = this.getEffectDamage(level) * 100
-        ship.modify(`${ship.id}${this.name}`, 'shield', 'add', shieldDamage, endAt, popShield)
-        ship.cubeMesh = Render.sphere(ship.stats.collision / 100 * 1.75, { parent: ship.container, color: 0xeeeeee, opacity: 0.33 })
+        })
+        ship.shieldMesh = Render.sphere(ship.stats.collision / 100 * 1.8, { parent: ship.model, color: 0xffffff, opacity: 0.25, hideOutline: true })
+        ship.shieldMesh.position.z = 15
       },
       end: function (ship) {
-        if (ship.cubeMesh) {
-          Render.remove(ship.cubeMesh)
-          ship.cubeMesh = null
+        if (ship.shieldMesh) {
+          Render.remove(ship.shieldMesh)
+          ship.shieldMesh = null
         }
       },
     },
@@ -1114,7 +1114,7 @@ export default {
     },
     {
       name: 'Salvage',
-      description: 'Boost health regeneration [[Regen]], while halving movement speed',
+      description: 'Boost health regeneration [[Regen]], while reducing move speed one third',
       target: TARGET_SELF,
       disabledBy: [false, true, null],
       isDisabledBy: isDisabledBy,
@@ -1130,9 +1130,9 @@ export default {
       },
       start: function (index, level, ship) {
         ship.modify(this.name, 'healthRegen', 'add', this.getEffectRegen(level))
-        ship.modify(this.name, 'moveSpeed', 'times', 0.5)
+        ship.modify(this.name, 'moveSpeed', 'times', 0.33)
 
-        ship.salvageMesh = Render.outline(ship.top.children[0], 0x00ff00, 1.07)
+        ship.salvageMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.07)
       },
       end: function (ship) {
         ship.modify(this.name, 'healthRegen', null)

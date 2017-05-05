@@ -17,16 +17,16 @@ export default {
   charger: {
     healthMax: [800, 10],
     healthRegen: [30, 1],
-    armor: [10, 1],
+    armor: [0, 0],
 
     sightRange: [180, 0],
-    attackRange: [170, 0],
+    attackRange: [110, 0],
 
     attackDamage: [70, 3],
     attackPierce: [0, 0],
-    attackCooldown: [22, 0],
-    attackMoveSpeed: 8,
-    bulletSize: 5,
+    attackCooldown: [19, 0],
+    attackMoveSpeed: 12,
+    bulletSize: 6,
 
     moveSpeed: [8, 0],
     turnSpeed: 5,
@@ -219,7 +219,7 @@ export default {
     attackMoveSpeed: 8,
     bulletSize: 5,
 
-    moveSpeed: [8, 0],
+    moveSpeed: [7, 0],
     turnSpeed: 5,
     collision: 22,
 
@@ -242,7 +242,7 @@ export default {
     attackMoveSpeed: 11,
     bulletSize: 4,
 
-    moveSpeed: [9, 0],
+    moveSpeed: [8, 0],
     turnSpeed: 6,
     collision: 24,
 
