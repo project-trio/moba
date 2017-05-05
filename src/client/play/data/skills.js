@@ -76,7 +76,7 @@ export default {
         ship.uncontrollable = false
         ship.disableAttacking = false
 
-        const damage = this.getEffectDamage(level)
+        const damage = this.getEffectDamage(level) * 100
         const aoeRange = this.getEffectRange(level)
         new AreaOfEffect(ship, false, {
           dot: false,
@@ -85,7 +85,7 @@ export default {
           opacity: 0.5,
           px: ship.px, py: ship.py,
           radius: aoeRange,
-          attackDamage: damage * 100,
+          attackDamage: damage,
           attackPierce: 0,
         })
       },
@@ -186,7 +186,7 @@ export default {
       },
       start: function (index, level, ship, target, startAt) {
         const delay = this.getEffectDelay(level)
-        const damage = this.getEffectDamage(level)
+        const damage = this.getEffectDamage(level) * 100
         const aoeRange = this.getEffectRange(level)
         new AreaOfEffect(ship, false, {
           dot: false,
@@ -197,7 +197,7 @@ export default {
           radius: aoeRange,
           time: startAt,
           delay: delay,
-          attackDamage: damage * 100,
+          attackDamage: damage,
           attackPierce: 0,
         })
       },
@@ -302,12 +302,12 @@ export default {
         return levelMultiplier(200, level, -5)
       },
       start: function (index, level, ship, target) {
-        const damage = this.getEffectDamage(level)
+        const damage = this.getEffectDamage(level) * 100
         const bulletData = {
           hitsTowers: this.hitsTowers,
           bulletSize: 10,
           bulletColor: 0xdddd00,
-          attackDamage: damage * 100,
+          attackDamage: damage,
           attackPierce: 10,
           attackMoveSpeed: 7,
           propagates: this.getEffectPropagates(level),
@@ -411,7 +411,6 @@ export default {
     {
       name: 'Emergency',
       description: 'Expend a huge boost of [[MoveSpeed]] movement speed',
-      suffixAttackSpeed: '%',
       suffixMoveSpeed: '%',
       target: TARGET_SELF,
       isDisabledBy: null,
@@ -465,7 +464,7 @@ export default {
         return levelMultiplier(250, level, -5)
       },
       start: function (index, level, ship, target) {
-        const damage = this.getEffectDamage(level)
+        const damage = this.getEffectDamage(level) * 100
         const moveSpeed = new Decimal(1).minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
         const stunDuration = this.getEffectDuration(level)
         const maxRange = this.getRange(level)
@@ -473,7 +472,7 @@ export default {
           hitsTowers: this.hitsTowers,
           bulletSize: 10,
           bulletColor: 0xdddd00,
-          attackDamage: damage * 100,
+          attackDamage: damage,
           attackPierce: 10,
           attackMoveSpeed: 8,
           maxRange: maxRange,
@@ -599,14 +598,14 @@ export default {
         return 60
       },
       start: function (index, level, ship, target) {
-        const damage = this.getEffectDamage(level)
+        const damage = this.getEffectDamage(level) * 100
         const maxRange = this.getRange(level)
         const bulletData = {
           toMaxRange: true,
           hitsTowers: this.hitsTowers,
           bulletSize: 12,
           bulletColor: 0xcc0000,
-          attackDamage: damage * 100,
+          attackDamage: damage,
           attackPierce: 10,
           attackMoveSpeed: 12,
           maxRange: maxRange,
@@ -729,13 +728,13 @@ export default {
         return 100
       },
       start: function (index, level, ship, target) {
-        const damage = this.getEffectDamage(level)
+        const damage = this.getEffectDamage(level) * 100
         const maxRange = this.getRange(level)
         const bulletData = {
           hitsTowers: this.hitsTowers,
           bulletSize: 10,
           bulletColor: 0x00dddd,
-          attackDamage: damage * 100,
+          attackDamage: damage,
           attackPierce: 100,
           attackMoveSpeed: 6,
           maxRange: maxRange,
@@ -763,14 +762,14 @@ export default {
       },
       start: function (index, level, ship, target, startAt, endAt) {
         const aoeRange = this.getEffectRange(level)
-        const damage = this.getEffectDamage(level)
+        const damage = this.getEffectDamage(level) * 100
         const maxRange = this.getRange(level)
         const attackMoveSpeed = 4
         const bulletData = {
           hitsTowers: this.hitsTowers,
           bulletSize: 8,
           bulletColor: 0x660066,
-          attackDamage: damage * 100,
+          attackDamage: damage,
           attackPierce: 10,
           attackMoveSpeed: attackMoveSpeed,
           maxRange: maxRange,

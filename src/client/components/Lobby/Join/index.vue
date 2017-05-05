@@ -64,12 +64,7 @@ export default {
     Local.gid = this.gid
     LobbyEvents.connect('join', { gid: this.gid }, (data) => {
       if (data.error) {
-        const errorMessage = `Join error: ${data.error}`
-        if (Local.TESTING) {
-          window.alert(errorMessage)
-        } else {
-          warn(errorMessage)
-        }
+        warn(`Join error: ${data.error}`)
         router.replace({ name: 'Lobby' })
       } else {
         this.size = data.size
