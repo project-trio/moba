@@ -265,7 +265,7 @@ export default {
     attackMoveSpeed: 13,
     bulletSize: 4,
 
-    moveSpeed: [12, 0],
+    moveSpeed: [10, 0],
     turnSpeed: 12,
     collision: 16,
 

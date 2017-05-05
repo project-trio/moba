@@ -1061,7 +1061,8 @@ export default {
     },
     {
       name: 'Encrypt',
-      description: 'Turn invisible and untargetable to enemies',
+      description: 'Turn invisible and untargetable to enemies, boosting movespeed by [[MoveSpeed]]',
+      suffixMoveSpeed: '%',
       target: TARGET_SELF,
       disabledBy: [false, null, true],
       isDisabledBy: isDisabledBy,
@@ -1069,12 +1070,16 @@ export default {
       getDuration: function (level) {
         return levelMultiplier(40, level, 5)
       },
+      getEffectMoveSpeed: function (level) {
+        return levelMultiplier(20, level, 3)
+      },
       getCooldown: function (level) {
         return levelMultiplier(200, level, -5)
       },
       start: function (index, level, ship, target, startAt, endAt, cooldown) {
         ship.removeTarget()
         ship.invisible = true
+        ship.modify(this.name, 'moveSpeed', 'times', new Decimal(1).plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
 
         const animDuration = 500
         ship.queueAnimation(null, 'opacity', {
@@ -1099,6 +1104,8 @@ export default {
         }
       },
       end: function (ship) {
+        ship.modify(this.name, 'moveSpeed', null)
+
         ship.invisible = false
         ship.endInvisible = null
       },
