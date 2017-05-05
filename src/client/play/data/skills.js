@@ -134,163 +134,163 @@ export default {
 
 //TEMPEST
 
-    tempest: [
-      {
-        name: 'Bolt',
-        description: 'Strike enemies inside after [[Delay]] for [[Damage]]',
-        target: TARGET_GROUND,
-        hitsTowers: false,
-        disabledBy: [null, true, false],
-        isDisabledBy: isDisabledBy,
-        endOnDeath: false,
-        getEffectDelay: function (level) {
-          return 500
-        },
-        getEffectRange: function (level) {
-          return 60
-        },
-        getEffectDamage: function (level) {
-          return levelMultiplier(80, level, 10)
-        },
-        getRange: function (level) {
-          return levelMultiplier(80, level, 5)
-        },
-        getCooldown: function (level) {
-          return levelMultiplier(150, level, -5)
-        },
-        start: function (index, level, ship, target, startAt) {
-          const delay = this.getEffectDelay(level)
-          const damage = this.getEffectDamage(level)
-          const aoeRange = this.getEffectRange(level)
-          new AreaOfEffect(ship, false, {
-            dot: false,
-            hitsTowers: this.hitsTowers,
-            color: 0xffff00,
-            opacity: 0.9,
-            px: target[0], py: target[1],
-            radius: aoeRange,
-            time: startAt,
-            delay: delay,
-            attackDamage: damage * 100,
-            attackPierce: 0,
-          })
-        },
+  tempest: [
+    {
+      name: 'Bolt',
+      description: 'Strike enemies inside after [[Delay]] for [[Damage]]',
+      target: TARGET_GROUND,
+      hitsTowers: false,
+      disabledBy: [null, true, false],
+      isDisabledBy: isDisabledBy,
+      endOnDeath: false,
+      getEffectDelay: function (level) {
+        return 500
       },
-      {
-        name: 'Scud',
-        description: 'Fly by the power of the wind',
-        target: TARGET_GROUND,
-        isDisabledBy: null,
-        startsImmediately: false,
-        getRange: function (level) {
-          return levelMultiplier(110, level, 10)
-        },
-        getDuration: function (level) {
-          return 3
-        },
-        getCooldown: function (level) {
-          return levelMultiplier(300, level, -10)
-        },
-        start: function (index, level, ship, target, startAt, endAt, cooldown) {
-          ship.customPosition = true
-          ship.uncontrollable = true
-          ship.untargetable = true
-          ship.disableAttacking = true
-
-          let destX = target[0]
-          let destY = target[1]
-          while (ship.blocked(destX, destY)) { //TODO prevent going backwards
-            // p('Blocked', destX, destY, ship.moveX, ship.moveY)
-            destX -= ship.moveX
-            destY -= ship.moveY
-          }
-
-          const duration = endAt - startAt
-          ship.queueAnimation('container', 'position', {
-            axis: 'x',
-            from: ship.px / 100,
-            to: destX / 100,
-            pow: 2,
-            start: startAt,
-            duration: duration,
-          })
-          ship.queueAnimation('container', 'position', {
-            axis: 'y',
-            from: ship.py / 100,
-            to: destY / 100,
-            pow: 2,
-            start: startAt,
-            duration: duration,
-          })
-
-          ship.px = destX
-          ship.py = destY
-
-          ship.queueAnimation('top', 'position', {
-            child: 0,
-            axis: 'z',
-            from: 0,
-            to: 0,
-            parabola: 4,
-            max: 768,
-            start: startAt,
-            duration: duration - 50,
-          })
-          ship.queueAnimation('top', 'opacity', {
-            child: 0,
-            from: 1,
-            to: 1,
-            parabola: 4,
-            max: -1,
-            start: startAt,
-            duration: duration - 50,
-          })
-        },
-        end: function (ship) {
-          ship.customPosition = false
-          ship.uncontrollable = false
-          ship.untargetable = false
-          ship.disableAttacking = false
-        },
+      getEffectRange: function (level) {
+        return 60
       },
-      {
-        name: 'Chain strike',
-        description: 'Lightning passes through up to [[Propagates]] enemies within [[Range]], dealing [[Damage]] to each',
-        target: TARGET_ENEMY,
-        hitsTowers: true,
-        disabledBy: [false, true, null],
-        isDisabledBy: isDisabledBy,
-        getEffectRange: function (level) {
-          return 70
-        },
-        getEffectPropagates: function (level) {
-          return 5
-        },
-        getEffectDamage: function (level) {
-          return levelMultiplier(70, level, 5)
-        },
-        getRange: function (level) {
-          return 140
-        },
-        getCooldown: function (level) {
-          return levelMultiplier(200, level, -5)
-        },
-        start: function (index, level, ship, target) {
-          const damage = this.getEffectDamage(level)
-          const bulletData = {
-            hitsTowers: this.hitsTowers,
-            bulletSize: 10,
-            bulletColor: 0xdddd00,
-            attackDamage: damage * 100,
-            attackPierce: 10,
-            attackMoveSpeed: 7,
-            propagates: this.getEffectPropagates(level),
-            propagateRange: this.getEffectRange(level),
-          }
-          new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
-        },
+      getEffectDamage: function (level) {
+        return levelMultiplier(80, level, 10)
       },
-    ],
+      getRange: function (level) {
+        return levelMultiplier(80, level, 5)
+      },
+      getCooldown: function (level) {
+        return levelMultiplier(150, level, -5)
+      },
+      start: function (index, level, ship, target, startAt) {
+        const delay = this.getEffectDelay(level)
+        const damage = this.getEffectDamage(level)
+        const aoeRange = this.getEffectRange(level)
+        new AreaOfEffect(ship, false, {
+          dot: false,
+          hitsTowers: this.hitsTowers,
+          color: 0xffff00,
+          opacity: 0.9,
+          px: target[0], py: target[1],
+          radius: aoeRange,
+          time: startAt,
+          delay: delay,
+          attackDamage: damage * 100,
+          attackPierce: 0,
+        })
+      },
+    },
+    {
+      name: 'Scud',
+      description: 'Fly by the power of the wind',
+      target: TARGET_GROUND,
+      isDisabledBy: null,
+      startsImmediately: false,
+      getRange: function (level) {
+        return levelMultiplier(110, level, 10)
+      },
+      getDuration: function (level) {
+        return 3
+      },
+      getCooldown: function (level) {
+        return levelMultiplier(300, level, -10)
+      },
+      start: function (index, level, ship, target, startAt, endAt, cooldown) {
+        ship.customPosition = true
+        ship.uncontrollable = true
+        ship.untargetable = true
+        ship.disableAttacking = true
+
+        let destX = target[0]
+        let destY = target[1]
+        while (ship.blocked(destX, destY)) { //TODO prevent going backwards
+          // p('Blocked', destX, destY, ship.moveX, ship.moveY)
+          destX -= ship.moveX
+          destY -= ship.moveY
+        }
+
+        const duration = endAt - startAt
+        ship.queueAnimation('container', 'position', {
+          axis: 'x',
+          from: ship.px / 100,
+          to: destX / 100,
+          pow: 2,
+          start: startAt,
+          duration: duration,
+        })
+        ship.queueAnimation('container', 'position', {
+          axis: 'y',
+          from: ship.py / 100,
+          to: destY / 100,
+          pow: 2,
+          start: startAt,
+          duration: duration,
+        })
+
+        ship.px = destX
+        ship.py = destY
+
+        ship.queueAnimation('top', 'position', {
+          child: 0,
+          axis: 'z',
+          from: 0,
+          to: 0,
+          parabola: 4,
+          max: 768,
+          start: startAt,
+          duration: duration - 50,
+        })
+        ship.queueAnimation('top', 'opacity', {
+          child: 0,
+          from: 1,
+          to: 1,
+          parabola: 4,
+          max: -1,
+          start: startAt,
+          duration: duration - 50,
+        })
+      },
+      end: function (ship) {
+        ship.customPosition = false
+        ship.uncontrollable = false
+        ship.untargetable = false
+        ship.disableAttacking = false
+      },
+    },
+    {
+      name: 'Chain strike',
+      description: 'Lightning passes through up to [[Propagates]] enemies within [[Range]], dealing [[Damage]] to each',
+      target: TARGET_ENEMY,
+      hitsTowers: true,
+      disabledBy: [false, true, null],
+      isDisabledBy: isDisabledBy,
+      getEffectRange: function (level) {
+        return 70
+      },
+      getEffectPropagates: function (level) {
+        return 5
+      },
+      getEffectDamage: function (level) {
+        return levelMultiplier(70, level, 5)
+      },
+      getRange: function (level) {
+        return 140
+      },
+      getCooldown: function (level) {
+        return levelMultiplier(200, level, -5)
+      },
+      start: function (index, level, ship, target) {
+        const damage = this.getEffectDamage(level)
+        const bulletData = {
+          hitsTowers: this.hitsTowers,
+          bulletSize: 10,
+          bulletColor: 0xdddd00,
+          attackDamage: damage * 100,
+          attackPierce: 10,
+          attackMoveSpeed: 7,
+          propagates: this.getEffectPropagates(level),
+          propagateRange: this.getEffectRange(level),
+        }
+        new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+      },
+    },
+  ],
 
 //STITCHES
 
@@ -1135,4 +1135,5 @@ export default {
       },
     },
   ],
+
 }

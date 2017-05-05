@@ -7,6 +7,8 @@ import Local from '@/play/local'
 
 import Game from '@/play/game/entity/game/game'
 
+let redirectingTo = null
+
 const joinGame = function (gid) {
   const routeObject = { name: 'Join', params: { gid: gid } }
   if (router.currentRoute.name === 'Create' || router.currentRoute.name === 'Queue') {
@@ -27,8 +29,9 @@ export default {
 
     Bridge.emit('lobby action', data, (response) => {
       const existingGid = response.reenter
-      if (existingGid) {
-        p('redirecting to game', existingGid)
+      if (existingGid && redirectingTo !== existingGid) {
+        redirectingTo = existingGid
+        p('redirecting to game', existingGid, router.currentRoute)
         router.replace({ name: 'Join', params: { gid: existingGid } })
       } else if (callback) {
         callback(response)

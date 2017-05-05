@@ -10,12 +10,10 @@ import util from '@/helpers/util'
 
 const KEY_TAB = 9
 const KEY_ESCAPE = 27
-const KEY_1 = 49
-const KEY_3 = 51
 
 const validKeyEvent = (event) => {
   const keyCode = event.which || event.keyCode
-  if (keyCode === KEY_TAB || keyCode === KEY_ESCAPE || (keyCode >= KEY_1 && keyCode <= KEY_3)) {
+  if (keyCode === KEY_TAB || keyCode === KEY_ESCAPE) { //TODO distinguish skills while typing
     event.preventDefault()
   }
   if (event.repeat) {

@@ -312,13 +312,13 @@ class Ship extends Movable {
           endSkill = skill.endOnDeath
         }
         if (endSkill) {
-          this.endSkill(ai)
-        } else {
-          const update = skill.update
-          if (update) {
-            const startTime = this.skills.started[ai]
-            update(this, startTime, renderTime, durationEnd)
-          }
+          this.endSkill(ai, renderTime)
+        // } else {
+        //   const update = skill.update
+        //   if (update) {
+        //     const startTime = this.skills.started[ai]
+        //     update(this, startTime, renderTime, durationEnd)
+        //   }
         }
       }
     }

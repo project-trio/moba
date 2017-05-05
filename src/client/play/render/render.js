@@ -240,7 +240,7 @@ export default {
     }
     new Vox.Parser().parse(require(`@/assets/${type}/${name}.vox`)).then((voxelData) => {
       builder = new Vox.MeshBuilder(voxelData, { voxelSize: 2 })
-      if (options.cache) {
+      if (voxelCache && options.cache) {
         voxelCache[team][name] = builder
       }
       const mesh = builder.createMesh()

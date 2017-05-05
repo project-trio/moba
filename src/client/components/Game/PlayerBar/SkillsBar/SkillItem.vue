@@ -295,7 +295,7 @@ export default {
 
     levelupProgress (progress) {
       this.levelRing.animateTo(Math.floor(progress * 360))
-    }
+    },
   },
 
   methods: {

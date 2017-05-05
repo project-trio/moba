@@ -60,7 +60,7 @@ module.exports = {
       }
 
       socket.on('admin', (data, callback) => {
-        if (CommonConsts.TESTING || name === 'kiko ') {
+        if (CommonConsts.TESTING || name === 'kiko ' || name === 'mod') {
           callback({ names: getPlayerNames(), games: Game.getList() })
         }
       })
