@@ -46,6 +46,7 @@ class AreaOfEffect {
     this.collisionSize = data.radius * POSITION_MAGNITUDE_OFFSET
     this.attackDamage = data.attackDamage
     this.attackPierce = data.attackPierce
+    this.stunDuration = data.stunDuration
 
     areaofEffects.push(this)
     Animate.apply(this)
@@ -82,8 +83,13 @@ class AreaOfEffect {
         if (this.modify) {
           target.modifyData(renderTime, this.modify)
         }
-        if (!isAlly && this.attackDamage) {
-          target.takeDamage(fromUnit, renderTime, this.attackDamage, this.attackPierce)
+        if (!isAlly) {
+          if (this.attackDamage) {
+            target.takeDamage(fromUnit, renderTime, this.attackDamage, this.attackPierce)
+          }
+          if (this.stunDuration) {
+            target.stun(renderTime, this.stunDuration)
+          }
         }
       }
     }

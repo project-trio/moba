@@ -353,11 +353,22 @@ class Unit {
     if (stunEnd > this.stunnedUntil) {
       // p('Stun for', duration, stunEnd)
       this.stunnedUntil = stunEnd
+      if (!this.stunMesh) {
+        this.stunMesh = Render.outline(this.base.children[0] || this.top.children[0], 0xffaa00, 1.1)
+      }
     }
   }
 
   checkStun (renderTime) {
-    return renderTime < this.stunnedUntil
+    if (renderTime > this.stunnedUntil) {
+      if (this.stunMesh) {
+        Render.remove(this.stunMesh)
+        this.stunMesh = null
+      }
+      this.stunnedUntil = 0
+      return true
+    }
+    return false
   }
 
   shouldMove () {
@@ -372,9 +383,7 @@ class Unit {
     }
     if (!this.isDead) {
       this.doRegenerate()
-      if (this.stunnedUntil > 0 && !this.checkStun(renderTime)) {
-        this.stunnedUntil = 0
-      }
+      this.checkStun(renderTime)
     }
   }
 

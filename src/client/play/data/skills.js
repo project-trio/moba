@@ -81,7 +81,7 @@ export default {
         new AreaOfEffect(ship, false, {
           dot: false,
           hitsTowers: this.hitsTowers,
-          color: 0xff0000,
+          color: 0x0000ff,
           opacity: 0.5,
           px: ship.px, py: ship.py,
           radius: aoeRange,
@@ -104,7 +104,7 @@ export default {
         return 500
       },
       getEffectDuration: function (level) {
-        return levelMultiplier(1000, level, 200)
+        return levelMultiplier(1000, level, 100)
       },
       getCooldown: function (level) {
         return 200
@@ -116,7 +116,7 @@ export default {
         new AreaOfEffect(ship, false, {
           dot: false,
           hitsTowers: this.hitsTowers,
-          color: 0x0000ff,
+          color: 0xffaa00,
           opacity: 0.5,
           px: ship.px, py: ship.py,
           radius: aoeRange,
@@ -441,7 +441,7 @@ export default {
       start: function (index, level, ship, target) {
         const damage = this.getEffectDamage(level)
         const moveSpeed = new Decimal(1).minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
-        const effectDuration = this.getEffectDuration(level)
+        const stunDuration = this.getEffectDuration(level)
         const maxRange = this.getRange(level)
         const bulletData = {
           hitsTowers: this.hitsTowers,
@@ -456,9 +456,9 @@ export default {
             stat: 'moveSpeed',
             method: 'times',
             value: moveSpeed,
-            expires: effectDuration,
+            expires: 1000,
           },
-          stunDuration: effectDuration,
+          stunDuration: stunDuration,
         }
         new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
       },
