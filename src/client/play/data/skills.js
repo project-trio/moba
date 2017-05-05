@@ -40,8 +40,55 @@ export default {
 
   charger: [
     {
-      name: '[TBD]',
-      description: '',
+      name: 'Lunge',
+      description: 'Ram into the first unit you collide with, dealing [[Damage]] to enemies nearby',
+      target: TARGET_GROUND,
+      hitsTowers: false,
+      isDisabledBy: null,
+      continuesToDestination: true,
+      getRange: function (level) {
+        return levelMultiplier(120, level, 10)
+      },
+      getEffectRange: function (level) {
+        return 80
+      },
+      getEffectDamage: function (level) {
+        return levelMultiplier(50, level, 10)
+      },
+      getCooldown: function (level) {
+        return 200
+      },
+      start: function (index, level, ship, target, startAt, endAt, cooldown) {
+        ship.modify(this.name, 'moveSpeed', 'times', 5)
+        ship.uncontrollable = true
+        ship.disableAttacking = true
+        ship.opacity(0.75)
+
+        ship.onStopped = function () {
+          p('cancel charge')
+          ship.endSkill(index)
+        }
+      },
+      end: function (ship, level) {
+        ship.onStopped = null
+        ship.modify(this.name, 'moveSpeed', null)
+        ship.opacity(1)
+        ship.uncontrollable = false
+        ship.disableAttacking = false
+
+        const damage = this.getEffectDamage(level)
+        const aoeRange = this.getEffectRange(level)
+        new AreaOfEffect(ship, false, {
+          dot: false,
+          hitsTowers: this.hitsTowers,
+          color: 0xff0000,
+          opacity: 0.5,
+          px: ship.px, py: ship.py,
+          radius: aoeRange,
+          attackDamage: damage * 100,
+          attackPierce: 0,
+        })
+      },
     },
     {
       name: '[TBD]',
@@ -533,7 +580,7 @@ export default {
         ship.disableAttacking = true
         ship.opacity(0.75)
 
-        ship.endBarrelRoll = function () {
+        ship.onStopped = function () {
           p('cancel barrel roll')
           ship.updateCooldown(index, store.state.game.renderTime, cooldown)
           ship.endSkill(index)
@@ -564,7 +611,7 @@ export default {
       },
       end: function (ship) {
         ship.modify(this.name, 'moveSpeed', null)
-        ship.endBarrelRoll = null
+        ship.onStopped = null
         ship.propGroup.visible = true
         ship.base.rotation.x = 0
 

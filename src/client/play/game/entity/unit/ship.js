@@ -117,15 +117,15 @@ class Ship extends Movable {
     super.move(timeDelta, tweening)
 
     if (!tweening) {
-      if (this.isBlocked && this.endBarrelRoll) {
-        this.endBarrelRoll()
+      if (this.isBlocked && this.onStopped) {
+        this.onStopped()
       }
     }
   }
 
   reachedDestination (needsNewDestination) {
-    if (this.endBarrelRoll) {
-      this.endBarrelRoll()
+    if (this.onStopped) {
+      this.onStopped()
     }
 
     super.reachedDestination(needsNewDestination)
@@ -291,9 +291,9 @@ class Ship extends Movable {
 
   // Health
 
-  endSkill (index) {
+  endSkill (index, renderTime) {
     this.skills.actives[index] = 0
-    this.skills.data[index].end(this)
+    this.skills.data[index].end(this, this.skills.levels[index]) //TODO level when skill started
 
     if (this.isLocal) {
       store.state.local.skills.actives.splice(index, 1, 0)
