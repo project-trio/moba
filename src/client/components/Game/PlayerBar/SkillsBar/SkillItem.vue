@@ -138,7 +138,7 @@ export default {
         } else if (substitution === 'Regen') {
           factor = Local.tickDuration / 10
           suffix = ' hp / s'
-        } else if (substitution === 'Duration') {
+        } else if (substitution === 'Duration' || substitution === 'Delay') {
           factor = 1000
           suffix = ' seconds'
         } else {

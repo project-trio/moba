@@ -91,8 +91,40 @@ export default {
       },
     },
     {
-      name: '[TBD]',
-      description: '',
+      name: 'Quake',
+      description: 'Send out tremors that after [[Delay]] stun all enemies nearby for [[Duration]]',
+      target: TARGET_SELF,
+      hitsTowers: false,
+      disabledBy: [true, null, false],
+      isDisabledBy: isDisabledBy,
+      getRange: function (level) {
+        return levelMultiplier(120, level, 10)
+      },
+      getEffectDelay: function (level) {
+        return 500
+      },
+      getEffectDuration: function (level) {
+        return levelMultiplier(1000, level, 200)
+      },
+      getCooldown: function (level) {
+        return 200
+      },
+      start: function (index, level, ship, target, startAt, endAt, cooldown) {
+        const aoeRange = this.getRange(level)
+        const stunDelay = this.getEffectDelay(level)
+        const stunDuration = this.getEffectDuration(level)
+        new AreaOfEffect(ship, false, {
+          dot: false,
+          hitsTowers: this.hitsTowers,
+          color: 0x0000ff,
+          opacity: 0.5,
+          px: ship.px, py: ship.py,
+          radius: aoeRange,
+          time: startAt,
+          delay: stunDelay,
+          stunDuration: stunDuration,
+        })
+      },
     },
     {
       name: '[TBD]',
@@ -105,13 +137,13 @@ export default {
     tempest: [
       {
         name: 'Bolt',
-        description: 'Strike enemies inside after [[Duration]] for [[Damage]]',
+        description: 'Strike enemies inside after [[Delay]] for [[Damage]]',
         target: TARGET_GROUND,
         hitsTowers: false,
         disabledBy: [null, true, false],
         isDisabledBy: isDisabledBy,
         endOnDeath: false,
-        getEffectDuration: function (level) {
+        getEffectDelay: function (level) {
           return 500
         },
         getEffectRange: function (level) {
@@ -127,7 +159,7 @@ export default {
           return levelMultiplier(150, level, -5)
         },
         start: function (index, level, ship, target, startAt) {
-          const delay = this.getEffectDuration(level)
+          const delay = this.getEffectDelay(level)
           const damage = this.getEffectDamage(level)
           const aoeRange = this.getEffectRange(level)
           new AreaOfEffect(ship, false, {

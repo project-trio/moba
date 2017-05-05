@@ -19,7 +19,7 @@ class AreaOfEffect {
     this.source = source
     this.withUnit = withUnit
     this.dot = data.dot
-    this.startAt = data.time + data.delay
+    this.startAt = data.delay ? data.time + data.delay : null
     this.endAt = data.endAt
     this.active = true
     this.hitsTowers = data.hitsTowers
