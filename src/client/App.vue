@@ -31,16 +31,31 @@ const validKeyEvent = (event) => {
 }
 
 export default {
+  data () {
+    return {
+      countdownInterval: null,
+    }
+  },
+
   created () {
     util.addListener(window, 'keydown', this.keydown, true)
     util.addListener(window, 'keyup', this.keyup, true)
     util.addListener(window, 'contextmenu', this.onRightClick, true)
+
+    this.countdownInterval = window.setInterval(() => {
+      store.state.minuteTime = util.seconds()
+    }, 60 * 1000)
   },
 
   destroyed () {
     util.removeListener(window, 'keydown', this.keydown, true)
     util.removeListener(window, 'keyup', this.keyup, true)
     util.removeListener(window, 'contextmenu', this.onRightClick, true)
+
+    if (this.countdownInterval) {
+      window.clearInterval(this.countdownInterval)
+      this.countdownInterval = null
+    }
   },
 
   methods: {

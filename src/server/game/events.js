@@ -1,4 +1,4 @@
-const SocketIO = require('socket.io')
+const Socket = require('socket.io')
 
 const CommonConsts = require.main.require('../common/constants')
 
@@ -45,7 +45,7 @@ module.exports = {
 
     socket.on('chat', (data, callback) => {
       const response = {}
-      if (!player.game) {
+      if (!player.game && !player.queueing) {
         response.error = 'Not in game'
       } else {
         const updateTime = Util.seconds() // player.game.serverUpdate
@@ -53,12 +53,17 @@ module.exports = {
           response.error = 'Chatting too fast!'
         } else {
           player.chatAt = updateTime
-          data.id = player.id
           data.at = updateTime
-          if (data.all) {
-            player.game.broadcast('msg', data)
+          if (player.queueing) {
+            data.from = player.name
+            Socket.io.to('queue').emit('msg', data)
           } else {
-            player.game.teamBroadcast(player.team, 'msg', data)
+            data.id = player.id
+            if (data.all) {
+              player.game.broadcast('msg', data)
+            } else {
+              player.game.teamBroadcast(player.team, 'msg', data)
+            }
           }
         }
       }

@@ -54,6 +54,7 @@ const defaultLocalState = () => {
 
 export default {
   state: {
+    minuteTime: 0,
     playerId: null,
 
     windowWidth: window.innerWidth,

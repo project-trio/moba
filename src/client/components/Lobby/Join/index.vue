@@ -20,9 +20,7 @@
       Invite a friend: <a :href="url" onclick="return false">{{ url }}</a>
     </div>
     <button @click="onStart" v-if="isHost" class="big interactive">{{ startText }}</button>
-    <div class="chat-input-container">
-      <input ref="chatInput" v-model.trim="draftMessage" class="chat-input" placeholder="press enter to chat" :disabled="disableChat"></input>
-    </div>
+    <lobby-chat></lobby-chat>
   </div>
 </div>
 </template>
@@ -38,12 +36,12 @@ import LobbyEvents from '@/play/events/lobby'
 
 import Local from '@/play/local'
 
+import LobbyChat from '@/components/Lobby/Chat'
 import PlayerBox from '@/components/Lobby/Join/PlayerBox'
-
-const KEY_ENTER = 13
 
 export default {
   components: {
+    LobbyChat,
     PlayerBox,
   },
 
@@ -55,12 +53,10 @@ export default {
     return {
       map: null,
       size: null,
-      draftMessage: '',
     }
   },
 
   created () {
-    store.state.chatMessages = []
     Local.gid = this.gid
     LobbyEvents.connect('join', { gid: this.gid }, (data) => {
       if (data.error) {
@@ -107,14 +103,6 @@ export default {
       return window.location.href
     },
 
-    disableChat () {
-      return !this.pressed
-    },
-
-    pressed () {
-      return store.state.key.pressed
-    },
-
     isHost () {
       return store.state.playerId === store.state.game.host
     },
@@ -123,27 +111,6 @@ export default {
     },
     readyToStart () {
       return store.state.game.ready
-    },
-  },
-
-  watch: {
-    pressed (key) {
-      if (key.code === KEY_ENTER) {
-        this.$nextTick(() => {
-          this.$refs.chatInput.focus()
-        })
-
-        if (this.draftMessage) {
-          Bridge.emit('chat', { all: true, body: this.draftMessage }, (response) => {
-            if (response.error) {
-              //TODO display throttle error
-              p('chat err', response)
-            } else {
-              this.draftMessage = ''
-            }
-          })
-        }
-      }
     },
   },
 
@@ -168,20 +135,6 @@ export default {
 .lobby-join
   padding-bottom 64px
   box-sizing border-box
-
-.chat-input-container
-  position fixed
-  left 0
-  right 0
-  bottom 0
-  height 64px
-  width 100%
-.chat-input
-  height inherit
-  width inherit
-  font-size 1.5em
-  padding 0 8px
-  background transparent
 
 .vertical
   display none
@@ -212,5 +165,4 @@ export default {
   .team-players
     flex-direction column
     flex-basis 50%
-
 </style>

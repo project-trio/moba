@@ -29,9 +29,11 @@ export default {
     })
 
     Bridge.on('msg', (data) => {
-      const player = Local.game.player(data.id)
-      data.from = player.name
-      data.team = player.team
+      if (Local.game) {
+        const player = Local.game.player(data.id)
+        data.from = player.name
+        data.team = player.team
+      }
       store.state.chatMessages.push(data)
     })
   },

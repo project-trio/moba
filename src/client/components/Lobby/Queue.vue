@@ -7,7 +7,7 @@
   <game-sizes @onGameSize="onGameSize" :gameSizes="gameSizes" :selectedSize="selectedSize"></game-sizes>
   <div class="queue-action">
     <div v-if="enoughPlayersForGame">
-      <button @click="onReady" class="ready-button big interactive" :class="{ selected: readyRequested }">{{ readyRequested ? 'ready!' : `ready? (${15 - readyAt})` }}</button>
+      <button @click="onReady" class="ready-button big interactive" :class="{ selected: readyRequested }">{{ readyRequested ? 'ready!' : `ready? (${queueTimer - readyAt})` }}</button>
     </div>
     <div v-else>
       <h2>waiting for {{ pluralize(waitingForSize, 'player') }}...</h2>
@@ -23,6 +23,7 @@
       Lets you know when a game is available while the page is in the background.
     </div>
   </div>
+  <lobby-chat></lobby-chat>
 </div>
 </template>
 
@@ -34,18 +35,23 @@ import router from '@/router'
 
 import util from '@/helpers/util'
 
+import Local from '@/play/local'
+
 import Bridge from '@/play/events/bridge'
 import LobbyEvents from '@/play/events/lobby'
 
+import LobbyChat from '@/components/Lobby/Chat'
 import GameSizes from '@/components/Lobby/SelectionGroup/GameSizes'
 
 export default {
   components: {
     GameSizes,
+    LobbyChat,
   },
 
   data () {
     return {
+      queueTimer: 20,
       selectedSize: 1,
       readyRequested: false,
       readyAt: 0,
@@ -144,7 +150,7 @@ export default {
         }
         this.readyAt = 0
         this.readyTimer = window.setInterval(() => {
-          if (this.readyAt >= 15) {
+          if (this.readyAt >= this.queueTimer) {
             this.cancelTimer()
             if (!this.readyRequested) {
               router.replace({ name: 'Lobby' })
@@ -177,6 +183,7 @@ export default {
   },
 
   mounted () {
+    Local.game = null
     this.notificationPermission = window.Notification ? Notification.permission : 'unavailable'
     LobbyEvents.connect('queue', { size: this.selectedSize, ready: false })
   },

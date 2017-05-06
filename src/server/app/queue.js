@@ -36,10 +36,10 @@ module.exports = {
     const queuedSizes = new Array(maxCountSize).fill(0).map((_, idx) => { return (idx + 1) * 2 })
     const readiedCounts = [...queuedSizes]
     for (let idx = queuedCount - 1; idx >= 0; idx -= 1) {
-      const queued = queuedPlayers[idx]
-      for (let size = maxCountSize; size >= queued.queueMin; size -= 1) {
+      const player = queuedPlayers[idx]
+      for (let size = maxCountSize; size >= player.queueMin; size -= 1) {
         queuedSizes[size - 1] -= 1
-        if (queued.queueReady) {
+        if (player.queueReady) {
           readiedCounts[size - 1] -= 1
         }
       }
@@ -51,14 +51,14 @@ module.exports = {
         const game = new Game('pvp', size, map, true)
 
         for (let idx = queuedCount - 1; idx >= 0; idx -= 1) {
-          const queued = queuedPlayers[idx]
-          if (queued.queueReady && queued.queueMin <= size) {
-            remove(queued)
-            const joinData = game.add(queued)
+          const player = queuedPlayers[idx]
+          if (player.queueReady && player.queueMin <= size) {
+            remove(player)
+            const joinData = game.add(player)
             if (joinData.error) {
-              queued.emit('queue', { error: joinData.error })
+              player.emit('queue', { error: joinData.error })
             } else {
-              queued.emit('queue', { gid: game.id })
+              player.emit('queue', { gid: game.id })
             }
             if (game.checkFull()) {
               break
