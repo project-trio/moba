@@ -10,7 +10,7 @@ import Bullet from '@/play/game/entity/attack/bullet'
 
 import Unit from '@/play/game/entity/unit/unit'
 
-let lastUpdate = 0
+let previousTimestamp = 0
 let lastTickTime = 0
 
 let updatePanel, tickPanel, framePanel, animationId
@@ -50,7 +50,7 @@ const animate = function (timestamp) {
     if (storeSettings.fpsCap) {
       return
     }
-    const tweenTimeDelta = timestamp - lastUpdate
+    const tweenTimeDelta = timestamp - previousTimestamp
     const renderTime = store.state.game.renderTime + (timestamp - lastTickTime)
     Bullet.update(renderTime, tweenTimeDelta, true)
     Unit.update(renderTime, tweenTimeDelta, true)
@@ -69,7 +69,7 @@ const animate = function (timestamp) {
   if (framePanel && isPlaying) {
     framePanel.end()
   }
-  lastUpdate = timestamp
+  previousTimestamp = timestamp
 }
 
 //PUBLIC

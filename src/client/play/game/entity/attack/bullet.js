@@ -48,7 +48,7 @@ class Bullet {
     this.propagates = data.propagates
     this.propagateRange = data.propagateRange
     this.targeted = []
-    this.color = this.rebound ? 0x0000ff : data.bulletColor || 0x000000
+    this.color = this.rebound ? 0x0000ff : (data.bulletColor || 0x000000)
 
     this.container = Render.group()
     const ball = Render.sphere(data.bulletSize, { color: this.color, hideOutline: true })
@@ -65,7 +65,7 @@ class Bullet {
     if (!this.unitTarget) {
       this.collisionCheck = Util.squared(data.collisionSize || data.attackMoveSpeed * 100)
     }
-    this.setLocation(x, y, source.height, startAngle)
+    this.setLocation(x, y, source.height || 10, startAngle)
     this.setTarget(target)
 
     allBullets.push(this)
