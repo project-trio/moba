@@ -88,20 +88,20 @@ class Movable extends Unit {
     // Walls
     const walls = Local.game.map.blockCheck(bx, by)
     if (!walls) {
-      return false
+      return true
     }
     const ux1 = bx - collisionSize * 0.5 //TODO validate integer
     const uy1 = by - collisionSize * 0.5
     const ux2 = ux1 + collisionSize
     const uy2 = uy1 + collisionSize
-    for (let idx = 0; idx < walls.length; idx += 1) {
+    for (let idx = walls.length - 1; idx >= 0; idx -= 1) {
       const wall = walls[idx]
       const wx = wall[0]
       const wy = wall[1]
       const ww = wall[2]
       const wh = wall[3]
-      if (wh) {
-        if (rectanglesIntersecting(wx, wy, wx + ww, wy + wh, ux1, uy1, ux2, uy2)) {
+      if (wh !== undefined) {
+        if (rectanglesIntersecting(wx, wy, ww, wh, ux1, uy1, ux2, uy2)) {
           return true
         }
       } else {

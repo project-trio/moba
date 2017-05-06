@@ -31,13 +31,14 @@ const GameMap = function (mapName, parent) {
 
   pointer.init(floorContainer)
 
-  const walls = []
+  const collisionWalls = []
 
 //LISTEN
 
   let previousPositionX = null
   let previousPositionY = null
   let previousCameraX, previousCameraY
+  let maxMapX, maxMapY
 
   container.interactive = true
 
@@ -50,14 +51,16 @@ const GameMap = function (mapName, parent) {
   }
 
   this.blockCheck = function (moveX, moveY) {
-    if (moveX < 1 || moveY < 1 || moveX >= layout.width * 1000 || moveY >= layout.height * 1000) {
+    if (moveX <= 0 || moveY <= 0 || moveX >= maxMapX || moveY >= maxMapY) {
       return null
     }
-    return walls
+    return collisionWalls
   }
 
   const createWallRect = function (x, y, w, h, team) {
-    walls.push([(x - w / 2) * 100, (y - h / 2) * 100, w * 100, h * 100])
+    const cx = (x - w / 2) * 100
+    const cy = (y - h / 2) * 100
+    collisionWalls.push([cx, cy, cx + w * 100, cy + h * 100])
 
     RenderMinimap.addWall(x, y, w, h, team)
     Render.wall(team, x, y, w, h, wallContainer)
@@ -65,7 +68,7 @@ const GameMap = function (mapName, parent) {
 
   const createWallCap = function (x, y, radius, team) {
     radius = radius / 2
-    walls.push([x * 100, y * 100, radius * 100])
+    collisionWalls.push([x * 100, y * 100, radius * 100])
 
     RenderMinimap.addWallCap(x, y, radius, team)
     Render.wallCap(team, x, y, radius, wallContainer)
@@ -98,6 +101,8 @@ const GameMap = function (mapName, parent) {
 
     const mapWidth = layout.width
     const mapHeight = layout.height
+    maxMapX = mapWidth * 100
+    maxMapY = mapHeight * 100
     Render.positionCamera(mapWidth / 2, mapHeight / 2)
 
     Mini.init()
