@@ -38,7 +38,7 @@ export default {
 			p('Connected', store.state.playerId)
 			store.state.signin.loading = false
 
-			socket.on('auth', (data) => {
+			socket.on('auth', (_data) => {
 				// p('authed', data)
 			})
 
@@ -50,5 +50,5 @@ export default {
 				window.location.reload(false)
 			})
 		})
-	}
+	},
 }

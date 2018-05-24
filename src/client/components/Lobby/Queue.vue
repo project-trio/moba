@@ -4,7 +4,7 @@
 		<h1>{{ queuedPlayers }} in queue</h1>
 	</div>
 	<h3>minimum game size:</h3>
-	<game-sizes @onGameSize="onGameSize" :gameSizes="gameSizes" :selectedSize="selectedSize"></game-sizes>
+	<game-sizes @onGameSize="onGameSize" :gameSizes="gameSizes" :selectedSize="selectedSize" />
 	<div class="queue-action">
 		<div v-if="enoughPlayersForGame">
 			<button @click="onReady" class="ready-button big interactive" :class="{ selected: readyRequested }">{{ readyRequested ? 'ready!' : `ready? (${queueTimer - readyAt})` }}</button>
@@ -23,7 +23,7 @@
 			Lets you know when a game is available while the page is in the background.
 		</div>
 	</div>
-	<lobby-chat></lobby-chat>
+	<lobby-chat />
 </div>
 </template>
 
@@ -105,7 +105,7 @@ export default {
 			this.setReadyTimer(enough)
 		},
 
-		availableSizes (sizes) {
+		availableSizes () {
 			if (!this.enoughPlayersForGame) {
 				this.readyRequested = false
 			}
@@ -117,6 +117,17 @@ export default {
 		selectedSize () {
 			this.sendQueue()
 		},
+	},
+
+	mounted () {
+		Local.game = null
+		this.notificationPermission = window.Notification ? Notification.permission : 'unavailable'
+		LobbyEvents.connect('queue', { size: this.selectedSize, ready: false })
+	},
+
+	beforeDestroy () {
+		this.setReadyTimer(false)
+		LobbyEvents.connect('leave') //TODO queue
 	},
 
 	methods: {
@@ -189,17 +200,6 @@ export default {
 				this.notificationPermission = permission
 			})
 		},
-	},
-
-	mounted () {
-		Local.game = null
-		this.notificationPermission = window.Notification ? Notification.permission : 'unavailable'
-		LobbyEvents.connect('queue', { size: this.selectedSize, ready: false })
-	},
-
-	beforeDestroy () {
-		this.setReadyTimer(false)
-		LobbyEvents.connect('leave') //TODO queue
 	},
 }
 </script>

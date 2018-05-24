@@ -6,7 +6,9 @@ try {
 		},
 	})
 	window.addEventListener('test', null, options)
-} catch (error) {}
+} catch (error) {
+	// p('passive unvailable')
+}
 
 export default {
 

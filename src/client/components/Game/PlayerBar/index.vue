@@ -1,9 +1,9 @@
 <template>
 <div class="player-bar">
-	<chat-bar></chat-bar>
-	<player-info class="bar-section"></player-info>
-	<skills-bar class="bar-section"></skills-bar>
-	<minimap v-show="playing" class="bar-section"></minimap>
+	<chat-bar />
+	<player-info class="bar-section" />
+	<skills-bar class="bar-section" />
+	<minimap v-show="playing" class="bar-section" />
 </div>
 </template>
 
@@ -32,6 +32,12 @@ export default {
 		SkillsBar,
 	},
 
+	computed: {
+		playing () {
+			return store.state.game.playing
+		},
+	},
+
 	created () {
 		util.addListener(window, 'keydown', this.keydown)
 		util.addListener(window, 'keyup', this.keyup)
@@ -42,12 +48,6 @@ export default {
 		util.removeListener(window, 'keydown', this.keydown)
 		util.removeListener(window, 'keyup', this.keyup)
 		util.removeListener(window, 'wheel', this.scroll)
-	},
-
-	computed: {
-		playing () {
-			return store.state.game.playing
-		},
 	},
 
 	methods: {

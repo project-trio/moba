@@ -1,6 +1,6 @@
 <template>
 <div class="selection-group">
-	<slot></slot>
+	<slot />
 </div>
 </template>
 

@@ -37,7 +37,7 @@ export default {
 				!this.player ? 'empty' : null,
 				this.bottom ? 'bottom' : 'top',
 				this.isLocal ? 'local' : null,
-				this.isLocal ? `team-${this.player.team + 1}-border` : null
+				this.isLocal ? `team-${this.player.team + 1}-border` : null,
 			]
 		},
 

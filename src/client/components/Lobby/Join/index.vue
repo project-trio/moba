@@ -9,18 +9,18 @@
 		<div class="player-teams scrolls">
 			<div class="team-players team-1">
 				<h3 class="vertical">Team Blue</h3>
-				<player-box v-for="(player, index) in teamPlayers[0]" :player="player" :key="player ? player.id : index"></player-box>
+				<player-box v-for="(player, index) in teamPlayers[0]" :player="player" :key="player ? player.id : index" />
 			</div>
 			<div class="team-players team-2">
 				<h3 class="vertical">Team Pink</h3>
-				<player-box v-for="(player, index) in teamPlayers[1]" :player="player" :key="player ? player.id : index"></player-box>
+				<player-box v-for="(player, index) in teamPlayers[1]" :player="player" :key="player ? player.id : index" />
 			</div>
 		</div>
 		<div class="invite-link faint note">
 			Invite a friend: <a :href="url" onclick="return false">{{ url }}</a>
 		</div>
 		<button @click="onStart" v-if="isHost" class="big interactive">{{ startText }}</button>
-		<lobby-chat></lobby-chat>
+		<lobby-chat />
 	</div>
 </div>
 </template>
@@ -54,27 +54,6 @@ export default {
 			map: null,
 			size: null,
 		}
-	},
-
-	created () {
-		Local.gid = this.gid
-		LobbyEvents.connect('join', { gid: this.gid }, (data) => {
-			if (data.error) {
-				warn(`Join error: ${data.error}`)
-				router.replace({ name: 'Lobby' })
-			} else {
-				this.size = data.size
-				this.map = data.map
-				if (Local.game) {
-					warn('Game already exists', data)
-				} else {
-					// p('join', data)
-					const newGame = new Game(data.gid, data.mode, data.size, data.map)
-					newGame.updatePlayers(data)
-					Local.game = newGame
-				}
-			}
-		})
 	},
 
 	computed: {
@@ -114,6 +93,27 @@ export default {
 		},
 	},
 
+	created () {
+		Local.gid = this.gid
+		LobbyEvents.connect('join', { gid: this.gid }, (data) => {
+			if (data.error) {
+				warn(`Join error: ${data.error}`)
+				router.replace({ name: 'Lobby' })
+			} else {
+				this.size = data.size
+				this.map = data.map
+				if (Local.game) {
+					warn('Game already exists', data)
+				} else {
+					// p('join', data)
+					const newGame = new Game(data.gid, data.mode, data.size, data.map)
+					newGame.updatePlayers(data)
+					Local.game = newGame
+				}
+			}
+		})
+	},
+
 	methods: {
 		onStart () {
 			if (!this.readyToStart) {
@@ -123,7 +123,6 @@ export default {
 				if (data.error) {
 					const errorMessage = `Start error: ${data.error}`
 					window.alert(errorMessage)
-				} else {
 				}
 			})
 		},

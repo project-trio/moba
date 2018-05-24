@@ -1,6 +1,6 @@
 <template>
 <div class="minimap">
-	<canvas id="minimap"></canvas>
+	<canvas id="minimap" />
 </div>
 </template>
 

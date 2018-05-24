@@ -2,7 +2,7 @@
 <div class="chat-bar" :class="{ active: showingInput }">
 	<div class="chat-messages-container">
 		<div ref="chatScroll" class="chat-messages scrolls">
-			<div v-for="msg in messages" class="msg">
+			<div v-for="(msg, index) in messages" class="msg" :key="index">
 				<div v-if="msg.active !== undefined"><span :class="`msg-from team-${msg.team + 1}`">{{ msg.name }}</span> {{ msg.active ? 'rejoined' : 'left' }} the game</div>
 				<div v-else-if="msg.kill"><span :class="`msg-from team-${msg.team + 1}`">{{ msg.kill }}</span> {{ msg.executed ? 'died to ' + (msg.damagers.indexOf('base') !== -1 ? 'the' : 'a') : 'killed by' }} <span :class="`msg-from team-${1 - msg.team + 1}`">{{ msg.damagers.join(', ') }}</span></div>
 				<div v-else-if="msg.tower"><span :class="`msg-from team-${msg.team + 1}`">{{ msg.tower }}</span> destroyed!</div>
@@ -12,7 +12,7 @@
 	</div>
 	<div class="chat-input-container">
 		<button v-show="showingInput" @click="onTeamVisibility" :class="chatVisibilityClass" class="chat-visibility-button interactive">{{ allChat ? 'ALL' : 'team' }}</button>
-		<input ref="chatInput" v-model.trim="draftMessage" @focus="onFocusChat" @blur="onBlurChat" class="chat-input" :class="{ active: showingInput }"></input>
+		<input ref="chatInput" v-model.trim="draftMessage" @focus="onFocusChat" @blur="onBlurChat" class="chat-input" :class="{ active: showingInput }">
 		<div v-if="!showingInput" class="chat-placeholder">{{ chatPlaceholder }}</div>
 	</div>
 </div>
@@ -91,7 +91,7 @@ export default {
 	},
 
 	methods: {
-		scrollToBottom (showing) {
+		scrollToBottom () {
 			this.$nextTick(() => {
 				if (this.$refs.chatScroll) {
 					this.$refs.chatScroll.scrollTop = this.$refs.chatScroll.scrollHeight

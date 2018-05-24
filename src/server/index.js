@@ -26,11 +26,11 @@ loop.init()
 
 app.use(express.static('dist'))
 
-app.get('admin', (request, response, next) => {
+app.get('admin', (request, response, _next) => {
 	response.sendFile(path.resolve(__dirname, '../../dist/admin.html'))
 })
 
-app.get('*', (request, response, next) => {
+app.get('*', (request, response, _next) => {
 	response.sendFile(path.resolve(__dirname, '../../dist/index.html'))
 })
 

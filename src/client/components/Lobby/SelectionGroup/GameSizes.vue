@@ -1,6 +1,6 @@
 <template>
 <selection-group>
-	<button v-for="size in gameSizes" @click="onGameSize(size)" class="selection interactive" :class="{ selected: size === selectedSize }">{{ sizeLabel(size) }}</button>
+	<button v-for="size in gameSizes" @click="onGameSize(size)" class="selection interactive" :class="{ selected: size === selectedSize }" :key="size">{{ sizeLabel(size) }}</button>
 </selection-group>
 </template>
 

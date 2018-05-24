@@ -2,20 +2,21 @@
 <div class="lobby-create inherit scrolls">
 	<h1>create game</h1>
 	<div v-if="loading">
+		...
 	</div>
 	<div v-else>
 		<h3>game type:</h3>
 		<selection-group>
-			<button v-for="mode in gameModes" @click="onGameMode(mode)" class="selection interactive" :class="{ selected: mode === selectedMode }">{{ mode.name }}</button>
+			<button v-for="mode in gameModes" @click="onGameMode(mode)" class="selection interactive" :class="{ selected: mode === selectedMode }" :key="mode.name">{{ mode.name }}</button>
 			<div class="mode-description">
-				{{ this.selectedMode.description }}
+				{{ selectedMode.description }}
 			</div>
 		</selection-group>
 		<h3>game size:</h3>
-		<game-sizes @onGameSize="onGameSize" :gameSizes="gameSizes" :selectedSize="selectedSize"></game-sizes>
+		<game-sizes @onGameSize="onGameSize" :gameSizes="gameSizes" :selectedSize="selectedSize" />
 		<h3>map:</h3>
 		<selection-group>
-			<button v-for="map in mapsForSize" @click="onMap(map)" class="selection interactive" :class="{ selected: map === selectedMap }">{{ map }}</button>
+			<button v-for="map in mapsForSize" @click="onMap(map)" class="selection interactive" :class="{ selected: map === selectedMap }" :key="map">{{ map }}</button>
 		</selection-group>
 		<button @click="onSubmit" class="big interactive">confirm</button>
 	</div>

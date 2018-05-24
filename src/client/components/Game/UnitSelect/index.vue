@@ -7,10 +7,10 @@
 	<h1>choose your unit</h1>
 	<div class="unit-selection">
 		<div class="chosen-box selection-half">
-			<canvas id="preview"></canvas>
+			<canvas id="preview" />
 		</div>
 		<div class="units-list selection-half" :class="`team-${localTeam + 1}`">
-			<button v-for="name in shipNames" @click="onUnit(name)" class="unit-box interactive" :class="{ selected: chosenUnit === name }">{{ name }}</button>
+			<button v-for="name in shipNames" @click="onUnit(name)" class="unit-box interactive" :class="{ selected: chosenUnit === name }" :key="name">{{ name }}</button>
 		</div>
 	</div>
 
@@ -37,17 +37,6 @@ import Bridge from '@/client/play/events/bridge'
 import RenderPreview from '@/client/play/render/preview'
 
 export default {
-	mounted () {
-		RenderPreview.create()
-		if (this.chosenUnit) {
-			RenderPreview.load(this.chosenUnit, this.localTeam)
-		}
-	},
-
-	destroyed () {
-		RenderPreview.destroy()
-	},
-
 	computed: {
 		countdownTime () {
 			return Math.round(-store.state.game.renderTime / 1000)
@@ -94,6 +83,17 @@ export default {
 				RenderPreview.load(name, this.localTeam)
 			}
 		},
+	},
+
+	mounted () {
+		RenderPreview.create()
+		if (this.chosenUnit) {
+			RenderPreview.load(this.chosenUnit, this.localTeam)
+		}
+	},
+
+	destroyed () {
+		RenderPreview.destroy()
 	},
 
 	methods: {

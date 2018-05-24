@@ -37,7 +37,7 @@ const animate = function (timestamp) {
 			tickPanel.begin()
 		}
 
-		game.performTicks(ticksToRender, timestamp, updatePanel)
+		game.performTicks(ticksToRender)
 
 		if (isPlaying) {
 			Local.unit.updateVisibility()

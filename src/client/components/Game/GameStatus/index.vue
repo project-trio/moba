@@ -1,16 +1,16 @@
 <template>
 <div class="game-status scrollable">
-	<help-panel v-if="showPanel === 'help'"></help-panel>
-	<settings-panel v-else-if="showPanel === 'settings'"></settings-panel>
+	<help-panel v-if="showPanel === 'help'" />
+	<settings-panel v-else-if="showPanel === 'settings'" />
 	<div v-else-if="gameOver">
 		<div class="bar-section panel">
 			<h1>game over</h1>
 			<h2 :class="`team-${winningTeam + 1}`">team {{ winningTeamColor }} won!</h2>
 			<button @click="onReturnToLobby" class="panel-button interactive">leave</button>
 		</div>
-		<player-scores></player-scores>
+		<player-scores />
 	</div>
-	<player-scores v-else-if="pressingTab"></player-scores>
+	<player-scores v-else-if="pressingTab" />
 	<div v-else-if="missingUpdate" class="bar-section panel">
 		<h1>waiting for server connection</h1>
 	</div>

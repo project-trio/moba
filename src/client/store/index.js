@@ -79,7 +79,7 @@ export default {
 		lobby: {
 			games: [],
 			onlineCount: 0,
-			queue: {}
+			queue: {},
 		},
 
 		chatMessages: [],

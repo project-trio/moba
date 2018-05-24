@@ -54,7 +54,7 @@ export default {
 		collision: 12,
 
 		createMeshes: createMeshes,
-		create: function (name, team, top, bottom, ship) {
+		create (name, team, top, bottom, ship) {
 			const cloudGroup = Render.group()
 			cloudGroup.noAlpha = true
 			const sphereCount = 6
@@ -82,7 +82,7 @@ export default {
 			this.createMeshes(name, team, top, bottom, ship)
 		},
 
-		tween: function (renderTime) {
+		tween (renderTime) {
 			// this.cloudGroup.position.z = 8 + Math.cos(renderTime) * 3
 			const clouds = this.cloudGroup.children
 			const speed = renderTime / 1000
@@ -92,7 +92,7 @@ export default {
 			}
 		},
 
-		onDeath: function (renderTime) {
+		onDeath (renderTime) {
 			this.queueAnimation('cloudGroup', 'position', {
 				axis: 'z',
 				from: 0,
@@ -101,7 +101,7 @@ export default {
 				duration: 900,
 			})
 		},
-		onRespawn: function (renderTime) {
+		onRespawn (renderTime) {
 			this.queueAnimation('cloudGroup', 'position', {
 				axis: 'z',
 				from: -50,
@@ -182,7 +182,7 @@ export default {
 		collision: 20,
 
 		createMeshes: createMeshes,
-		create: function (name, team, top, bottom, ship) {
+		create (name, team, top, bottom, ship) {
 			const propGroup = Render.group()
 			propGroup.position.set(14, 0, 54)
 			bottom.add(propGroup)
@@ -190,7 +190,7 @@ export default {
 			this.createMeshes(name, team, propGroup, bottom, ship)
 		},
 
-		tween: function (renderTime) {
+		tween (renderTime) {
 			const sinceReemerge = renderTime - this.reemergeAt
 			if (sinceReemerge > 0) {
 				let rotation = 1.3

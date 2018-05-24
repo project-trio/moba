@@ -2,7 +2,7 @@ const Socket = require('socket.io')
 
 const CommonConsts = require.main.require('../common/constants')
 
-const User = require.main.require('./app/entity/user')
+// const User = require.main.require('./app/entity/user')
 
 const lobby = require.main.require('./app/lobby')
 
@@ -24,7 +24,7 @@ module.exports = {
 
 	init () {
 		Socket.io.use((socket, next) => {
-			var query = socket.handshake.query
+			const query = socket.handshake.query
 			if (query.v === CommonConsts.VERSION) {
 				const pid = socket.client.id
 				socket.pid = pid
@@ -39,7 +39,7 @@ module.exports = {
 			if (!socket.name) {
 				return
 			}
-			const pid = socket.pid
+			// const pid = socket.pid
 			const name = socket.name
 			let player = clientPlayers[name]
 			if (player) {

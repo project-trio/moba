@@ -2,12 +2,9 @@ const Socket = require('socket.io')
 
 const CommonConsts = require.main.require('../common/constants')
 
-const lobby = require.main.require('./app/lobby')
-
 const Util = require.main.require('./utils/util')
 
 const Config = require.main.require('./game/config')
-const Game = require.main.require('./game/game')
 
 //PUBLIC
 

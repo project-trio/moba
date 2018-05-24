@@ -27,19 +27,6 @@ import Local from '@/client/play/local'
 import LobbyEvents from '@/client/play/events/lobby'
 
 export default {
-	mounted () {
-		LobbyEvents.connect('enter', { leaving: Local.gid }, (data) => {
-			// p('joined lobby', data)
-			store.state.lobby.onlineCount = data.online
-			store.state.lobby.games = data.games
-			Local.gid = null
-		})
-	},
-
-	beforeDestroy () {
-		LobbyEvents.connect('leave')
-	},
-
 	computed: {
 		username () {
 			return store.state.signin.username
@@ -52,6 +39,19 @@ export default {
 		games () {
 			return store.state.lobby.games
 		},
+	},
+
+	mounted () {
+		LobbyEvents.connect('enter', { leaving: Local.gid }, (data) => {
+			// p('joined lobby', data)
+			store.state.lobby.onlineCount = data.online
+			store.state.lobby.games = data.games
+			Local.gid = null
+		})
+	},
+
+	beforeDestroy () {
+		LobbyEvents.connect('leave')
 	},
 }
 </script>

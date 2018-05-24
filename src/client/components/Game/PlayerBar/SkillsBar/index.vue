@@ -1,6 +1,6 @@
 <template>
 <div class="skills-bar">
-	<skill-item v-for="(skill, index) in skills" :index="index" :skill="skill" :key="skill.name"></skill-item>
+	<skill-item v-for="(skill, index) in skills" :index="index" :skill="skill" :key="skill.name" />
 </div>
 </template>
 

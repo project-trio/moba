@@ -1,13 +1,13 @@
 <template>
 <div class="game-container inherit">
-	<canvas id="canvas" class="inherit"></canvas>
+	<canvas id="canvas" class="inherit" />
 
-	<unit-select v-if="!playing && winningTeam === null"></unit-select>
+	<unit-select v-if="!playing && winningTeam === null" />
 
-	<game-status></game-status>
+	<game-status />
 
-	<score-bar class="ui-bar"></score-bar>
-	<player-bar class="ui-bar"></player-bar>
+	<score-bar class="ui-bar" />
+	<player-bar class="ui-bar" />
 </div>
 </template>
 
@@ -32,6 +32,16 @@ export default {
 		UnitSelect,
 	},
 
+	computed: {
+		playing () {
+			return store.state.game.playing
+		},
+
+		winningTeam () {
+			return store.state.game.winningTeam
+		},
+	},
+
 	mounted () {
 		if (!Local.game) {
 			return
@@ -53,16 +63,6 @@ export default {
 		util.removeListener(window, 'touchmove', this.cancelZoom, true)
 	},
 
-	computed: {
-		playing () {
-			return store.state.game.playing
-		},
-
-		winningTeam () {
-			return store.state.game.winningTeam
-		},
-	},
-
 	methods: {
 		confirmExit (event) {
 			if (store.state.game.active) {
@@ -82,7 +82,7 @@ export default {
 			if (event.scale) {
 				event.preventDefault()
 			}
-		}
+		},
 	},
 }
 </script>

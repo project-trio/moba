@@ -1,12 +1,12 @@
 <template>
 <div class="lobby-chat">
 	<div ref="chatScroll" class="chat-log scrolls">
-		<div v-for="msg in messages" class="msg">
+		<div v-for="(msg, index) in messages" class="msg" :key="index">
 			<span :class="`msg-from team-${msg.team !== undefined ? msg.team + 1 : 0}`">{{ msg.from }}</span> <span class="msg-at">({{ timeSince(msg.at) }})</span>: {{ msg.body }}
 		</div>
 	</div>
 	<div class="chat-input-container">
-		<input ref="chatInput" v-model.trim="draftMessage" class="chat-input" placeholder="press enter to chat" :disabled="disableChat"></input>
+		<input ref="chatInput" v-model.trim="draftMessage" class="chat-input" placeholder="press enter to chat" :disabled="disableChat">
 	</div>
 </div>
 </template>
@@ -23,10 +23,6 @@ export default {
 		return {
 			draftMessage: '',
 		}
-	},
-
-	created () {
-		store.state.chatMessages = []
 	},
 
 	computed: {
@@ -76,6 +72,10 @@ export default {
 		},
 	},
 
+	created () {
+		store.state.chatMessages = []
+	},
+
 	methods: {
 		timeSince (timestamp) {
 			const diff = this.now - timestamp
@@ -91,7 +91,7 @@ export default {
 				timeName = 'h'
 			}
 			return `${timeAmount}${timeName} ago`
-		}
+		},
 	},
 }
 </script>

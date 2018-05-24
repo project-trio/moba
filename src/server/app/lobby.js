@@ -3,7 +3,6 @@ const Socket = require('socket.io')
 const CommonConsts = require.main.require('../common/constants')
 const CommonMaps = require.main.require('../common/maps')
 
-const connection = require.main.require('./app/connection')
 const queue = require.main.require('./app/queue')
 
 const Game = require.main.require('./game/game')
@@ -15,7 +14,7 @@ const broadcastWith = function (withPlayers, withGames) {
 	if (withPlayers) {
 		data.online = lobby.playerCount
 	}
-	if (withPlayers) {
+	if (withGames) {
 		data.games = Game.getList()
 	}
 	Socket.io.to('lobby').emit('lobby', data)
@@ -155,10 +154,10 @@ const lobby = {
 			}
 		})
 
-		socket.on('queue', (data, callback) => {
+		socket.on('queue', (data, _callback) => {
 			player.updateQueue(data)
 		})
-	}
+	},
 }
 
 module.exports = lobby

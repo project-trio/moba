@@ -3,13 +3,13 @@
 	<h1>{{ players.length }} online</h1>
 	<div>{{ players.join(', ') }}</div>
 	<h1>{{ games.length }} games</h1>
-	<div v-for="game in games" class="game">
+	<div v-for="game in games" class="game" :key="game.id">
 		<div>Mode: {{ game.mode }}</div>
 		<div>Status: {{ game.state }}</div>
 		<div>Size: {{ game.size }}</div>
 		<div>Update: {{ game.update }}</div>
 		Players:
-		<div v-for="player in game.players">
+		<div v-for="player in game.players" :key="player.name">
 			{{ player.team }} {{ player.name }} {{ player.shipName }}
 		</div>
 	</div>

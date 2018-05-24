@@ -12,6 +12,10 @@
 		"parser": "babel-eslint",
 		"ecmaVersion": 2017,
 	},
+	"globals": {
+		"p": true,
+		"warn": true,
+	},
 	"rules": {
 		"comma-dangle": [ "error", "always-multiline" ],
 		"curly": "error",

@@ -9,7 +9,7 @@
 		</span>
 		<span class="tower-symbol">〒</span> <span class="towers team-2"> {{ towers[1] }}</span>
 	</div>
-	<settings-buttons class="bar-section"></settings-buttons>
+	<settings-buttons class="bar-section" />
 </div>
 </template>
 

@@ -112,7 +112,7 @@ export default {
 		const ambientLight = new THREE.AmbientLight(0xffffff, 0.8)
 		scene.add(ambientLight)
 
-		var dirLight = new THREE.DirectionalLight(0xffffff, 0.3)
+		const dirLight = new THREE.DirectionalLight(0xffffff, 0.3)
 		dirLight.position.set(0, 0, 1).normalize()
 		scene.add(dirLight)
 		const pointLight = new THREE.PointLight(0xffffff, 0.3)

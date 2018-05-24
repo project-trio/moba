@@ -45,7 +45,7 @@ export default function (gid, mode, size, mapName) {
 		return Math.floor((currentTime - lastTickTime - tickOffsetTime) / tickDuration)
 	}
 
-	this.performTicks = function (ticksToRender, currentTime) {
+	this.performTicks = function (ticksToRender) {
 		let renderTime
 		let ticksRenderedForFrame = 0
 		const maxTicksToRender = ticksToRender > 9 ? Math.min(10000, Math.floor(Math.pow(ticksToRender, 0.75))) : 1

@@ -2,7 +2,7 @@ const maps = {}
 
 {
 	const wallRadius = 24
-	var wH, hH
+	let wH, hH
 
 	// Tiny
 
@@ -80,7 +80,7 @@ const maps = {}
 				start: { x: 0, y: 250 },
 				radius: wallRadius,
 				move: [
-					{ dx: 10, dy: 0, },
+					{ dx: 10, dy: 0 },
 				],
 				mirror: true,
 				endCap: true,
@@ -89,7 +89,7 @@ const maps = {}
 				start: { x: wH - 100, y: 330 },
 				radius: wallRadius,
 				move: [
-					{ dx: 100, dy: 0, },
+					{ dx: 100, dy: 0 },
 				],
 				mirror: false,
 				endCap: true,
@@ -98,7 +98,7 @@ const maps = {}
 				start: { x: SMALL_WIDTH, y: hH - 80 },
 				radius: wallRadius,
 				move: [
-					{ dx: -50, dy: 0, },
+					{ dx: -50, dy: 0 },
 				],
 				mirror: false,
 				endCap: true,
@@ -143,7 +143,7 @@ const maps = {}
 				start: { x: 380, y: 360 },
 				radius: wallRadius,
 				move: [
-					{ dx: -60, dy: 0, },
+					{ dx: -60, dy: 0 },
 					{ dx: 0, dy: -60 },
 				],
 				mirror: true,
@@ -199,7 +199,7 @@ const maps = {}
 				start: { x: 380, y: 400 },
 				radius: wallRadius,
 				move: [
-					{ dx: -60, dy: 0, },
+					{ dx: -60, dy: 0 },
 					{ dx: 0, dy: -60 },
 				],
 				mirror: true,
@@ -209,7 +209,7 @@ const maps = {}
 				start: { x: wH - 100, y: 400 },
 				radius: wallRadius,
 				move: [
-					{ dx: 100, dy: 0, },
+					{ dx: 100, dy: 0 },
 				],
 				mirror: false,
 				endCap: true,

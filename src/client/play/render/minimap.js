@@ -33,7 +33,7 @@ const onMouseMove = function (event) {
 	track(event)
 }
 
-const onMouseCancel = function (event) {
+const onMouseCancel = function () {
 	clickActive = false
 }
 

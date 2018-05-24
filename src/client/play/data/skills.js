@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import Decimal from 'decimal.js'
 
 import store from '@/client/store'
@@ -46,19 +48,19 @@ export default {
 			hitsTowers: false,
 			isDisabledBy: null,
 			continuesToDestination: true,
-			getRange: function (level) {
+			getRange (level) {
 				return levelMultiplier(120, level, 10)
 			},
-			getEffectRange: function (level) {
+			getEffectRange (level) {
 				return 80
 			},
-			getEffectDamage: function (level) {
+			getEffectDamage (level) {
 				return levelMultiplier(70, level, 10)
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(150, level, -5)
 			},
-			start: function (index, level, ship, target, startAt, endAt, cooldown) {
+			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.modify(this.name, 'moveSpeed', 'times', 5)
 				ship.uncontrollable = true
 				ship.disableAttacking = true
@@ -69,7 +71,7 @@ export default {
 					ship.endSkill(index)
 				}
 			},
-			end: function (ship, level) {
+			end (ship, level) {
 				ship.onStopped = null
 				ship.modify(this.name, 'moveSpeed', null)
 				ship.opacity(1)
@@ -97,19 +99,19 @@ export default {
 			hitsTowers: false,
 			disabledBy: [true, null, false],
 			isDisabledBy: isDisabledBy,
-			getRange: function (level) {
+			getRange (level) {
 				return levelMultiplier(120, level, 2)
 			},
-			getEffectDelay: function (level) {
+			getEffectDelay (level) {
 				return 500
 			},
-			getEffectDuration: function (level) {
+			getEffectDuration (level) {
 				return levelMultiplier(10, level, 1) * 100
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return 200
 			},
-			start: function (index, level, ship, target, startAt, endAt, cooldown) {
+			start (index, level, ship, target, startAt, endAt, cooldown) {
 				const aoeRange = this.getRange(level)
 				const stunDelay = this.getEffectDelay(level)
 				const stunDuration = this.getEffectDuration(level)
@@ -134,21 +136,21 @@ export default {
 			disabledBy: [false, true, null],
 			isDisabledBy: isDisabledBy,
 			endOnDeath: true,
-			getEffectStrength: function (level) {
+			getEffectStrength (level) {
 				return levelMultiplier(30, level, 2)
 			},
-			getDuration: function (level) {
+			getDuration (level) {
 				return 50
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(150, level, -5)
 			},
-			start: function (index, level, ship) {
+			start (index, level, ship) {
 				ship.repairDamageRatio = new Decimal(this.getEffectStrength(level)).dividedBy(100)
 				ship.reflectDamageRatio = ship.repairDamageRatio.dividedBy(2)
 				ship.prickleMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
-			end: function (ship) {
+			end (ship) {
 				ship.repairDamageRatio = null
 				ship.reflectDamageRatio = null
 				if (ship.prickleMesh) {
@@ -170,22 +172,22 @@ export default {
 			disabledBy: [null, true, false],
 			isDisabledBy: isDisabledBy,
 			endOnDeath: false,
-			getEffectDelay: function (level) {
+			getEffectDelay (level) {
 				return 500
 			},
-			getEffectRange: function (level) {
+			getEffectRange (level) {
 				return 60
 			},
-			getEffectDamage: function (level) {
+			getEffectDamage (level) {
 				return levelMultiplier(80, level, 10)
 			},
-			getRange: function (level) {
+			getRange (level) {
 				return levelMultiplier(80, level, 5)
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(150, level, -5)
 			},
-			start: function (index, level, ship, target, startAt) {
+			start (index, level, ship, target, startAt) {
 				const delay = this.getEffectDelay(level)
 				const damage = this.getEffectDamage(level) * 100
 				const aoeRange = this.getEffectRange(level)
@@ -209,16 +211,16 @@ export default {
 			target: TARGET_GROUND,
 			isDisabledBy: null,
 			startsImmediately: false,
-			getRange: function (level) {
+			getRange (level) {
 				return levelMultiplier(110, level, 10)
 			},
-			getDuration: function (level) {
+			getDuration (level) {
 				return 3
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(300, level, -10)
 			},
-			start: function (index, level, ship, target, startAt, endAt, cooldown) {
+			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.customPosition = true
 				ship.uncontrollable = true
 				ship.untargetable = true
@@ -273,7 +275,7 @@ export default {
 					duration: duration - 50,
 				})
 			},
-			end: function (ship) {
+			end (ship) {
 				ship.customPosition = false
 				ship.uncontrollable = false
 				ship.untargetable = false
@@ -287,22 +289,22 @@ export default {
 			hitsTowers: true,
 			disabledBy: [false, true, null],
 			isDisabledBy: isDisabledBy,
-			getEffectRange: function (level) {
+			getEffectRange (level) {
 				return 70
 			},
-			getEffectPropagates: function (level) {
+			getEffectPropagates (level) {
 				return 5
 			},
-			getEffectDamage: function (level) {
+			getEffectDamage (level) {
 				return levelMultiplier(70, level, 5)
 			},
-			getRange: function (level) {
+			getRange (level) {
 				return 140
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(200, level, -5)
 			},
-			start: function (index, level, ship, target) {
+			start (index, level, ship, target) {
 				const damage = this.getEffectDamage(level) * 100
 				const bulletData = {
 					hitsTowers: this.hitsTowers,
@@ -329,19 +331,19 @@ export default {
 			hitsTowers: false,
 			isDisabledBy: null,
 			endOnDeath: false,
-			getEffectRegen: function (level) {
+			getEffectRegen (level) {
 				return levelMultiplier(300, level, 30)
 			},
-			getEffectDuration: function (level) {
+			getEffectDuration (level) {
 				return 30 * 100
 			},
-			getRange: function (level) {
+			getRange (level) {
 				return 100
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(250, level, -10)
 			},
-			start: function (index, level, ship) {
+			start (index, level, ship) {
 				new AreaOfEffect(ship, false, {
 					dot: false,
 					hitsTowers: this.hitsTowers,
@@ -366,25 +368,25 @@ export default {
 			suffixMoveSpeed: '%',
 			target: TARGET_GROUND,
 			isDisabledBy: null,
-			getRange: function (level) {
+			getRange (level) {
 				return 120
 			},
-			getEffectRange: function (level) {
+			getEffectRange (level) {
 				return levelMultiplier(70, level, 2)
 			},
-			getEffectRemainsDuration: function (level) {
+			getEffectRemainsDuration (level) {
 				return levelMultiplier(30, level, 2) * 100
 			},
-			getEffectDuration: function (level) {
+			getEffectDuration (level) {
 				return levelMultiplier(10, level, 2) * 100
 			},
-			getEffectMoveSpeed: function (level) {
+			getEffectMoveSpeed (level) {
 				return levelMultiplier(50, level, 2)
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return 220
 			},
-			start: function (index, level, ship, target) {
+			start (index, level, ship, target) {
 				const moveSpeed = new Decimal(1).minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
 				const aoeRange = this.getEffectRange(level)
 				const effectDuration = this.getEffectDuration(level)
@@ -416,20 +418,20 @@ export default {
 			target: TARGET_SELF,
 			isDisabledBy: null,
 			endOnDeath: true,
-			getEffectMoveSpeed: function (level) {
+			getEffectMoveSpeed (level) {
 				return levelMultiplier(25, level, 10)
 			},
-			getDuration: function (level) {
+			getDuration (level) {
 				return 40
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(150, level, -2)
 			},
-			start: function (index, level, ship) {
+			start (index, level, ship) {
 				ship.modify(this.name, 'moveSpeed', 'times', new Decimal(1).plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
 				ship.emergencyMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.07)
 			},
-			end: function (ship) {
+			end (ship) {
 				ship.modify(this.name, 'moveSpeed', null)
 				if (ship.emergencyMesh) {
 					Render.remove(ship.emergencyMesh)
@@ -449,22 +451,22 @@ export default {
 			hitsTowers: false,
 			target: TARGET_ENEMY,
 			isDisabledBy: null,
-			getEffectMoveSpeed: function (level) {
+			getEffectMoveSpeed (level) {
 				return levelMultiplier(50, level, 2)
 			},
-			getEffectDuration: function (level) {
+			getEffectDuration (level) {
 				return levelMultiplier(20, level, 2) * 100
 			},
-			getEffectDamage: function (level) {
+			getEffectDamage (level) {
 				return levelMultiplier(40, level, 5)
 			},
-			getRange: function (level) {
+			getRange (level) {
 				return 120
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(250, level, -5)
 			},
-			start: function (index, level, ship, target) {
+			start (index, level, ship, target) {
 				const damage = this.getEffectDamage(level) * 100
 				const moveSpeed = new Decimal(1).minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
 				const stunDuration = this.getEffectDuration(level)
@@ -496,25 +498,25 @@ export default {
 			target: TARGET_GROUND,
 			hitsTowers: true,
 			isDisabledBy: null,
-			getRange: function (level) {
+			getRange (level) {
 				return 160
 			},
-			getEffectRange: function (level) {
+			getEffectRange (level) {
 				return 60
 			},
-			getEffectDuration: function (level) {
+			getEffectDuration (level) {
 				return levelMultiplier(10, level, 1) * 100
 			},
-			getEffectMoveSpeed: function (level) {
+			getEffectMoveSpeed (level) {
 				return levelMultiplier(25, level, 2)
 			},
-			getEffectDps: function (level) {
+			getEffectDps (level) {
 				return levelMultiplier(400, level, 50)
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(180, level, -5)
 			},
-			start: function (index, level, ship, target) {
+			start (index, level, ship, target) {
 				const dps = this.getEffectDps(level)
 				const aoeRange = this.getEffectRange(level)
 				const effectDuration = this.getEffectDuration(level)
@@ -550,25 +552,25 @@ export default {
 			target: TARGET_SELF,
 			isDisabledBy: null,
 			endOnDeath: true,
-			getEffectAttackSpeed: function (level) {
+			getEffectAttackSpeed (level) {
 				return levelMultiplier(30, level, 3)
 			},
-			getEffectMoveSpeed: function (level) {
+			getEffectMoveSpeed (level) {
 				return levelMultiplier(20, level, 4)
 			},
-			getDuration: function (level) {
+			getDuration (level) {
 				return 50
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(150, level, -2)
 			},
-			start: function (index, level, ship) {
+			start (index, level, ship) {
 				ship.modify(this.name, 'attackCooldown', 'times', new Decimal(1).minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
 				ship.modify(this.name, 'moveSpeed', 'times', new Decimal(1).plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
 
 				ship.enrageMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
-			end: function (ship) {
+			end (ship) {
 				ship.modify(this.name, 'attackCooldown', null)
 				ship.modify(this.name, 'moveSpeed', null)
 				if (ship.enrageMesh) {
@@ -589,16 +591,16 @@ export default {
 			hitsTowers: true,
 			disabledBy: [null, true, false],
 			isDisabledBy: isDisabledBy,
-			getRange: function (level) {
+			getRange (level) {
 				return levelMultiplier(150, level, 5)
 			},
-			getEffectDamage: function (level) {
+			getEffectDamage (level) {
 				return levelMultiplier(100, level, 15)
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return 60
 			},
-			start: function (index, level, ship, target) {
+			start (index, level, ship, target) {
 				const damage = this.getEffectDamage(level) * 100
 				const maxRange = this.getRange(level)
 				const bulletData = {
@@ -622,16 +624,16 @@ export default {
 			isDisabledBy: null,
 			startsImmediately: true,
 			continuesToDestination: true,
-			getRange: function (level) {
+			getRange (level) {
 				return levelMultiplier(120, level, 10) //TODO calculate
 			},
-			getDuration: function (level) {
+			getDuration (level) {
 				return levelMultiplier(5, level, 1)
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return 200
 			},
-			start: function (index, level, ship, target, startAt, endAt, cooldown) {
+			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.modify(this.name, 'moveSpeed', 'times', 3)
 				ship.uncontrollable = true
 				ship.untargetable = true
@@ -667,7 +669,7 @@ export default {
 				})
 				ship.propGroup.visible = false
 			},
-			end: function (ship) {
+			end (ship) {
 				ship.modify(this.name, 'moveSpeed', null)
 				ship.onStopped = null
 				ship.propGroup.visible = true
@@ -687,20 +689,20 @@ export default {
 			disabledBy: [false, true, null],
 			isDisabledBy: isDisabledBy,
 			endOnDeath: true,
-			getEffectRebound: function (level) {
+			getEffectRebound (level) {
 				return levelMultiplier(40, level, 5)
 			},
-			getDuration: function (level) {
+			getDuration (level) {
 				return levelMultiplier(50, level, 5)
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(150, level, -5)
 			},
-			start: function (index, level, ship) {
+			start (index, level, ship) {
 				ship.rebound = new Decimal(this.getEffectRebound(level)).dividedBy(100)
 				ship.reboundMesh = Render.outline(ship.base.children[1], 0x0000ff, 1.07)
 			},
-			end: function (ship) {
+			end (ship) {
 				ship.rebound = null
 				if (ship.reboundMesh) {
 					Render.remove(ship.reboundMesh)
@@ -719,16 +721,16 @@ export default {
 			hitsTowers: true,
 			target: TARGET_ENEMY,
 			isDisabledBy: null,
-			getEffectDamage: function (level) {
+			getEffectDamage (level) {
 				return levelMultiplier(100, level, 10)
 			},
-			getRange: function (level) {
+			getRange (level) {
 				return 170
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return 100
 			},
-			start: function (index, level, ship, target) {
+			start (index, level, ship, target) {
 				const damage = this.getEffectDamage(level) * 100
 				const maxRange = this.getRange(level)
 				const bulletData = {
@@ -749,19 +751,19 @@ export default {
 			target: TARGET_GROUND,
 			hitsTowers: false,
 			isDisabledBy: null,
-			getEffectRange: function (level) {
+			getEffectRange (level) {
 				return levelMultiplier(100, level, 5)
 			},
-			getEffectDamage: function (level) {
+			getEffectDamage (level) {
 				return levelMultiplier(100, level, 10)
 			},
-			getRange: function (level) {
+			getRange (level) {
 				return levelMultiplier(200, level, 10)
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return 260
 			},
-			start: function (index, level, ship, target, startAt, endAt) {
+			start (index, level, ship, target, startAt, endAt) {
 				const aoeRange = this.getEffectRange(level)
 				const damage = this.getEffectDamage(level) * 100
 				const maxRange = this.getRange(level)
@@ -797,16 +799,16 @@ export default {
 			target: TARGET_SELF,
 			isDisabledBy: null,
 			minLeveled: 1,
-			activatable: function () {
+			activatable () {
 				return store.state.local.skills.cooldowns[0] || store.state.local.skills.cooldowns[1]
 			},
-			getEffectDuration: function (level) {
+			getEffectDuration (level) {
 				return levelMultiplier(80, level, 50) * 100
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(600, level, -40)
 			},
-			start: function (index, level, ship) {
+			start (index, level, ship) {
 				const reduction = this.getEffectDuration(level)
 				for (let skillIndex = 0; skillIndex < 2; skillIndex += 1) {
 					const cooldownEnd = ship.skills.cooldowns[skillIndex]
@@ -825,16 +827,16 @@ export default {
 			target: TARGET_SELF,
 			isDisabledBy: null,
 			endOnDeath: true,
-			getEffectDamage: function (level) {
+			getEffectDamage (level) {
 				return levelMultiplier(200, level, 30)
 			},
-			getDuration: function (level) {
+			getDuration (level) {
 				return levelMultiplier(40, level, 2)
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(150, level, -5)
 			},
-			start: function (index, level, ship, target, startAt, endAt) {
+			start (index, level, ship, target, startAt, endAt) {
 				const shieldDamage = this.getEffectDamage(level) * 100
 				ship.modify(`${ship.id}${this.name}`, 'shield', 'add', shieldDamage, endAt, () => {
 					// p('cancel shield')
@@ -843,7 +845,7 @@ export default {
 				ship.shieldMesh = Render.sphere(ship.stats.collision / 100 * 1.8, { parent: ship.model, color: 0xffffff, opacity: 0.25, hideOutline: true })
 				ship.shieldMesh.position.z = 15
 			},
-			end: function (ship) {
+			end (ship) {
 				if (ship.shieldMesh) {
 					Render.remove(ship.shieldMesh)
 					ship.shieldMesh = null
@@ -858,19 +860,19 @@ export default {
 			hitsTowers: false,
 			isDisabledBy: null,
 			endOnDeath: false,
-			getEffectArmor: function (level) {
+			getEffectArmor (level) {
 				return levelMultiplier(30, level, 2)
 			},
-			getRange: function (level) {
+			getRange (level) {
 				return 150
 			},
-			getDuration: function (level) {
+			getDuration (level) {
 				return levelMultiplier(35, level, 2)
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(200, level, -10)
 			},
-			start: function (index, level, ship, target, startAt, endAt) {
+			start (index, level, ship, target, startAt, endAt) {
 				const radius = this.getRange(level)
 				const armor = this.getEffectArmor(level)
 				new AreaOfEffect(ship, false, {
@@ -891,7 +893,7 @@ export default {
 					endAt: endAt,
 				})
 			},
-			end: function (ship) {
+			end (ship) {
 			},
 		},
 		{
@@ -900,26 +902,26 @@ export default {
 			target: TARGET_GROUND,
 			isDisabledBy: null,
 			endOnDeath: false,
-			getRange: function (level) {
+			getRange (level) {
 				return levelMultiplier(160, level, 30)
 			},
-			getEffectRange: function (level) {
+			getEffectRange (level) {
 				return levelMultiplier(140, level, 20)
 			},
-			getDuration: function (level) {
+			getDuration (level) {
 				return levelMultiplier(25, level, 5)
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(400, level, -20)
 			},
-			start: function (index, level, ship, target) {
+			start (index, level, ship, target) {
 				const sightRange = this.getEffectRange(level)
 				const stats = { sightRange: [sightRange, 0] }
 				ship.eye = new Unit(ship.team, stats, null, target[0] / 100, target[1] / 100, null, false, true)
 				const sphere = Render.sphere(12, { parent: ship.eye.top, team: ship.team, segments: 16 })
 				sphere.position.z = levelMultiplier(60, level, 5)
 			},
-			end: function (ship) {
+			end (ship) {
 				ship.eye.isDying = true
 				ship.eye.destroy()
 			},
@@ -936,19 +938,19 @@ export default {
 			hitsTowers: true,
 			disabledBy: [null, true, false],
 			isDisabledBy: isDisabledBy,
-			getRange: function (level) {
+			getRange (level) {
 				return 200
 			},
-			getEffectRange: function (level) {
+			getEffectRange (level) {
 				return 60
 			},
-			getEffectDamage: function (level) {
+			getEffectDamage (level) {
 				return levelMultiplier(100, level, 10)
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return 100
 			},
-			start: function (index, level, ship, target) {
+			start (index, level, ship, target) {
 				const damage = this.getEffectDamage(level)
 				const maxRange = this.getRange(level)
 				const aoeRange = this.getEffectRange(level)
@@ -973,19 +975,19 @@ export default {
 			hitsTowers: false,
 			isDisabledBy: null,
 			endOnDeath: true,
-			getRange: function (level) {
+			getRange (level) {
 				return 100
 			},
-			getEffectDps: function (level) {
+			getEffectDps (level) {
 				return levelMultiplier(300, level, 30)
 			},
-			getDuration: function (level) {
+			getDuration (level) {
 				return levelMultiplier(35, level, 2)
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(200, level, -10)
 			},
-			start: function (index, level, ship, target, startAt, endAt) {
+			start (index, level, ship, target, startAt, endAt) {
 				ship.removeTarget()
 				ship.untargetable = true
 				ship.disableAttacking = true
@@ -1013,7 +1015,7 @@ export default {
 					duration: endAt - startAt,
 				})
 			},
-			end: function (ship) {
+			end (ship) {
 				ship.model.position.z = 0
 				ship.untargetable = false
 				ship.disableAttacking = false
@@ -1039,21 +1041,21 @@ export default {
 			disabledBy: [null, false, true],
 			isDisabledBy: isDisabledBy,
 			endOnDeath: true,
-			getEffectAttackSpeed: function (level) {
+			getEffectAttackSpeed (level) {
 				return levelMultiplier(40, level, 3)
 			},
-			getDuration: function (level) {
+			getDuration (level) {
 				return levelMultiplier(40, level, 2)
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return 150
 			},
-			start: function (index, level, ship, target, startAt, endAt) {
+			start (index, level, ship, target, startAt, endAt) {
 				ship.modify(this.name, 'attackCooldown', 'times', new Decimal(1).minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
 				ship.modify(this.name, 'armor', 'times', 0.5)
 				ship.bruteForceMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
-			end: function (ship) {
+			end (ship) {
 				ship.modify(this.name, 'attackCooldown', null)
 				ship.modify(this.name, 'armor', null)
 				if (ship.bruteForceMesh) {
@@ -1070,16 +1072,16 @@ export default {
 			disabledBy: [false, null, true],
 			isDisabledBy: isDisabledBy,
 			endOnDeath: true,
-			getDuration: function (level) {
+			getDuration (level) {
 				return levelMultiplier(40, level, 5)
 			},
-			getEffectMoveSpeed: function (level) {
+			getEffectMoveSpeed (level) {
 				return levelMultiplier(20, level, 3)
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(200, level, -5)
 			},
-			start: function (index, level, ship, target, startAt, endAt, cooldown) {
+			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.removeTarget()
 				ship.invisible = true
 				ship.modify(this.name, 'moveSpeed', 'times', new Decimal(1).plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
@@ -1106,7 +1108,7 @@ export default {
 					ship.endSkill(index)
 				}
 			},
-			end: function (ship) {
+			end (ship) {
 				ship.modify(this.name, 'moveSpeed', null)
 
 				ship.invisible = false
@@ -1120,22 +1122,22 @@ export default {
 			disabledBy: [false, true, null],
 			isDisabledBy: isDisabledBy,
 			endOnDeath: true,
-			getEffectRegen: function (level) {
+			getEffectRegen (level) {
 				return levelMultiplier(40, level, 4)
 			},
-			getDuration: function (level) {
+			getDuration (level) {
 				return 50
 			},
-			getCooldown: function (level) {
+			getCooldown (level) {
 				return levelMultiplier(150, level, -2)
 			},
-			start: function (index, level, ship) {
+			start (index, level, ship) {
 				ship.modify(this.name, 'healthRegen', 'add', this.getEffectRegen(level))
 				ship.modify(this.name, 'moveSpeed', 'times', 0.33)
 
 				ship.salvageMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.07)
 			},
-			end: function (ship) {
+			end (ship) {
 				ship.modify(this.name, 'healthRegen', null)
 				ship.modify(this.name, 'moveSpeed', null)
 

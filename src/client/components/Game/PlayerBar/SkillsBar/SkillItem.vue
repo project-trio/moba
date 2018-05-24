@@ -2,8 +2,8 @@
 <div class="skill-item" :class="{ selected: !disabled && isActiveSkill, disabled: disabled, cooldown: cooldownTime, showsLevelup: levelupReady }">
 	<div class="skill-content">
 		<div class="button-content">
-			<div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`"></div>
-			<div :class="`item-circle level-ring-${indexName}`"></div>
+			<div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`" />
+			<div :class="`item-circle level-ring-${indexName}`" />
 			<button @click="onSkill(true)" @mouseenter="overButton(true)" @mouseleave="overButton(false)" class="skill-button">{{ indexName }}</button>
 			<div v-if="showingLevelupIndicator" @click="onLevelup" @mouseenter="overLevelup(true)" @mouseleave="overLevelup(false)" class="button-levelup interactive">
 				⬆︎
@@ -14,7 +14,7 @@
 		</div>
 	</div>
 	<div v-if="isActiveSkill && hintText" class="description-tooltip tooltip-small">{{ hintText }}</div>
-	<div v-if="!isAnySkillActive" class="description-tooltip tooltip-large bar-section" v-html="descriptionHtml"></div>
+	<div v-if="!isAnySkillActive" class="description-tooltip tooltip-large bar-section" v-html="descriptionHtml" />
 </div>
 </template>
 
@@ -65,7 +65,7 @@ export default {
 		return {
 			cooldownRing: null,
 			levelRing: null,
-			submittedLevelup: true,
+			submittedLevelup: false,
 			disabledByOtherSkill: false,
 			isOverLevelup: false,
 			activationCooldown: null,
@@ -178,7 +178,6 @@ export default {
 		},
 
 		level () {
-			this.submittedLevelup = false
 			return store.state.local.skills.levels[this.index]
 		},
 		levelupProgress () {
@@ -244,6 +243,10 @@ export default {
 	},
 
 	watch: {
+		level () {
+			this.submittedLevelup = false
+		},
+
 		currentPress (currentKey) {
 			if (!Local.unit) {
 				return
