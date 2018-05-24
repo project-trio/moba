@@ -207,18 +207,18 @@ export default {
     }
   },
 
-  setKeyDown (ignore, code, modified, event) {
+  setKeyDown ({ ignore, code, modifier }) {
     const keyState = this.state.key
-    if (!ignore && !event.metaKey && (keyState.lastPress.released || keyState.lastPress.code !== code)) {
+    if (!ignore && (keyState.lastPress.released || keyState.lastPress.code !== code)) {
       keyState.lastPress.code = code
       keyState.lastPress.released = false
       keyState.count += 1
     }
     if (!keyState.lastPress.released) {
-      keyState.lastPress.modifier = modified
+      keyState.lastPress.modifier = modifier
     }
   },
-  setKeyUp (ignore, code, modified, event) {
+  setKeyUp ({ ignore, code, modifier }) {
     if (ignore) {
       return
     }
@@ -228,7 +228,7 @@ export default {
       keyState.count = 0
       keyState.pressed = {
         at: performance.now(),
-        modifier: modified,
+        modifier: modifier,
         code: code,
       }
       keyState.lastPress.code = null

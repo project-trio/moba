@@ -24,7 +24,7 @@ const validKeyEvent = (event) => {
     keyDescription.ignore = true
     keyDescription.modifier = true
   } else {
-    keyDescription.name = name
+    keyDescription.ignore = event.metaKey
     keyDescription.modifier = event.altKey || event.shiftKey || event.metaKey || event.ctrlKey
   }
   return keyDescription
@@ -62,14 +62,14 @@ export default {
     keydown (event) {
       const keyDescription = validKeyEvent(event)
       if (keyDescription) {
-        store.setKeyDown(keyDescription.ignore, keyDescription.code, keyDescription.modifier, event)
+        store.setKeyDown(keyDescription)
       }
     },
 
     keyup (event) {
       const keyDescription = validKeyEvent(event)
       if (keyDescription) {
-        store.setKeyUp(keyDescription.ignore, keyDescription.code, keyDescription.modifier, event)
+        store.setKeyUp(keyDescription)
       }
     },
 
