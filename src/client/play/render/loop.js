@@ -1,14 +1,14 @@
 import Stats from 'stats.js'
 
-import store from '@/store'
+import store from '@/client/store'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import Render from '@/play/render/render'
+import Render from '@/client/play/render/render'
 
-import Bullet from '@/play/game/entity/attack/bullet'
+import Bullet from '@/client/play/game/entity/attack/bullet'
 
-import Unit from '@/play/game/entity/unit/unit'
+import Unit from '@/client/play/game/entity/unit/unit'
 
 let previousTimestamp = 0
 let lastTickTime = 0

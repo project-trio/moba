@@ -26,18 +26,18 @@
 </template>
 
 <script>
-import router from '@/router'
-import store from '@/store'
+import router from '@/client/router'
+import store from '@/client/store'
 
-import Game from '@/play/game/entity/game/game'
+import Game from '@/client/play/game/entity/game/game'
 
-import Bridge from '@/play/events/bridge'
-import LobbyEvents from '@/play/events/lobby'
+import Bridge from '@/client/play/events/bridge'
+import LobbyEvents from '@/client/play/events/lobby'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import LobbyChat from '@/components/Lobby/Chat'
-import PlayerBox from '@/components/Lobby/Join/PlayerBox'
+import LobbyChat from '@/client/components/Lobby/Chat'
+import PlayerBox from '@/client/components/Lobby/Join/PlayerBox'
 
 export default {
   components: {

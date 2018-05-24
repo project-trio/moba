@@ -1,10 +1,10 @@
-import TrigCache from '@/play/external/trigcache'
+import TrigCache from '@/client/play/external/trigcache'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import Util from '@/play/game/util'
+import Util from '@/client/play/game/util'
 
-import Unit from '@/play/game/entity/unit/unit'
+import Unit from '@/client/play/game/entity/unit/unit'
 
 //LOCAL
 

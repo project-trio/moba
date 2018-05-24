@@ -1,7 +1,7 @@
 // import Decimal from 'decimal.js'
-import TrigCache from '@/play/external/trigcache'
+import TrigCache from '@/client/play/external/trigcache'
 
-import Util from '@/play/game/util'
+import Util from '@/client/play/game/util'
 
 const iterations = 9999
 

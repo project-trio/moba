@@ -6,16 +6,14 @@
 
 ``` bash
 # install dependencies
-yarn install
+yarn
 
-# serve with hot reload at localhost:8090
-yarn run dev
+# run the game server
+yarn start
 
-# build for production with minification
-yarn run build
+# hot-reload dev environment localhost:8090
+yarn serve
 
-# build for production and view the bundle analyzer report
-yarn run build --report
+# build for production
+yarn build
 ```
-
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).

@@ -1,18 +1,18 @@
-import TrigCache from '@/play/external/trigcache'
+import TrigCache from '@/client/play/external/trigcache'
 
-import store from '@/store'
+import store from '@/client/store'
 
-import Local from '@/play/local'
-import Render from '@/play/render/render'
+import Local from '@/client/play/local'
+import Render from '@/client/play/render/render'
 
-import AreaOfEffect from '@/play/game/entity/attack/aoe'
-import Bullet from '@/play/game/entity/attack/bullet'
+import AreaOfEffect from '@/client/play/game/entity/attack/aoe'
+import Bullet from '@/client/play/game/entity/attack/bullet'
 
-import GameMap from '@/play/game/entity/game/map'
-import Player from '@/play/game/entity/game/player'
-import Wave from '@/play/game/entity/game/wave'
+import GameMap from '@/client/play/game/entity/game/map'
+import Player from '@/client/play/game/entity/game/player'
+import Wave from '@/client/play/game/entity/game/wave'
 
-import Unit from '@/play/game/entity/unit/unit'
+import Unit from '@/client/play/game/entity/unit/unit'
 
 export default function (gid, mode, size, mapName) {
   let players = {}

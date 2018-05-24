@@ -1,10 +1,10 @@
-import storage from '@/helpers/storage'
+import storage from '@/client/helpers/storage'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import render from '@/play/render/render'
+import render from '@/client/play/render/render'
 
-import Unit from '@/play/game/entity/unit/unit'
+import Unit from '@/client/play/game/entity/unit/unit'
 
 let selectedUnit = null
 

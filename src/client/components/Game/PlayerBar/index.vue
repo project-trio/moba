@@ -8,15 +8,15 @@
 </template>
 
 <script>
-import store from '@/store'
-import util from '@/helpers/util'
+import store from '@/client/store'
+import util from '@/client/helpers/util'
 
-import ChatBar from '@/components/Game/PlayerBar/ChatBar'
-import Minimap from '@/components/Game/PlayerBar/Minimap'
-import PlayerInfo from '@/components/Game/PlayerBar/PlayerInfo'
-import SkillsBar from '@/components/Game/PlayerBar/SkillsBar'
+import ChatBar from '@/client/components/Game/PlayerBar/ChatBar'
+import Minimap from '@/client/components/Game/PlayerBar/Minimap'
+import PlayerInfo from '@/client/components/Game/PlayerBar/PlayerInfo'
+import SkillsBar from '@/client/components/Game/PlayerBar/SkillsBar'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
 const KEY_SPACE = 32
 const KEY_LEFT = 37

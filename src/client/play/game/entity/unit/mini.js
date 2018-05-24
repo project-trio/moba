@@ -1,11 +1,11 @@
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import minisData from '@/play/data/minis'
+import minisData from '@/client/play/data/minis'
 
-import Render from '@/play/render/render'
+import Render from '@/client/play/render/render'
 
-import Movable from '@/play/game/entity/unit/movable'
-import Unit from '@/play/game/entity/unit/unit'
+import Movable from '@/client/play/game/entity/unit/movable'
+import Unit from '@/client/play/game/entity/unit/unit'
 
 //CLASS
 

@@ -23,17 +23,17 @@
 </template>
 
 <script>
-import router from '@/router'
+import router from '@/client/router'
 
-import CommonConsts from 'common/constants'
-import commonMaps from 'common/maps'
+import CommonConsts from '@/common/constants'
+import commonMaps from '@/common/maps'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import LobbyEvents from '@/play/events/lobby'
+import LobbyEvents from '@/client/play/events/lobby'
 
-import SelectionGroup from '@/components/Lobby/SelectionGroup'
-import GameSizes from '@/components/Lobby/SelectionGroup/GameSizes'
+import SelectionGroup from '@/client/components/Lobby/SelectionGroup'
+import GameSizes from '@/client/components/Lobby/SelectionGroup/GameSizes'
 
 export default {
   components: {

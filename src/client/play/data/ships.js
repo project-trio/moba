@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import Render from '@/play/render/render'
+import Render from '@/client/play/render/render'
 
 //HELPERS
 

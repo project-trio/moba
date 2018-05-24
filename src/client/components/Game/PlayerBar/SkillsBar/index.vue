@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import store from '@/store'
+import store from '@/client/store'
 
-import skillsData from '@/play/data/skills'
+import skillsData from '@/client/play/data/skills'
 
-import SkillItem from '@/components/Game/PlayerBar/SkillsBar/SkillItem'
+import SkillItem from '@/client/components/Game/PlayerBar/SkillsBar/SkillItem'
 
 export default {
   components: {

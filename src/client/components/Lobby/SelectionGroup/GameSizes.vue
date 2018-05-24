@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import SelectionGroup from '@/components/Lobby/SelectionGroup'
+import SelectionGroup from '@/client/components/Lobby/SelectionGroup'
 
 export default {
   components: {

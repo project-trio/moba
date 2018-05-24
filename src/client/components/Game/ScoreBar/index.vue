@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import store from '@/store'
+import store from '@/client/store'
 
-import SettingsButtons from '@/components/Game/ScoreBar/SettingsButtons'
+import SettingsButtons from '@/client/components/Game/ScoreBar/SettingsButtons'
 
 export default {
   components: {

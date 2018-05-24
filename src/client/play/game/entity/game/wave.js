@@ -1,4 +1,4 @@
-import Mini from '@/play/game/entity/unit/mini'
+import Mini from '@/client/play/game/entity/unit/mini'
 
 export default {
 

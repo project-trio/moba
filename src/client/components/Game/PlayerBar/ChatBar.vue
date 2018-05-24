@@ -19,11 +19,11 @@
 </template>
 
 <script>
-import store from '@/store'
+import store from '@/client/store'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import Bridge from '@/play/events/bridge'
+import Bridge from '@/client/play/events/bridge'
 
 const KEY_ENTER = 13
 const KEY_ESCAPE = 27

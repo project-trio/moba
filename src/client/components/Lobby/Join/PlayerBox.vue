@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import store from '@/store'
+import store from '@/client/store'
 
-import Util from '@/helpers/util'
+import Util from '@/client/helpers/util'
 
 export default {
   props: {

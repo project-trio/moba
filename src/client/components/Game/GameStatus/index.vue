@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import router from '@/router'
-import store from '@/store'
+import router from '@/client/router'
+import store from '@/client/store'
 
-import HelpPanel from '@/components/Game/GameStatus/HelpPanel'
-import PlayerScores from '@/components/Game/GameStatus/PlayerScores'
-import SettingsPanel from '@/components/Game/GameStatus/SettingsPanel'
+import HelpPanel from '@/client/components/Game/GameStatus/HelpPanel'
+import PlayerScores from '@/client/components/Game/GameStatus/PlayerScores'
+import SettingsPanel from '@/client/components/Game/GameStatus/SettingsPanel'
 
 const KEY_TAB = 9
 const KEY_ESCAPE = 27

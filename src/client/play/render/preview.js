@@ -1,14 +1,14 @@
 import * as THREE from 'three'
 
-import store from '@/store'
+import store from '@/client/store'
 
-import shipStats from '@/play/data/ships'
+import shipStats from '@/client/play/data/ships'
 
-import Animate from '@/play/game/helpers/animate'
+import Animate from '@/client/play/game/helpers/animate'
 
-import OutlineEffect from '@/play/external/OutlineEffect'
+import OutlineEffect from '@/client/play/external/OutlineEffect'
 
-import Render from '@/play/render/render'
+import Render from '@/client/play/render/render'
 
 let renderer, outlineEffect, scene, camera, cameraTarget, container, shipContainer, canvas, animationId
 let renderWidth, renderHeight

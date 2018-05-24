@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Bridge from '@/play/events/bridge'
+import Bridge from '@/client/play/events/bridge'
 
 export default {
   data () {

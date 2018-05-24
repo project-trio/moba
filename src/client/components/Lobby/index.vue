@@ -18,13 +18,13 @@
 </template>
 
 <script>
-import store from '@/store'
+import store from '@/client/store'
 
-import util from '@/helpers/util'
+import util from '@/client/helpers/util'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import LobbyEvents from '@/play/events/lobby'
+import LobbyEvents from '@/client/play/events/lobby'
 
 export default {
   mounted () {

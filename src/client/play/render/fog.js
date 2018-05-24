@@ -1,8 +1,8 @@
 import * as THREE from 'three'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import RenderMinimap from '@/play/render/minimap'
+import RenderMinimap from '@/client/play/render/minimap'
 
 let fogScene, fogCamera, fogTarget
 let circleMaterial

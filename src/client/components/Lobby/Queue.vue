@@ -28,20 +28,20 @@
 </template>
 
 <script>
-// import CommonConsts from 'common/constants'
+// import CommonConsts from '@/common/constants'
 
-import store from '@/store'
-import router from '@/router'
+import store from '@/client/store'
+import router from '@/client/router'
 
-import util from '@/helpers/util'
+import util from '@/client/helpers/util'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import Bridge from '@/play/events/bridge'
-import LobbyEvents from '@/play/events/lobby'
+import Bridge from '@/client/play/events/bridge'
+import LobbyEvents from '@/client/play/events/lobby'
 
-import LobbyChat from '@/components/Lobby/Chat'
-import GameSizes from '@/components/Lobby/SelectionGroup/GameSizes'
+import LobbyChat from '@/client/components/Lobby/Chat'
+import GameSizes from '@/client/components/Lobby/SelectionGroup/GameSizes'
 
 export default {
   components: {

@@ -1,4 +1,4 @@
-import TrigCache from '@/play/external/trigcache'
+import TrigCache from '@/client/play/external/trigcache'
 
 const PI = Math.PI
 const PIt2 = PI * 2

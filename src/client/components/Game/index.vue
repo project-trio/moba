@@ -12,17 +12,17 @@
 </template>
 
 <script>
-import store from '@/store'
-import util from '@/helpers/util'
+import store from '@/client/store'
+import util from '@/client/helpers/util'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import Loop from '@/play/render/loop'
+import Loop from '@/client/play/render/loop'
 
-import GameStatus from '@/components/Game/GameStatus'
-import PlayerBar from '@/components/Game/PlayerBar'
-import ScoreBar from '@/components/Game/ScoreBar'
-import UnitSelect from '@/components/Game/UnitSelect'
+import GameStatus from '@/client/components/Game/GameStatus'
+import PlayerBar from '@/client/components/Game/PlayerBar'
+import ScoreBar from '@/client/components/Game/ScoreBar'
+import UnitSelect from '@/client/components/Game/UnitSelect'
 
 export default {
   components: {

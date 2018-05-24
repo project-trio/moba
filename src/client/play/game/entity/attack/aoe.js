@@ -1,9 +1,9 @@
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import Render from '@/play/render/render'
+import Render from '@/client/play/render/render'
 
-import Animate from '@/play/game/helpers/animate'
-import Util from '@/play/game/util'
+import Animate from '@/client/play/game/helpers/animate'
+import Util from '@/client/play/game/util'
 
 const POSITION_MAGNITUDE_OFFSET = 100
 

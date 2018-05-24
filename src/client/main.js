@@ -1,20 +1,21 @@
 import Vue from 'vue'
 import App from './App'
-import router from '@/router'
+import router from '@/client/router'
 
-import store from '@/store'
-import util from '@/helpers/util'
+import store from '@/client/store'
+import util from '@/client/helpers/util'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import Events from '@/play/events'
-import LobbyEvents from '@/play/events/lobby'
+import Events from '@/client/play/events'
+import LobbyEvents from '@/client/play/events/lobby'
 
 // App
 
 window.p = console.log
 window.warn = console.warn
-console.log = console.warn = () => {}
+const emptyFunction = () => {}
+// console.log = console.warn = emptyFunction
 
 Vue.config.productionTip = false
 
@@ -23,15 +24,17 @@ if (hasSignin) {
   Events.init()
 }
 
-util.addListener(document.body, 'touchstart', () => {})
+util.addListener(window, 'touchstart', emptyFunction)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
+  components: { App },
   data: store,
-  template: '<App/>',
-  components: { App }
+  router,
+  render: (createElement) => {
+    return createElement(App)
+  },
 })
 
 // Guard routes

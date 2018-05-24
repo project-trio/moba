@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import router from '@/router'
-import store from '@/store'
+import router from '@/client/router'
+import store from '@/client/store'
 
-import Events from '@/play/events'
+import Events from '@/client/play/events'
 
 export default {
   data () {

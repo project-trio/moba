@@ -1,12 +1,12 @@
-import store from '@/store'
+import store from '@/client/store'
 
-import towersData from '@/play/data/towers'
+import towersData from '@/client/play/data/towers'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import Render from '@/play/render/render'
+import Render from '@/client/play/render/render'
 
-import Unit from '@/play/game/entity/unit/unit'
+import Unit from '@/client/play/game/entity/unit/unit'
 
 //CLASS
 

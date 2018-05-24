@@ -17,10 +17,10 @@
   <div class="player-teams scrolls">
     <h1>teams</h1>
     <div class="team-players team-1">
-      <div v-for="player in teamPlayers[0]" :player="player" class="player-ship animated" :class="{ selected: player && player.id === localId }" :key="player">{{ player && player.shipName }}</div>
+      <div v-for="player in teamPlayers[0]" :player="player" class="player-ship animated" :class="{ selected: player && player.id === localId }" :key="player.id">{{ player && player.shipName }}</div>
     </div>
     <div class="team-players team-2">
-      <div v-for="player in teamPlayers[1]" :player="player" class="player-ship animated" :class="{ selected: player && player.id === localId }" :key="player">{{ player && player.shipName }}</div>
+      <div v-for="player in teamPlayers[1]" :player="player" class="player-ship animated" :class="{ selected: player && player.id === localId }" :key="player.id">{{ player && player.shipName }}</div>
     </div>
   </div>
 </div>
@@ -28,13 +28,13 @@
 </template>
 
 <script>
-import CommonConsts from 'common/constants'
+import CommonConsts from '@/common/constants'
 
-import store from '@/store'
+import store from '@/client/store'
 
-import Bridge from '@/play/events/bridge'
+import Bridge from '@/client/play/events/bridge'
 
-import RenderPreview from '@/play/render/preview'
+import RenderPreview from '@/client/play/render/preview'
 
 export default {
   mounted () {

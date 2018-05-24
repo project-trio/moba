@@ -7,6 +7,8 @@ window.p = console.log
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  template: '<App/>',
-  components: { App }
+  components: { App },
+  render: (createElement) => {
+    return createElement(App)
+  },
 })

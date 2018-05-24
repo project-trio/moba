@@ -1,10 +1,10 @@
 import SocketIO from 'socket.io-client'
 
-import CommonConsts from 'common/constants'
+import CommonConsts from '@/common/constants'
 
-import store from '@/store'
+import store from '@/client/store'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
 //PUBLIC
 

@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import store from '@/store'
+import store from '@/client/store'
 
-import fullscreen from '@/play/external/fullscreen.js'
+import fullscreen from '@/client/play/external/fullscreen.js'
 
 export default {
   methods: {

@@ -1,17 +1,17 @@
-import commonMaps from 'common/maps'
+import commonMaps from '@/common/maps'
 
-import store from '@/store'
+import store from '@/client/store'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import Bridge from '@/play/events/bridge'
+import Bridge from '@/client/play/events/bridge'
 
-import pointer from '@/play/render/pointer'
-import Render from '@/play/render/render'
-import RenderMinimap from '@/play/render/minimap'
+import pointer from '@/client/play/render/pointer'
+import Render from '@/client/play/render/render'
+import RenderMinimap from '@/client/play/render/minimap'
 
-import Mini from '@/play/game/entity/unit/mini'
-import Tower from '@/play/game/entity/unit/tower'
+import Mini from '@/client/play/game/entity/unit/mini'
+import Tower from '@/client/play/game/entity/unit/tower'
 
 //CONSTRUCTOR
 

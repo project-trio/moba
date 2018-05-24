@@ -1,14 +1,14 @@
 import Decimal from 'decimal.js'
-import TrigCache from '@/play/external/trigcache'
+import TrigCache from '@/client/play/external/trigcache'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import Render from '@/play/render/render'
+import Render from '@/client/play/render/render'
 
-import Util from '@/play/game/util'
+import Util from '@/client/play/game/util'
 
-import AreaOfEffect from '@/play/game/entity/attack/aoe'
-import Unit from '@/play/game/entity/unit/unit'
+import AreaOfEffect from '@/client/play/game/entity/attack/aoe'
+import Unit from '@/client/play/game/entity/unit/unit'
 
 //LOCAL
 

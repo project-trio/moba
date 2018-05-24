@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-import util from '@/helpers/util'
+import util from '@/client/helpers/util'
 
 const raycaster = new THREE.Raycaster()
 const pointerLocation = new THREE.Vector2()

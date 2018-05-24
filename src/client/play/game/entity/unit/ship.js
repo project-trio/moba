@@ -1,16 +1,16 @@
-import store from '@/store'
+import store from '@/client/store'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import shipStats from '@/play/data/ships'
-import skillsData from '@/play/data/skills'
+import shipStats from '@/client/play/data/ships'
+import skillsData from '@/client/play/data/skills'
 
-import Render from '@/play/render/render'
+import Render from '@/client/play/render/render'
 
-import Util from '@/play/game/util'
+import Util from '@/client/play/game/util'
 
-import Movable from '@/play/game/entity/unit/movable'
-import Unit from '@/play/game/entity/unit/unit'
+import Movable from '@/client/play/game/entity/unit/movable'
+import Unit from '@/client/play/game/entity/unit/unit'
 
 //LOCAL
 

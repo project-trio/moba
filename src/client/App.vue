@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import store from '@/store'
-import util from '@/helpers/util'
+import store from '@/client/store'
+import util from '@/client/helpers/util'
 
 const KEY_TAB = 9
 const KEY_ESCAPE = 27

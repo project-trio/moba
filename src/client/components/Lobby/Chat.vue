@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import store from '@/store'
+import store from '@/client/store'
 
-import Bridge from '@/play/events/bridge'
+import Bridge from '@/client/play/events/bridge'
 
 const KEY_ENTER = 13
 
@@ -35,7 +35,6 @@ export default {
     },
 
     messages () {
-      p(store.state.chatMessages)
       return store.state.chatMessages
     },
 

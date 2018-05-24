@@ -1,9 +1,9 @@
-import router from '@/router'
-import store from '@/store'
+import router from '@/client/router'
+import store from '@/client/store'
 
-import Bridge from '@/play/events/bridge'
+import Bridge from '@/client/play/events/bridge'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
 //SOCKET
 

@@ -1,16 +1,16 @@
 import Decimal from 'decimal.js'
 
-import store from '@/store'
+import store from '@/client/store'
 
-import Bridge from '@/play/events/bridge'
-import Local from '@/play/local'
+import Bridge from '@/client/play/events/bridge'
+import Local from '@/client/play/local'
 
-import Render from '@/play/render/render'
+import Render from '@/client/play/render/render'
 
-import Animate from '@/play/game/helpers/animate'
-import Util from '@/play/game/util'
+import Animate from '@/client/play/game/helpers/animate'
+import Util from '@/client/play/game/util'
 
-import Bullet from '@/play/game/entity/attack/bullet'
+import Bullet from '@/client/play/game/entity/attack/bullet'
 
 //LOCAL
 

@@ -23,9 +23,9 @@
 </template>
 
 <script>
-import store from '@/store'
+import store from '@/client/store'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
 export default {
   computed: {

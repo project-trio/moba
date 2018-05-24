@@ -19,15 +19,15 @@
 </template>
 
 <script>
-import store from '@/store'
+import store from '@/client/store'
 
-import Sektor from '@/play/external/sektor'
+import Sektor from '@/client/play/external/sektor'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import Bridge from '@/play/events/bridge'
+import Bridge from '@/client/play/events/bridge'
 
-import Unit from '@/play/game/entity/unit/unit'
+import Unit from '@/client/play/game/entity/unit/unit'
 
 const checkTarget = function (target) {
   if (!target) {

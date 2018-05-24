@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Start from '@/components/Start'
-import Lobby from '@/components/Lobby'
-import LobbyCreate from '@/components/Lobby/Create'
-import LobbyJoin from '@/components/Lobby/Join'
-import LobbyQueue from '@/components/Lobby/Queue'
-import Game from '@/components/Game'
+import Start from '@/client/components/Start'
+import Lobby from '@/client/components/Lobby'
+import LobbyCreate from '@/client/components/Lobby/Create'
+import LobbyJoin from '@/client/components/Lobby/Join'
+import LobbyQueue from '@/client/components/Lobby/Queue'
+import Game from '@/client/components/Game'
 
 Vue.use(Router)
 

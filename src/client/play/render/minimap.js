@@ -1,10 +1,10 @@
 import * as THREE from 'three'
 
-import util from '@/helpers/util'
+import util from '@/client/helpers/util'
 
-import Local from '@/play/local'
+import Local from '@/client/play/local'
 
-import dataConstants from '@/play/data/constants'
+import dataConstants from '@/client/play/data/constants'
 
 let renderer, scene, camera, cameraMesh
 

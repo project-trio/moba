@@ -1,7 +1,7 @@
-import store from '@/store'
+import store from '@/client/store'
 
-import Local from '@/play/local'
-import Ship from '@/play/game/entity/unit/ship'
+import Local from '@/client/play/local'
+import Ship from '@/client/play/game/entity/unit/ship'
 
 const PLAYER_INSET = 64
 

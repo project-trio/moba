@@ -1,16 +1,16 @@
 import Decimal from 'decimal.js'
 
-import store from '@/store'
+import store from '@/client/store'
 
-import Render from '@/play/render/render'
+import Render from '@/client/play/render/render'
 
-import Animate from '@/play/game/helpers/animate'
-import Util from '@/play/game/util'
+import Animate from '@/client/play/game/helpers/animate'
+import Util from '@/client/play/game/util'
 
-import AreaOfEffect from '@/play/game/entity/attack/aoe'
-import Bullet from '@/play/game/entity/attack/bullet'
+import AreaOfEffect from '@/client/play/game/entity/attack/aoe'
+import Bullet from '@/client/play/game/entity/attack/bullet'
 
-import Unit from '@/play/game/entity/unit/unit'
+import Unit from '@/client/play/game/entity/unit/unit'
 
 //LOCAL
 

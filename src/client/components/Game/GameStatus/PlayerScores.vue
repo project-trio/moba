@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import store from '@/store'
+import store from '@/client/store'
 
 export default {
   computed: {
