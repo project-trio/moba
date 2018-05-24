@@ -90,21 +90,21 @@ export default {
 
     const light = new THREE.DirectionalLight(0xeeeeee, 1)
     gameScene.add(light)
-    light.position.set(10, -50, 10)
+    light.position.set(10, -50, 20)
     light.target.position.set(15, -40, 0)
     gameScene.add(light.target)
 
     light.castShadow = true
     light.shadow.enabled = true
-    const projectionSize = 1000
+    const projectionSize = 1500
     light.shadow.camera.left = -projectionSize
     light.shadow.camera.right = projectionSize
     light.shadow.camera.top = projectionSize
     light.shadow.camera.bottom = -projectionSize
     light.shadow.camera.near = 1
-    light.shadow.camera.far = 10000000
-    light.shadow.mapSize.width = 1024
-    light.shadow.mapSize.height = 1024
+    light.shadow.camera.far = 2048
+    light.shadow.mapSize.width = 2048
+    light.shadow.mapSize.height = 2048
 
     // const helper = new THREE.CameraHelper(light.shadow.camera)
     // gameScene.add(helper)
