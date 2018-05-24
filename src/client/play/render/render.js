@@ -88,7 +88,7 @@ export default {
 
 		// Shadow
 
-		const light = new THREE.DirectionalLight(0xeeeeee, 1)
+		const light = new THREE.DirectionalLight(0xdddddd, 1)
 		gameScene.add(light)
 		light.position.set(10, -50, 20)
 		light.target.position.set(15, -40, 0)
@@ -386,7 +386,9 @@ export default {
 			material.opacity = options.opacity
 		}
 		const sphere = new THREE.Mesh(geometry, material)
-		sphere.castShadow = true
+		if (!options.hideShadow) {
+			sphere.castShadow = true
+		}
 
 		if (options.parent) {
 			options.parent.add(sphere)

@@ -842,7 +842,7 @@ export default {
 					// p('cancel shield')
 					ship.endSkill(index)
 				})
-				ship.shieldMesh = Render.sphere(ship.stats.collision / 100 * 1.8, { parent: ship.model, color: 0xffffff, opacity: 0.25, hideOutline: true })
+				ship.shieldMesh = Render.sphere(ship.stats.collision / 100 * 1.8, { parent: ship.model, segments: 16, color: 0xffffff, opacity: 0.33, hideOutline: true, hideShadow: true })
 				ship.shieldMesh.position.z = 15
 			},
 			end (ship) {
