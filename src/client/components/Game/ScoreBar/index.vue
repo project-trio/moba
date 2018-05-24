@@ -1,28 +1,24 @@
 <template>
 <div class="score-bar">
-	<div v-show="showScores" class="scores-section bar-section">
-		<span class="towers team-1">{{ towers[0] }}</span> <span class="tower-symbol">〒</span>
+	<div v-show="showScores" class="scores-section">
+		<span class="towers team-1">{{ towers[0] }}</span>&nbsp;<span class="tower-symbol">♜</span>
 		<span class="kills-container">
 			<span class="kills team-1">{{ kills[0] }}</span>
 			⚔️
 			<span class="kills team-2">{{ kills[1] }}</span>
 		</span>
-		<span class="tower-symbol">〒</span> <span class="towers team-2"> {{ towers[1] }}</span>
+		<span class="tower-symbol">♜</span><span class="towers team-2"> {{ towers[1] }}</span>
+		<div>
+			{{ displayTime }}
+		</div>
 	</div>
-	<settings-buttons class="bar-section" />
 </div>
 </template>
 
 <script>
 import store from '@/client/store'
 
-import SettingsButtons from '@/client/components/Game/ScoreBar/SettingsButtons'
-
 export default {
-	components: {
-		SettingsButtons,
-	},
-
 	computed: {
 		showScores () {
 			return store.state.game.playing || store.state.game.winningTeam !== null
@@ -34,6 +30,28 @@ export default {
 
 		towers () {
 			return store.state.game.stats.towers
+		},
+
+		secondsElapsed () {
+			return Math.round(store.state.game.renderTime / 1000)
+		},
+
+		displayTime () {
+			let seconds = this.secondsElapsed
+			let minutes
+			if (seconds >= 60) {
+				minutes = Math.floor(seconds / 60)
+				seconds %= 60
+				if (minutes < 10) {
+					minutes = `0${minutes}`
+				}
+			} else {
+				minutes = '00'
+			}
+			if (seconds < 10) {
+				seconds = `0${seconds}`
+			}
+			return `${minutes}:${seconds}`
 		},
 	},
 }
@@ -63,9 +81,10 @@ export default {
 
 .towers
 	font-size 1.2em
-	line-height 1em
 
 .tower-symbol
 	color #bbb
-	font-weight 500
+	font-weight 400
+	font-size 0.9em
+	vertical-align 10%
 </style>

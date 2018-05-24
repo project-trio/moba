@@ -6,7 +6,8 @@
 
 	<game-status />
 
-	<score-bar class="ui-bar" />
+	<settings-buttons class="bar-section" />
+
 	<player-bar class="ui-bar" />
 </div>
 </template>
@@ -21,14 +22,14 @@ import Loop from '@/client/play/render/loop'
 
 import GameStatus from '@/client/components/Game/GameStatus'
 import PlayerBar from '@/client/components/Game/PlayerBar'
-import ScoreBar from '@/client/components/Game/ScoreBar'
 import UnitSelect from '@/client/components/Game/UnitSelect'
+import SettingsButtons from '@/client/components/Game/ScoreBar/SettingsButtons'
 
 export default {
 	components: {
 		GameStatus,
 		PlayerBar,
-		ScoreBar,
+		SettingsButtons,
 		UnitSelect,
 	},
 

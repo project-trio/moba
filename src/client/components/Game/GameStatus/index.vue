@@ -1,8 +1,6 @@
 <template>
 <div class="game-status scrollable">
-	<help-panel v-if="showPanel === 'help'" />
-	<settings-panel v-else-if="showPanel === 'settings'" />
-	<div v-else-if="gameOver">
+	<div v-if="gameOver">
 		<div class="bar-section panel">
 			<h1>game over</h1>
 			<h2 :class="`team-${winningTeam + 1}`">team {{ winningTeamColor }} won!</h2>
@@ -10,7 +8,9 @@
 		</div>
 		<player-scores />
 	</div>
-	<player-scores v-else-if="pressingTab" />
+	<player-scores v-else-if="playing && pressingTab" />
+	<help-panel v-else-if="showPanel === 'help'" />
+	<settings-panel v-else-if="showPanel === 'settings'" />
 	<div v-else-if="missingUpdate" class="bar-section panel">
 		<h1>waiting for server connection</h1>
 	</div>
@@ -119,9 +119,8 @@ export default {
 	top 0
 	left 0
 	right 0
-	bottom 0
+	bottom 64px
 	margin auto
-	padding-top 34px
 	color #fffffe
 	text-shadow -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000
 	pointer-events none

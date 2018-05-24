@@ -1,5 +1,6 @@
 <template>
 <div class="bar-section panel">
+	<score-bar />
 	<table class="player-scores">
 		<tr><th>name</th><th>level</th><th>ship</th><th>assists</th><th>deaths</th><th>damage</th></tr>
 		<tr v-for="result in playerResults" :class="`team-${result.team + 1} ${result.active ? 'active' : 'inactive'}`" :key="result.name">
@@ -12,7 +13,13 @@
 <script>
 import store from '@/client/store'
 
+import ScoreBar from '@/client/components/Game/ScoreBar'
+
 export default {
+	components: {
+		ScoreBar,
+	},
+
 	computed: {
 		playerResults () {
 			return store.state.game.ships.map(ship => {
