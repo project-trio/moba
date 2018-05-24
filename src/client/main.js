@@ -15,7 +15,7 @@ import LobbyEvents from '@/client/play/events/lobby'
 window.p = console.log
 window.warn = console.warn
 const emptyFunction = () => {}
-// console.log = console.warn = emptyFunction
+console.log = console.warn = emptyFunction
 
 Vue.config.productionTip = false
 
