@@ -57,6 +57,7 @@ export default {
       readyAt: 0,
       readyInterval: null,
       notificationPermission: null,
+      hasFocusedWindow: false,
     }
   },
 
@@ -130,24 +131,19 @@ export default {
         window.clearInterval(this.readyTimer)
         this.readyTimer = null
       }
+      this.hasFocusedWindow = false
+    },
+
+    checkFocus () {
+      if (!this.hasFocusedWindow && document.hasFocus()) {
+        this.hasFocusedWindow = true
+      }
     },
 
     setReadyTimer (enabled) {
       this.cancelTimer()
 
       if (enabled) {
-        if (this.notificationPermission === 'granted' && !document.hasFocus()) {
-          this.notification = new Notification('moba queue ready!', {
-            icon: require('@/assets/icon.png'),
-          })
-          this.notification.onclick = () => {
-            if (window.parent) {
-              parent.focus()
-            }
-            window.focus()
-            this.notification.close()
-          }
-        }
         this.readyAt = 0
         this.readyTimer = window.setInterval(() => {
           if (this.readyAt >= this.queueTimer) {
@@ -158,6 +154,19 @@ export default {
             }
           } else {
             this.readyAt += 1
+            this.checkFocus()
+            if (this.readyAt === 3 && !this.hasFocusedWindow && this.notificationPermission === 'granted') {
+              this.notification = new Notification('moba queue ready!', {
+                icon: require('@/client/assets/icon.png'),
+              })
+              this.notification.onclick = () => {
+                if (window.parent) {
+                  parent.focus()
+                }
+                window.focus()
+                this.notification.close()
+              }
+            }
           }
         }, 1000)
       }
