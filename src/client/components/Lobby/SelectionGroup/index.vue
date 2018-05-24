@@ -1,6 +1,6 @@
 <template>
 <div class="selection-group">
-  <slot></slot>
+	<slot></slot>
 </div>
 </template>
 
@@ -11,23 +11,23 @@ export default {
 
 <style lang="stylus" scoped>
 .selection-group
-  margin auto
-  width 480px
-  max-width 100%
-  display flex
-  flex-wrap wrap
+	margin auto
+	width 480px
+	max-width 100%
+	display flex
+	flex-wrap wrap
 
 .selection
-  margin 4px
-  height 56px
-  flex-grow 1
-  flex-basis 16%
-  box-sizing border-box
-  border-radius 1px
+	margin 4px
+	height 56px
+	flex-grow 1
+	flex-basis 16%
+	box-sizing border-box
+	border-radius 1px
 
 .selection
-  background #ddd
+	background #ddd
 
 .selection.selected
-  background #dd6677
+	background #dd6677
 </style>

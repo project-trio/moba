@@ -162,10 +162,10 @@ export default function ( renderer, parameters ) {
 			originalVertexShader = originalMaterial.vertexShader;
 
 			if ( ! /attribute\s+vec3\s+position\s*;/.test( originalVertexShader ) ||
-			     ! /attribute\s+vec3\s+normal\s*;/.test( originalVertexShader ) ) {
+					 ! /attribute\s+vec3\s+normal\s*;/.test( originalVertexShader ) ) {
 
 				console.error( 'THREE.OutlineEffect requires both vec3 position and normal attributes in vertex shader, ' +
-				              'does not draw outline for ' + originalMaterial.name + '(uuid:' + originalMaterial.uuid + ') material.' );
+											'does not draw outline for ' + originalMaterial.name + '(uuid:' + originalMaterial.uuid + ') material.' );
 
 				return createInvisibleMaterial();
 
@@ -198,7 +198,7 @@ export default function ( renderer, parameters ) {
 		var defines = {};
 
 		if ( ! /vec3\s+transformed\s*=/.test( originalVertexShader ) &&
-		     ! /#include\s+<begin_vertex>/.test( originalVertexShader ) ) defines.DECLARE_TRANSFORMED = true;
+				 ! /#include\s+<begin_vertex>/.test( originalVertexShader ) ) defines.DECLARE_TRANSFORMED = true;
 
 		return new THREE.ShaderMaterial( {
 			defines: defines,
@@ -460,7 +460,7 @@ export default function ( renderer, parameters ) {
 	 *
 	 * function render () {
 	 *
- 	 * 	effect.render( scene, camera );
+	 * 	effect.render( scene, camera );
 	 *
 	 * }
 	 */

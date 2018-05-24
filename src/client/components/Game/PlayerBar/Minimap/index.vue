@@ -1,6 +1,6 @@
 <template>
 <div class="minimap">
-  <canvas id="minimap"></canvas>
+	<canvas id="minimap"></canvas>
 </div>
 </template>
 
@@ -12,12 +12,12 @@ export default {
 
 <style lang="stylus" scoped>
 .minimap
-  position absolute
-  right 0
-  bottom 0
-  margin 0
-  padding 0
-  height 200px
-  border-radius 4px 0 0 0
-  overflow hidden
+	position absolute
+	right 0
+	bottom 0
+	margin 0
+	padding 0
+	height 200px
+	border-radius 4px 0 0 0
+	overflow hidden
 </style>

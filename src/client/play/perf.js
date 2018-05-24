@@ -9,12 +9,12 @@ let rx = -60, ry = 30
 let value
 
 function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min
+	return Math.floor(Math.random() * (max - min)) + min
 }
 
 function randomizePosition() {
-  rx = getRandomInt(-100, 100)
-  ry = getRandomInt(-100, 100)
+	rx = getRandomInt(-100, 100)
+	ry = getRandomInt(-100, 100)
 }
 
 //SETUP
@@ -32,8 +32,8 @@ console.log('\nATAN')
 
 console.time('Math.atan2')
 for (let i = 0; i < iterations; i += 1) {
-  randomizePosition()
-  value = Math.atan2(ry, rx)
+	randomizePosition()
+	value = Math.atan2(ry, rx)
 }
 console.timeEnd('Math.atan2')
 console.log(value)
@@ -59,8 +59,8 @@ console.log(value)
 
 console.time('Util.angleOf')
 for (let i = 0; i < iterations; i += 1) {
-  // randomizePosition()
-  value = Util.angleOf(rx, ry, false)
+	// randomizePosition()
+	value = Util.angleOf(rx, ry, false)
 }
 console.timeEnd('Util.angleOf')
 console.log(value / 1000)
@@ -77,7 +77,7 @@ const angleApprox = Util.angleOf(rx, ry, false)
 
 console.time('Math.cos')
 for (let i = 0; i < iterations; i += 1) {
-  value = Math.cos(anglePrecise)
+	value = Math.cos(anglePrecise)
 }
 console.timeEnd('Math.cos')
 console.log(value)
@@ -93,7 +93,7 @@ console.log(value)
 
 console.time('TrigCache.cos')
 for (let i = 0; i < iterations; i += 1) {
-  value = TrigCache.cos(angleApprox)
+	value = TrigCache.cos(angleApprox)
 }
 console.timeEnd('TrigCache.cos')
 console.log(value / 1000)
@@ -106,7 +106,7 @@ console.log('\nSIN')
 
 console.time('Math.sin')
 for (let i = 0; i < iterations; i += 1) {
-  value = Math.sin(anglePrecise)
+	value = Math.sin(anglePrecise)
 }
 console.timeEnd('Math.sin')
 console.log(value)
@@ -122,7 +122,7 @@ console.log(value)
 
 console.time('TrigCache.sin')
 for (let i = 0; i < iterations; i += 1) {
-  value = TrigCache.sin(angleApprox)
+	value = TrigCache.sin(angleApprox)
 }
 console.timeEnd('TrigCache.sin')
 console.log(value / 1000)

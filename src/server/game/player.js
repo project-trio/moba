@@ -7,123 +7,123 @@ const Util = require.main.require('./utils/util')
 
 module.exports = class Player {
 
-  constructor (client) {
-    this.bot = !client
-    if (client) {
-      this.client = client
-      this.id = client.pid
-      this.name = client.name
-    } else {
-      const botId = `bot-${Util.code()}`
-      this.id = botId
-      this.name = botId
-    }
+	constructor (client) {
+		this.bot = !client
+		if (client) {
+			this.client = client
+			this.id = client.pid
+			this.name = client.name
+		} else {
+			const botId = `bot-${Util.code()}`
+			this.id = botId
+			this.name = botId
+		}
 
-    this.game = null
-    this.team = null
-    this.teamIndex = null
-    this.isActive = false
+		this.game = null
+		this.team = null
+		this.teamIndex = null
+		this.isActive = false
 
-    this.shipName = null
-    this.switchUnit = null
-    this.actionUpdate = null
-    this.serverUpdate = null
-    this.updatesUntilAuto = 0
-    this.actions = null
-    this.levelNext = null
-    this.chatAt = null
+		this.shipName = null
+		this.switchUnit = null
+		this.actionUpdate = null
+		this.serverUpdate = null
+		this.updatesUntilAuto = 0
+		this.actions = null
+		this.levelNext = null
+		this.chatAt = null
 
-    this.queueing = false
-    this.queueReady = false
-    this.queueMin = 1
-  }
+		this.queueing = false
+		this.queueReady = false
+		this.queueMin = 1
+	}
 
-  data () {
-    return {
-      name: this.name,
-      shipName: this.shipName,
-      team: this.team,
-      teamIndex: this.teamIndex,
-    }
-  }
+	data () {
+		return {
+			name: this.name,
+			shipName: this.shipName,
+			team: this.team,
+			teamIndex: this.teamIndex,
+		}
+	}
 
-  emit (name, message) {
-    if (this.client) {
-      this.client.emit(name, message)
-    }
-  }
+	emit (name, message) {
+		if (this.client) {
+			this.client.emit(name, message)
+		}
+	}
 
-  resetGame (team, teamIndex) {
-    this.team = team
-    this.teamIndex = teamIndex
+	resetGame (team, teamIndex) {
+		this.team = team
+		this.teamIndex = teamIndex
 
-    this.isActive = true
-    this.shipName = this.client ? 'boxy' : CommonUtils.randomItem(CommonConsts.SHIP_NAMES)
-    this.switchUnit = null
-    this.actionUpdate = 0
-    this.serverUpdate = 0
-    this.actions = []
-    this.levelNext = null
-    this.chatAt = null
-  }
+		this.isActive = true
+		this.shipName = this.client ? 'boxy' : CommonUtils.randomItem(CommonConsts.SHIP_NAMES)
+		this.switchUnit = null
+		this.actionUpdate = 0
+		this.serverUpdate = 0
+		this.actions = []
+		this.levelNext = null
+		this.chatAt = null
+	}
 
-  // Rooms
+	// Rooms
 
-  join (room) {
-    if (this.client) {
-      this.client.join(room)
-    }
-  }
+	join (room) {
+		if (this.client) {
+			this.client.join(room)
+		}
+	}
 
-  leave (room) {
-    if (this.client) {
-      this.client.leave(room)
-    }
-  }
+	leave (room) {
+		if (this.client) {
+			this.client.leave(room)
+		}
+	}
 
-  // Game
+	// Game
 
-  joinGame (game) {
-    this.game = game
+	joinGame (game) {
+		this.game = game
 
-    this.join(game.id)
-  }
+		this.join(game.id)
+	}
 
-  leaveGameRoom () {
-    if (this.game) {
-      this.leave(this.game.id)
-    }
-  }
+	leaveGameRoom () {
+		if (this.game) {
+			this.leave(this.game.id)
+		}
+	}
 
-  leaveGame () {
-    if (this.game) {
-      this.leaveGameRoom()
-      const game = this.game
-      this.game = null //TODO temp
-      return game.remove(this)
-    }
-  }
+	leaveGame () {
+		if (this.game) {
+			this.leaveGameRoom()
+			const game = this.game
+			this.game = null //TODO temp
+			return game.remove(this)
+		}
+	}
 
-  // Queue
+	// Queue
 
-  updateQueue (data) {
-    this.queueReady = data.ready
-    this.queueMin = data.size
-  
-    queue.update()
-  }
+	updateQueue (data) {
+		this.queueReady = data.ready
+		this.queueMin = data.size
 
-  queueEnter () {
-    this.join('queue')
-  }
+		queue.update()
+	}
 
-  queueLeave () {
-    this.leave('queue')
-  }
+	queueEnter () {
+		this.join('queue')
+	}
 
-  disconnect () {
-    queue.remove(this)
+	queueLeave () {
+		this.leave('queue')
+	}
 
-    return this.leaveGame()
-  }
+	disconnect () {
+		queue.remove(this)
+
+		return this.leaveGame()
+	}
 }

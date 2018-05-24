@@ -1,7 +1,7 @@
 module.exports = {
 
-  randomItem (items) {
-    return items[Math.floor(Math.random() * items.length)]
-  },
+	randomItem (items) {
+		return items[Math.floor(Math.random() * items.length)]
+	},
 
 }
