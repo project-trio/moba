@@ -468,10 +468,10 @@ class Unit {
         // p(damage, reflectedDamage)
         source.takeDamage(this, renderTime, reflectedDamage, 0, true)
       }
-      if (this.repairRatio) {
+      if (this.repairDamageRatio) {
         const duration = 2000
         const ticks = duration / Local.tickDuration
-        const healthPerTick = this.repairRatio.times(damageDecimal).dividedBy(ticks).round().toNumber()
+        const healthPerTick = this.repairDamageRatio.times(damageDecimal).dividedBy(ticks).round().toNumber()
         this.modify(`${source.id}${renderTime}`, 'healthRegen', 'add', healthPerTick, renderTime + duration)
       }
     }

@@ -98,7 +98,7 @@ export default {
       disabledBy: [true, null, false],
       isDisabledBy: isDisabledBy,
       getRange: function (level) {
-        return levelMultiplier(120, level, 10)
+        return levelMultiplier(120, level, 2)
       },
       getEffectDelay: function (level) {
         return 500
@@ -127,7 +127,7 @@ export default {
       },
     },
     {
-      name: 'Rebound',
+      name: 'Prickle',
       description: 'Heal for [[Strength]] of damage taken, and deal half that amount back as damage to attackers',
       suffixStrength: '%',
       target: TARGET_SELF,
@@ -144,15 +144,16 @@ export default {
         return levelMultiplier(150, level, -5)
       },
       start: function (index, level, ship) {
-        ship.repairRatio = new Decimal(this.getEffectStrength(level)).dividedBy(100)
-        ship.reflectDamageRatio = ship.repairRatio.dividedBy(2)
-        ship.reboundMesh = Render.outline(ship.base.children[0], 0xff0000, 1.1)
+        ship.repairDamageRatio = new Decimal(this.getEffectStrength(level)).dividedBy(100)
+        ship.reflectDamageRatio = ship.repairDamageRatio.dividedBy(2)
+        ship.prickleMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
       },
       end: function (ship) {
+        ship.repairDamageRatio = null
         ship.reflectDamageRatio = null
-        if (ship.reboundMesh) {
-          Render.remove(ship.reboundMesh)
-          ship.reboundMesh = null
+        if (ship.prickleMesh) {
+          Render.remove(ship.prickleMesh)
+          ship.prickleMesh = null
         }
       },
     },
