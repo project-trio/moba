@@ -43,19 +43,23 @@ class Ship extends Movable {
 		this.player = player
 		this.name = name
 		this.split = statBase.split
-		this.reemergeAt = store.state.game.renderTime
 		this.uncontrollable = false
 		this.rebound = null
 
 		this.level = 1
 		this.levelExp = 0
 		this.expPerLevel = expPerLevel
-		this.respawned = false
-		this.isBlocking = true
 		this.exactDestination = false
 		this.selected = false
 		this.requiresSightOfTarget = false
 		this.reflectDamage = null
+
+		this.isDead = true
+		this.timeOfDeath = -9000
+		this.respawned = true
+		this.isBlocking = false
+		this.reemergeAt = 4000
+		this.modify('Spawn', 'moveSpeed', 'times', 2)
 
 		this.queuedForActivation = [false, false, false]
 		this.queuedForTarget = null
@@ -74,7 +78,7 @@ class Ship extends Movable {
 			this.setSelection(0xffff00)
 		}
 
-		statBase.create(name, team, this.top, this.base, this)
+		statBase.create(name, team, this.top, this.base, this, true)
 
 		const displayName = player.name
 		const displayTextSize = displayName.length < 4 ? 10 : 10 - (displayName.length - 4) / 4
@@ -430,7 +434,7 @@ class Ship extends Movable {
 		this.isBlocking = false
 		this.isDying = false
 		this.stunnedUntil = 0
-		this.modify('Death', 'moveSpeed', 'times', 0.5)
+		this.modify('Spawn', 'moveSpeed', 'times', 0.5)
 
 		const spawnAt = this.player.spawnLocation()
 		this.setLocation(spawnAt[0], spawnAt[1])
@@ -446,7 +450,7 @@ class Ship extends Movable {
 		this.timeOfDeath = null
 		this.isBlocking = true
 		this.opacity(1.0)
-		this.modify('Death', 'moveSpeed', null)
+		this.modify('Spawn', 'moveSpeed', null)
 
 		this.infoContainer.visible = true
 		if (this.isLocal) {

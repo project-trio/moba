@@ -221,6 +221,10 @@ export default {
 		if (options.parent) {
 			options.parent.add(mesh)
 		}
+		if (options.opacity !== undefined) {
+			mesh.material.transparent = true
+			mesh.material.opacity = options.opacity
+		}
 		mesh.castShadow = true
 		mesh.receiveShadow = true
 		mesh.owner = options.owner

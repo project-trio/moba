@@ -3,10 +3,10 @@ import Render from '@/client/play/render/render'
 
 //HELPERS
 
-const createMeshes = function (name, team, top, base, ship) {
-	Render.voxel(team, 'ships', `${name}-top`, { parent: top, z: this.offsetTop, owner: ship })
+const createMeshes = function (name, team, top, base, ship, inGame) {
+	Render.voxel(team, 'ships', `${name}-top`, { parent: top, z: this.offsetTop, owner: ship, opacity: inGame ? 0.5 : undefined })
 	if (this.split && !this.noBaseModel) {
-		Render.voxel(team, 'ships', `${name}-base`, { parent: base, owner: ship })
+		Render.voxel(team, 'ships', `${name}-base`, { parent: base, owner: ship, opacity: inGame ? 0.5 : undefined })
 	}
 }
 
