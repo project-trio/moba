@@ -8,27 +8,19 @@ const precision = function (n) {
 export default {
 
 	add (a, b) {
-		a *= PRECISION
-		b *= PRECISION
-		return (a + b) / PRECISION
+		return (a * PRECISION + b * PRECISION) / PRECISION
 	},
 
 	subtract (a, b) {
-		a *= PRECISION
-		b *= PRECISION
-		return (a - b) / PRECISION
+		return (a * PRECISION - b * PRECISION) / PRECISION
 	},
 
 	multiply (a, b) {
-		a *= PRECISION
-		b *= PRECISION
-		return (a * b) / PRECISION_SQUARE
+		return ((a * PRECISION) * (b * PRECISION)) / PRECISION_SQUARE
 	},
 
 	divide (a, b) {
-		a *= PRECISION
-		b *= PRECISION
-		return a / b
+		return (a * PRECISION) / (b * PRECISION)
 	},
 
 	atan (y, x) {
