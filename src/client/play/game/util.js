@@ -1,4 +1,5 @@
-import TrigCache from '@/client/play/external/trigcache'
+// import TrigCache from '@/client/play/external/trigcache'
+import Float from '@/client/play/game/helpers/float'
 
 const PI = Math.PI
 const PIt2 = PI * 2
@@ -13,7 +14,8 @@ export default {
 		if (fast) {
 			return Math.atan2(dy, dx)
 		}
-		return TrigCache.atan(dy, dx)
+		return Float.atan(dy, dx)
+		// return TrigCache.atan(dy, dx) //DECIMAL
 	},
 
 	angleBetween (a, b, fast) {

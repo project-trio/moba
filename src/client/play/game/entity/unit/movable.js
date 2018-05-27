@@ -1,4 +1,4 @@
-import TrigCache from '@/client/play/external/trigcache'
+// import TrigCache from '@/client/play/external/trigcache'
 
 import Local from '@/client/play/local'
 
@@ -48,10 +48,14 @@ class Movable extends Unit {
 		if (moveX === undefined) {
 			if (dx !== 0 || dy !== 0) {
 				const moveAngle = Util.angleOf(dx, dy, false)
-				this.moveTargetAngle = moveAngle.toNumber() / 1000
-				const angleIndex = TrigCache.indexFor(moveAngle)
-				moveX = TrigCache.cos(angleIndex)
-				moveY = TrigCache.sin(angleIndex)
+				this.moveTargetAngle = moveAngle
+				moveX = Math.floor(Float.cos(moveAngle) * 1000)
+				moveY = Math.floor(Float.sin(moveAngle) * 1000)
+				//DECIMAL
+				// this.moveTargetAngle = moveAngle.toNumber() / 1000 //DECIMAL
+				// const angleIndex = TrigCache.indexFor(moveAngle)
+				// moveX = TrigCache.cos(angleIndex)
+				// moveY = TrigCache.sin(angleIndex)
 			} else {
 				moveX = 0
 				moveY = 0

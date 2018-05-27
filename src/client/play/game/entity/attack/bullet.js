@@ -1,5 +1,5 @@
 // import Decimal from 'decimal.js'
-import TrigCache from '@/client/play/external/trigcache'
+// import TrigCache from '@/client/play/external/trigcache'
 
 import Local from '@/client/play/local'
 
@@ -108,10 +108,14 @@ class Bullet {
 		let moveX, moveY
 		if (dx !== 0 || dy !== 0) {
 			const moveAngle = Util.angleOf(dx, dy, false)
-			this.aimTargetAngle = moveAngle.toNumber() / 1000
-			const angleIndex = TrigCache.indexFor(moveAngle)
-			moveX = TrigCache.cos(angleIndex)
-			moveY = TrigCache.sin(angleIndex)
+			this.aimTargetAngle = moveAngle
+			moveX = Math.floor(Float.cos(moveAngle) * 1000)
+			moveY = Math.floor(Float.sin(moveAngle) * 1000)
+			//DECMIAL
+			// this.aimTargetAngle = moveAngle.toNumber() / 1000 //DECIMAL
+			// const angleIndex = TrigCache.indexFor(moveAngle)
+			// moveX = TrigCache.cos(angleIndex)
+			// moveY = TrigCache.sin(angleIndex)
 		} else { //TODO workaround
 			moveX = 0
 			moveY = 0

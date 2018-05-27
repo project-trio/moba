@@ -1,4 +1,4 @@
-import TrigCache from '@/client/play/external/trigcache'
+// import TrigCache from '@/client/play/external/trigcache'
 
 import store from '@/client/store'
 
@@ -227,7 +227,7 @@ export default function (gid, mode, size, mapName) {
 
 		Local.player = players[store.state.playerId]
 
-		TrigCache.prepare()
+		// TrigCache.prepare() //DECIMAL
 
 		const gameContainer = Render.group()
 		this.container = gameContainer

@@ -260,7 +260,7 @@ class Unit {
 			result = result[mathMethod](byValue)
 		}
 		if (statName === 'moveSpeed') {
-			this.current[statName] = result
+			this.current[statName] = result //DECIMAL
 			this.cacheMoveSpeed = result.toNumber() / Local.tickDuration
 		} else {
 			this.current[statName] = result.toNumber()
@@ -467,7 +467,7 @@ class Unit {
 
 			if (this.reflectDamageRatio) {
 				// const reflectedDamage = damageDecimal.times(this.reflectDamageRatio).round().toNumber() //DECIMAL
-				const reflectedDamage = Float.multiply(damage, this.reflectDamageRatio)
+				const reflectedDamage = Math.floor(Float.multiply(damage, this.reflectDamageRatio))
 				source.takeDamage(this, renderTime, reflectedDamage, 0, true)
 			}
 			if (this.repairDamageRatio) {
