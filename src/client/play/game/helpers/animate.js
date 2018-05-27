@@ -65,7 +65,11 @@ const update = function (renderTime) {
 			}
 			const axis = animation.axis
 			if (axis !== undefined) {
-				obj[animation.property][axis] = currentValue
+				if (axis === 'all') {
+					obj[animation.property].set(currentValue, currentValue, currentValue)
+				} else {
+					obj[animation.property][axis] = currentValue
+				}
 			} else if (animation.property === 'opacity') {
 				if (obj) {
 					obj.material.transparent = true

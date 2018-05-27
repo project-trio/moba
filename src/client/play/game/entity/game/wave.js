@@ -12,8 +12,16 @@ export default {
 					for (let pi = 0; pi < paths.length; pi += 1) {
 						const path = paths[pi]
 						const mini = Mini.spawn(team, name, path, mirrored)
-						mini.container.position.z = -10
-						mini.queueAnimation('container', 'position', {
+						mini.model.scale.set(0.1, 0.1, 0.1)
+						mini.queueAnimation('model', 'scale', {
+							axis: 'all',
+							from: 0.1,
+							to: 1,
+							start: renderTime,
+							duration: 1000,
+						})
+						mini.model.position.z = -10
+						mini.queueAnimation('model', 'position', {
 							axis: 'z',
 							from: -10,
 							to: 0,
