@@ -85,7 +85,7 @@ export default {
 			return this.level === 0 || this.activated || this.cooldownRemaining > 200 || (this.skill.activatable && !this.skill.activatable())
 		},
 		disabled () {
-			return this.preventsActivation || this.cooldownRemaining > 0 || this.disabledByOtherSkill || store.state.local.dead
+			return this.preventsActivation || this.cooldownRemaining > 0 || this.isToggled || this.disabledByOtherSkill || store.state.local.dead
 		},
 
 		isAnySkillActive () {
@@ -233,6 +233,10 @@ export default {
 				store.state.local.skills.cooldowns.splice(this.index, 1, 0)
 			}
 			return 0
+		},
+
+		isToggled () {
+			return store.state.local.skills.toggle === this.index
 		},
 
 		currentPress () {

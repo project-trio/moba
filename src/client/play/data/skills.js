@@ -327,30 +327,27 @@ export default {
 
 	stitches: [
 		{
-			name: `Repair Swarm`,
-			description: 'Repairs allies in range by [[Regen]] for [[Duration]]',
+			name: `Repair Wave`,
+			description: 'Repair nearby allies for [[Regen]]',
+			toggle: 10,
 			target: TARGET_SELF,
-			hitsTowers: false,
-			isDisabledBy: null,
-			endOnDeath: false,
+			disabledBy: [null, true, true],
+			isDisabledBy: isDisabledBy,
+			endOnDeath: true,
 			getEffectRegen (level) {
-				return levelMultiplier(300, level, 30)
-			},
-			getEffectDuration (level) {
-				return 30 * 100
+				return levelMultiplier(50, level, 5)
 			},
 			getRange (level) {
-				return 100
+				return 140
 			},
 			getCooldown (level) {
-				return levelMultiplier(250, level, -10)
+				return levelMultiplier(90, level, -6)
 			},
-			start (index, level, ship) {
+			activate (index, level, ship) {
 				new AreaOfEffect(ship, false, {
 					dot: false,
-					hitsTowers: this.hitsTowers,
-					color: 0x00ccff,
-					opacity: 0.5,
+					color: 0x00ff77,
+					opacity: 0.2,
 					px: ship.px, py: ship.py,
 					radius: this.getRange(level),
 					allies: true,
@@ -359,86 +356,81 @@ export default {
 						stat: 'healthRegen',
 						method: 'add',
 						value: this.getEffectRegen(level),
-						expires: this.getEffectDuration(level),
+						expires: 1000,
 					},
 				})
 			},
 		},
 		{
-			name: 'Jetsam',
-			description: 'Toss repair debris overboard, slowing enemies that walk over it by [[MoveSpeed]] for [[Duration]]',
+			name: 'Turbo Wave',
+			description: 'Speed up nearby allies by [[MoveSpeed]]',
+			toggle: 10,
 			suffixMoveSpeed: '%',
-			target: TARGET_GROUND,
-			isDisabledBy: null,
-			getRange (level) {
-				return 120
-			},
-			getEffectRange (level) {
-				return levelMultiplier(70, level, 2)
-			},
-			getEffectRemainsDuration (level) {
-				return levelMultiplier(30, level, 2) * 100
-			},
-			getEffectDuration (level) {
-				return levelMultiplier(10, level, 2) * 100
-			},
+			target: TARGET_SELF,
+			disabledBy: [true, null, true],
+			isDisabledBy: isDisabledBy,
+			endOnDeath: true,
 			getEffectMoveSpeed (level) {
-				return levelMultiplier(50, level, 2)
+				return levelMultiplier(30, level, 3)
+			},
+			getRange (level) {
+				return 140
 			},
 			getCooldown (level) {
-				return 220
+				return levelMultiplier(90, level, -6)
 			},
-			start (index, level, ship, target) {
-				const moveSpeed = new Decimal(1).minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
-				const aoeRange = this.getEffectRange(level)
-				const effectDuration = this.getEffectDuration(level)
-				const effectRemainsDuration = this.getEffectRemainsDuration(level)
-				const bulletData = {
-					dot: true,
-					opacity: 0.5,
-					attackMoveSpeed: 18,
-					bulletSize: 14,
-					bulletColor: 0x222222,
-					allies: false,
+			activate (index, level, ship) {
+				new AreaOfEffect(ship, false, {
+					dot: false,
+					color: 0xff7700,
+					opacity: 0.2,
+					px: ship.px, py: ship.py,
+					radius: this.getRange(level),
+					allies: true,
 					modify: {
 						name: this.name,
 						stat: 'moveSpeed',
 						method: 'times',
-						value: moveSpeed,
-						expires: effectDuration,
+						value: new Decimal(1).add(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)),
+						expires: 1000,
 					},
-					explosionRadius: aoeRange,
-					effectDuration: effectRemainsDuration,
-				}
-				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+				})
 			},
 		},
 		{
-			name: 'Emergency',
-			description: 'Expend a huge boost of [[MoveSpeed]] movement speed',
-			suffixMoveSpeed: '%',
+			name: 'Power Wave',
+			description: 'Boost nearby allies\' attack speed by [[AttackSpeed]]',
+			toggle: 10,
+			suffixAttackSpeed: '%',
 			target: TARGET_SELF,
-			isDisabledBy: null,
+			disabledBy: [true, true, null],
+			isDisabledBy: isDisabledBy,
 			endOnDeath: true,
-			getEffectMoveSpeed (level) {
-				return levelMultiplier(25, level, 10)
+			getEffectAttackSpeed (level) {
+				return levelMultiplier(30, level, 3)
 			},
-			getDuration (level) {
-				return 40
+			getRange (level) {
+				return 140
 			},
 			getCooldown (level) {
-				return levelMultiplier(150, level, -2)
+				return levelMultiplier(90, level, -6)
 			},
-			start (index, level, ship) {
-				ship.modify(this.name, 'moveSpeed', 'times', new Decimal(1).plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
-				ship.emergencyMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.07)
-			},
-			end (ship) {
-				ship.modify(this.name, 'moveSpeed', null)
-				if (ship.emergencyMesh) {
-					Render.remove(ship.emergencyMesh)
-					ship.emergencyMesh = null
-				}
+			activate (index, level, ship) {
+				new AreaOfEffect(ship, false, {
+					dot: false,
+					color: 0xff00cc,
+					opacity: 0.2,
+					px: ship.px, py: ship.py,
+					radius: this.getRange(level),
+					allies: true,
+					modify: {
+						name: this.name,
+						stat: 'attackCooldown',
+						method: 'times',
+						value: new Decimal(1).minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)),
+						expires: 1000,
+					},
+				})
 			},
 		},
 	],
@@ -466,7 +458,7 @@ export default {
 				return 120
 			},
 			getCooldown (level) {
-				return levelMultiplier(250, level, -5)
+				return 100
 			},
 			start (index, level, ship, target) {
 				const damage = this.getEffectDamage(level) * 100
@@ -797,7 +789,7 @@ export default {
 		},
 		{
 			name: 'Rearm',
-			description: 'Lowers the cooldown of other abilities by [[Duration]]',
+			description: 'Removes [[Duration]] from the cooldown of other abilities',
 			target: TARGET_SELF,
 			isDisabledBy: null,
 			minLeveled: 1,

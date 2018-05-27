@@ -60,6 +60,9 @@ class Ship extends Movable {
 		this.queuedForActivation = [false, false, false]
 		this.queuedForTarget = null
 		this.targetingSkill = null
+		this.toggleSkillIndex = null
+		this.toggleSkillAt = 0
+		this.toggleSkillDuration = null
 
 		const scores = { pid: player.id, level: this.level, kills: 0, deaths: 0, damage: 0 }
 		store.state.game.ships.push(scores)
@@ -266,7 +269,15 @@ class Ship extends Movable {
 		const cooldownDuration = skill.getCooldown(skillLevel) * 100
 		this.updateCooldown(index, endDurationAt, cooldownDuration)
 
-		skill.start(index, skillLevel, this, target, renderTime, endDurationAt, cooldownDuration)
+		if (skill.toggle) {
+			this.toggleSkillIndex = index
+			this.toggleSkillDuration = skill.toggle * 100
+			if (this.isLocal) {
+				store.state.local.skills.toggle = index
+			}
+		} else {
+			skill.start(index, skillLevel, this, target, renderTime, endDurationAt, cooldownDuration)
+		}
 		return true
 	}
 
@@ -359,6 +370,8 @@ class Ship extends Movable {
 		this.targetingSkill = null
 		this.queuedForTarget = null
 		this.queuedForActivation = [false, false, false]
+		this.toggleSkillIndex = null
+		this.toggleSkillAt = 0
 
 		super.die(renderTime)
 
@@ -403,6 +416,7 @@ class Ship extends Movable {
 		if (this.isLocal) {
 			store.state.local.dead = true
 			store.state.local.reemergeAt = this.reemergeAt
+			store.state.local.skills.toggle = null
 		}
 	}
 
@@ -626,6 +640,13 @@ class Ship extends Movable {
 					this.performSkill(renderTime, skillIndex)
 					this.queuedForActivation[skillIndex] = false
 				}
+			}
+			const toggleIndex = this.toggleSkillIndex
+			if (toggleIndex !== null && this.toggleSkillAt + this.toggleSkillDuration < renderTime) {
+				const skill = this.skills.data[toggleIndex]
+				const skillLevel = this.skills.levels[toggleIndex]
+				skill.activate(toggleIndex, skillLevel, this)
+				this.toggleSkillAt = renderTime
 			}
 
 			this.checkQueuedSkill(renderTime)
