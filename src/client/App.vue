@@ -127,12 +127,12 @@ button
 button.big
 	width 300px
 	height 64px
-	font-size 28px
+	font-size 32px
 	font-weight 500
-	color #333
+	background #d
 	display block
 	margin 32px auto
-	border-radius 4px
+	border-radius 3px
 
 button.interactive:hover
 	opacity 0.8

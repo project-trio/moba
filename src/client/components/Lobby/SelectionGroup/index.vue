@@ -30,4 +30,7 @@ export default {
 
 .selection.selected
 	background #dd6677
+
+.selection-group button
+	border-radius 30px
 </style>
