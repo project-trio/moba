@@ -8,6 +8,7 @@ import Local from '@/client/play/local'
 import Render from '@/client/play/render/render'
 
 import Animate from '@/client/play/game/helpers/animate'
+import Float from '@/client/play/game/helpers/float'
 import Util from '@/client/play/game/util'
 
 import Bullet from '@/client/play/game/entity/attack/bullet'
@@ -75,7 +76,7 @@ class Unit {
 				color: 0x000000,
 				opacity: 0.5,
 				segments: 32,
-				parent: this.floor
+				parent: this.floor,
 			})
 			this.selectionIndicator = selectionRing
 			this.selectionIndicator.visible = false
@@ -460,18 +461,20 @@ class Unit {
 		let damage = amount
 		if (!reflected) {
 			let armor = 100 - Math.max(0, this.current.armor - pierce)
-			const damageDecimal = new Decimal(damage).times(armor).dividedBy(100)
-			damage = damageDecimal.round().toNumber()
+			damage = Math.round(Float.multiply(damage, armor) / 100)
+			// const damageDecimal = new Decimal(damage).times(armor).dividedBy(100) //DECIMAL
+			// damage = damageDecimal.round().toNumber() //DECIMAL
 
 			if (this.reflectDamageRatio) {
-				const reflectedDamage = damageDecimal.times(this.reflectDamageRatio).round().toNumber()
-				// p(damage, reflectedDamage)
+				// const reflectedDamage = damageDecimal.times(this.reflectDamageRatio).round().toNumber() //DECIMAL
+				const reflectedDamage = Float.multiply(damage, this.reflectDamageRatio)
 				source.takeDamage(this, renderTime, reflectedDamage, 0, true)
 			}
 			if (this.repairDamageRatio) {
 				const duration = 2000
-				const ticks = duration / Local.tickDuration
-				const healthPerTick = this.repairDamageRatio.times(damageDecimal).dividedBy(ticks).round().toNumber()
+				const ticks = Math.floor(duration / Local.tickDuration)
+				const healthPerTick = Math.floor(Float.multiply(this.repairDamageRatio, damage) / ticks)
+				// const healthPerTick = this.repairDamageRatio.times(damageDecimal).dividedBy(ticks).round().toNumber() //DECIMAL
 				this.modify(`${source.id}${renderTime}`, 'healthRegen', 'add', healthPerTick, renderTime + duration)
 			}
 		}

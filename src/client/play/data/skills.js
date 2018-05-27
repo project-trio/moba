@@ -7,6 +7,7 @@ import store from '@/client/store'
 import Render from '@/client/play/render/render'
 
 import Animate from '@/client/play/game/helpers/animate'
+import Float from '@/client/play/game/helpers/float'
 import Util from '@/client/play/game/util'
 
 import AreaOfEffect from '@/client/play/game/entity/attack/aoe'
@@ -146,8 +147,9 @@ export default {
 				return levelMultiplier(150, level, -5)
 			},
 			start (index, level, ship) {
-				ship.repairDamageRatio = new Decimal(this.getEffectStrength(level)).dividedBy(100)
-				ship.reflectDamageRatio = ship.repairDamageRatio.dividedBy(2)
+				ship.repairDamageRatio = Float.divide(this.getEffectStrength(level), 100)
+				// ship.repairDamageRatio = new Decimal(this.getEffectStrength(level)).dividedBy(100) //DECIMAL
+				ship.reflectDamageRatio = ship.repairDamageRatio / 2
 				ship.prickleMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
 			end (ship) {

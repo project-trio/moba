@@ -2,6 +2,7 @@ import TrigCache from '@/client/play/external/trigcache'
 
 import Local from '@/client/play/local'
 
+import Float from '@/client/play/game/helpers/float'
 import Util from '@/client/play/game/util'
 
 import Unit from '@/client/play/game/entity/unit/unit'
@@ -147,8 +148,10 @@ class Movable extends Unit {
 			cx = this.px
 			cy = this.py
 
-			moveByX = this.current.moveSpeed.times(this.moveX).round().toNumber()
-			moveByY = this.current.moveSpeed.times(this.moveY).round().toNumber()
+			moveByX = Math.round(Float.multiply(this.current.moveSpeed, this.moveX))
+			moveByY = Math.round(Float.multiply(this.current.moveSpeed, this.moveY))
+			// moveByX = this.current.moveSpeed.times(this.moveX).round().toNumber() //DECIMAL
+			// moveByY = this.current.moveSpeed.times(this.moveY).round().toNumber() //DECIMAL
 		}
 
 		let movingToX = cx + moveByX

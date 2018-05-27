@@ -1,10 +1,11 @@
-import Decimal from 'decimal.js'
+// import Decimal from 'decimal.js'
 import TrigCache from '@/client/play/external/trigcache'
 
 import Local from '@/client/play/local'
 
 import Render from '@/client/play/render/render'
 
+import Float from '@/client/play/game/helpers/float'
 import Util from '@/client/play/game/util'
 
 import AreaOfEffect from '@/client/play/game/entity/attack/aoe'
@@ -57,10 +58,12 @@ class Bullet {
 
 		this.attackDamage = data.attackDamage
 		this.attackPierce = data.attackPierce
-		this.moveConstant = new Decimal(data.attackMoveSpeed).dividedBy(500)
+		this.moveConstant = Float.divide(data.attackMoveSpeed, 500)
+		// this.moveConstant = new Decimal(data.attackMoveSpeed).dividedBy(500) //DECIMAL
 
 		if (source.height) {
-			this.dropRate = 1400000 * this.moveConstant.toNumber() / Math.sqrt(source.distanceTo(target))
+			this.dropRate = 1400000 * this.moveConstant / Math.sqrt(source.distanceTo(target))
+			// this.dropRate = 1400000 * this.moveConstant.toNumber() / Math.sqrt(source.distanceTo(target)) //DECIMAL
 		}
 		if (!this.unitTarget) {
 			this.collisionCheck = Util.squared(data.collisionSize || data.attackMoveSpeed * 100)
@@ -154,7 +157,8 @@ class Bullet {
 			if (this.attackDamage) {
 				const damage = this.target.takeDamage(this.source, renderTime, this.attackDamage, this.attackPierce)
 				if (this.rebound && !this.source.isDead) {
-					const heal = new Decimal(damage).times(this.rebound).round().toNumber()
+					const heal = Math.round(Float.multiply(damage, this.rebound))
+					// const heal = new Decimal(damage).times(this.rebound).round().toNumber() //DECIMAL
 					new Bullet(this.target, this.source, { bulletColor: 0x00ff00, heal: heal, bulletSize: 8, attackMoveSpeed: 10 }, this.px, this.py, this.container.rotation.z)
 				}
 			}
@@ -220,12 +224,15 @@ class Bullet {
 			cy = this.py
 
 			// Cache
-			const moveSpeed = this.moveConstant
-			this.currentSpeed = moveSpeed.toNumber()
-
-			const moveScalar = moveSpeed.times(timeDelta)
-			moveByX = moveScalar.times(this.moveX).round().toNumber()
-			moveByY = moveScalar.times(this.moveY).round().toNumber()
+			// const moveSpeed = this.moveConstant //DECIMAL
+			// this.currentSpeed = moveSpeed.toNumber() //DECIMAL
+			this.currentSpeed = this.moveConstant
+			const moveScalar = this.currentSpeed * timeDelta
+			// const moveScalar = moveSpeed.times(timeDelta) //DECIMAL
+			moveByX = Math.round(Float.multiply(moveScalar, this.moveX))
+			moveByY = Math.round(Float.multiply(moveScalar, this.moveY))
+			// moveByX = moveScalar.times(this.moveX).round().toNumber() //DECIMAL
+			// moveByY = moveScalar.times(this.moveY).round().toNumber() //DECIMAL
 		}
 
 		let movingToX = cx + moveByX
