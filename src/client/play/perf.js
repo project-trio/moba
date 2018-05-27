@@ -1,9 +1,10 @@
-// import Decimal from 'decimal.js'
+import Decimal from 'decimal.js'
 import TrigCache from '@/client/play/external/trigcache'
 
+import Float from '@/client/play/game/helpers/float'
 import Util from '@/client/play/game/util'
 
-const iterations = 9999
+const iterations = 99999
 
 let rx = -60, ry = 30
 let value
@@ -17,7 +18,35 @@ function randomizePosition() {
 	ry = getRandomInt(-100, 100)
 }
 
+
+//FLOAT
+
+
+console.time('Basic math')
+for (let i = 0; i < iterations; i += 1) {
+	value = Math.round(ry * rx)
+}
+const basicValue = value
+console.timeEnd('Basic math')
+
+console.time('Float.multiply')
+for (let i = 0; i < iterations; i += 1) {
+	value = Math.round(Float.multiply(ry, rx))
+}
+const floatValue = value
+console.timeEnd('Float.multiply')
+
+
+console.time('Decimal.multiply')
+for (let i = 0; i < iterations; i += 1) {
+	value = new Decimal(ry).times(rx).round().toNumber()
+}
+console.timeEnd('Decimal.multiply')
+console.log(basicValue, floatValue, value)
+
+
 //SETUP
+
 
 TrigCache.prepare()
 

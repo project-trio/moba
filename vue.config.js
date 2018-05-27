@@ -16,6 +16,7 @@ module.exports = {
 
 	configureWebpack: config => {
 		config.entry.app = './src/client/main.js'
+		// config.entry.app = './src/client/play/perf.js' //SAMPLE
 
 		config.module.rules.push({
 			test: /\.(vox|typeface)$/,
