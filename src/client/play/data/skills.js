@@ -59,7 +59,7 @@ export default {
 				return levelMultiplier(70, level, 10)
 			},
 			getCooldown (level) {
-				return levelMultiplier(150, level, -5)
+				return levelMultiplier(100, level, -4)
 			},
 			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.modify(this.name, 'moveSpeed', 'times', 5)
@@ -110,7 +110,7 @@ export default {
 				return levelMultiplier(10, level, 1) * 100
 			},
 			getCooldown (level) {
-				return 200
+				return levelMultiplier(200, level, -10)
 			},
 			start (index, level, ship, target, startAt, endAt, cooldown) {
 				const aoeRange = this.getRange(level)
@@ -144,7 +144,7 @@ export default {
 				return 50
 			},
 			getCooldown (level) {
-				return levelMultiplier(150, level, -5)
+				return levelMultiplier(150, level, -10)
 			},
 			start (index, level, ship) {
 				ship.repairDamageRatio = Float.divide(this.getEffectStrength(level), 100)
@@ -175,7 +175,7 @@ export default {
 			isDisabledBy: isDisabledBy,
 			endOnDeath: false,
 			getEffectDelay (level) {
-				return 500
+				return 300
 			},
 			getEffectRange (level) {
 				return 60
@@ -187,7 +187,7 @@ export default {
 				return levelMultiplier(80, level, 5)
 			},
 			getCooldown (level) {
-				return levelMultiplier(150, level, -5)
+				return levelMultiplier(100, level, -5)
 			},
 			start (index, level, ship, target, startAt) {
 				const delay = this.getEffectDelay(level)
@@ -220,7 +220,7 @@ export default {
 				return 3
 			},
 			getCooldown (level) {
-				return levelMultiplier(300, level, -10)
+				return levelMultiplier(200, level, -10)
 			},
 			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.customPosition = true
@@ -304,7 +304,7 @@ export default {
 				return 140
 			},
 			getCooldown (level) {
-				return levelMultiplier(200, level, -5)
+				return levelMultiplier(100, level, -5)
 			},
 			start (index, level, ship, target) {
 				const damage = this.getEffectDamage(level) * 100
@@ -508,7 +508,7 @@ export default {
 				return levelMultiplier(400, level, 50)
 			},
 			getCooldown (level) {
-				return levelMultiplier(180, level, -5)
+				return levelMultiplier(180, level, -10)
 			},
 			start (index, level, ship, target) {
 				const dps = this.getEffectDps(level)
@@ -556,7 +556,7 @@ export default {
 				return 50
 			},
 			getCooldown (level) {
-				return levelMultiplier(150, level, -2)
+				return levelMultiplier(150, level, -5)
 			},
 			start (index, level, ship) {
 				ship.modify(this.name, 'attackCooldown', 'times', new Decimal(1).minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
@@ -592,7 +592,7 @@ export default {
 				return levelMultiplier(100, level, 15)
 			},
 			getCooldown (level) {
-				return 60
+				return levelMultiplier(80, level, -4)
 			},
 			start (index, level, ship, target) {
 				const damage = this.getEffectDamage(level) * 100
@@ -625,7 +625,7 @@ export default {
 				return levelMultiplier(5, level, 1)
 			},
 			getCooldown (level) {
-				return 200
+				return levelMultiplier(150, level, -10)
 			},
 			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.modify(this.name, 'moveSpeed', 'times', 3)
@@ -690,7 +690,7 @@ export default {
 				return levelMultiplier(50, level, 5)
 			},
 			getCooldown (level) {
-				return levelMultiplier(150, level, -5)
+				return levelMultiplier(120, level, -5)
 			},
 			start (index, level, ship) {
 				ship.rebound = new Decimal(this.getEffectRebound(level)).dividedBy(100)
@@ -755,7 +755,7 @@ export default {
 				return levelMultiplier(200, level, 10)
 			},
 			getCooldown (level) {
-				return 260
+				return 200
 			},
 			start (index, level, ship, target, startAt, endAt) {
 				const aoeRange = this.getEffectRange(level)
@@ -828,7 +828,7 @@ export default {
 				return levelMultiplier(40, level, 2)
 			},
 			getCooldown (level) {
-				return levelMultiplier(150, level, -5)
+				return levelMultiplier(120, level, -5)
 			},
 			start (index, level, ship, target, startAt, endAt) {
 				const shieldDamage = this.getEffectDamage(level) * 100
@@ -906,7 +906,7 @@ export default {
 				return levelMultiplier(25, level, 5)
 			},
 			getCooldown (level) {
-				return levelMultiplier(400, level, -20)
+				return levelMultiplier(300, level, -20)
 			},
 			start (index, level, ship, target) {
 				const sightRange = this.getEffectRange(level)
@@ -942,7 +942,7 @@ export default {
 				return levelMultiplier(100, level, 10)
 			},
 			getCooldown (level) {
-				return 100
+				return levelMultiplier(100, level, -5)
 			},
 			start (index, level, ship, target) {
 				const damage = this.getEffectDamage(level)
@@ -979,7 +979,7 @@ export default {
 				return levelMultiplier(35, level, 2)
 			},
 			getCooldown (level) {
-				return levelMultiplier(200, level, -10)
+				return levelMultiplier(150, level, -10)
 			},
 			start (index, level, ship, target, startAt, endAt) {
 				ship.removeTarget()
@@ -1042,7 +1042,7 @@ export default {
 				return levelMultiplier(40, level, 2)
 			},
 			getCooldown (level) {
-				return 150
+				return levelMultiplier(150, level, 5)
 			},
 			start (index, level, ship, target, startAt, endAt) {
 				ship.modify(this.name, 'attackCooldown', 'times', new Decimal(1).minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
@@ -1073,7 +1073,7 @@ export default {
 				return levelMultiplier(20, level, 3)
 			},
 			getCooldown (level) {
-				return levelMultiplier(200, level, -5)
+				return levelMultiplier(200, level, -10)
 			},
 			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.removeTarget()
@@ -1123,7 +1123,7 @@ export default {
 				return 50
 			},
 			getCooldown (level) {
-				return levelMultiplier(150, level, -2)
+				return 100
 			},
 			start (index, level, ship) {
 				ship.modify(this.name, 'healthRegen', 'add', this.getEffectRegen(level))
