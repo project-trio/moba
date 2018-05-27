@@ -276,33 +276,42 @@ export default {
 
 	// Map
 
-	wall (team, x, y, w, h, parent) {
-		const geometry = new THREE.BoxBufferGeometry(w, h, WALL_HEIGHT)
-		const material = new THREE.MeshLambertMaterial({ color: dataConstants.wallColors[team] })
-		material.outlineParameters = {
-			color: new THREE.Color(dataConstants.darkColors[team]),
+	createWalls (array, parent) {
+		const mergedGeometries = [ new THREE.Geometry(), new THREE.Geometry() ]
+		let capGeometry
+		for (const wall of array) {
+			const x = wall[0]
+			const y = wall[1]
+			let geometry, team
+			if (wall.length === 5) {
+				const w = wall[2]
+				const h = wall[3]
+				team = wall[4]
+				geometry = new THREE.BoxGeometry(w, h, WALL_HEIGHT)
+			} else {
+				team = wall[3]
+				if (!capGeometry) {
+					const radius = wall[2] / 2
+					capGeometry = new THREE.CylinderGeometry(radius, radius, WALL_HEIGHT, 32)
+					capGeometry.rotateX(Math.PI / 2)
+				}
+				geometry = capGeometry
+			}
+			geometry.translate(x, y, 0)
+			mergedGeometries[team].merge(geometry)
+			geometry.translate(-x, -y, 0)
 		}
-		const wall = new THREE.Mesh(geometry, material)
-		wall.position.set(x, y, WALL_HEIGHT / 2)
-		wall.castShadow = true
-		wall.receiveShadow = true
-		parent.add(wall)
-		return wall
-	},
-
-	wallCap (team, x, y, radius, parent) {
-		const geometry = new THREE.CylinderBufferGeometry(radius, radius, WALL_HEIGHT, 32)
-		const material = new THREE.MeshLambertMaterial({ color: dataConstants.wallColors[team] })
-		material.outlineParameters = {
-			color: new THREE.Color(dataConstants.darkColors[team]),
+		for (let team = 0; team < 2; team += 1) {
+			const material = new THREE.MeshLambertMaterial({ color: dataConstants.wallColors[team], blending: THREE.NoBlending })
+			material.outlineParameters = {
+				color: new THREE.Color(dataConstants.darkColors[team]),
+			}
+			const mesh = new THREE.Mesh(mergedGeometries[team], material)
+			mesh.position.set(0, 0, WALL_HEIGHT / 2)
+			mesh.castShadow = true
+			mesh.receiveShadow = true
+			parent.add(mesh)
 		}
-		const wall = new THREE.Mesh(geometry, material)
-		wall.rotation.set(Math.PI / 2, 0, 0)
-		wall.castShadow = true
-		wall.receiveShadow = false
-		wall.position.set(x, y, WALL_HEIGHT / 2)
-		parent.add(wall)
-		return wall
 	},
 
 	ground (width, height, options) {

@@ -144,24 +144,36 @@ export default {
 		}
 	},
 
-	addWall (x, y, w, h, team) {
-		const geometry = new THREE.PlaneBufferGeometry(w * mapScale, h * mapScale)
-		const material = new THREE.MeshBasicMaterial({ color: dataConstants.wallColors[team] })
-		const mesh = new THREE.Mesh(geometry, material)
-		mesh.position.x = x * mapScale - renderWidth / 2
-		mesh.position.y = y * mapScale - renderHeight / 2
-		mesh.position.z = 1
-		scene.add(mesh)
-	},
-
-	addWallCap (x, y, r, team) {
-		const geometry = new THREE.CircleBufferGeometry(r * mapScale, 16)
-		const material = new THREE.MeshBasicMaterial({ color: dataConstants.wallColors[team] })
-		const mesh = new THREE.Mesh(geometry, material)
-		mesh.position.x = x * mapScale - renderWidth / 2
-		mesh.position.y = y * mapScale - renderHeight / 2
-		mesh.position.z = 1
-		scene.add(mesh)
+	createWalls (array) {
+		const mergedGeometries = [ new THREE.Geometry(), new THREE.Geometry() ]
+		let capGeometry
+		for (const wall of array) {
+			const x = wall[0] * mapScale
+			const y = wall[1] * mapScale
+			let geometry, team
+			if (wall.length === 5) {
+				const w = wall[2] * mapScale
+				const h = wall[3] * mapScale
+				team = wall[4]
+				geometry = new THREE.PlaneGeometry(w, h)
+			} else {
+				team = wall[3]
+				if (!capGeometry) {
+					const radius = wall[2] * mapScale / 2
+					capGeometry = new THREE.CircleGeometry(radius, 16)
+				}
+				geometry = capGeometry
+			}
+			geometry.translate(x, y, 1)
+			mergedGeometries[team].merge(geometry)
+			geometry.translate(-x, -y, -1)
+		}
+		for (let team = 0; team < 2; team += 1) {
+			const material = new THREE.MeshBasicMaterial({ color: dataConstants.wallColors[team] })
+			const mesh = new THREE.Mesh(mergedGeometries[team], material)
+			mesh.position.set(-renderWidth / 2, -renderHeight / 2, 1)
+			scene.add(mesh)
+		}
 	},
 
 	update (units) {

@@ -95,10 +95,10 @@ class Movable extends Unit {
 		if (!walls) {
 			return true
 		}
-		const ux1 = bx - collisionSize * 0.5 //TODO validate integer
-		const uy1 = by - collisionSize * 0.5
-		const ux2 = ux1 + collisionSize
-		const uy2 = uy1 + collisionSize
+		const ux1 = bx - collisionSize
+		const uy1 = by - collisionSize
+		const ux2 = ux1 + collisionSize * 2
+		const uy2 = uy1 + collisionSize * 2
 		for (let idx = walls.length - 1; idx >= 0; idx -= 1) {
 			const wall = walls[idx]
 			const wx = wall[0]

@@ -57,21 +57,24 @@ const GameMap = function (mapName, parent) {
 		return collisionWalls
 	}
 
-	const createWallRect = function (x, y, w, h, team) {
-		const cx = (x - w / 2) * 100
-		const cy = (y - h / 2) * 100
-		collisionWalls.push([cx, cy, cx + w * 100, cy + h * 100])
+	this.createWalls = function (array) {
+		for (const wall of array) {
+			const x = wall[0]
+			const y = wall[1]
+			if (wall.length === 5) {
+				const w = wall[2]
+				const h = wall[3]
+				const cx = (x - w / 2) * 100
+				const cy = (y - h / 2) * 100
+				collisionWalls.push([ cx, cy, cx + w * 100, cy + h * 100 ])
+			} else {
+				const r = wall[2] / 2
+				collisionWalls.push([x * 100, y * 100, r * 100])
 
-		RenderMinimap.addWall(x, y, w, h, team)
-		Render.wall(team, x, y, w, h, wallContainer)
-	}
-
-	const createWallCap = function (x, y, radius, team) {
-		radius = radius / 2
-		collisionWalls.push([x * 100, y * 100, radius * 100])
-
-		RenderMinimap.addWallCap(x, y, radius, team)
-		Render.wallCap(team, x, y, radius, wallContainer)
+			}
+		}
+		RenderMinimap.createWalls(array)
+		Render.createWalls(array, wallContainer)
 	}
 
 	const getTargetFromPoint = function (point) {
@@ -212,6 +215,7 @@ const GameMap = function (mapName, parent) {
 			}
 		}
 
+		const wallArray = []
 		for (let idx = 0; idx < layout.walls.length; idx += 1) {
 			const wall = layout.walls[idx]
 			const radius = wall.radius
@@ -225,7 +229,7 @@ const GameMap = function (mapName, parent) {
 					const mirroredMp = mirrored ? 1 : -1
 					let segmentX = mirrored ? mapWidth - teamX : teamX
 					let segmentY = teamY
-					createWallCap(segmentX, segmentY, radius * 2, team)
+					wallArray.push([ segmentX, segmentY, radius * 2, team ])
 
 					const moveCount = wall.move.length
 					for (let pidx = 0; pidx < moveCount; pidx += 1) {
@@ -243,17 +247,19 @@ const GameMap = function (mapName, parent) {
 						}
 						const wallWidth = Math.abs(point.dx || radius) * 2
 						const wallHeight = Math.abs(point.dy || radius) * 2
-						createWallRect(wallX, wallY, wallWidth, wallHeight, team)
+						wallArray.push([ wallX, wallY, wallWidth, wallHeight, team ])
 
 						segmentX += dx * 2
 						segmentY += dy * 2
 						if (wall.endCap || pidx + 1 < moveCount) {
-							createWallCap(segmentX, segmentY, radius * 2, team)
+							wallArray.push([ segmentX, segmentY, radius * 2, team ])
 						}
 					}
 				}
 			}
 		}
+		this.createWalls(wallArray)
+
 		for (let idx = 0; idx < layout.towers.length; idx += 1) {
 			const tower = layout.towers[idx]
 			const towerType = tower[0]
