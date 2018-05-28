@@ -33,6 +33,7 @@ const defaultLocalState = () => {
 			leveled: 0,
 			levels: [0, 0, 0],
 			cooldowns: [0, 0, 0],
+			internal: [0, 0, 0],
 			actives: [0, 0, 0],
 
 			active: null,

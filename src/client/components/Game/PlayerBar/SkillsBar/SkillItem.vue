@@ -2,8 +2,9 @@
 <div class="skill-item" :class="{ selected: !disabled && isActiveSkill, disabled: disabled, cooldown: cooldownTime, showsLevelup: levelupReady }">
 	<div class="skill-content">
 		<div class="button-content">
-			<div :class="`item-circle cooldown-ring cooldown-ring-${indexName}`" />
-			<div :class="`item-circle level-ring-${indexName}`" />
+			<div :id="`cooldown-ring-${indexName}`" class="item-circle cooldown-ring" />
+			<div v-show="!cooldownRemaining" :id="`internal-ring-${indexName}`" />
+			<div :id="`level-ring-${indexName}`" class="item-circle" />
 			<button @click="onSkill(true)" @mouseenter="overButton(true)" @mouseleave="overButton(false)" class="skill-button">{{ indexName }}</button>
 			<div v-if="showingLevelupIndicator" @click="onLevelup" @mouseenter="overLevelup(true)" @mouseleave="overLevelup(false)" class="button-levelup interactive">
 				⬆︎
@@ -63,12 +64,14 @@ export default {
 
 	data () {
 		return {
+			internalRing: null,
 			cooldownRing: null,
 			levelRing: null,
 			submittedLevelup: false,
 			disabledByOtherSkill: false,
 			isOverLevelup: false,
 			activationCooldown: null,
+			internalCooldown: null,
 		}
 	},
 
@@ -138,7 +141,7 @@ export default {
 				} else if (substitution === 'Regen') {
 					factor = Local.tickDuration / 10
 					suffix = ' hp / s'
-				} else if (substitution === 'Duration' || substitution === 'Delay') {
+				} else if (substitution === 'Duration' || substitution === 'Delay' || substitution === 'Cooldown') {
 					factor = 1000
 					suffix = ' seconds'
 				} else {
@@ -151,7 +154,7 @@ export default {
 				if (this.showsDiff) {
 					const diff = substitutionFunction(this.level + 1) - valueForLevel
 					if (diff) {
-						effectText += ` <span class="levelup">(${diff >= 0 ? '+' : ''}${!factor ? diff : (diff / factor)})</span>`
+						effectText += ` <span class="diff">(${diff >= 0 ? '+' : ''}${!factor ? diff : (diff / factor)})</span>`
 					}
 				}
 				return `<span class="bold">${effectText}${suffix}</span>`
@@ -216,23 +219,20 @@ export default {
 		activated () {
 			return this.allActives[this.index]
 		},
+		renderTime () {
+			return store.state.game.renderTime
+		},
+		internalTime () {
+			return this.activated ? 0 : store.state.local.skills.internal[this.index]
+		},
+		internalRemaining () {
+			return this.internalTime > 0 ? this.internalTime - this.renderTime : 0
+		},
 		cooldownTime () {
 			return this.activated ? 0 : store.state.local.skills.cooldowns[this.index]
 		},
 		cooldownRemaining () {
-			const cooldownAt = this.cooldownTime
-			if (cooldownAt > 0) {
-				const diff = cooldownAt - store.state.game.renderTime
-				if (diff >= 0) {
-					if (!this.activationCooldown) {
-						this.activationCooldown = diff
-					}
-					return diff
-				}
-				this.activationCooldown = null
-				store.state.local.skills.cooldowns.splice(this.index, 1, 0)
-			}
-			return 0
+			return this.cooldownTime ? this.cooldownTime - this.renderTime : 0
 		},
 
 		isToggled () {
@@ -293,10 +293,29 @@ export default {
 			}
 		},
 
+		internalRemaining (remaining) {
+			if (this.cooldownRemaining) {
+				return
+			}
+			if (!this.internalCooldown) {
+				this.internalCooldown = remaining
+			}
+			const angle = Math.floor(remaining / this.internalCooldown * 360)
+			this.internalRing.changeAngle(angle >= 360 ? 0 : angle)
+			if (remaining === 0) {
+				this.internalCooldown = null
+				store.state.local.skills.internal.splice(this.index, 1, 0)
+			}
+		},
 		cooldownRemaining (remaining) {
-			if (remaining >= 0) {
-				const angle = 360 - Math.floor(remaining / this.activationCooldown * 360)
-				this.cooldownRing.changeAngle(angle >= 360 ? 0 : angle)
+			if (!this.activationCooldown) {
+				this.activationCooldown = remaining
+			}
+			const angle = 360 - Math.floor(remaining / this.activationCooldown * 360)
+			this.cooldownRing.changeAngle(angle >= 360 ? 0 : angle)
+			if (remaining === 0) {
+				this.activationCooldown = null
+				store.state.local.skills.cooldowns.splice(this.index, 1, 0)
 			}
 		},
 
@@ -405,7 +424,7 @@ export default {
 	},
 
 	mounted () {
-		this.cooldownRing = new Sektor(`.cooldown-ring-${this.indexName}`, {
+		this.cooldownRing = new Sektor(`#cooldown-ring-${this.indexName}`, {
 			size: 80,
 			stroke: 40,
 			arc: true,
@@ -414,7 +433,16 @@ export default {
 			circleColor: '#aaa',
 			fillCircle: true,
 		})
-		this.levelRing = new Sektor(`.level-ring-${this.indexName}`, {
+		if (this.skill.getEffectCooldown) {
+			this.internalRing = new Sektor(`#internal-ring-${this.indexName}`, {
+				size: 80,
+				stroke: 40,
+				arc: true,
+				angle: 0,
+				sectorColor: '#888',
+			})
+		}
+		this.levelRing = new Sektor(`#level-ring-${this.indexName}`, {
 			size: 82,
 			stroke: 6,
 			arc: true,
@@ -510,7 +538,7 @@ export default {
 .skill-item .skill-button, .skill-item .cooldown-ring
 	transition transform 0.4s ease, opacity 0.4s ease
 
-.skill-item:hover .cooldown-ring, .skill-item.selected cooldown-ring
+.skill-item:hover .cooldown-ring, .skill-item.selected .cooldown-ring
 	background rgba(170, 170, 170, 0.8)
 .skill-item:hover .description-tooltip, .skill-item.selected .description-tooltip
 	display block

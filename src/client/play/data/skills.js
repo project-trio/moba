@@ -209,24 +209,42 @@ export default {
 		},
 		{
 			name: 'Scud',
-			description: 'Fly by the power of the wind',
+			description: 'Blink to the target destination. Reusing within [[Cooldown]] increases its cooldown.',
 			target: TARGET_GROUND,
 			isDisabledBy: null,
 			startsImmediately: false,
+			hideDuration: true,
 			getRange (level) {
 				return levelMultiplier(110, level, 10)
 			},
 			getDuration (level) {
 				return 3
 			},
-			getCooldown (level) {
-				return levelMultiplier(200, level, -10)
+			getEffectCooldown (level) {
+				return levelMultiplier(12000, level, -800)
 			},
-			start (index, level, ship, target, startAt, endAt, cooldown) {
+			getCooldown (level) {
+				return levelMultiplier(40, level, -2)
+			},
+			start (index, level, ship, target, startAt, endAt, cooldown, isLocal) {
 				ship.customPosition = true
 				ship.uncontrollable = true
 				ship.untargetable = true
 				ship.disableAttacking = true
+
+				const cooldownCooldown = this.getEffectCooldown(level) + cooldown
+				if (isLocal) {
+					store.state.local.skills.internal[index] = startAt + cooldownCooldown
+				}
+				if (ship.scudAt) {
+					const diff = cooldownCooldown - (startAt - ship.scudAt)
+					if (diff > 0) {
+						const cooldownEnd = ship.skills.cooldowns[index]
+						ship.updateCooldown(index, cooldownEnd, diff * 3)
+						p(diff)
+					}
+				}
+				ship.scudAt = startAt
 
 				let destX = target[0]
 				let destY = target[1]
