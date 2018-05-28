@@ -46,7 +46,6 @@ class Bullet {
 		this.stunDuration = data.stunDuration
 
 		this.propagated = 0
-		this.propagates = data.propagates
 		this.propagateRange = data.propagateRange
 		this.targeted = []
 		this.color = this.rebound ? 0x0000ff : (data.bulletColor || 0x000000)
@@ -173,7 +172,7 @@ class Bullet {
 			}
 		}
 
-		if (this.propagates && this.propagated < this.propagates) {
+		if (this.propagateRange) {
 			const units = Unit.all()
 			const targetTeam = this.target.team
 			let nearestUnit

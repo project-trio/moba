@@ -304,7 +304,7 @@ export default {
 		},
 		{
 			name: 'Chain strike',
-			description: 'Lightning passes through up to [[Propagates]] enemies within [[Range]], dealing [[Damage]] to each',
+			description: 'Lightning passes through enemies within [[Range]] of eachother, dealing [[Damage]] to each',
 			target: TARGET_ENEMY,
 			hitsTowers: true,
 			disabledBy: [false, true, null],
@@ -333,7 +333,6 @@ export default {
 					attackDamage: damage,
 					attackPierce: 10,
 					attackMoveSpeed: 7,
-					propagates: this.getEffectPropagates(level),
 					propagateRange: this.getEffectRange(level),
 				}
 				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
