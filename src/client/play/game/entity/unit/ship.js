@@ -88,6 +88,10 @@ class Ship extends Movable {
 			parent: this.infoContainer,
 		})
 		this.renderLevelText()
+
+		if (name === 'tempest') {
+			this.scudAt = null
+		}
 	}
 
 	allyNotLocal () {
@@ -280,7 +284,7 @@ class Ship extends Movable {
 				store.state.local.skills.toggle = index
 			}
 		} else {
-			skill.start(index, skillLevel, this, target, renderTime, endDurationAt, cooldownDuration)
+			skill.start(index, skillLevel, this, target, renderTime, endDurationAt, cooldownDuration, this.isLocal)
 		}
 		return true
 	}

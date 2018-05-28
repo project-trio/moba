@@ -121,11 +121,15 @@ export default {
 		},
 
 		setChatVisiblity (enabled) {
-			if (Local.game && Local.game.size > 1) {
-				this.allChat = enabled
-			} else {
-				this.allChat = true
+			let setAllChat = true
+			if (Local.game) {
+				if (Local.game.bots) {
+					setAllChat = false
+				} else if (Local.game.size > 1) {
+					setAllChat = enabled
+				}
 			}
+			this.allChat = setAllChat
 		},
 
 		onTeamVisibility () {

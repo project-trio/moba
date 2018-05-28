@@ -35,6 +35,7 @@ export default function (gid, mode, size, mapName) {
 	this.playing = false
 	this.finished = false
 	this.serverUpdate = -1
+	this.bots = mode === 'bots'
 
 	store.state.game.playing = false
 
