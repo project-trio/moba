@@ -361,11 +361,10 @@ export default {
 				return levelMultiplier(90, level, -6)
 			},
 			activate (index, level, ship) {
-				new AreaOfEffect(ship, false, {
+				new AreaOfEffect(ship, true, {
 					dot: false,
 					color: 0x00ff77,
 					opacity: 0.2,
-					px: ship.px, py: ship.py,
 					radius: this.getRange(level),
 					allies: true,
 					modify: {
@@ -397,11 +396,10 @@ export default {
 				return levelMultiplier(90, level, -6)
 			},
 			activate (index, level, ship) {
-				new AreaOfEffect(ship, false, {
+				new AreaOfEffect(ship, true, {
 					dot: false,
 					color: 0xff7700,
 					opacity: 0.2,
-					px: ship.px, py: ship.py,
 					radius: this.getRange(level),
 					allies: true,
 					modify: {
@@ -433,11 +431,10 @@ export default {
 				return levelMultiplier(90, level, -6)
 			},
 			activate (index, level, ship) {
-				new AreaOfEffect(ship, false, {
+				new AreaOfEffect(ship, true, {
 					dot: false,
 					color: 0xff00cc,
 					opacity: 0.2,
-					px: ship.px, py: ship.py,
 					radius: this.getRange(level),
 					allies: true,
 					modify: {
@@ -504,7 +501,7 @@ export default {
 		},
 		{
 			name: 'Acid Drop',
-			description: 'Spit a toxic glob on the ground for [[Duration]], [[poisoning:poison]] enemies for [[Dps]] and move speed by [[MoveSpeed]]',
+			description: 'Spit a toxic glob on the ground for [[Duration]], [[poisoning:poison]] enemies for [[Dps]] and [[MoveSpeed]] move speed',
 			suffixMoveSpeed: '%',
 			target: TARGET_GROUND,
 			hitsTowers: true,
@@ -792,7 +789,9 @@ export default {
 				}
 				const flingBullet = new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
 				Animate.apply(flingBullet)
-				const animationDuration = Math.sqrt(Util.pointDistance(ship.px, ship.py, target[0], target[1])) / flingBullet.moveConstant.toNumber() / 1000
+				const moveConstant = flingBullet.moveConstant
+				// const moveConstant = flingBullet.moveConstant.toNumber() //DECIMAL
+				const animationDuration = Math.sqrt(Util.pointDistance(ship.px, ship.py, target[0], target[1])) / moveConstant / 1000
 				flingBullet.queueAnimation('container', 'position', {
 					axis: 'z',
 					from: 0,
@@ -1021,7 +1020,7 @@ export default {
 					from: 0,
 					to: 0,
 					parabola: 8,
-					max: -26,
+					max: -28,
 					start: startAt,
 					duration: endAt - startAt,
 				})
@@ -1077,7 +1076,7 @@ export default {
 		},
 		{
 			name: 'Encrypt',
-			description: 'Turn invisible and untargetable to enemies, boosting movespeed by [[MoveSpeed]]',
+			description: 'Turn invisible and untargetable to enemies, boosting move speed [[MoveSpeed]]',
 			suffixMoveSpeed: '%',
 			target: TARGET_SELF,
 			disabledBy: [false, null, true],
