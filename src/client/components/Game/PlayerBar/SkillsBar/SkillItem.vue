@@ -161,11 +161,13 @@ export default {
 			})
 
 			const rows = [`<div class="description-text">${description}</div>`]
-			if (this.skill.getDuration) {
+			if (this.skill.getDuration && !this.skill.hideDuration) {
 				let durationText = `${this.activeDuration / 1000}`
 				if (this.showsDiff) {
 					const diff = this.skill.getDuration(this.level + 1) * 100 - this.activeDuration
-					durationText += ` <span class="levelup">(${diff >= 0 ? '+' : ''}${diff / 1000})</span>`
+					if (diff) {
+						durationText += ` <span class="diff">(${diff >= 0 ? '+' : ''}${diff / 1000})</span>`
+					}
 				}
 				rows.push(`<div>Duration: <span class="bold">${durationText}</span> seconds</div>`)
 			}
@@ -173,7 +175,9 @@ export default {
 				let cooldownText = `${this.cooldownDuration / 1000}`
 				if (this.showsDiff) {
 					const diff = this.skill.getCooldown(this.level + 1) * 100 - this.cooldownDuration
-					cooldownText += ` <span class="levelup">(${diff === 0 ? '-' : (diff > 0 ? '+' : '')}${diff / 1000})</span>`
+					if (diff) {
+						cooldownText += ` <span class="diff">(${diff === 0 ? '-' : (diff > 0 ? '+' : '')}${diff / 1000})</span>`
+					}
 				}
 				rows.push(`<div>Cooldown: <span class="bold">${cooldownText}</span> seconds</div>`)
 			}
@@ -525,6 +529,9 @@ export default {
 	background #d55
 	height 64px
 	z-index 1
+
+.skill-item .diff
+	color #8e9
 
 .skill-item .levelup
 	color #d55
