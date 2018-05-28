@@ -31,16 +31,24 @@ class AreaOfEffect {
 		this.modify = data.modify
 
 		const startingOpacity = this.startAt ? 0 : data.opacity
-		this.circle = Render.circle(data.radius, { color: data.color, opacity: startingOpacity, parent: withUnit ? data.parent : Local.game.map.floorContainer })
+		this.container = Render.group()
+		this.circle = Render.circle(data.radius, { color: data.color, opacity: startingOpacity, parent: this.container })
+		if (!withUnit) {
+			this.ring = Render.ring(data.radius, 1, { team: source.team, parent: this.container })
+		}
+		const parent = withUnit ? source.floor : Local.game.map.floorContainer
+		parent.add(this.container)
 
-		if (data.px) {
+		if (withUnit) {
+			this.container.position.z = 1
+		} else if (data.px) {
 			this.px = data.px
 			this.py = data.py
-			this.circle.position.x = this.px / POSITION_MAGNITUDE_OFFSET
-			this.circle.position.y = this.py / POSITION_MAGNITUDE_OFFSET
+			this.container.position.x = this.px / POSITION_MAGNITUDE_OFFSET
+			this.container.position.y = this.py / POSITION_MAGNITUDE_OFFSET
 		}
 		if (data.z) {
-			this.circle.position.z = data.z
+			this.container.position.z = data.z
 		}
 
 		this.collisionSize = data.radius * POSITION_MAGNITUDE_OFFSET
@@ -96,7 +104,7 @@ class AreaOfEffect {
 	}
 
 	destroy () {
-		Render.remove(this.circle)
+		Render.remove(this.container)
 		this.remove = true
 	}
 
