@@ -19,9 +19,11 @@ const WALL_HEIGHT = 50
 const CAMERA_FOV = 60
 const CAMERA_HEIGHT = 256 / (CAMERA_FOV / 180)
 
-let gameScene, gameCamera, renderer, outlineEffect
+let gameScene, renderer, outlineEffect
+let gameCamera, perspectiveCamera, orthoCamera
 let audioListener, gameSound, audioLoader
 let pixelMultiplier = null
+let usePerspectiveCamera = null
 
 let font
 let voxelCache
@@ -34,6 +36,28 @@ const resize = function () {
 	const width = window.innerWidth
 	const height = window.innerHeight
 
+	const newPerspectiveSetting = store.state.settings.perspective
+	if (newPerspectiveSetting !== usePerspectiveCamera) {
+		usePerspectiveCamera = newPerspectiveSetting
+		let oldX, oldY
+		if (gameCamera) {
+			gameCamera.remove(audioListener)
+			oldX = gameCamera.position.x
+			oldY = gameCamera.position.y
+		}
+		if (usePerspectiveCamera) {
+			gameCamera = perspectiveCamera
+		} else {
+			gameCamera = orthoCamera
+		}
+		if (oldX !== undefined) {
+			gameCamera.position.x = oldX
+			gameCamera.position.y = oldY
+		}
+		gameCamera.position.z = CAMERA_HEIGHT
+		// gameCamera.add(audioListener)
+	}
+
 	let newPixelMultiplier = window.devicePixelRatio / (store.state.settings.fullResolution ? 1 : 2)
 	if (newPixelMultiplier !== pixelMultiplier) {
 		pixelMultiplier = newPixelMultiplier
@@ -41,7 +65,15 @@ const resize = function () {
 	}
 	renderer.setSize(width, height)
 
-	gameCamera.aspect = width / height
+	if (usePerspectiveCamera) {
+		gameCamera.aspect = width / height
+	} else {
+		const cameraZoom = height / 440
+		gameCamera.left = -width / cameraZoom
+		gameCamera.right = width / cameraZoom
+		gameCamera.top = height / cameraZoom
+		gameCamera.bottom = -height / cameraZoom
+	}
 	gameCamera.updateProjectionMatrix()
 
 	const visibleFOV = gameCamera.fov * Math.PI / 180
@@ -54,11 +86,16 @@ const resize = function () {
 
 export default {
 
+	updateCamera () {
+		resize()
+		this.positionCamera()
+	},
+
 	createRenderer () {
 		pixelMultiplier = null
 
 		renderer = new THREE.WebGLRenderer({
-			antialias: store.state.settings.antialias,
+			// antialias: store.state.settings.antialias,
 			canvas: document.getElementById('canvas'),
 		})
 		const shadowQuality = store.state.settings.shadows
@@ -81,9 +118,8 @@ export default {
 		// Scene
 
 		gameScene = new THREE.Scene()
-		gameCamera = new THREE.PerspectiveCamera(CAMERA_FOV)
-		// gameCamera = new THREE.OrthographicCamera(window.innerWidth / -2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / -2, -CAMERA_HEIGHT, CAMERA_HEIGHT)
-		gameCamera.position.z = CAMERA_HEIGHT
+		perspectiveCamera = new THREE.PerspectiveCamera(CAMERA_FOV)
+		orthoCamera = new THREE.OrthographicCamera()
 
 		const ambientLight = new THREE.AmbientLight(0x666666, 1)
 		gameScene.add(ambientLight)
@@ -112,7 +148,6 @@ export default {
 		// gameScene.add(helper)
 
 		audioListener = new THREE.AudioListener()
-		gameCamera.add(audioListener)
 		gameSound = new THREE.Audio(audioListener)
 		audioLoader = new THREE.AudioLoader()
 
@@ -124,6 +159,8 @@ export default {
 		util.removeListener(window, 'resize', resize)
 		gameScene = null
 		gameCamera = null
+		perspectiveCamera = null
+		orthoCamera = null
 		renderer = null
 		pixelMultiplier = null
 		voxelCache = null

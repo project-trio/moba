@@ -15,7 +15,7 @@ export default {
 	get (key, defaultValue = null) {
 		if (storage) {
 			const value = storage.getItem(key)
-			if (value !== undefined && value !== null) {
+			if (value !== undefined && value !== 'null') {
 				return value
 			}
 		}
@@ -33,7 +33,7 @@ export default {
 	//CONVENIENCE
 
 	getBool (key, defaultValue = null) {
-		return this.get(key) === 'true' || defaultValue
+		return this.get(key, defaultValue) == 'true'
 	},
 
 	getInt (key, defaultValue = null) {

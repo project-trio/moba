@@ -14,9 +14,13 @@
 			<button @click="onShadows" class="interactive">{{ shadows === 0 ? 'off' : shadows === 1 ? 'low' : 'high' }}</button>
 			<div class="label">Shadows</div>
 		</div>
-		<div class="setting">
+		<!-- <div class="setting">
 			<button @click="onAntialias" class="interactive">{{ antialias ? 'on' : 'off' }}</button>
 			<div class="label">Antialias</div>
+		</div> -->
+		<div class="setting">
+			<button @click="onPerspective" class="interactive">{{ perspective ? '3D' : '2D' }}</button>
+			<div class="label">Perspective</div>
 		</div>
 	</div>
 </div>
@@ -48,6 +52,10 @@ export default {
 		antialias () {
 			return store.state.settings.antialias
 		},
+
+		perspective () {
+			return store.state.settings.perspective
+		},
 	},
 
 	methods: {
@@ -63,8 +71,12 @@ export default {
 			store.applySetting('shadows', (this.shadows + 1) % 3, true)
 		},
 
-		onAntialias () {
-			store.applySetting('antialias', !this.antialias, true)
+		// onAntialias () {
+		// 	store.applySetting('antialias', !this.antialias, true)
+		// },
+
+		onPerspective () {
+			store.applySetting('perspective', !this.perspective, true)
 		},
 	},
 }
