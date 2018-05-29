@@ -51,7 +51,7 @@ class Bullet {
 		this.color = this.rebound ? 0x0000ff : (data.bulletColor || 0x000000)
 
 		this.container = Render.group()
-		const ball = Render.sphere(data.bulletSize, { color: this.color, hideOutline: true, hideShadow: true })
+		const ball = Render.sphere(data.bulletSize, { segments: data.bulletSize * 1.5, color: this.color, hideOutline: true, hideShadow: true })
 		this.container.add(ball)
 		Local.game.map.floorContainer.add(this.container)
 
