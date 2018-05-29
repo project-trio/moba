@@ -77,6 +77,7 @@ export default {
 			// antialias: storage.getBool('antialias', true),
 			fullResolution: storage.getInt('fullResolution', true),
 			shadows: storage.getInt('shadows', 1),
+			outline: storage.getBool('outline', true),
 		},
 
 		lobby: {
@@ -137,11 +138,17 @@ export default {
 
 	// Settings
 
-	applySetting (name, value, graphics) {
+	applySetting (name, value, toggle) {
 		this.state.settings[name] = value
 		storage.set(name, value)
-		if (graphics) {
-			render.createRenderer()
+		if (toggle !== null) {
+			if (name === 'outline') {
+				render.toggleOutline(value)
+			} else if (!toggle) {
+				render.resize()
+			} else {
+				render.createRenderer()
+			}
 		}
 	},
 

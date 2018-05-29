@@ -22,6 +22,10 @@
 			<button @click="onPerspective" class="interactive">{{ perspective ? '3D' : '2D' }}</button>
 			<div class="label">Perspective</div>
 		</div>
+		<div class="setting">
+			<button @click="onOutline" class="interactive">{{ outline ? 'On' : 'Off' }}</button>
+			<div class="label">Outline effect</div>
+		</div>
 	</div>
 </div>
 </template>
@@ -56,15 +60,19 @@ export default {
 		perspective () {
 			return store.state.settings.perspective
 		},
+
+		outline () {
+			return store.state.settings.outline
+		},
 	},
 
 	methods: {
 		onFps () {
-			store.applySetting('fpsCap', !this.fpsCap, true)
+			store.applySetting('fpsCap', !this.fpsCap, null)
 		},
 
 		onResolution () {
-			store.applySetting('fullResolution', !this.fullResolution, true)
+			store.applySetting('fullResolution', !this.fullResolution, false)
 		},
 
 		onShadows () {
@@ -76,7 +84,11 @@ export default {
 		// },
 
 		onPerspective () {
-			store.applySetting('perspective', !this.perspective, true)
+			store.applySetting('perspective', !this.perspective, false)
+		},
+
+		onOutline () {
+			store.applySetting('outline', !this.outline, false)
 		},
 	},
 }
@@ -95,7 +107,7 @@ export default {
 	// width 50%
 
 button
-	width 88px
+	width 96px
 	height 44px
 	margin-bottom 2px
 	border-radius 6px

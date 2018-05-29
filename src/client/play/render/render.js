@@ -19,7 +19,7 @@ const WALL_HEIGHT = 50
 const CAMERA_FOV = 60
 const CAMERA_HEIGHT = 256 / (CAMERA_FOV / 180)
 
-let gameScene, renderer, outlineEffect
+let gameScene, renderer, outlineEffect, gameLight
 let gameCamera, perspectiveCamera, orthoCamera
 let audioListener, gameSound, audioLoader
 let pixelMultiplier = null
@@ -55,7 +55,7 @@ const resize = function () {
 			gameCamera.position.y = oldY
 		}
 		gameCamera.position.z = CAMERA_HEIGHT
-		// gameCamera.add(audioListener)
+		// gameCamera.add(audioListener) //TODO
 	}
 
 	let newPixelMultiplier = window.devicePixelRatio / (store.state.settings.fullResolution ? 1 : 2)
@@ -86,10 +86,7 @@ const resize = function () {
 
 export default {
 
-	updateCamera () {
-		resize()
-		this.positionCamera()
-	},
+	resize,
 
 	createRenderer () {
 		pixelMultiplier = null
@@ -99,17 +96,27 @@ export default {
 			canvas: document.getElementById('canvas'),
 		})
 		const shadowQuality = store.state.settings.shadows
-		renderer.shadowMap.enabled = shadowQuality >= 1
-		if (shadowQuality >= 2) {
-			renderer.shadowMap.type = THREE.PCFSoftShadowMap
+		const renderShadow = shadowQuality >= 1
+		gameLight.castShadow = renderShadow
+		renderer.shadowMap.enabled = renderShadow
+		if (renderShadow) {
+			renderer.shadowMap.type = shadowQuality >= 2 ? THREE.PCFSoftShadowMap : THREE.BasicShadowMap
 		}
 
-		outlineEffect = new OutlineEffect(renderer, {
-			defaultThickness: 0.0015,
-			defaultKeepAlive: false,
-		})
+		this.toggleOutline(store.state.settings.outline)
 
 		resize()
+	},
+
+	toggleOutline (enabled) {
+		if (enabled) {
+			outlineEffect = new OutlineEffect(renderer, {
+				defaultThickness: 0.0015,
+				defaultKeepAlive: false,
+			})
+		} else {
+			outlineEffect = null
+		}
 	},
 
 	create () {
@@ -124,27 +131,23 @@ export default {
 		const ambientLight = new THREE.AmbientLight(0x666666, 1)
 		gameScene.add(ambientLight)
 
-		// Shadow
+		gameLight = new THREE.DirectionalLight(0xdddddd, 1)
+		gameScene.add(gameLight)
+		gameLight.position.set(10, -50, 20)
+		gameLight.target.position.set(15, -40, 0)
+		gameScene.add(gameLight.target)
 
-		const light = new THREE.DirectionalLight(0xdddddd, 1)
-		gameScene.add(light)
-		light.position.set(10, -50, 20)
-		light.target.position.set(15, -40, 0)
-		gameScene.add(light.target)
-
-		light.castShadow = true
-		light.shadow.enabled = true
 		const projectionSize = 1500
-		light.shadow.camera.left = -projectionSize
-		light.shadow.camera.right = projectionSize
-		light.shadow.camera.top = projectionSize
-		light.shadow.camera.bottom = -projectionSize
-		light.shadow.camera.near = 1
-		light.shadow.camera.far = 2048
-		light.shadow.mapSize.width = 2048
-		light.shadow.mapSize.height = 2048
+		gameLight.shadow.camera.left = -projectionSize
+		gameLight.shadow.camera.right = projectionSize
+		gameLight.shadow.camera.top = projectionSize
+		gameLight.shadow.camera.bottom = -projectionSize
+		gameLight.shadow.camera.near = 1
+		gameLight.shadow.camera.far = 2048
+		gameLight.shadow.mapSize.width = 2048
+		gameLight.shadow.mapSize.height = 2048
 
-		// const helper = new THREE.CameraHelper(light.shadow.camera)
+		// const helper = new THREE.CameraHelper(gameLight.shadow.camera)
 		// gameScene.add(helper)
 
 		audioListener = new THREE.AudioListener()
@@ -152,6 +155,7 @@ export default {
 		audioLoader = new THREE.AudioLoader()
 
 		this.createRenderer()
+
 		util.addListener(window, 'resize', resize)
 	},
 
@@ -186,7 +190,11 @@ export default {
 	render (units) {
 		pointer.reposition(gameCamera)
 
-		outlineEffect.render(gameScene, gameCamera)
+		if (outlineEffect) {
+			outlineEffect.render(gameScene, gameCamera)
+		} else {
+			renderer.render(gameScene, gameCamera)
+		}
 
 		const mmRenderer = RenderMinimap.update(units)
 		RenderFog.update(units, renderer, mmRenderer)
