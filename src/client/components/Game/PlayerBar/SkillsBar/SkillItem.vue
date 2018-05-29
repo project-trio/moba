@@ -520,6 +520,7 @@ export default {
 	position relative
 	cursor pointer
 	border-radius 50%
+	font-weight 500
 
 .skill-item .button-levelup
 	position absolute

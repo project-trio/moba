@@ -58,7 +58,7 @@ class Ship extends Movable {
 		this.timeOfDeath = -9000
 		this.respawned = true
 		this.isBlocking = false
-		this.reemergeAt = 4000
+		this.reemergeAt = Local.TESTING ? 1000 : 4000
 		this.modify('Spawn', 'moveSpeed', 'times', 2)
 
 		this.queuedForActivation = [false, false, false]
