@@ -81,12 +81,11 @@ export default {
 
 				const damage = this.getEffectDamage(level) * 100
 				const aoeRange = this.getEffectRange(level)
-				new AreaOfEffect(ship, false, {
+				new AreaOfEffect(ship, {
 					dot: false,
 					hitsTowers: this.hitsTowers,
 					color: 0x0000ff,
 					opacity: 0.5,
-					px: ship.px, py: ship.py,
 					radius: aoeRange,
 					attackDamage: damage,
 					attackPierce: 0,
@@ -116,12 +115,11 @@ export default {
 				const aoeRange = this.getRange(level)
 				const stunDelay = this.getEffectDelay(level)
 				const stunDuration = this.getEffectDuration(level)
-				new AreaOfEffect(ship, false, {
+				new AreaOfEffect(ship, {
 					dot: false,
 					hitsTowers: this.hitsTowers,
 					color: 0xffaa00,
 					opacity: 0.5,
-					px: ship.px, py: ship.py,
 					radius: aoeRange,
 					time: startAt,
 					delay: stunDelay,
@@ -193,7 +191,7 @@ export default {
 				const delay = this.getEffectDelay(level)
 				const damage = this.getEffectDamage(level) * 100
 				const aoeRange = this.getEffectRange(level)
-				new AreaOfEffect(ship, false, {
+				new AreaOfEffect(ship, {
 					dot: false,
 					hitsTowers: this.hitsTowers,
 					color: 0xffff00,
@@ -361,7 +359,8 @@ export default {
 				return levelMultiplier(90, level, -6)
 			},
 			activate (index, level, ship) {
-				new AreaOfEffect(ship, true, {
+				new AreaOfEffect(ship, {
+					follow: true,
 					dot: false,
 					color: 0x00ff77,
 					opacity: 0.2,
@@ -396,8 +395,9 @@ export default {
 				return levelMultiplier(90, level, -6)
 			},
 			activate (index, level, ship) {
-				new AreaOfEffect(ship, true, {
+				new AreaOfEffect(ship, {
 					dot: false,
+					follow: true,
 					color: 0xff7700,
 					opacity: 0.2,
 					radius: this.getRange(level),
@@ -431,7 +431,8 @@ export default {
 				return levelMultiplier(90, level, -6)
 			},
 			activate (index, level, ship) {
-				new AreaOfEffect(ship, true, {
+				new AreaOfEffect(ship, {
+					follow: true,
 					dot: false,
 					color: 0xff00cc,
 					opacity: 0.2,
@@ -537,7 +538,7 @@ export default {
 					bulletColor: 0x00ff00,
 					attackDamage: dps,
 					attackPierce: 0,
-					attackMoveSpeed: 12,
+					attackMoveSpeed: 10,
 					explosionRadius: aoeRange,
 					effectDuration: effectDuration,
 					allies: false,
@@ -549,6 +550,7 @@ export default {
 						expires: effectDuration,
 					},
 				}
+				p(target)
 				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
 			},
 		},
@@ -747,7 +749,7 @@ export default {
 					bulletColor: 0x00dddd,
 					attackDamage: damage,
 					attackPierce: 100,
-					attackMoveSpeed: 6,
+					attackMoveSpeed: 8,
 					maxRange: maxRange,
 				}
 				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
@@ -755,7 +757,7 @@ export default {
 		},
 		{
 			name: `Fling`,
-			description: 'Hurls a large shell that explodes on impact for [[Damage]] to nearby enemies in [[Range]]',
+			description: 'Hurls a large shell that explodes on impact for [[Damage]] to enemies within [[Range]]',
 			target: TARGET_GROUND,
 			hitsTowers: false,
 			isDisabledBy: null,
@@ -885,12 +887,11 @@ export default {
 			start (index, level, ship, target, startAt, endAt) {
 				const radius = this.getRange(level)
 				const armor = this.getEffectArmor(level)
-				new AreaOfEffect(ship, false, {
+				new AreaOfEffect(ship, {
 					dot: true,
 					hitsTowers: this.hitsTowers,
 					color: 0x0066aa,
 					opacity: 0.5,
-					px: ship.px, py: ship.py,
 					radius: radius,
 					allies: true,
 					modify: {
@@ -900,7 +901,8 @@ export default {
 						value: armor,
 						expires: 200,
 					},
-					endAt: endAt,
+					time: startAt,
+					duration: endAt - startAt,
 				})
 			},
 			end (ship) {
@@ -1004,7 +1006,8 @@ export default {
 
 				const radius = this.getRange(level)
 				const damage = this.getEffectDps(level)
-				ship.diveCircle = new AreaOfEffect(ship, true, {
+				ship.diveCircle = new AreaOfEffect(ship, {
+					follow: true,
 					hitsTowers: this.hitsTowers,
 					dot: true,
 					color: 0x0066aa,
@@ -1020,7 +1023,7 @@ export default {
 					from: 0,
 					to: 0,
 					parabola: 8,
-					max: -28,
+					max: -27,
 					start: startAt,
 					duration: endAt - startAt,
 				})

@@ -15,12 +15,12 @@ class AreaOfEffect {
 
 	// Constructor
 
-	constructor (source, withUnit, data) {
+	constructor (source, data) {
 		this.source = source
-		this.withUnit = withUnit
+		this.withUnit = data.follow
 		this.dot = data.dot
 		this.startAt = data.delay ? data.time + data.delay : null
-		this.endAt = data.endAt
+		this.endAt = data.duration ? data.time + data.duration : null
 		this.active = true
 		this.hitsTowers = data.hitsTowers
 		if (data.allies !== undefined) {
@@ -33,24 +33,29 @@ class AreaOfEffect {
 		const startingOpacity = this.startAt ? 0 : data.opacity
 		this.container = Render.group()
 		this.circle = Render.circle(data.radius, { color: data.color, opacity: startingOpacity, parent: this.container })
-		if (!withUnit) {
+		const showsRing = this.px || data.duration > 500
+		if (showsRing) {
 			this.ring = Render.ring(data.radius, 1, { team: source.team, parent: this.container })
 		}
-		const parent = withUnit ? source.floor : Local.game.map.floorContainer
+		const parent = this.withUnit ? source.floor : Local.game.map.floorContainer
 		parent.add(this.container)
 
-		if (withUnit) {
+		if (this.withUnit) {
 			this.container.position.z = 1
-		} else if (data.px) {
-			this.px = data.px
-			this.py = data.py
-			this.container.position.x = this.px / POSITION_MAGNITUDE_OFFSET
-			this.container.position.y = this.py / POSITION_MAGNITUDE_OFFSET
+		} else {
+			let ax, ay
+			if (data.px) {
+				ax = data.px
+				ay = data.py
+			} else {
+				ax = source.px
+				ay = source.py
+			}
+			this.px = ax
+			this.py = ay
+			this.container.position.x = ax / POSITION_MAGNITUDE_OFFSET
+			this.container.position.y = ay / POSITION_MAGNITUDE_OFFSET
 		}
-		if (data.z) {
-			this.container.position.z = data.z
-		}
-
 		this.collisionSize = data.radius * POSITION_MAGNITUDE_OFFSET
 		this.attackDamage = data.attackDamage
 		this.attackPierce = data.attackPierce

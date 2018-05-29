@@ -139,7 +139,7 @@ class Bullet {
 
 	reachedDestination (renderTime) {
 		if (this.explosionRadius) {
-			new AreaOfEffect(this.source, false, {
+			new AreaOfEffect(this.source, {
 				dot: this.dot,
 				hitsTowers: this.hitsTowers,
 				px: this.px,
@@ -151,7 +151,8 @@ class Bullet {
 				radius: this.explosionRadius,
 				attackDamage: this.attackDamage,
 				attackPierce: this.attackPierce,
-				endAt: (this.effectDuration ? renderTime + this.effectDuration : null),
+				time: renderTime,
+				duration: this.effectDuration,
 				parent: Local.game.map.floorContainer,
 			})
 		} else if (this.heal) {
