@@ -738,7 +738,7 @@ export default {
 				return 170
 			},
 			getCooldown (level) {
-				return 100
+				return 120
 			},
 			start (index, level, ship, target) {
 				const damage = this.getEffectDamage(level) * 100
@@ -771,7 +771,7 @@ export default {
 				return levelMultiplier(200, level, 10)
 			},
 			getCooldown (level) {
-				return 200
+				return 240
 			},
 			start (index, level, ship, target, startAt, endAt) {
 				const aoeRange = this.getEffectRange(level)
@@ -815,16 +815,18 @@ export default {
 				return store.state.local.skills.cooldowns[0] || store.state.local.skills.cooldowns[1]
 			},
 			getEffectDuration (level) {
-				return levelMultiplier(80, level, 50) * 100
+				return levelMultiplier(80, level, 40) * 100
 			},
 			getCooldown (level) {
-				return levelMultiplier(600, level, -40)
+				return levelMultiplier(500, level, -40)
 			},
-			start (index, level, ship) {
+			start (index, level, ship, target, startAt, endAt) {
 				const reduction = this.getEffectDuration(level)
 				for (let skillIndex = 0; skillIndex < 2; skillIndex += 1) {
 					const cooldownEnd = ship.skills.cooldowns[skillIndex]
-					ship.updateCooldown(skillIndex, cooldownEnd, -reduction)
+					if (cooldownEnd > startAt) {
+						ship.updateCooldown(skillIndex, cooldownEnd, -reduction)
+					}
 				}
 			},
 		},
