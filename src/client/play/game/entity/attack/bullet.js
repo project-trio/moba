@@ -65,7 +65,7 @@ class Bullet {
 			// this.dropRate = 1400000 * this.moveConstant.toNumber() / Math.sqrt(source.distanceTo(target)) //DECIMAL
 		}
 		if (!this.unitTarget) {
-			this.collisionCheck = Util.squared(data.collisionSize || data.attackMoveSpeed * 100)
+			this.collisionCheck = Util.squared(data.collisionSize || data.attackMoveSpeed * 50)
 		}
 		this.setLocation(x, y, source.height || 10, startAngle)
 		this.setTarget(target)
@@ -142,8 +142,8 @@ class Bullet {
 			new AreaOfEffect(this.source, {
 				dot: this.dot,
 				hitsTowers: this.hitsTowers,
-				px: this.px,
-				py: this.py,
+				px: this.target[0],
+				py: this.target[1],
 				color: this.color,
 				opacity: 0.25,
 				allies: this.allies,
