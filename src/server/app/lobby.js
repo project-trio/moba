@@ -38,7 +38,7 @@ const createGame = function (player, mode, size, map, joining, autoStart) {
 			response.error = 'Invalid map'
 		} else if (!joining && size < mapData.minSize) { //TODO remove joining
 			response.error = 'Chosen map too big for game size'
-		} else if (!joining && size > mapData.maxSize) {
+		} else if (!joining && mapData.maxSize && size > mapData.maxSize) {
 			response.error = 'Chosen map too small for game size'
 		} else {
 			const game = new Game(mode, size, map, autoStart)

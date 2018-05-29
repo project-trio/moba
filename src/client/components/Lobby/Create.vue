@@ -61,7 +61,13 @@ export default {
 		},
 
 		gameSizes () {
-			return this.pvpMode ? CommonConsts.GAME_SIZES : CommonConsts.GAME_SIZES.slice(0, 2)
+			let sizes = CommonConsts.GAME_SIZES
+			if (this.pvpMode) {
+				return sizes
+			}
+			sizes = sizes.slice(0, 2)
+			sizes.push(25)
+			return sizes
 		},
 
 		mapsForSize () {
