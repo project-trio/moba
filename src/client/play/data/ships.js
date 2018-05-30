@@ -26,7 +26,8 @@ export default {
 		attackDamage: [70, 3],
 		attackPierce: [0, 0],
 		attackCooldown: [19, 0],
-		attackMoveSpeed: 12,
+
+		bulletSpeed: 12,
 		bulletSize: 6,
 
 		moveSpeed: [8, 0],
@@ -47,7 +48,8 @@ export default {
 		attackDamage: [40, 2],
 		attackPierce: [0, 0],
 		attackCooldown: [10, 0],
-		attackMoveSpeed: 10,
+
+		bulletSpeed: 10,
 		bulletSize: 3,
 
 		moveSpeed: [10, 0],
@@ -127,7 +129,8 @@ export default {
 		attackDamage: [20, 3],
 		attackPierce: [0, 0],
 		attackCooldown: [15, 0],
-		attackMoveSpeed: 10,
+
+		bulletSpeed: 10,
 		bulletSize: 3,
 
 		moveSpeed: [10, 0],
@@ -150,7 +153,8 @@ export default {
 		attackDamage: [30, 4],
 		attackPierce: [0, 0],
 		attackCooldown: [12, 0],
-		attackMoveSpeed: 10,
+
+		bulletSpeed: 10,
 		bulletSize: 3,
 
 		moveSpeed: [9, 0],
@@ -175,7 +179,8 @@ export default {
 		attackDamage: [40, 1],
 		attackPierce: [0, 0],
 		attackCooldown: [10, 0],
-		attackMoveSpeed: 14,
+
+		bulletSpeed: 14,
 		bulletSize: 4,
 
 		moveSpeed: [11, 0],
@@ -217,7 +222,7 @@ export default {
 		attackDamage: [70, 3],
 		attackPierce: [0, 0],
 		attackCooldown: [22, 0],
-		attackMoveSpeed: 8,
+		bulletSpeed: 8,
 		bulletSize: 5,
 
 		moveSpeed: [7, 0],
@@ -240,7 +245,8 @@ export default {
 		attackDamage: [40, 2],
 		attackPierce: [0, 0],
 		attackCooldown: [18, 0],
-		attackMoveSpeed: 11,
+
+		bulletSpeed: 11,
 		bulletSize: 4,
 
 		moveSpeed: [8, 0],
@@ -263,7 +269,8 @@ export default {
 		attackDamage: [60, 3],
 		attackPierce: [0, 0],
 		attackCooldown: [15, 0],
-		attackMoveSpeed: 13,
+
+		bulletSpeed: 13,
 		bulletSize: 4,
 
 		moveSpeed: [10, 0],
@@ -286,7 +293,8 @@ export default {
 		attackDamage: [30, 3],
 		attackPierce: [0, 0],
 		attackCooldown: [16, 0],
-		attackMoveSpeed: 11,
+		
+		bulletSpeed: 11,
 		bulletSize: 4,
 
 		moveSpeed: [10, 0],

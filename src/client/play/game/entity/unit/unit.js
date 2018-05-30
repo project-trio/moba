@@ -94,7 +94,7 @@ class Unit {
 			this.stats.attackDamage = statBase.attackDamage[0] * 100
 			this.stats.attackPierce = statBase.attackPierce[0] * 100
 			this.stats.attackCooldown = statBase.attackCooldown[0] * 100
-			this.stats.attackMoveSpeed = statBase.attackMoveSpeed
+			this.stats.bulletSpeed = statBase.bulletSpeed
 			this.stats.turnSpeed = statBase.turnSpeed || 8
 			this.stats.collision = statBase.collision * 100
 			this.collisionCheck = Util.squared(this.stats.collision)
@@ -662,7 +662,7 @@ class Unit {
 
 	attack (enemy, renderTime) {
 		this.lastAttack = renderTime
-		if (!this.stats.attackMoveSpeed) {
+		if (!this.stats.bulletSpeed) {
 			enemy.takeDamage(this, renderTime, this.stats.attackDamage, this.stats.attackPierce)
 		} else {
 			new Bullet(this, enemy, this.stats, this.px, this.py, this.base.rotation.z) //TODO top rotation

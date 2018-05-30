@@ -57,15 +57,15 @@ class Bullet {
 
 		this.attackDamage = data.attackDamage
 		this.attackPierce = data.attackPierce
-		this.moveConstant = Float.divide(data.attackMoveSpeed, 500)
-		// this.moveConstant = new Decimal(data.attackMoveSpeed).dividedBy(500) //DECIMAL
+		this.moveConstant = Float.divide(data.bulletSpeed, 500)
+		// this.moveConstant = new Decimal(data.bulletSpeed).dividedBy(500) //DECIMAL
 
 		if (source.height) {
 			this.dropRate = 1400000 * this.moveConstant / Math.sqrt(source.distanceTo(target))
 			// this.dropRate = 1400000 * this.moveConstant.toNumber() / Math.sqrt(source.distanceTo(target)) //DECIMAL
 		}
 		if (!this.unitTarget) {
-			this.collisionCheck = Util.squared(data.collisionSize || data.attackMoveSpeed * 50)
+			this.collisionCheck = Util.squared(data.collisionSize || data.bulletSpeed * 50)
 		}
 		this.setLocation(x, y, source.height || 10, startAngle)
 		this.setTarget(target)
@@ -163,7 +163,7 @@ class Bullet {
 				if (this.rebound && !this.source.isDead) {
 					const heal = Math.round(Float.multiply(damage, this.rebound))
 					// const heal = new Decimal(damage).times(this.rebound).round().toNumber() //DECIMAL
-					new Bullet(this.target, this.source, { bulletColor: 0x00ff00, heal: heal, bulletSize: 8, attackMoveSpeed: 10 }, this.px, this.py, this.container.rotation.z)
+					new Bullet(this.target, this.source, { bulletColor: 0x00ff00, heal: heal, bulletSize: 8, bulletSpeed: 10 }, this.px, this.py, this.container.rotation.z)
 				}
 			}
 			if (this.stunDuration && (this.hitsTowers || !this.target.tower) && this.target.hasModifier('moveSpeed', 'Poison')) {

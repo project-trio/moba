@@ -10,7 +10,8 @@ export default {
 		attackDamage: [50, 0],
 		attackPierce: [10, 0],
 		attackCooldown: [2, 0],
-		attackMoveSpeed: 10,
+
+		bulletSpeed: 10,
 		bulletSize: 6,
 		bulletColor: 0xff0000,
 
@@ -30,7 +31,8 @@ export default {
 		attackDamage: [140, 0],
 		attackPierce: [2, 0],
 		attackCooldown: [10, 0],
-		attackMoveSpeed: 10,
+
+		bulletSpeed: 10,
 		bulletSize: 5,
 		bulletColor: 0xbb0000,
 
@@ -50,7 +52,8 @@ export default {
 		attackDamage: [100, 0],
 		attackPierce: [6, 0],
 		attackCooldown: [10, 0],
-		attackMoveSpeed: 10,
+
+		bulletSpeed: 10,
 		bulletSize: 5,
 		bulletColor: 0x770000,
 

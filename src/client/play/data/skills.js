@@ -330,7 +330,7 @@ export default {
 					bulletColor: 0xdddd00,
 					attackDamage: damage,
 					attackPierce: 10,
-					attackMoveSpeed: 7,
+					bulletSpeed: 7,
 					propagateRange: this.getEffectRange(level),
 				}
 				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
@@ -486,7 +486,7 @@ export default {
 					bulletColor: 0xdddd00,
 					attackDamage: damage,
 					attackPierce: 10,
-					attackMoveSpeed: 8,
+					bulletSpeed: 8,
 					maxRange: maxRange,
 					modify: {
 						name: 'Poison',
@@ -538,7 +538,7 @@ export default {
 					bulletColor: 0x00ff00,
 					attackDamage: dps,
 					attackPierce: 0,
-					attackMoveSpeed: 10,
+					bulletSpeed: 10,
 					explosionRadius: aoeRange,
 					effectDuration: effectDuration,
 					allies: false,
@@ -620,7 +620,7 @@ export default {
 					bulletColor: 0xcc0000,
 					attackDamage: damage,
 					attackPierce: 10,
-					attackMoveSpeed: 12,
+					bulletSpeed: 12,
 					maxRange: maxRange,
 					firstCollision: true,
 				}
@@ -749,7 +749,7 @@ export default {
 					bulletColor: 0x00dddd,
 					attackDamage: damage,
 					attackPierce: 100,
-					attackMoveSpeed: 8,
+					bulletSpeed: 8,
 					maxRange: maxRange,
 				}
 				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
@@ -777,14 +777,14 @@ export default {
 				const aoeRange = this.getEffectRange(level)
 				const damage = this.getEffectDamage(level) * 100
 				const maxRange = this.getRange(level)
-				const attackMoveSpeed = 4
+				const bulletSpeed = 4
 				const bulletData = {
 					hitsTowers: this.hitsTowers,
 					bulletSize: 8,
 					bulletColor: 0x660066,
 					attackDamage: damage,
 					attackPierce: 10,
-					attackMoveSpeed: attackMoveSpeed,
+					bulletSpeed: bulletSpeed,
 					maxRange: maxRange,
 					explosionRadius: aoeRange,
 					firstCollision: false,
@@ -974,7 +974,7 @@ export default {
 					bulletColor: 0xcc00ff,
 					attackDamage: damage * 100,
 					attackPierce: 10,
-					attackMoveSpeed: 7,
+					bulletSpeed: 7,
 					maxRange: maxRange,
 					explosionRadius: aoeRange,
 					firstCollision: true,
