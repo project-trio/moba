@@ -12,6 +12,7 @@ export default {
 		attackCooldown: [2, 0],
 
 		bulletSpeed: 10,
+		bulletOffset: 33,
 		bulletSize: 6,
 		bulletColor: 0xff0000,
 
@@ -33,6 +34,7 @@ export default {
 		attackCooldown: [10, 0],
 
 		bulletSpeed: 10,
+		bulletOffset: 33,
 		bulletSize: 5,
 		bulletColor: 0xbb0000,
 
@@ -54,6 +56,7 @@ export default {
 		attackCooldown: [10, 0],
 
 		bulletSpeed: 10,
+		bulletOffset: 33,
 		bulletSize: 5,
 		bulletColor: 0x770000,
 

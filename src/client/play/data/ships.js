@@ -222,6 +222,7 @@ export default {
 		attackDamage: [70, 3],
 		attackPierce: [0, 0],
 		attackCooldown: [22, 0],
+
 		bulletSpeed: 8,
 		bulletSize: 5,
 
@@ -293,7 +294,7 @@ export default {
 		attackDamage: [30, 3],
 		attackPierce: [0, 0],
 		attackCooldown: [16, 0],
-		
+
 		bulletSpeed: 11,
 		bulletSize: 4,
 

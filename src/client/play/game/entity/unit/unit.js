@@ -95,6 +95,7 @@ class Unit {
 			this.stats.attackPierce = statBase.attackPierce[0] * 100
 			this.stats.attackCooldown = statBase.attackCooldown[0] * 100
 			this.stats.bulletSpeed = statBase.bulletSpeed
+			this.stats.bulletOffset = statBase.bulletOffset
 			this.stats.turnSpeed = statBase.turnSpeed || 8
 			this.stats.collision = statBase.collision * 100
 			this.collisionCheck = Util.squared(this.stats.collision)
@@ -665,7 +666,7 @@ class Unit {
 		if (!this.stats.bulletSpeed) {
 			enemy.takeDamage(this, renderTime, this.stats.attackDamage, this.stats.attackPierce)
 		} else {
-			new Bullet(this, enemy, this.stats, this.px, this.py, this.base.rotation.z) //TODO top rotation
+			new Bullet(this, enemy, this.stats, this.px, this.py, this.base.rotation.z, this.stats.bulletOffset) //TODO top rotation
 		}
 	}
 

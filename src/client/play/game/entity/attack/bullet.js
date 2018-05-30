@@ -23,7 +23,7 @@ class Bullet {
 
 	// Constructor
 
-	constructor (source, target, data, x, y, startAngle) {
+	constructor (source, target, data, x, y, startAngle, initialDistance) {
 		this.team = source.team
 		this.source = source
 		this.unitTarget = target.stats !== undefined
@@ -69,6 +69,12 @@ class Bullet {
 		}
 		this.setLocation(x, y, source.height || 10, startAngle)
 		this.setTarget(target)
+		if (initialDistance) {
+			initialDistance *= 100
+			this.px += Math.floor(Float.multiply(Float.cos(this.moveAngle), initialDistance))
+			this.py += Math.floor(Float.multiply(Float.sin(this.moveAngle), initialDistance))
+			this.updatePosition()
+		}
 
 		allBullets.push(this)
 	}
@@ -107,11 +113,13 @@ class Bullet {
 		let moveX, moveY
 		if (dx !== 0 || dy !== 0) {
 			const moveAngle = Util.angleOf(dx, dy, false)
-			this.aimTargetAngle = moveAngle
+			this.moveAngle = moveAngle
 			moveX = Math.floor(Float.cos(moveAngle) * 1000)
 			moveY = Math.floor(Float.sin(moveAngle) * 1000)
+			this.container.rotation.z = moveAngle
+
 			//DECMIAL
-			// this.aimTargetAngle = moveAngle.toNumber() / 1000 //DECIMAL
+			// this.moveAngle = moveAngle.toNumber() / 1000 //DECIMAL
 			// const angleIndex = TrigCache.indexFor(moveAngle)
 			// moveX = TrigCache.cos(angleIndex)
 			// moveY = TrigCache.sin(angleIndex)
@@ -231,7 +239,7 @@ class Bullet {
 			// const moveSpeed = this.moveConstant //DECIMAL
 			// this.currentSpeed = moveSpeed.toNumber() //DECIMAL
 			this.currentSpeed = this.moveConstant
-			const moveScalar = this.currentSpeed * timeDelta
+			const moveScalar = Float.multiply(this.currentSpeed, timeDelta)
 			// const moveScalar = moveSpeed.times(timeDelta) //DECIMAL
 			moveByX = Math.round(Float.multiply(moveScalar, this.moveX))
 			moveByY = Math.round(Float.multiply(moveScalar, this.moveY))
@@ -289,11 +297,6 @@ class Bullet {
 
 	// Aim
 
-	updateAim () {
-		this.aimTargetAngle = Util.angleBetween(this, this.target, true)
-		this.container.rotation.z = this.aimTargetAngle
-	}
-
 	updateTarget (force) {
 		if (!force && this.target.isDead) {
 			this.unitTarget = false
@@ -341,9 +344,6 @@ Bullet.update = function (renderTime, timeDelta, tweening) {
 	// Move
 	for (let idx = startIndex; idx >= 0; idx -= 1) {
 		const bullet = allBullets[idx]
-		if (bullet.unitTarget) {
-			bullet.updateAim()
-		}
 		bullet.move(renderTime, timeDelta, tweening)
 		if (bullet.updateAnimations) {
 			bullet.updateAnimations(renderTime)

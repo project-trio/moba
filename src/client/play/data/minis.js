@@ -30,6 +30,7 @@ export default {
 		attackCooldown: [10, 0],
 
 		bulletSpeed: 10,
+		bulletOffset: 15,
 		bulletSize: 3,
 		bulletColor: 0x888888,
 
