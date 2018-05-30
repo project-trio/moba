@@ -44,7 +44,7 @@ class Game {
 				this.players[player.id] = player
 				player.resetGame(botTeam, teamIndex)
 			}
-			if (CommonConsts.TESTING) {
+			if (CommonConsts.TESTING || size >= 10) {
 				botTeam = 0
 				this.counts[botTeam] = size - 1
 				for (let teamIndex = 0; teamIndex < size - 1; teamIndex += 1) {

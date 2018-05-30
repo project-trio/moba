@@ -7,11 +7,11 @@
 			<div class="label">FPS Cap</div>
 		</div>
 		<div class="setting">
-			<button @click="onResolution" class="interactive">{{ fullResolution ? 'full' : 'low' }}</button>
+			<button @click="onResolution" class="interactive">{{ fullResolution ? 'Full' : 'Low' }}</button>
 			<div class="label">Resolution</div>
 		</div>
 		<div class="setting">
-			<button @click="onShadows" class="interactive">{{ shadows === 0 ? 'off' : shadows === 1 ? 'low' : 'high' }}</button>
+			<button @click="onShadows" class="interactive">{{ shadows === 0 ? 'Off' : shadows === 1 ? 'Low' : 'High' }}</button>
 			<div class="label">Shadows</div>
 		</div>
 		<!-- <div class="setting">

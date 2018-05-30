@@ -33,7 +33,8 @@ export default {
 	//CONVENIENCE
 
 	getBool (key, defaultValue = null) {
-		return this.get(key, defaultValue) == 'true'
+		const bool = this.get(key)
+		return bool === null ? defaultValue : bool === 'true'
 	},
 
 	getInt (key, defaultValue = null) {

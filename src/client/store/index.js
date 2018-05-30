@@ -76,7 +76,7 @@ export default {
 			fpsCap: storage.getBool('fpsCap', false),
 			// antialias: storage.getBool('antialias', true),
 			fullResolution: storage.getInt('fullResolution', true),
-			shadows: storage.getInt('shadows', 1),
+			shadows: storage.getInt('shadows', 2),
 			outline: storage.getBool('outline', true),
 		},
 
