@@ -12,8 +12,13 @@ module.exports = {
 
 	register (socket, player) {
 		socket.on('switch unit', (data) => {
+			if (!player.game) {
+				console.log('Action ERR: No game for player')
+				return
+			}
 			const newShip = data.name
-			if (CommonConsts.SHIP_NAMES.indexOf(newShip) !== -1) {
+			const shipNames = player.game.retro ? CommonConsts.RETRO_SHIP_NAMES : CommonConsts.SHIP_NAMES
+			if (shipNames.indexOf(newShip) !== -1) {
 				player.switchUnit = newShip
 			}
 		})

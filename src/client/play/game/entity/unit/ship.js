@@ -3,7 +3,9 @@ import store from '@/client/store'
 import Local from '@/client/play/local'
 
 import shipStats from '@/client/play/data/ships'
+import retroShipStats from '@/client/play/data/ships-retro'
 import skillsData from '@/client/play/data/skills'
+import retroSkillsData from '@/client/play/data/skills-retro'
 
 import Render from '@/client/play/render/render'
 
@@ -22,17 +24,17 @@ const maxLevel = 30
 
 class Ship extends Movable {
 
-	constructor (name, player, team, x, y, angle, isLocal) {
-		const statBase = shipStats[name]
+	constructor (name, player, team, x, y, angle, isLocal, retro) {
+		const statBase = (retro ? retroShipStats : shipStats)[name]
 		super(team, statBase, 2, x, y, angle, isLocal)
 
 		this.skills = {
-			data: skillsData[name],
+			data: (retro ? retroSkillsData : skillsData)[name],
 			started: [0, 0, 0],
 			actives: [0, 0, 0],
 			cooldowns: [0, 0, 0],
-			levels: [0, 0, 0],
-			leveled: 0,
+			levels: retro ? [1, 1, 1] : [0, 0, 0],
+			leveled: retro ? 1 : 0,
 		}
 		this.tween = statBase.tween || null
 		this.onDeath = statBase.onDeath || null
@@ -255,7 +257,7 @@ class Ship extends Movable {
 		}
 		const skill = this.skills.data[index]
 		if (!skill.getCooldown) {
-			console.error('Invalid skill', this.name, index, skill)
+			p('Invalid skill', this.name, index)
 			return false
 		}
 		if (skill.isDisabledBy && skill.isDisabledBy(this.skills.actives)) {
@@ -291,14 +293,18 @@ class Ship extends Movable {
 
 	levelup (index) {
 		if (this.skills.leveled < this.level) {
-			const currentLevel = this.skills.levels[index]
-			if (currentLevel < 10) {
+			const nextLevel = this.skills.levels[index] + 1
+			if (nextLevel <= 10) {
 				this.skills.leveled += 1
-				this.skills.levels[index] = currentLevel + 1
+				this.skills.levels[index] = nextLevel
+				const skillData = this.skills.data[index]
+				if (skillData.levelup) {
+					skillData.levelup(index, nextLevel, this)
+				}
 
 				if (this.isLocal) {
 					store.state.local.skills.leveled = this.skills.leveled
-					store.state.local.skills.levels.splice(index, 1, currentLevel + 1)
+					store.state.local.skills.levels.splice(index, 1, nextLevel)
 				}
 			} else {
 				// p('Skill already maxed', index, currentLevel)
@@ -476,10 +482,22 @@ class Ship extends Movable {
 		})
 	}
 
+	addSightRange (value) {
+		this.stats.sightRange += value * 100
+		this.sightRangeCheck = Util.squared(this.stats.sightRange)
+	}
+
+	addAttackDamage (value, update) {
+		this.stats.attackDamage += value * 100
+		if (update && this.selected) {
+			store.modifierStats(this)
+		}
+	}
+
 	levelUp (over) {
 		this.level += 1
 		this.displayStats.level = this.level
-		if (this.level >= maxLevel) {
+		if (this.level >= maxLevel && !store.state.game.retro) {
 			this.maxLevel = true
 		}
 		this.levelExp = over
@@ -490,13 +508,18 @@ class Ship extends Movable {
 
 		this.stats.healthRegen += this.statBase.healthRegen[1]
 		this.stats.armor += this.statBase.armor[1]
-		this.stats.sightRange += this.statBase.sightRange[1]
 		this.stats.attackRange += this.statBase.attackRange[1] * 100
-		this.stats.attackDamage += this.statBase.attackDamage[1] * 100
 		this.stats.attackPierce += this.statBase.attackPierce[1] * 100
 		this.stats.attackCooldown += this.statBase.attackCooldown[1] * 100
 
-		this.sightRangeCheck = Util.squared(this.stats.sightRange)
+		const addDamage = this.statBase.attackDamage[1]
+		if (addDamage) {
+			this.addAttackDamage(addDamage, false)
+		}
+		const addSight = this.statBase.sightRange[1]
+		if (addSight) {
+			this.addSightRange(addSight)
+		}
 		this.attackRangeCheck = Util.squared(this.stats.attackRange)
 
 		this.stats.moveSpeed += this.statBase.moveSpeed[1]

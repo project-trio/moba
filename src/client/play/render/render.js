@@ -290,7 +290,7 @@ export default {
 			return this.voxelMesh(mesh, team, options)
 		}
 		new Vox.Parser().parse(require(`@/client/assets/${type}/${name}.vox`)).then((voxelData) => {
-			builder = new Vox.MeshBuilder(voxelData, { voxelSize: 2 })
+			builder = new Vox.MeshBuilder(voxelData, { voxelSize: options.size || 2 })
 			if (voxelCache && options.cache) {
 				voxelCache[team][name] = builder
 			}

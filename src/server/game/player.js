@@ -53,12 +53,13 @@ module.exports = class Player {
 		}
 	}
 
-	resetGame (team, teamIndex) {
+	resetGame (team, teamIndex, retro) {
 		this.team = team
 		this.teamIndex = teamIndex
 
 		this.isActive = true
-		this.shipName = this.client ? 'boxy' : CommonUtils.randomItem(CommonConsts.SHIP_NAMES)
+		const shipNames = retro ? CommonConsts.RETRO_SHIP_NAMES : CommonConsts.SHIP_NAMES
+		this.shipName = this.client ? shipNames[0] : CommonUtils.randomItem(shipNames)
 		this.switchUnit = null
 		this.actionUpdate = 0
 		this.serverUpdate = 0

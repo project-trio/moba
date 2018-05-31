@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import store from '@/client/store'
 
 import shipStats from '@/client/play/data/ships'
+import retroShipStats from '@/client/play/data/ships-retro'
 
 import Animate from '@/client/play/game/helpers/animate'
 
@@ -127,13 +128,13 @@ export default {
 		animate()
 	},
 
-	load (name, team) {
+	load (name, team, retro) {
 		for (let i = shipContainer.children.length - 1; i >= 0; i -= 1) {
 			shipContainer.remove(shipContainer.children[i])
 		}
 		shipContainer.rotation.z = 0
 
-		statBase = shipStats[name]
+		statBase = retro ? retroShipStats[name] : shipStats[name]
 		store.setSelectedUnit({
 			sample: true,
 			name: name,
@@ -153,6 +154,7 @@ export default {
 
 		const renderTime = performance.now()
 		container.reemergeAt = renderTime + 300
+		container.statBase = statBase
 		statBase.create(name, team, shipContainer, shipContainer, container)
 		container.tween = statBase.tween
 		if (statBase.onRespawn) {

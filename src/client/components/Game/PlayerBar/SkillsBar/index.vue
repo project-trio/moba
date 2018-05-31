@@ -8,6 +8,7 @@
 import store from '@/client/store'
 
 import skillsData from '@/client/play/data/skills'
+import retroSkillsData from '@/client/play/data/skills-retro'
 
 import SkillItem from '@/client/components/Game/PlayerBar/SkillsBar/SkillItem'
 
@@ -21,8 +22,16 @@ export default {
 			return store.state.game.players[store.state.playerId]
 		},
 
+		retro () {
+			return store.state.game.retro
+		},
+
 		skills () {
-			return this.localPlayer ? skillsData[this.localPlayer.shipName] : []
+			if (!this.localPlayer) {
+				return []
+			}
+			const skills = this.retro ? retroSkillsData : skillsData
+			return skills[this.localPlayer.shipName]
 		},
 	},
 }

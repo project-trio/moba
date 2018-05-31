@@ -22,6 +22,8 @@ const TARGET_SELF = 1
 const TARGET_GROUND = 2
 const TARGET_ENEMY = 3
 
+const D1 = new Decimal(1)
+
 const levelMultiplier = function (base, level, multiplier) {
 	return base + (level - 1) * multiplier
 }
@@ -406,7 +408,7 @@ export default {
 						name: this.name,
 						stat: 'moveSpeed',
 						method: 'times',
-						value: new Decimal(1).add(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)),
+						value: D1.add(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)),
 						expires: 1000,
 					},
 				})
@@ -442,7 +444,7 @@ export default {
 						name: this.name,
 						stat: 'attackCooldown',
 						method: 'times',
-						value: new Decimal(1).minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)),
+						value: D1.minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)),
 						expires: 1000,
 					},
 				})
@@ -477,7 +479,7 @@ export default {
 			},
 			start (index, level, ship, target) {
 				const damage = this.getEffectDamage(level) * 100
-				const moveSpeed = new Decimal(1).minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
+				const moveSpeed = D1.minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
 				const stunDuration = this.getEffectDuration(level)
 				const maxRange = this.getRange(level)
 				const bulletData = {
@@ -529,7 +531,7 @@ export default {
 				const dps = this.getEffectDps(level)
 				const aoeRange = this.getEffectRange(level)
 				const effectDuration = this.getEffectDuration(level)
-				const moveSpeed = new Decimal(1).minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
+				const moveSpeed = D1.minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
 				const bulletData = {
 					dot: true,
 					hitsTowers: this.hitsTowers,
@@ -575,8 +577,8 @@ export default {
 				return levelMultiplier(150, level, -5)
 			},
 			start (index, level, ship) {
-				ship.modify(this.name, 'attackCooldown', 'times', new Decimal(1).minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
-				ship.modify(this.name, 'moveSpeed', 'times', new Decimal(1).plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
+				ship.modify(this.name, 'attackCooldown', 'times', D1.minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
+				ship.modify(this.name, 'moveSpeed', 'times', D1.plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
 
 				ship.enrageMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
@@ -1066,7 +1068,7 @@ export default {
 				return levelMultiplier(150, level, 5)
 			},
 			start (index, level, ship, target, startAt, endAt) {
-				ship.modify(this.name, 'attackCooldown', 'times', new Decimal(1).minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
+				ship.modify(this.name, 'attackCooldown', 'times', D1.minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
 				ship.modify(this.name, 'armor', 'times', 0.5)
 				ship.bruteForceMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
@@ -1099,7 +1101,7 @@ export default {
 			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.removeTarget()
 				ship.invisible = true
-				ship.modify(this.name, 'moveSpeed', 'times', new Decimal(1).plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
+				ship.modify(this.name, 'moveSpeed', 'times', D1.plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
 
 				const animDuration = 500
 				ship.queueAnimation(null, 'opacity', {

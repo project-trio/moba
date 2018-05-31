@@ -1,6 +1,7 @@
 import Local from '@/client/play/local'
 
 import minisData from '@/client/play/data/minis'
+import retroMinisData from '@/client/play/data/minis'
 
 import Render from '@/client/play/render/render'
 
@@ -183,13 +184,13 @@ class Mini extends Movable {
 
 let cache
 
-Mini.spawn = function (team, type, path, mirrored) {
+Mini.spawn = function (team, type, path, mirrored, retro) {
 	const cachedMini = cache[type][team].pop()
 	if (cachedMini) {
 		cachedMini.refresh(team, path, mirrored)
 		return cachedMini
 	}
-	return new Mini(team, type, path, mirrored)
+	return new Mini(team, type, path, mirrored, retro)
 }
 
 Mini.init = function () {

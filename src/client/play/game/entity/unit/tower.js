@@ -1,6 +1,7 @@
 import store from '@/client/store'
 
 import towersData from '@/client/play/data/towers'
+import retroTowersData from '@/client/play/data/towers-retro'
 
 import Local from '@/client/play/local'
 
@@ -14,10 +15,10 @@ let spawnCount, extraHealth
 
 class Tower extends Unit {
 
-	constructor (team, towerType, x, y) {
-		const stats = towersData[towerType]
-
-		super(team, stats, towerType === 'base' ? 4 : 3, x, y, null, false, true)
+	constructor (team, towerType, x, y, retro) {
+		const stats = (retro ? retroTowersData : towersData)[towerType]
+		const isBase = towerType === 'base'
+		super(team, stats, isBase ? 4 : 3, x, y, null, false, true)
 
 		this.tower = true
 		this.name = towerType
@@ -25,8 +26,9 @@ class Tower extends Unit {
 		spawnCount += 1
 		this.targetedAt = null
 
-		Render.voxel(team, 'npcs', 'turret-base', { receiveShadow: true, parent: this.base, owner: this })
-		Render.voxel(team, 'npcs', 'turret-top', { parent: this.top, owner: this })
+		const size = isBase ? 2.5 : 2
+		Render.voxel(team, 'npcs', 'turret-base', { size, receiveShadow: true, parent: this.base, owner: this })
+		Render.voxel(team, 'npcs', 'turret-top', { size, parent: this.top, owner: this })
 
 		this.stats.healthMax += extraHealth
 		this.healthRemaining = this.stats.healthMax

@@ -1,7 +1,7 @@
 const maps = {}
 
 {
-	const wallRadius = 24
+	const WALL_RADIUS = 24
 	let wH, hH
 
 	// Tiny
@@ -25,7 +25,7 @@ const maps = {}
 		walls: [
 			{
 				start: { x: TINY_WIDTH / 5, y: TINY_HEIGHT / 5 },
-				radius: wallRadius,
+				radius: WALL_RADIUS,
 				move: [
 					{ dx: 0, dy: -hH / 5 },
 				],
@@ -34,7 +34,7 @@ const maps = {}
 			},
 			{
 				start: { x: TINY_WIDTH, y: hH },
-				radius: wallRadius,
+				radius: WALL_RADIUS,
 				move: [
 					{ dx: -15, dy: 0 },
 				],
@@ -42,6 +42,11 @@ const maps = {}
 				endCap: true,
 			},
 		],
+
+		spawn: {
+			interval: 20,
+			initialDelay: 6,
+		},
 
 		minions: [
 			{
@@ -78,7 +83,7 @@ const maps = {}
 		walls: [
 			{
 				start: { x: 0, y: 250 },
-				radius: wallRadius,
+				radius: WALL_RADIUS,
 				move: [
 					{ dx: 10, dy: 0 },
 				],
@@ -87,7 +92,7 @@ const maps = {}
 			},
 			{
 				start: { x: wH - 100, y: 330 },
-				radius: wallRadius,
+				radius: WALL_RADIUS,
 				move: [
 					{ dx: 100, dy: 0 },
 				],
@@ -96,7 +101,7 @@ const maps = {}
 			},
 			{
 				start: { x: SMALL_WIDTH, y: hH - 80 },
-				radius: wallRadius,
+				radius: WALL_RADIUS,
 				move: [
 					{ dx: -50, dy: 0 },
 				],
@@ -104,6 +109,11 @@ const maps = {}
 				endCap: true,
 			},
 		],
+
+		spawn: {
+			interval: 20,
+			initialDelay: 6,
+		},
 
 		minions: [
 			{
@@ -141,7 +151,7 @@ const maps = {}
 		walls: [
 			{
 				start: { x: 380, y: 360 },
-				radius: wallRadius,
+				radius: WALL_RADIUS,
 				move: [
 					{ dx: -60, dy: 0 },
 					{ dx: 0, dy: -60 },
@@ -150,6 +160,11 @@ const maps = {}
 				endCap: true,
 			},
 		],
+
+		spawn: {
+			interval: 20,
+			initialDelay: 6,
+		},
 
 		minions: [
 			{
@@ -197,7 +212,7 @@ const maps = {}
 		walls: [
 			{
 				start: { x: 380, y: 400 },
-				radius: wallRadius,
+				radius: WALL_RADIUS,
 				move: [
 					{ dx: -60, dy: 0 },
 					{ dx: 0, dy: -60 },
@@ -207,7 +222,7 @@ const maps = {}
 			},
 			{
 				start: { x: wH - 100, y: 400 },
-				radius: wallRadius,
+				radius: WALL_RADIUS,
 				move: [
 					{ dx: 100, dy: 0 },
 				],
@@ -215,6 +230,11 @@ const maps = {}
 				endCap: true,
 			},
 		],
+
+		spawn: {
+			interval: 20,
+			initialDelay: 6,
+		},
 
 		minions: [
 			{
@@ -234,6 +254,69 @@ const maps = {}
 					[[wH + 90, 80, 0, 0], [wH + 250, hH / 2, -356, -934], [wH + 250, hH, 0, -1000]],
 				],
 				mirror: true,
+			},
+		],
+	}
+
+	// Retro
+
+	const RETRO_WIDTH = 1000
+	const RETRO_HEIGHT = 1666
+	const RETRO_WALL_RADIUS = 36
+	wH = RETRO_WIDTH / 2
+	hH = RETRO_HEIGHT / 2
+	maps.retro = {
+		minSize: 1,
+		maxSize: 10,
+
+		width: RETRO_WIDTH,
+		height: RETRO_HEIGHT,
+
+		towers: [
+			['base', wH, 44, false],
+			['tower', 317, 393, true],
+			['tower', 285, 684, false],
+			['tower', 800, 684, false],
+		],
+
+		walls: [
+			{
+				start: { x: 220, y: 320 },
+				radius: RETRO_WALL_RADIUS,
+				move: [
+					{ dx: 48, dy: 0 },
+					{ dx: 0, dy: -48 },
+				],
+				mirror: true,
+				endCap: true,
+			},
+		],
+
+		spawn: {
+			interval: 20,
+			initialDelay: 6,
+			rangedDelay: 3,
+			rangedWaveEvery: 2,
+		},
+
+		minions: [
+			{
+				type: 'melee',
+				paths: [
+					[[wH - 80, 90, 0, 0], [90, 100, hH, -23], [90, 360, 0, -hH], [260, 880, -311, -950], [260, hH, 0, -hH]],
+					[[wH - 80, 60, 0, 0], [120, 70, hH, -25], [120, 390, 0, -hH], [300, 880, -345, -939], [300, hH, 0, -hH]],
+					[[wH - 80, 30, 0, 0], [150, 40, hH, -27], [150, 420, 0, -hH], [340, 880, -382, -924], [340, hH, 0, -hH]],
+				],
+				mirror: true,
+			},
+			{
+				type: 'ranged',
+				paths: [
+					[[wH - 40, 74, 0, 0], [wH - 40, hH, 0, -hH]],
+					[[wH, 80, 0, 0], [wH, hH, 0, -hH]],
+					[[wH + 40, 74, 0, 0], [wH + 40, hH, 0, -hH]],
+				],
+				mirror: false,
 			},
 		],
 	}

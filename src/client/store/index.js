@@ -18,6 +18,7 @@ const defaultGameState = () => {
 		playing: false,
 		missingUpdate: false,
 		showPanel: null,
+		retro: false,
 		stats: {
 			kills: [0, 0],
 			towers: [0, 0],

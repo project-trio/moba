@@ -33,7 +33,6 @@ import CommonConsts from '@/common/constants'
 import store from '@/client/store'
 
 import Bridge from '@/client/play/events/bridge'
-
 import RenderPreview from '@/client/play/render/preview'
 
 export default {
@@ -57,8 +56,11 @@ export default {
 		chosenUnit () {
 			return this.localPlayer ? this.localPlayer.shipName : ''
 		},
+		retro () {
+			return store.state.game.retro
+		},
 		shipNames () {
-			return CommonConsts.SHIP_NAMES
+			return this.retro ? CommonConsts.RETRO_SHIP_NAMES : CommonConsts.SHIP_NAMES
 		},
 
 		teamPlayers () {
@@ -80,7 +82,7 @@ export default {
 	watch: {
 		chosenUnit (name) {
 			if (name) {
-				RenderPreview.load(name, this.localTeam)
+				RenderPreview.load(name, this.localTeam, this.retro)
 			}
 		},
 	},
@@ -88,7 +90,7 @@ export default {
 	mounted () {
 		RenderPreview.create()
 		if (this.chosenUnit) {
-			RenderPreview.load(this.chosenUnit, this.localTeam)
+			RenderPreview.load(this.chosenUnit, this.localTeam, this.retro)
 		}
 	},
 

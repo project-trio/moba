@@ -40,7 +40,7 @@ export default class Player {
 		if (!storeData) {
 			return console.error('No store data for player', this, store.state.game.players)
 		}
-		this.unit = new Ship(storeData.shipName, this, this.team, position[0], position[1], null, this.isLocal)
+		this.unit = new Ship(storeData.shipName, this, this.team, position[0], position[1], null, this.isLocal, store.state.game.retro)
 	}
 
 	destroy () {

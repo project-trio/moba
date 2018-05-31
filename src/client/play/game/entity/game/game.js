@@ -10,7 +10,6 @@ import Bullet from '@/client/play/game/entity/attack/bullet'
 
 import GameMap from '@/client/play/game/entity/game/map'
 import Player from '@/client/play/game/entity/game/player'
-import Wave from '@/client/play/game/entity/game/wave'
 
 import Unit from '@/client/play/game/entity/unit/unit'
 
@@ -36,8 +35,14 @@ export default function (gid, mode, size, mapName) {
 	this.finished = false
 	this.serverUpdate = -1
 	this.bots = mode === 'bots'
+	this.retro = mapName === 'retro'
 
 	store.state.game.playing = false
+	store.state.game.retro = this.retro
+	if (this.retro) {
+		store.state.local.skills.levels = [1, 1, 1]
+		store.state.local.skills.leveled = 1
+	}
 
 	// Update
 
@@ -70,11 +75,7 @@ export default function (gid, mode, size, mapName) {
 				AreaOfEffect.update(renderTime, Unit.all())
 				Bullet.update(renderTime, tickDuration, false)
 				Unit.update(renderTime, tickDuration, false)
-
-				const spawnMinionWave = renderTime % 30000 === (Local.TESTING ? 5000 : 10000)
-				if (spawnMinionWave) {
-					Wave.spawn(this.map.minionData(), renderTime)
-				}
+				this.map.update(renderTime, this.retro)
 			} else if (renderTime === 0) {
 				this.startPlaying()
 			}

@@ -12,6 +12,7 @@ import RenderMinimap from '@/client/play/render/minimap'
 
 import Mini from '@/client/play/game/entity/unit/mini'
 import Tower from '@/client/play/game/entity/unit/tower'
+import Wave from '@/client/play/game/entity/game/wave'
 
 //CONSTRUCTOR
 
@@ -39,6 +40,7 @@ const GameMap = function (mapName, parent) {
 	let previousPositionY = null
 	let previousCameraX, previousCameraY
 	let maxMapX, maxMapY
+	let waveNumber, waveInterval, waveDelay, wavesBetweenRanged, waveRangedDelay
 
 	container.interactive = true
 
@@ -99,8 +101,16 @@ const GameMap = function (mapName, parent) {
 	}
 
 	this.build = function (playerCount) {
+		const retro = store.state.game.retro
 		// mapName = 'tiny' //SAMPLE
 		layout = commonMaps[mapName]
+		waveNumber = 0
+		waveInterval = layout.spawn.interval * 1000
+		waveDelay = layout.spawn.initialDelay * 1000
+		wavesBetweenRanged = layout.spawn.rangedWaveEvery
+		if (wavesBetweenRanged) {
+			waveRangedDelay = layout.spawn.rangedDelay * 1000
+		}
 
 		const mapWidth = layout.width
 		const mapHeight = layout.height
@@ -209,7 +219,7 @@ const GameMap = function (mapName, parent) {
 			const minionSpawn = layout.minions[idx]
 			for (let team = 0; team < 2; team += 1) {
 				for (let pidx = 0; pidx < minionSpawn.paths.length; pidx += 1) {
-					const mini = Mini.spawn(team, minionSpawn.type, minionSpawn.paths[pidx], minionSpawn.mirrored)
+					const mini = Mini.spawn(team, minionSpawn.type, minionSpawn.paths[pidx], minionSpawn.mirrored, retro)
 					mini.isDying = true
 				}
 			}
@@ -273,7 +283,7 @@ const GameMap = function (mapName, parent) {
 					const firstTeam = team === 0
 					const tx = firstTeam != mirrored ? mapWidth - ox : ox
 					const ty = firstTeam ? mapHeight - oy : oy
-					new Tower(team, towerType, tx, ty)
+					new Tower(team, towerType, tx, ty, retro)
 				}
 			}
 		}
@@ -344,8 +354,29 @@ const GameMap = function (mapName, parent) {
 		}
 	}
 
-	this.minionData = function () {
-		return layout.minions
+	this.layout = function () {
+		return layout
+	}
+
+	this.update = function (renderTime, retro) {
+		const spawnIntervalPoint = renderTime % waveInterval
+		let spawnMinionWave = false
+		let spawnRanged = false
+		let spawnOneType = !!wavesBetweenRanged
+		if (spawnIntervalPoint === waveDelay) {
+			spawnMinionWave = true
+		} else if (spawnOneType && waveNumber % wavesBetweenRanged === 1) {
+			if (spawnIntervalPoint === waveDelay + waveRangedDelay) {
+				spawnMinionWave = true
+				spawnRanged = true
+			}
+		}
+		if (spawnMinionWave) {
+			if (!spawnRanged) {
+				waveNumber += 1
+			}
+			Wave.spawn(layout.minions, spawnOneType, spawnRanged, renderTime, retro)
+		}
 	}
 
 //DIMENSIONS

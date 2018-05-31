@@ -88,7 +88,7 @@ export default {
 			return this.level === 0 || this.activated || this.cooldownRemaining > 200 || (this.skill.activatable && !this.skill.activatable())
 		},
 		disabled () {
-			return this.preventsActivation || this.cooldownRemaining > 0 || this.isToggled || this.disabledByOtherSkill || store.state.local.dead
+			return this.preventsActivation || this.cooldownRemaining > 0 || this.isToggled || this.disabledByOtherSkill || store.state.local.dead || !this.skill.getCooldown
 		},
 
 		isAnySkillActive () {

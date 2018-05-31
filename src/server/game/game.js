@@ -23,6 +23,7 @@ class Game {
 		this.botMode = mode === 'bots'
 		this.size = size
 		this.map = map
+		this.retro = map === 'retro'
 		this.mapWidth = mapData.width
 		this.mapHeight = mapData.height
 		this.game = null
@@ -42,7 +43,7 @@ class Game {
 			for (let teamIndex = 0; teamIndex < size; teamIndex += 1) {
 				const player = new Player(null)
 				this.players[player.id] = player
-				player.resetGame(botTeam, teamIndex)
+				player.resetGame(botTeam, teamIndex, this.retro)
 			}
 			if (CommonConsts.TESTING || size >= 10) {
 				botTeam = 0
@@ -50,7 +51,7 @@ class Game {
 				for (let teamIndex = 0; teamIndex < size - 1; teamIndex += 1) {
 					const player = new Player(null)
 					this.players[player.id] = player
-					player.resetGame(botTeam, teamIndex)
+					player.resetGame(botTeam, teamIndex, this.retro)
 				}
 			}
 		}
@@ -117,7 +118,7 @@ class Game {
 			const teamSize = this.counts[team]
 			this.counts[team] += 1
 			this.players[pid] = player
-			player.resetGame(team, teamSize)
+			player.resetGame(team, teamSize, this.retro)
 
 			if (this.checkFull()) {
 				this.state = 'FULL'
