@@ -74,7 +74,7 @@ export default function (gid, mode, size, mapName) {
 			if (renderTime > 0) {
 				AreaOfEffect.update(renderTime, Unit.all())
 				Bullet.update(renderTime, tickDuration, false)
-				Unit.update(renderTime, tickDuration, false)
+				Unit.update(renderTime, tickDuration, false, this.retro)
 				this.map.update(renderTime, this.retro)
 			} else if (renderTime === 0) {
 				this.startPlaying()
@@ -259,11 +259,13 @@ export default function (gid, mode, size, mapName) {
 		store.state.game.winningTeam = winningTeam
 	}
 
-	this.killTower = function (byTeam) {
-		for (let pid in players) {
-			const player = players[pid]
-			if (player.team === byTeam) {
-				player.unit.awardExperience(1000)
+	this.killTower = function (byTeam, isRetro) {
+		if (!isRetro) {
+			for (let pid in players) {
+				const player = players[pid]
+				if (player.team === byTeam) {
+					player.unit.awardExperience(1000)
+				}
 			}
 		}
 	}

@@ -199,10 +199,10 @@ class Movable extends Unit {
 		}
 	}
 
-	die (renderTime) {
+	die (renderTime, isRetro) {
 		this.hasDestination = false
 
-		super.die(renderTime)
+		super.die(renderTime, isRetro)
 	}
 
 	// Target
@@ -213,7 +213,7 @@ class Movable extends Unit {
 		this.reachedDestination(false)
 	}
 
-	checkUpdateTarget (renderTime) {
+	checkUpdateTarget (_renderTime) {
 		this.isAttackingTarget = this.inRangeFor(this.attackTarget)
 		if (!this.isAttackingTarget) {
 			this.setDestination(this.attackTarget.px, this.attackTarget.py, true)

@@ -196,7 +196,7 @@ class Ship extends Movable {
 
 	trySkill (renderTime, index, targetData) {
 		if (!targetData) {
-			return this.performSkill(renderTime, index)
+			return this.performSkill(renderTime, index, null)
 		}
 		const skill = this.skills.data[index]
 		if (!skill) {
@@ -277,7 +277,7 @@ class Ship extends Movable {
 			}
 		}
 		const cooldownDuration = skill.getCooldown(skillLevel) * 100
-		this.updateCooldown(index, endDurationAt, cooldownDuration)
+		this.updateCooldown(index, store.state.game.retro ? renderTime : endDurationAt, cooldownDuration)
 
 		if (skill.toggle) {
 			this.toggleSkillIndex = index
@@ -358,7 +358,7 @@ class Ship extends Movable {
 		}
 	}
 
-	die (renderTime) {
+	die (renderTime, isRetro) {
 		if (this.onDeath) {
 			this.onDeath(renderTime)
 		}
@@ -387,7 +387,7 @@ class Ship extends Movable {
 		this.toggleSkillIndex = null
 		this.toggleSkillAt = 0
 
-		super.die(renderTime)
+		super.die(renderTime, isRetro)
 
 		this.healthRemaining = 0
 
@@ -400,23 +400,33 @@ class Ship extends Movable {
 		let lastDamager = null
 		let lastDamageAt = 0
 		let playerAssisted = false
+		let killCreditUnit = null
 		for (let did in this.damagers) {
 			const enemyDamage = this.damagers[did]
 			const damagedAt = enemyDamage.at
+			const damageUnit = enemyDamage.unit
 			if (damagedAt > lastDamageAt) {
 				lastDamageAt = damagedAt
 				lastDamager = did
+				if (isRetro && damageUnit.player) {
+					killCreditUnit = damageUnit
+				}
 			}
-			const damageUnit = enemyDamage.unit
 			if (damageUnit.player && damagedAt > renderTime - 10 * 1000) {
 				playerAssisted = true
-				damageUnit.displayStats.kills += 1
-				damageUnit.awardExperience(1000)
-				killData.damagers.push(damageUnit.player.name)
+				if (!isRetro) {
+					damageUnit.awardExperience(1000)
+					damageUnit.displayStats.kills += 1
+					killData.damagers.push(damageUnit.player.name)
+				}
 			}
 		}
+		if (killCreditUnit) {
+			killCreditUnit.displayStats.kills += 1
+			killData.damagers.push(killCreditUnit.player.name)
+		}
+		this.displayStats.deaths += 1
 		if (playerAssisted) {
-			this.displayStats.deaths += 1
 			const killIndex = 1 - this.team
 			const oldKills = store.state.game.stats.kills[killIndex]
 			store.state.game.stats.kills.splice(killIndex, 1, oldKills + 1)
@@ -628,9 +638,15 @@ class Ship extends Movable {
 
 	// Update
 
-	update (renderTime, timeDelta) {
+	update (renderTime, timeDelta, isRetro) {
 		this.updateSkills(renderTime)
-		this.awardExperience(2)
+		if (!isRetro || !this.isDead) {
+			let exp = 2
+			if (isRetro && this.isAttackingTarget && (this.attackTarget.player || this.attackTarget.tower)) {
+				exp *= 2
+			}
+			this.awardExperience(exp)
+		}
 
 		if (this.isDead && this.timeOfDeath) {
 			const deathDuration = renderTime - this.timeOfDeath
@@ -668,7 +684,7 @@ class Ship extends Movable {
 			}
 			for (let skillIndex = this.queuedForActivation.length - 1; skillIndex >= 0; skillIndex -= 1) {
 				if (this.queuedForActivation[skillIndex]) {
-					this.performSkill(renderTime, skillIndex)
+					this.performSkill(renderTime, skillIndex, null)
 					this.queuedForActivation[skillIndex] = false
 				}
 			}

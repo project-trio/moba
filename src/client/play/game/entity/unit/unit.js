@@ -514,7 +514,7 @@ class Unit {
 		return damage
 	}
 
-	die (time) {
+	die (time, _isRetro) {
 		this.isDead = true
 		this.timeOfDeath = time
 		if (this.infoContainer) {
@@ -566,7 +566,7 @@ class Unit {
 		this.removeTarget()
 	}
 
-	checkUpdateTarget (renderTime) {
+	checkUpdateTarget (_renderTime) {
 	}
 
 	checkTarget (renderTime) {
@@ -719,14 +719,14 @@ Unit.get = function (id) {
 	console.error('Target id not found', id, allUnits.map(unit => unit.id))
 }
 
-Unit.update = function (renderTime, timeDelta, tweening) {
+Unit.update = function (renderTime, timeDelta, tweening, isRetro) {
 	let startIndex = allUnits.length - 1
 	if (!tweening) {
 		// Update before deaths
 		for (let idx = startIndex; idx >= 0; idx -= 1) {
 			const unit = allUnits[idx]
 			if (!unit.static) {
-				unit.update(renderTime, timeDelta)
+				unit.update(renderTime, timeDelta, isRetro)
 			}
 		}
 		for (let idx = startIndex; idx >= 0; idx -= 1) {
@@ -739,7 +739,7 @@ Unit.update = function (renderTime, timeDelta, tweening) {
 		for (let idx = startIndex; idx >= 0; idx -= 1) {
 			const unit = allUnits[idx]
 			if (unit.isDying && !unit.isDead) {
-				unit.die(renderTime)
+				unit.die(renderTime, isRetro)
 				if (unit.remove) {
 					allUnits.splice(idx, 1)
 					startIndex -= 1
