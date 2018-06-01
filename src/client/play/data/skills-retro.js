@@ -129,7 +129,7 @@ export default {
 			},
 			start (index, level, ship) {
 				ship.modify(this.name, 'attackCooldown', 'times', D1.add(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
-				ship.overloadMesh = Render.outline(ship.base.children[0], 0xffcc00, 1.07)
+				ship.overloadMesh = Render.outline(ship.top.children[0], 0xffcc00, 1.07)
 			},
 			end (ship) {
 				ship.modify(this.name, 'armor', null)
@@ -154,7 +154,7 @@ export default {
 				return 200
 			},
 			start (index, level, ship) {
-				ship.modify(this.name, 'attackPierce', 'add', this.getEffectRegen(level))
+				ship.modify(this.name, 'attackPierce', 'add', this.getEffectPierce(level))
 				ship.pierceMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
 			end (ship) {
@@ -167,10 +167,10 @@ export default {
 		},
 		{
 			name: 'HE Shells',
-			description: 'Permanently increases attack damage by [[Damage]]',
+			description: 'Permanently increases your attacks by [[Damage]]',
 			target: TARGET_SELF,
 			getEffectDamage (level) {
-				return 15
+				return 5
 			},
 			levelup (index, level, ship) {
 				ship.addAttackDamage(this.getEffectDamage(), true)
@@ -201,7 +201,7 @@ export default {
 			start (index, level, ship) {
 				new AreaOfEffect(ship, {
 					dot: false,
-					color: 0x00ff77,
+					color: 0x0033ff,
 					opacity: 0.2,
 					radius: this.getRange(level),
 					allies: true,
@@ -230,10 +230,11 @@ export default {
 				return 150
 			},
 			start (index, level, ship) {
-
+				ship.farSight = this.getEffectRange(level)
+				ship.addSightRange(ship.farSight)
 			},
 			end (ship) {
-
+				ship.addSightRange(-ship.farSight)
 			},
 		},
 		{
@@ -337,7 +338,7 @@ export default {
 				return levelMultiplier(15, level, 4)
 			},
 			getEffectMoveSpeed (level) {
-				return levelMultiplier(20, level, 3) // 4.5 0.9
+				return levelMultiplier(10, level, 2) // 4.5 0.9 to 36
 			},
 			getDuration (level) {
 				return 50
@@ -437,7 +438,7 @@ export default {
 					from: 0,
 					to: 0,
 					parabola: 2,
-					max: maxRange,
+					max: maxRange + 50,
 					start: startAt,
 					duration: animationDuration,
 				})
@@ -473,7 +474,7 @@ export default {
 			target: TARGET_GROUND,
 			hitsTowers: true,
 			getEffectRange (level) {
-				return levelMultiplier(90, level, 2) // 70 1
+				return levelMultiplier(70, level, 2) // 70 1
 			},
 			getEffectDamage (level) {
 				return levelMultiplier(25, level, 6)
@@ -490,8 +491,8 @@ export default {
 				new AreaOfEffect(ship, {
 					dot: false,
 					hitsTowers: this.hitsTowers,
-					color: 0xffff00,
-					opacity: 0.9,
+					color: 0xff0000,
+					opacity: 0.5,
 					px: target[0], py: target[1],
 					radius: aoeRange,
 					time: startAt,
@@ -602,14 +603,14 @@ export default {
 		},
 		{
 			name: 'Blur',
-			description: 'Turn invisible with an extra [[MoveSpeed]] move speed',
+			description: 'Turn invisible, gaining [[MoveSpeed]] move speed',
 			target: TARGET_SELF,
 			endOnDeath: true,
 			getDuration (level) {
 				return levelMultiplier(30, level, 4)
 			},
 			getEffectMoveSpeed (level) {
-				return 20 // add 12 to 25
+				return 20 // 25 -> 37
 			},
 			getCooldown (level) {
 				return levelMultiplier(200, level, -10)
@@ -617,7 +618,7 @@ export default {
 			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.removeTarget()
 				ship.invisible = true
-				ship.modify(this.name, 'moveSpeed', 'times', D1.plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
+				ship.modify(this.name, 'moveSpeed', 'add', new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
 
 				const animDuration = 500
 				ship.queueAnimation(null, 'opacity', {
