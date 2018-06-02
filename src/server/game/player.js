@@ -40,6 +40,7 @@ module.exports = class Player {
 
 	data () {
 		return {
+			id: this.id,
 			name: this.name,
 			shipName: this.shipName,
 			team: this.team,

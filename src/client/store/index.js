@@ -10,7 +10,7 @@ let selectedUnit = null
 
 const defaultGameState = () => {
 	return {
-		players: {},
+		players: [],
 		host: null,
 		ready: null,
 		winningTeam: null,
@@ -154,6 +154,15 @@ export default {
 	},
 
 	// Game
+
+	playerForId (id) {
+		for (const player of this.state.game.players) {
+			if (player.id === id) {
+				return player
+			}
+		}
+		return null
+	},
 
 	setSelectedUnit (unit) {
 		if (unit === selectedUnit) {

@@ -9,13 +9,14 @@ const PLAYER_INSET = 64
 
 export default class Player {
 
-	constructor (pid, data) {
-		this.id = pid
+	constructor (data) {
+		this.storePlayer = data
+		this.id = data.id
 		this.unit = null
 		this.name = data.name
 		this.team = parseInt(data.team, 10)
 		this.teamIndex = parseInt(data.teamIndex, 10)
-		this.isLocal = pid === store.state.playerId
+		this.isLocal = data.id === store.state.playerId
 		this.chatAt = 0
 		this.isActive = true
 	}
@@ -36,7 +37,7 @@ export default class Player {
 
 	createShip () {
 		const position = this.spawnLocation()
-		const storeData = store.state.game.players[this.id]
+		const storeData = store.playerForId(this.id)
 		if (!storeData) {
 			return console.error('No store data for player', this, store.state.game.players)
 		}

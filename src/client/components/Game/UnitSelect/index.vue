@@ -48,7 +48,7 @@ export default {
 			return store.state.playerId
 		},
 		localPlayer () {
-			return this.players[this.localId]
+			return store.playerForId(this.localId)
 		},
 		localTeam () {
 			return this.localPlayer ? this.localPlayer.team : 0
@@ -66,9 +66,7 @@ export default {
 		teamPlayers () {
 			const result = [Array(this.size), Array(this.size)]
 			let foundPlayer = false
-			for (let pid in this.players) {
-				const player = this.players[pid]
-				player.id = pid
+			for (const player of this.players) {
 				result[player.team][player.teamIndex] = player
 				foundPlayer = true
 			}

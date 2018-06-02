@@ -62,7 +62,7 @@ export default {
 		},
 
 		playerCount () {
-			return Object.keys(this.players).length
+			return this.players.length
 		},
 
 		players () {
@@ -70,9 +70,7 @@ export default {
 		},
 		teamPlayers () {
 			const result = [Array(this.size), Array(this.size)]
-			for (let pid in this.players) {
-				const player = this.players[pid]
-				player.id = pid
+			for (const player of this.players) {
 				result[player.team][player.teamIndex] = player
 			}
 			return result

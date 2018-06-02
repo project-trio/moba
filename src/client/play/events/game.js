@@ -30,7 +30,7 @@ export default {
 
 		Bridge.on('msg', (data) => {
 			if (Local.game) {
-				const player = Local.game.player(data.id)
+				const player = Local.game.playerForId(data.id)
 				data.from = player.name
 				data.team = player.team
 			}

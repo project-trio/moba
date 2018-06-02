@@ -55,7 +55,7 @@ export default {
 			return store.state.playerId
 		},
 		localPlayer () {
-			return store.state.game.players[this.localId]
+			return store.playerForId(this.localId)
 		},
 		localTeam () {
 			return this.localPlayer ? this.localPlayer.team : 0

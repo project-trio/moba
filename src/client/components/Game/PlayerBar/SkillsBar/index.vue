@@ -19,7 +19,7 @@ export default {
 
 	computed: {
 		localPlayer () {
-			return store.state.game.players[store.state.playerId]
+			return store.playerForId(store.state.playerId)
 		},
 
 		retro () {

@@ -10,20 +10,19 @@ const startTime = process.hrtime()
 let loopCount = 0
 
 const loop = function () {
-	const games = Game.all
-	for (let idx = games.length - 1; idx >= 0; idx -= 1) {
-		const game = games[idx]
+	for (const game of Game.all) {
 		if (game.started) {
 			let actionFound = false
-			const actionData = {}
+			const actionData = []
 			const currentUpdate = game.serverUpdate
 			const onSelectionScreen = currentUpdate <= Config.updatesUntilStart
-			for (let pid in game.players) {
-				const player = game.players[pid]
+			const gamePlayers = game.players
+			for (let pidx = 0; pidx < gamePlayers.length; pidx += 1) {
+				const player = gamePlayers[pidx]
 				if (onSelectionScreen) {
 					if (player.switchUnit) {
 						player.shipName = player.switchUnit
-						actionData[pid] = { unit: player.shipName }
+						actionData[pidx] = { unit: player.shipName }
 						player.switchUnit = null
 					}
 				} else {
@@ -75,7 +74,7 @@ const loop = function () {
 						} else {
 							actionFound = true
 						}
-						actionData[pid] = playerActions
+						actionData[pidx] = playerActions
 					}
 				}
 			}

@@ -96,7 +96,7 @@ export default {
 				// p('Start game', data)
 			}
 			Local.game.updatePlayers(data)
-			if (Local.game.player(store.state.playerId)) {
+			if (Local.game.playerForId(store.state.playerId)) {
 				router.replace({ name: 'Game' })
 			} else {
 				window.alert('Local player not found. You may be connected on another page. Please refresh and try again.')

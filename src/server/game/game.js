@@ -16,7 +16,7 @@ class Game {
 
 	constructor (mode, size, map, autoStart) {
 		const mapData = CommonMaps[map]
-		this.players = {}
+		this.players = []
 		this.counts = [0, 0]
 		this.id = Util.uid()
 		this.mode = mode
@@ -42,7 +42,7 @@ class Game {
 			this.counts[botTeam] = size
 			for (let teamIndex = 0; teamIndex < size; teamIndex += 1) {
 				const player = new Player(null)
-				this.players[player.id] = player
+				this.players.push(player)
 				player.resetGame(botTeam, teamIndex, this.retro)
 			}
 			if (CommonConsts.TESTING || size >= 10) {
@@ -50,7 +50,7 @@ class Game {
 				this.counts[botTeam] = size - 1
 				for (let teamIndex = 0; teamIndex < size - 1; teamIndex += 1) {
 					const player = new Player(null)
-					this.players[player.id] = player
+					this.players.push(player)
 					player.resetGame(botTeam, teamIndex, this.retro)
 				}
 			}
@@ -59,10 +59,18 @@ class Game {
 
 //PRIVATE
 
+	playerById (id) {
+		for (const player of this.players) {
+			if (player.id === id) {
+				return player
+			}
+		}
+		return null
+	}
+
 	activePlayerCount () {
 		let result = 0
-		for (let pid in this.players) {
-			const player = this.players[pid]
+		for (const player of this.players) {
 			if (!player.bot && player.isActive) {
 				result += 1
 			}
@@ -94,17 +102,16 @@ class Game {
 //JOIN
 
 	formattedPlayers () {
-		const broadcastPlayers = {}
-		for (let pid in this.players) {
-			const player = this.players[pid]
-			broadcastPlayers[pid] = player.data()
+		const broadcastPlayers = []
+		for (const player of this.players) {
+			broadcastPlayers.push(player.data())
 		}
 		return broadcastPlayers
 	}
 
 	add (player) {
 		const pid = player.id
-		if (this.players[pid]) {
+		if (this.playerById(pid)) {
 			player.isActive = true
 			this.broadcast('update player', { pid: pid, joined: true })
 		} else {
@@ -117,7 +124,7 @@ class Game {
 			const team = this.counts[0] <= this.counts[1] ? 0 : 1
 			const teamSize = this.counts[team]
 			this.counts[team] += 1
-			this.players[pid] = player
+			this.players.push(player)
 			player.resetGame(team, teamSize, this.retro)
 
 			if (this.checkFull()) {
@@ -132,8 +139,7 @@ class Game {
 	destroy () {
 		this.state = 'CLOSED'
 		this.started = false
-		for (let pid in this.players) {
-			const player = this.players[pid]
+		for (const player of this.players) {
 			player.leaveGameRoom()
 			player.game = null
 		}
@@ -150,12 +156,20 @@ class Game {
 
 	remove (removePlayer) {
 		const removeId = removePlayer.id
-		if (this.players[removeId]) {
+		const players = this.players
+		let removeIndex = null
+		for (let idx = 0; idx < players.length; idx += 1) {
+			if (players[idx].id === removeId) {
+				removeIndex = idx
+				break
+			}
+		}
+		if (removeIndex) {
 			if (this.started) {
 				removePlayer.isActive = false
 			} else {
 				this.counts[removePlayer.team] -= 1
-				delete this.players[removeId]
+				this.players.splice(removeIndex, 1)
 			}
 
 			console.log('Removed', this.id, this.activePlayerCount())
@@ -165,8 +179,7 @@ class Game {
 			}
 			if (!this.started) {
 				this.state = 'OPEN'
-				for (let pid in this.players) {
-					const remainingPlayer = this.players[pid]
+				for (const remainingPlayer of this.players) {
 					if (remainingPlayer.team === removePlayer.team && remainingPlayer.teamIndex > removePlayer.teamIndex) {
 						remainingPlayer.teamIndex -= 1
 					}
@@ -198,8 +211,7 @@ class Game {
 	}
 
 	teamBroadcast (team, name, message) {
-		for (let pid in this.players) {
-			const player = this.players[pid]
+		for (const player of this.players) {
 			if (player.team === team) {
 				player.emit(name, message)
 			}

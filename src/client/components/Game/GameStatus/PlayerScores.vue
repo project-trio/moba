@@ -26,12 +26,13 @@ export default {
 		},
 
 		playerResults () {
-			return store.state.game.ships.map(ship => {
-				const player = store.state.game.players[ship.pid]
-				if (!player) {
-					return ship
-				}
-				return {
+			const players = store.state.game.players
+			const ships = store.state.game.ships
+			const results = []
+			for (let idx = 0; idx < players.length; idx += 1) {
+				const player = players[idx]
+				const ship = ships[idx]
+				results[idx] = {
 					name: player.name,
 					active: player.isActive,
 					team: player.team,
@@ -41,7 +42,8 @@ export default {
 					deaths: ship.deaths,
 					damage: ship.damage,
 				}
-			})
+			}
+			return results
 		},
 	},
 }

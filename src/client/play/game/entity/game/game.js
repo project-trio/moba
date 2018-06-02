@@ -14,7 +14,7 @@ import Player from '@/client/play/game/entity/game/player'
 import Unit from '@/client/play/game/entity/unit/unit'
 
 export default function (gid, mode, size, mapName) {
-	let players = {}
+	let players = []
 
 	let updateCount = 0
 	let updateQueue = {}
@@ -95,7 +95,7 @@ export default function (gid, mode, size, mapName) {
 		return true
 	}
 
-	const dequeueUpdate = function (renderTime) {
+	const dequeueUpdate = function (_renderTime) {
 		const nextUpdate = updateQueue[updateCount]
 		if (!nextUpdate) {
 			return false
@@ -104,26 +104,26 @@ export default function (gid, mode, size, mapName) {
 		updateQueue[updateCount] = null
 		updateCount += 1
 
-		for (let pid in nextUpdate) { // 'action' response
-			const player = players[pid]
-			if (!player) {
-				console.error('Update invalid for player', pid, nextUpdate)
+		for (let idx = 0; idx < nextUpdate.length; idx += 1) { // 'action' response
+			const playerActions = nextUpdate[idx]
+			if (!playerActions) {
 				continue
 			}
-			const playerActions = nextUpdate[pid]
+			const player = players[idx]
+			if (!player) {
+				console.error('Update invalid for player', idx, playerActions)
+				continue
+			}
 			if (onSelectionScreen) {
-				if (playerActions.unit) {
-					const storePlayer = store.state.game.players[pid]
-					if (!storePlayer) {
-						console.error('Player not found for store', player, store.state.game.players)
-					} else {
-						storePlayer.shipName = playerActions.unit
-					}
+				const playerUnitName = playerActions.unit
+				if (playerUnitName) {
+					const storePlayer = store.state.game.players[idx]
+					storePlayer.shipName = playerUnitName
 				}
 			} else {
 				const ship = player.unit
 				if (!ship) {
-					console.error('Update invalid for ship', pid, player, nextUpdate, Unit.all())
+					console.error('Update invalid for ship', idx, player, nextUpdate, Unit.all())
 					if (Local.TESTING) {
 						window.alert('No ship')
 					}
@@ -180,11 +180,8 @@ export default function (gid, mode, size, mapName) {
 			console.error('game already playing')
 			return
 		}
-		for (let pid in players) {
-			const player = players[pid]
-			if (player) {
-				player.createShip()
-			}
+		for (const player of players) {
+			player.createShip()
 		}
 		Local.unit = Local.player.unit
 		store.setSelectedUnit(Local.unit)
@@ -227,7 +224,7 @@ export default function (gid, mode, size, mapName) {
 		this.started = true
 		store.state.game.winningTeam = null
 
-		Local.player = players[store.state.playerId]
+		Local.player = this.playerForId(store.state.playerId)
 
 		// TrigCache.prepare() //DECIMAL
 
@@ -243,12 +240,7 @@ export default function (gid, mode, size, mapName) {
 		// status = 'STARTED'
 		lastTickTime = performance.now()
 
-		let playerCount = 0
-		// eslint-disable-next-line
-		for (let pid in players) {
-			playerCount += 1
-		}
-		this.map.build(playerCount)
+		this.map.build(players.length)
 	}
 
 	this.end = function (winningTeam) {
@@ -261,8 +253,7 @@ export default function (gid, mode, size, mapName) {
 
 	this.killTower = function (byTeam, isRetro) {
 		if (!isRetro) {
-			for (let pid in players) {
-				const player = players[pid]
+			for (const player of players) {
 				if (player.team === byTeam) {
 					player.unit.awardExperience(1000)
 				}
@@ -272,8 +263,13 @@ export default function (gid, mode, size, mapName) {
 
 	// Players
 
-	this.player = function (id) {
-		return players[id]
+	this.playerForId = function (id) {
+		for (const player of players) {
+			if (player.id === id) {
+				return player
+			}
+		}
+		return null
 	}
 
 	this.updatePlayer = function (gameData) {
@@ -295,14 +291,12 @@ export default function (gid, mode, size, mapName) {
 			console.error('Cannot replace players for already started game')
 			return
 		}
-		const serverPlayers = gameData.players
-		players = {}
-		for (let pid in serverPlayers) {
-			const playerInfo = serverPlayers[pid]
-			players[pid] = new Player(pid, playerInfo)
+		players = []
+		store.state.game.players = gameData.players
+		for (const playerInfo of gameData.players) {
+			players.push(new Player(playerInfo))
 			playerInfo.isActive = true
 		}
-		store.state.game.players = serverPlayers
 
 		if (gameData.updates !== undefined) {
 			updateDuration = gameData.updates
