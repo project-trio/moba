@@ -108,16 +108,16 @@ class Unit {
 
 			// Modifiers
 			this.modifiers = {
-				shield: {},
-				healthRegen: {},
-				armor: {},
-				attackCooldown: {},
+				shield: new Map(),
+				healthRegen: new Map(),
+				armor: new Map(),
+				attackCooldown: new Map(),
 			}
 			this.current = {
 				sightRange: this.stats.sightRange,
 			}
 			if (statBase.moveSpeed) {
-				this.modifiers.moveSpeed = {}
+				this.modifiers.moveSpeed = new Map()
 				this.stats.moveSpeed = statBase.moveSpeed[0]
 				this.modify('Constant', 'moveSpeed', 'times', new Decimal(Local.tickDuration).dividedBy(2000))
 			}
@@ -181,27 +181,26 @@ class Unit {
 	}
 
 	updateModifiers () {
-		for (let statName in this.modifiers) {
+		for (const statName in this.modifiers) {
 			this.modify(null, statName)
 		}
 	}
 
 	hasModifier (statName, key) {
 		const statModifiers = this.modifiers[statName]
-		return statModifiers && statModifiers[key] !== undefined
+		return statModifiers && statModifiers.get(key) !== undefined
 	}
 
 	cancelModifiers (statName) {
 		const statModifiers = this.modifiers[statName]
 		let canceled = false
-		for (let key in statModifiers) {
+		for (const [key, mod] of statModifiers) {
 			canceled = true
-			const mod = statModifiers[key]
-			const callback = mod[3]
-			if (callback) {
-				callback()
+			const oldCallback = mod[3]
+			if (oldCallback) {
+				oldCallback()
 			}
-			delete statModifiers[key]
+			statModifiers.delete(key)
 		}
 		if (canceled) {
 			this.modify(null, statName)
@@ -209,19 +208,18 @@ class Unit {
 	}
 
 	expireModifiers (renderTime) {
-		for (let statName in this.modifiers) {
+		for (const statName in this.modifiers) {
 			const statModifiers = this.modifiers[statName]
 			let expired = false
-			for (let key in statModifiers) {
-				const mod = statModifiers[key]
+			for (const [key, mod] of statModifiers) {
 				const expiresAt = mod[2]
 				if (expiresAt && renderTime >= expiresAt) {
 					expired = true
-					const callback = mod[3]
-					if (callback) {
-						callback()
+					const oldCallback = mod[3]
+					if (oldCallback) {
+						oldCallback()
 					}
-					delete statModifiers[key]
+					statModifiers.delete(key)
 				}
 			}
 			if (expired) {
@@ -237,26 +235,25 @@ class Unit {
 	modify (modifierKey, statName, method, value, ending, callback) {
 		const statModifiers = this.modifiers[statName]
 		if (!statModifiers) {
-			return
+			return console.error('Invalid modifier', modifierKey, statName, value)
 		}
 		const updatingModifier = modifierKey !== null
 		if (updatingModifier) {
 			if (method === null) {
-				const mod = statModifiers[modifierKey]
+				const mod = statModifiers.get(modifierKey)
 				if (mod) {
-					const callback = mod[3]
-					if (callback) {
-						callback()
+					const oldCallback = mod[3]
+					if (oldCallback) {
+						oldCallback()
 					}
-					delete statModifiers[modifierKey]
+					statModifiers.delete(modifierKey)
 				}
 			} else {
-				statModifiers[modifierKey] = [method, value, ending, callback]
+				statModifiers.set(modifierKey, [method, value, ending, callback])
 			}
 		}
 		let result = new Decimal(this.stats[statName])
-		for (let key in statModifiers) {
-			const mod = statModifiers[key]
+		for (const [_, mod] of statModifiers) {
 			const mathMethod = mod[0]
 			const byValue = mod[1]
 			result = result[mathMethod](byValue)
