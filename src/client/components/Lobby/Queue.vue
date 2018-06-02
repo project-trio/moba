@@ -51,6 +51,7 @@ export default {
 
 	data () {
 		return {
+			baseUrl: process.env.BASE_URL,
 			queueTimer: 20,
 			selectedSize: 1,
 			readyRequested: false,
@@ -168,7 +169,7 @@ export default {
 						this.checkFocus()
 						if (this.readyAt === 3 && !this.hasFocusedWindow && this.notificationPermission === 'granted') {
 							this.notification = new Notification('moba queue ready!', {
-								icon: require('@/client/assets/icon.png'),
+								icon: `${this.baseUrl}icon.png`,
 							})
 							this.notification.onclick = () => {
 								if (window.parent) {
