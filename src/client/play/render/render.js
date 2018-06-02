@@ -95,6 +95,10 @@ export default {
 			// antialias: store.state.settings.antialias,
 			canvas: document.getElementById('canvas'),
 		})
+
+		perspectiveCamera = new THREE.PerspectiveCamera(CAMERA_FOV)
+		orthoCamera = new THREE.OrthographicCamera()
+
 		const shadowQuality = store.state.settings.shadows
 		const renderShadow = shadowQuality >= 1
 		gameLight.castShadow = renderShadow
@@ -125,8 +129,6 @@ export default {
 		// Scene
 
 		gameScene = new THREE.Scene()
-		perspectiveCamera = new THREE.PerspectiveCamera(CAMERA_FOV)
-		orthoCamera = new THREE.OrthographicCamera()
 
 		const ambientLight = new THREE.AmbientLight(0x666666, 1)
 		gameScene.add(ambientLight)
