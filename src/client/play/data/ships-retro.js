@@ -23,7 +23,7 @@ export default {
 		healthRegen: [10, 0],
 		armor: [0, 0],
 
-		sightRange: [170, 0],
+		sightRange: [160, 0],
 		attackRange: [115, 0], //80
 
 		attackDamage: [20, 1],
@@ -81,7 +81,7 @@ export default {
 		bulletSpeed: 10,
 		bulletSize: 3,
 
-		moveSpeed: [10, 0], //25
+		moveSpeed: [7, 0], //25
 		turnSpeed: 8,
 		collision: 22,
 

@@ -33,8 +33,8 @@ class Ship extends Movable {
 			started: [0, 0, 0],
 			actives: [0, 0, 0],
 			cooldowns: [0, 0, 0],
-			levels: retro ? [1, 1, 1] : [0, 0, 0],
-			leveled: retro ? 1 : 0,
+			levels: [0, 0, 0],
+			leveled: (retro ? -3 : 0),
 		}
 		this.tween = statBase.tween || null
 		this.onDeath = statBase.onDeath || null
@@ -55,6 +55,7 @@ class Ship extends Movable {
 		this.selected = false
 		this.requiresSightOfTarget = false
 		this.reflectDamage = null
+		this.bonusSight = 0
 
 		this.isDead = true
 		this.timeOfDeath = -9000
@@ -93,6 +94,12 @@ class Ship extends Movable {
 
 		if (name === 'tempest') {
 			this.scudAt = null
+		}
+
+		if (retro) {
+			this.levelup(0)
+			this.levelup(1)
+			this.levelup(2)
 		}
 	}
 
@@ -492,9 +499,10 @@ class Ship extends Movable {
 		})
 	}
 
-	addSightRange (value) {
-		this.stats.sightRange += value * 100
-		this.sightRangeCheck = Util.squared(this.stats.sightRange)
+	bonusSightRange (value) {
+		this.bonusSight = value * 100
+		this.current.sightRange = this.stats.sightRange + this.bonusSight
+		this.sightRangeCheck = Util.squared(this.current.sightRange)
 	}
 
 	addAttackDamage (value, update) {
@@ -518,19 +526,24 @@ class Ship extends Movable {
 
 		this.stats.healthRegen += this.statBase.healthRegen[1]
 		this.stats.armor += this.statBase.armor[1]
-		this.stats.attackRange += this.statBase.attackRange[1] * 100
 		this.stats.attackPierce += this.statBase.attackPierce[1] * 100
 		this.stats.attackCooldown += this.statBase.attackCooldown[1] * 100
 
+		const addAttackRange = this.statBase.attackRange[1]
+		if (addAttackRange) {
+			this.stats.attackRange += addAttackRange * 100
+			this.attackRangeCheck = Util.squared(this.stats.attackRange)
+		}
 		const addDamage = this.statBase.attackDamage[1]
 		if (addDamage) {
 			this.addAttackDamage(addDamage, false)
 		}
 		const addSight = this.statBase.sightRange[1]
 		if (addSight) {
-			this.addSightRange(addSight)
+			this.stats.sightRange += addSight * 100
+			this.current.sightRange = this.stats.sightRange + this.bonusSight
+			this.sightRangeCheck = Util.squared(this.current.sightRange)
 		}
-		this.attackRangeCheck = Util.squared(this.stats.attackRange)
 
 		this.stats.moveSpeed += this.statBase.moveSpeed[1]
 

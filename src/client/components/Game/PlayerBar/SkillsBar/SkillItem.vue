@@ -145,7 +145,7 @@ export default {
 					factor = 1000
 					suffix = ' seconds'
 				} else {
-					// factor = this.skill[`factor${substitution}`]
+					factor = this.skill[`factor${substitution}`]
 					suffix = this.skill[`suffix${substitution}`] || ''
 				}
 

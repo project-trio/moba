@@ -89,7 +89,6 @@ class Unit {
 			this.stats.healthMax = statBase.healthMax[0] * 100
 			this.stats.healthRegen = statBase.healthRegen[0]
 			this.stats.armor = statBase.armor[0]
-			this.stats.sightRange = statBase.sightRange[0] * 100
 			this.stats.attackRange = statBase.attackRange[0] * 100
 			this.stats.attackDamage = statBase.attackDamage[0] * 100
 			this.stats.attackPierce = statBase.attackPierce[0] * 100
@@ -114,7 +113,9 @@ class Unit {
 				armor: {},
 				attackCooldown: {},
 			}
-			this.current = {}
+			this.current = {
+				sightRange: this.stats.sightRange,
+			}
 			if (statBase.moveSpeed) {
 				this.modifiers.moveSpeed = {}
 				this.stats.moveSpeed = statBase.moveSpeed[0]

@@ -764,7 +764,7 @@ export default {
 			hitsTowers: false,
 			isDisabledBy: null,
 			getEffectRange (level) {
-				return levelMultiplier(100, level, 5)
+				return levelMultiplier(60, level, 5)
 			},
 			getEffectDamage (level) {
 				return levelMultiplier(100, level, 10)

@@ -56,7 +56,7 @@ export default {
 			if (unit.isDying) {
 				clearRadius = 0
 			} else if (unit.team === localTeam) {
-				clearRadius = unit.isDead ? MINI_RADIUS : unit.stats.sightRange / 100
+				clearRadius = unit.isDead ? MINI_RADIUS : unit.current.sightRange / 100
 			} else if (unit.visibleForFrame) {
 				clearRadius = MINI_RADIUS
 			} else {

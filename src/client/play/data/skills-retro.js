@@ -99,13 +99,13 @@ export default {
 		},
 		{
 			name: 'Sight',
-			description: 'Permanently increases sight range by [[Range]]',
+			description: 'Permanently increases sight by [[Range]]',
 			target: TARGET_SELF,
 			getEffectRange (level) {
-				return 10
+				return levelMultiplier(10, level, 3)
 			},
 			levelup (index, level, ship) {
-				ship.addSightRange(this.getEffectRange())
+				ship.bonusSightRange(this.getEffectRange(level))
 			},
 		},
 	],
@@ -230,22 +230,23 @@ export default {
 				return 150
 			},
 			start (index, level, ship) {
-				ship.farSight = this.getEffectRange(level)
-				ship.addSightRange(ship.farSight)
+				ship.bonusSightRange(this.getEffectRange(level))
 			},
 			end (ship) {
-				ship.addSightRange(-ship.farSight)
+				ship.bonusSightRange(0)
 			},
 		},
 		{
 			name: 'Engine',
 			description: 'Permanently increases move speed by [[MoveSpeed]]',
+			suffixMoveSpeed: 'kph',
+			factorMoveSpeed: 10,
 			target: TARGET_SELF,
 			getEffectMoveSpeed (level) {
-				return levelMultiplier(10, level, 20)
+				return levelMultiplier(15, level, 12)
 			},
 			levelup (index, level, ship) {
-				ship.modify(this.name, 'moveSpeed', 'add', this.getEffectMoveSpeed(level))
+				ship.modify(this.name, 'moveSpeed', 'add', new Decimal(this.getEffectMoveSpeed(level)).dividedBy(400))
 			},
 		},
 	],
@@ -590,7 +591,7 @@ export default {
 				return levelMultiplier(300, level, -10)
 			},
 			start (index, level, ship, target, startAt, endAt) {
-				ship.modify(this.name, 'attackCooldown', 'times', D1.minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
+				ship.modify(this.name, 'attackCooldown', 'times', new Decimal(50).dividedBy(this.getEffectAttackSpeed(level)))
 				ship.frenzyMesh = Render.outline(ship.top.children[0], 0xffaa00, 1.07)
 			},
 			end (ship) {
@@ -651,13 +652,13 @@ export default {
 		},
 		{
 			name: 'Nanobots',
-			description: 'Permanently increases hp regen by [[HealthRegen]]',
+			description: 'Permanently increases hp regen by [[Regen]]',
 			target: TARGET_SELF,
-			getEffectHealthRegen (level) {
-				return levelMultiplier(10, level, 5) // 0.4 0.2
+			getEffectRegen (level) {
+				return levelMultiplier(2, level, 1) // 0.4 0.2
 			},
 			levelup (index, level, ship) {
-				ship.modify(this.name, 'healthRegen', 'add', this.getEffectHealthRegen(level))
+				ship.modify(this.name, 'healthRegen', 'add', this.getEffectRegen(level))
 			},
 		},
 	],
