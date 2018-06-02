@@ -373,7 +373,7 @@ export default {
 			hitsTowers: true,
 			target: TARGET_ENEMY,
 			getEffectDamage (level) {
-				return levelMultiplier(30, level, 6)
+				return levelMultiplier(30, level, 5)
 			},
 			getRange (level) {
 				return 170 // 130
@@ -564,7 +564,7 @@ export default {
 			description: 'Permanently increases armor by [[Armor]]',
 			target: TARGET_SELF,
 			getEffectArmor (level) {
-				return levelMultiplier(2, level, 2) /1.5
+				return levelMultiplier(2, level, 2)
 			},
 			levelup (index, level, ship) {
 				ship.modify(this.name, 'armor', 'add', this.getEffectArmor(level))
@@ -655,7 +655,7 @@ export default {
 			description: 'Permanently increases hp regen by [[Regen]]',
 			target: TARGET_SELF,
 			getEffectRegen (level) {
-				return levelMultiplier(2, level, 1) // 0.4 0.2
+				return levelMultiplier(2, level, 2) // 0.4 0.2
 			},
 			levelup (index, level, ship) {
 				ship.modify(this.name, 'healthRegen', 'add', this.getEffectRegen(level))

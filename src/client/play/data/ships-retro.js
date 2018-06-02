@@ -26,14 +26,14 @@ export default {
 		sightRange: [160, 0],
 		attackRange: [115, 0], //80
 
-		attackDamage: [20, 1],
+		attackDamage: [20, 1], //15 1
 		attackPierce: [0, 0],
 		attackCooldown: [18, 0],
 
 		bulletSpeed: 11,
 		bulletSize: 4,
 
-		moveSpeed: [9, 0], //25
+		moveSpeed: [9, 0], //31
 		turnSpeed: 6,
 		collision: 24,
 
@@ -44,19 +44,19 @@ export default {
 		name: 'charger',
 		healthMax: [190, 15],
 		healthRegen: [10, 0],
-		armor: [0, 1],
+		armor: [0, 1], //0 0.5?
 
 		sightRange: [140, 0],
 		attackRange: [125, 0], //85
 
-		attackDamage: [25, 1],
+		attackDamage: [25, 1], //27 3
 		attackPierce: [0, 0],
 		attackCooldown: [19, 0],
 
 		bulletSpeed: 12,
 		bulletSize: 6,
 
-		moveSpeed: [9, 0], //25
+		moveSpeed: [9, 0], //31
 		turnSpeed: 5,
 		collision: 24,
 
@@ -67,21 +67,21 @@ export default {
 		name: 'stitches',
 		split: true,
 
-		healthMax: [200, 10],
+		healthMax: [180, 10],
 		healthRegen: [10, 0],
-		armor: [0, 1],
+		armor: [0, 1], //0 0.33?
 
 		sightRange: [155, 0],
 		attackRange: [155, 0], //100
 
-		attackDamage: [10, 1],
+		attackDamage: [10, 1], //13 0.8
 		attackPierce: [0, 0],
 		attackCooldown: [15, 0],
 
 		bulletSpeed: 10,
 		bulletSize: 3,
 
-		moveSpeed: [7, 0], //25
+		moveSpeed: [8, 0], //31
 		turnSpeed: 8,
 		collision: 22,
 
@@ -94,19 +94,19 @@ export default {
 
 		healthMax: [150, 10],
 		healthRegen: [10, 0],
-		armor: [0, 1],
+		armor: [0, 1], //0 0.5?
 
 		sightRange: [155, 0],
 		attackRange: [155, 0], //100
 
-		attackDamage: [10, 1],
+		attackDamage: [10, 1], //10 +1
 		attackPierce: [0, 0],
 		attackCooldown: [12, 0],
 
 		bulletSpeed: 10,
 		bulletSize: 3,
 
-		moveSpeed: [8, 0], //24
+		moveSpeed: [7, 0], //29
 		turnSpeed: 8,
 		collision: 20,
 
@@ -117,21 +117,21 @@ export default {
 		name: 'pulter',
 		split: true,
 
-		healthMax: [150, 10],
+		healthMax: [150, 8],
 		healthRegen: [10, 0],
 		armor: [0, 0],
 
 		sightRange: [155, 0],
 		attackRange: [170, 0], //110
 
-		attackDamage: [70, 3],
+		attackDamage: [70, 3], //8 +1
 		attackPierce: [0, 0],
 		attackCooldown: [22, 0],
 
 		bulletSpeed: 8,
 		bulletSize: 5,
 
-		moveSpeed: [8, 0], //24
+		moveSpeed: [8, 0], //30
 		turnSpeed: 5,
 		collision: 22,
 
@@ -144,19 +144,19 @@ export default {
 
 		healthMax: [150, 5],
 		healthRegen: [10, 0],
-		armor: [24, 1],
+		armor: [18, 1], //20 0.5?
 
 		sightRange: [140, 0],
-		attackRange: [100, 0], //60
+		attackRange: [100, 0], //70
 
-		attackDamage: [30, 3],
+		attackDamage: [30, 3], //27  1
 		attackPierce: [0, 0],
 		attackCooldown: [16, 0],
 
 		bulletSpeed: 11,
 		bulletSize: 4,
 
-		moveSpeed: [10, 0], //26
+		moveSpeed: [10, 0], //32
 		turnSpeed: 9,
 		collision: 16,
 
@@ -172,16 +172,16 @@ export default {
 		armor: [20, 1],
 
 		sightRange: [140, 0],
-		attackRange: [130, 0], //100
+		attackRange: [130, 0], //95
 
-		attackDamage: [10, 2],
+		attackDamage: [10, 2], //15 1
 		attackPierce: [0, 0],
 		attackCooldown: [15, 0],
 
 		bulletSpeed: 13,
 		bulletSize: 4,
 
-		moveSpeed: [9, 0], //25
+		moveSpeed: [9, 0], //31
 		turnSpeed: 12,
 		collision: 18,
 
