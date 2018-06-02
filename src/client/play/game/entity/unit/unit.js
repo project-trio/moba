@@ -333,9 +333,11 @@ class Unit {
 	}
 
 	onClick (point, rightClick) {
-		setTimeout(() => {
-			store.setSelectedUnit(this)
-		}, 0)
+		if (!rightClick) {
+			setTimeout(() => {
+				store.setSelectedUnit(this)
+			}, 0)
+		}
 		if (this.isLocal) { //TODO remove
 			return false
 		}
@@ -348,6 +350,9 @@ class Unit {
 				store.state.local.skills.activation(this.id)
 				return true
 			}
+		}
+		if (!rightClick) {
+			return false
 		}
 		if (this.localAlly) {
 			return false
@@ -410,7 +415,7 @@ class Unit {
 
 	// Health
 
-	update (renderTime, timeDelta) {
+	update (renderTime, _timeDelta) {
 		if (this.selected) {
 			store.everyUpdateStats(this)
 		}
@@ -462,6 +467,7 @@ class Unit {
 	takeDamage (source, renderTime, amount, pierce, reflected) {
 		let damage = amount
 		if (!reflected) {
+			// let armorMultiplier = 100 / (100 + Math.max(0, this.current.armor - pierce)) //TODO
 			let armor = 100 - Math.max(0, this.current.armor - pierce)
 			damage = Math.round(Float.multiply(damage, armor) / 100)
 			// const damageDecimal = new Decimal(damage).times(armor).dividedBy(100) //DECIMAL
@@ -678,7 +684,7 @@ class Unit {
 		return renderTime - this.lastAttack > this.current.attackCooldown
 	}
 
-	getAttackTarget (units) {
+	getAttackTarget (_units) {
 		return null
 	}
 

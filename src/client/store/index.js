@@ -161,12 +161,12 @@ export default {
 		}
 		if (selectedUnit && !selectedUnit.sample) {
 			selectedUnit.selected = false
-			if (selectedUnit.allyNotLocal()) {
+			if (!selectedUnit.isLocal) {
 				selectedUnit.setSelection(null)
 			}
 		}
 		selectedUnit = unit
-		if (!unit.sample && unit.allyNotLocal()) {
+		if (!unit.sample && !unit.isLocal) {
 			unit.setSelection(0xffffff)
 		}
 		this.state.selectedStats.name = unit.name
@@ -194,7 +194,7 @@ export default {
 	},
 	modifierStats (unit) {
 		const stats = this.state.selectedStats
-		stats.armor = unit.current.armor
+		stats.armor = Math.round(unit.current.armor)
 		stats.dps = Math.round(unit.stats.attackDamage * (10 / unit.current.attackCooldown))
 		stats.moveSpeed = unit.cacheMoveSpeed ? Math.round(unit.cacheMoveSpeed * 2000) + 22 : 0
 	},

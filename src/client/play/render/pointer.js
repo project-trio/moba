@@ -16,8 +16,7 @@ function onMouseMove (event) {
 
 function onClick (event) {
 	const rightClick = event.which ? event.which === 3 : event.button >= 2
-	for (let i = 0; i < intersecting.length; i++) {
-		const intersect = intersecting[i]
+	for (const intersect of intersecting) {
 		const owner = intersect.object.owner
 		if (owner && owner.onClick) {
 			if (owner.onClick(intersect.point, rightClick)) {
@@ -58,8 +57,7 @@ export default {
 
 		intersecting = raycaster.intersectObjects(intersectContainer.children, true)
 		const newHovering = {}
-		for (let i = 0; i < intersecting.length; i++) {
-			const intersect = intersecting[i]
+		for (const intersect of intersecting) {
 			const owner = intersect.object.owner
 			if (owner && owner.onHover) {
 				if (!hovering[owner.id]) {

@@ -182,17 +182,17 @@ const GameMap = function (mapName, parent) {
 			this.selectionRing.visible = false
 		}
 
-		ground.onClick = (point) => {
-			store.state.game.showPanel = null
+		ground.onClick = (point, rightClick) => {
+			if (rightClick && store.state.game.showPanel) {
+				store.state.game.showPanel = null
+			}
 
 			if (!Local.unit || Local.unit.isDying) {
 				return
 			}
 			const target = getTargetFromPoint(point)
 
-			if (store.state.local.skills.getGroundTarget) {
-				store.state.local.skills.activation(target)
-			} else {
+			if (rightClick) {
 				store.cancelActiveSkill()
 				Bridge.emit('action', { target })
 				store.setSelectedUnit(Local.unit)
@@ -200,6 +200,11 @@ const GameMap = function (mapName, parent) {
 				if (automateTimer) {
 					clearInterval(automateTimer)
 					automateTimer = null
+				}
+			} else {
+				store.setSelectedUnit(Local.unit)
+				if (store.state.local.skills.getGroundTarget) {
+					store.state.local.skills.activation(target)
 				}
 			}
 			return true
