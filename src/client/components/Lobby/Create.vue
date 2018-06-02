@@ -72,7 +72,7 @@ export default {
 
 		mapsForSize () {
 			const maps = []
-			for (let name in commonMaps) {
+			for (const name in commonMaps) {
 				const map = commonMaps[name]
 				if (this.selectedSize >= map.minSize && (!map.maxSize || this.selectedSize <= map.maxSize)) {
 					maps.push(name)

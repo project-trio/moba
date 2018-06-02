@@ -54,7 +54,7 @@ export default function (gid, mode, size, mapName) {
 	this.performTicks = function (ticksToRender) {
 		let renderTime
 		let ticksRenderedForFrame = 0
-		const maxTicksToRender = ticksToRender > 9 ? Math.min(10000, Math.floor(Math.pow(ticksToRender, 0.75))) : 1
+		const maxTicksToRender = ticksToRender > 9 ? Math.min(1000, Math.pow(ticksToRender, 0.75)) : 1
 		while (ticksToRender > 0) {
 			renderTime = ticksRendered * tickDuration
 			store.state.game.renderTime = renderTime
@@ -222,7 +222,6 @@ export default function (gid, mode, size, mapName) {
 		AreaOfEffect.init()
 
 		this.started = true
-		store.state.game.winningTeam = null
 
 		Local.player = this.playerForId(store.state.playerId)
 

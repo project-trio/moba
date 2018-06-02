@@ -82,15 +82,6 @@ const maps = {}
 
 		walls: [
 			{
-				start: { x: 0, y: 250 },
-				radius: WALL_RADIUS,
-				move: [
-					{ dx: 10, dy: 0 },
-				],
-				mirror: true,
-				endCap: true,
-			},
-			{
 				start: { x: wH - 100, y: 330 },
 				radius: WALL_RADIUS,
 				move: [

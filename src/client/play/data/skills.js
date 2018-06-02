@@ -895,7 +895,7 @@ export default {
 					dot: true,
 					hitsTowers: this.hitsTowers,
 					color: 0x0066aa,
-					opacity: 0.5,
+					opacity: 0.33,
 					radius: radius,
 					allies: true,
 					modify: {

@@ -65,7 +65,7 @@ module.exports = {
 
 		const columns = [], values = [], placeholders = []
 		let index = 0
-		for (let column in columnsValues) {
+		for (const column in columnsValues) {
 			columns.push(column)
 			values.push(columnsValues[column])
 			index += 1
@@ -86,7 +86,7 @@ module.exports = {
 
 		let columns = [], values = [], placeholders = []
 		let index = 0
-		for (let column in columnsValues) {
+		for (const column in columnsValues) {
 			columns.push(column)
 			values.push(columnsValues[column])
 			index += 1

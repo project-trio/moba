@@ -68,7 +68,7 @@ export default {
 				newHovering[owner.id] = owner
 			}
 		}
-		for (let id in hovering) {
+		for (const id in hovering) {
 			const newOwner = newHovering[id]
 			if (!newOwner) {
 				hovering[id].onBlur()
