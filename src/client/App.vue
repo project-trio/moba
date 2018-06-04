@@ -125,13 +125,15 @@ button
 	font-size 1.5em
 
 button.big
-	width 300px
+	min-width 300px
+	max-width 100%
 	height 64px
 	font-size 32px
 	font-weight 500
 	background #d
 	display block
 	margin 32px auto
+	padding 0 16px
 	border-radius 3px
 
 button.interactive:hover

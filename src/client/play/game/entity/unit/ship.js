@@ -20,6 +20,8 @@ const waitToRespawn = 2000
 const expPerLevel = 1200
 const maxLevel = 30
 
+const EXP_PER_TICK = Local.TESTING ? 30 : 2
+
 //CLASS
 
 class Ship extends Movable {
@@ -255,7 +257,7 @@ class Ship extends Movable {
 			return false
 		}
 		if (target && target.isDead) {
-			p('Skill canceled by dead target', renderTime, this.id, index)
+			// p('Skill canceled by dead target', renderTime, this.id, index)
 			return false
 		}
 		if (renderTime < this.skills.cooldowns[index]) {
@@ -654,7 +656,7 @@ class Ship extends Movable {
 	update (renderTime, timeDelta, isRetro) {
 		this.updateSkills(renderTime)
 		if (!isRetro || !this.isDead) {
-			let exp = 2
+			let exp = EXP_PER_TICK
 			if (isRetro && this.isAttackingTarget && (this.attackTarget.player || this.attackTarget.tower)) {
 				exp *= 2
 			}

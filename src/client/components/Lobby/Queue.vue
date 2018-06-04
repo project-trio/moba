@@ -18,8 +18,11 @@
 		<div v-if="notificationPermission === 'unavailable'">
 			(Notifications are unavailable in your browser.)
 		</div>
+		<div v-else-if="notificationPermission === 'denied'">
+			To be notified when a game becomes available while this page is in the background, please enable notifications for this site in your browser settings.
+		</div>
 		<div v-else>
-			<button @click="onNotifications" class="big interactive" :class="{ selected: readyRequested }">{{ notificationPermission === 'denied' ? 'Notifications disabled' : 'Enable notifications!' }}</button>
+			<button @click="onNotifications" class="big interactive" :class="{ selected: readyRequested }">Enable notifications!</button>
 			Lets you know when a game is available while the page is in the background.
 		</div>
 	</div>
