@@ -1,13 +1,13 @@
 export default {
 	melee: {
-		healthMax: [100, 0],
+		healthMax: [150, 0],
 		healthRegen: [0, 0],
 		armor: [0, 0],
 
 		sightRange: [100, 0],
 		attackRange: [35, 0],
 
-		attackDamage: [5, 0],
+		attackDamage: [4, 0],
 		attackPierce: [0, 0],
 		attackCooldown: [2, 0],
 
@@ -18,7 +18,7 @@ export default {
 	},
 
 	ranged: {
-		healthMax: [200, 0],
+		healthMax: [150, 0],
 		healthRegen: [0, 0],
 		armor: [0, 0],
 
@@ -34,7 +34,7 @@ export default {
 		bulletSize: 3,
 		bulletColor: 0x888888,
 
-		moveSpeed: [5, 0],
+		moveSpeed: [8, 0],
 		collision: 10,
 	},
 }

@@ -20,7 +20,7 @@ export default {
 		split: true,
 
 		healthMax: [250, 20],
-		healthRegen: [10, 0],
+		healthRegen: [15, 0],
 		armor: [0, 0],
 
 		sightRange: [160, 0],
@@ -43,7 +43,7 @@ export default {
 	basher: {
 		name: 'charger',
 		healthMax: [190, 15],
-		healthRegen: [10, 0],
+		healthRegen: [15, 0],
 		armor: [0, 1], //0 0.5?
 
 		sightRange: [140, 0],
@@ -68,7 +68,7 @@ export default {
 		split: true,
 
 		healthMax: [180, 10],
-		healthRegen: [10, 0],
+		healthRegen: [15, 0],
 		armor: [0, 1], //0 0.33?
 
 		sightRange: [155, 0],
@@ -93,7 +93,7 @@ export default {
 		split: true,
 
 		healthMax: [150, 10],
-		healthRegen: [10, 0],
+		healthRegen: [15, 0],
 		armor: [0, 1], //0 0.5?
 
 		sightRange: [155, 0],
@@ -118,7 +118,7 @@ export default {
 		split: true,
 
 		healthMax: [150, 8],
-		healthRegen: [10, 0],
+		healthRegen: [15, 0],
 		armor: [0, 0],
 
 		sightRange: [155, 0],
@@ -143,7 +143,7 @@ export default {
 		split: true,
 
 		healthMax: [150, 5],
-		healthRegen: [10, 0],
+		healthRegen: [15, 0],
 		armor: [18, 1], //20 0.5?
 
 		sightRange: [140, 0],
@@ -168,7 +168,7 @@ export default {
 		split: false,
 
 		healthMax: [125, 3],
-		healthRegen: [10, 0],
+		healthRegen: [15, 0],
 		armor: [20, 1],
 
 		sightRange: [140, 0],

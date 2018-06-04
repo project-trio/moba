@@ -4,6 +4,7 @@ import Decimal from 'decimal.js'
 
 import store from '@/client/store'
 
+import Local from '@/client/play/local'
 import Render from '@/client/play/render/render'
 
 import Animate from '@/client/play/game/helpers/animate'
@@ -246,7 +247,7 @@ export default {
 				return levelMultiplier(15, level, 12)
 			},
 			levelup (index, level, ship) {
-				ship.modify(this.name, 'moveSpeed', 'add', new Decimal(this.getEffectMoveSpeed(level)).dividedBy(400))
+				ship.modify(this.name, 'moveSpeed', 'add', new Decimal(this.getEffectMoveSpeed(level)).times(Local.tickDuration).dividedBy(20000))
 			},
 		},
 	],
@@ -308,7 +309,7 @@ export default {
 			},
 			start (index, level, ship, target) {
 				const aoeRange = this.getEffectRange(level)
-				const moveSpeed = D1.minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
+				const moveSpeed = D1.minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(2000))
 				const bulletData = {
 					dot: false,
 					opacity: 0.5,
@@ -349,7 +350,7 @@ export default {
 			},
 			start (index, level, ship) {
 				ship.modify(this.name, 'attackCooldown', 'times', D1.minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
-				ship.modify(this.name, 'moveSpeed', 'add', new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
+				ship.modify(this.name, 'moveSpeed', 'add', new Decimal(this.getEffectMoveSpeed(level)).times(Local.tickDuration).dividedBy(20000))
 
 				ship.enrageMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
@@ -619,7 +620,7 @@ export default {
 			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.removeTarget()
 				ship.invisible = true
-				ship.modify(this.name, 'moveSpeed', 'add', new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
+				ship.modify(this.name, 'moveSpeed', 'add', new Decimal(this.getEffectMoveSpeed(level)).times(Local.tickDuration).dividedBy(20000))
 
 				const animDuration = 500
 				ship.queueAnimation(null, 'opacity', {

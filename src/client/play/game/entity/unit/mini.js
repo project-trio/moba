@@ -1,7 +1,7 @@
 import Local from '@/client/play/local'
 
 import minisData from '@/client/play/data/minis'
-import retroMinisData from '@/client/play/data/minis'
+import retroMinisData from '@/client/play/data/minis-retro'
 
 import Render from '@/client/play/render/render'
 
@@ -14,8 +14,8 @@ let spawnCount
 
 class Mini extends Movable {
 
-	constructor (team, type, path, mirrored) {
-		const stats = minisData[type]
+	constructor (team, type, path, mirrored, retro) {
+		const stats = (retro ? retroMinisData : minisData)[type]
 
 		super(team, stats, 1)
 
