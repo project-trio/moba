@@ -243,7 +243,7 @@ export default {
 				return levelMultiplier(15, level, 12)
 			},
 			levelup (index, level, ship) {
-				const moveSpeed = Float.divide(this.getEffectMoveSpeed(level) * Local.tickDuration, 20000)
+				const moveSpeed = Float.divide(this.getEffectMoveSpeed(level), 10)
 				ship.modify(this.name, 'moveSpeed', 'add', moveSpeed)
 			},
 		},
@@ -306,7 +306,7 @@ export default {
 			},
 			start (index, level, ship, target) {
 				const aoeRange = this.getEffectRange(level)
-				const moveSpeed = Float.subtract(1, Float.divide(this.getEffectMoveSpeed(level), 20000))
+				const moveSpeed = Float.subtract(1, Float.divide(this.getEffectMoveSpeed(level), 100))
 				const bulletData = {
 					dot: false,
 					opacity: 0.5,
@@ -337,7 +337,7 @@ export default {
 				return levelMultiplier(15, level, 4)
 			},
 			getEffectMoveSpeed (level) {
-				return levelMultiplier(10, level, 2) // 4.5 0.9 to 36
+				return levelMultiplier(45, level, 9)
 			},
 			getDuration (level) {
 				return 50
@@ -347,7 +347,7 @@ export default {
 			},
 			start (index, level, ship) {
 				ship.modify(this.name, 'attackCooldown', 'multiply', Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100)))
-				const moveSpeed = Float.divide(this.getEffectMoveSpeed(level) * Local.tickDuration, 20000)
+				const moveSpeed = Float.divide(this.getEffectMoveSpeed(level), 10)
 				ship.modify(this.name, 'moveSpeed', 'add', moveSpeed)
 
 				ship.enrageMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
@@ -609,7 +609,7 @@ export default {
 				return levelMultiplier(30, level, 4)
 			},
 			getEffectMoveSpeed (level) {
-				return 20 // 25 -> 37
+				return 12
 			},
 			getCooldown (level) {
 				return levelMultiplier(200, level, -10)
@@ -617,7 +617,7 @@ export default {
 			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.removeTarget()
 				ship.invisible = true
-				const moveSpeed = Float.divide(this.getEffectMoveSpeed(level) * Local.tickDuration, 20000)
+				const moveSpeed = this.getEffectMoveSpeed(level)
 				ship.modify(this.name, 'moveSpeed', 'add', moveSpeed)
 
 				const animDuration = 500

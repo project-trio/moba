@@ -246,8 +246,8 @@ class Unit {
 		}
 		const updatingModifier = modifierKey !== null
 		if (updatingModifier) {
+			const oldIndex = this.modifierIndex(statName, modifierKey)
 			if (method === null) {
-				const oldIndex = this.modifierIndex(statName, modifierKey)
 				if (oldIndex) {
 					const mod = statModifiers[oldIndex]
 					const oldCallback = mod[4]
@@ -258,11 +258,16 @@ class Unit {
 				}
 			} else {
 				const mod = [ modifierKey, method, value, ending, callback ]
-				statModifiers.push(mod)
+				if (oldIndex) {
+					statModifiers[oldIndex] = mod
+				} else {
+					statModifiers.push(mod)
+				}
 			}
 		}
 		let result = this.stats[statName]
-		for (const mod of statModifiers) {
+		for (let idx = statModifiers.length - 1; idx >= 0; idx -= 1) {
+			const mod = statModifiers[idx]
 			const mathMethod = mod[1]
 			const byValue = mod[2]
 			result = Float[mathMethod](result, byValue)
