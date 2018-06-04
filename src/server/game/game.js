@@ -164,7 +164,7 @@ class Game {
 				break
 			}
 		}
-		if (removeIndex) {
+		if (removeIndex !== null) {
 			if (this.started) {
 				removePlayer.isActive = false
 			} else {
@@ -172,7 +172,6 @@ class Game {
 				this.players.splice(removeIndex, 1)
 			}
 
-			console.log('Removed', this.id, this.activePlayerCount())
 			if (this.activePlayerCount() <= 0) {
 				this.destroy()
 				return true

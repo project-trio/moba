@@ -138,7 +138,7 @@ const lobby = {
 				socket.leave('lobby')
 				if (data.action === 'queue') {
 					queue.add(player, data)
-				} else if (data.action === 'leave game') {
+				} else if (data.action === 'leave') {
 					player.leaveGame()
 				} else if (data.action === 'quick') {
 					const gameResponse = quickJoin(player, data.mode, data.size, data.map)

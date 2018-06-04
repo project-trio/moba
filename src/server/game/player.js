@@ -100,9 +100,9 @@ module.exports = class Player {
 	leaveGame () {
 		if (this.game) {
 			this.leaveGameRoom()
-			const game = this.game
-			this.game = null //TODO temp
-			return game.remove(this)
+			const result = this.game.remove(this)
+			this.game = null
+			return result
 		}
 	}
 
