@@ -10,6 +10,8 @@ import pointer from '@/client/play/render/pointer'
 import Render from '@/client/play/render/render'
 import RenderMinimap from '@/client/play/render/minimap'
 
+import Animate from '@/client/play/game/helpers/animate'
+
 import Mini from '@/client/play/game/entity/unit/mini'
 import Tower from '@/client/play/game/entity/unit/tower'
 import Wave from '@/client/play/game/entity/game/wave'
@@ -138,6 +140,7 @@ const GameMap = function (mapName, parent) {
 			parent: floorContainer,
 		})
 		this.targetRing.visible = false
+		Animate.apply(this.targetRing)
 
 		const ground = Render.ground(mapWidth, mapHeight, {
 			color: 0x448866,

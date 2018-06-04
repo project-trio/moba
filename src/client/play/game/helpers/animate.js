@@ -62,18 +62,24 @@ const update = function (renderTime) {
 				if (animation.child !== undefined) {
 					obj = obj.children[animation.child]
 				}
+			} else {
+				obj = this
 			}
 			const axis = animation.axis
 			if (axis !== undefined) {
 				if (axis === 'all') {
 					obj[animation.property].set(currentValue, currentValue, currentValue)
+				} else if (axis === 'xy') {
+					obj[animation.property].x = currentValue
+					obj[animation.property].y = currentValue
 				} else {
 					obj[animation.property][axis] = currentValue
 				}
 			} else if (animation.property === 'opacity') {
-				if (obj) {
-					obj.material.transparent = true
-					obj.material.opacity = currentValue
+				const material = obj.material
+				if (material) {
+					material.transparent = true
+					material.opacity = currentValue
 				} else {
 					this.opacity(currentValue)
 				}

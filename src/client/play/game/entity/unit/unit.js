@@ -17,8 +17,6 @@ import Bullet from '@/client/play/game/entity/attack/bullet'
 
 let allUnits = null
 
-let targetingGround = false
-
 //CLASS
 
 class Unit {
@@ -65,10 +63,14 @@ class Unit {
 
 		// Stats
 
+		const sightRange = statBase.sightRange[0] * 100
 		this.stats = {
-			sightRange: statBase.sightRange[0] * 100,
+			sightRange,
 		}
-		this.sightRangeCheck = Util.squared(this.stats.sightRange)
+		this.current = {
+			sightRange,
+		}
+		this.sightRangeCheck = Util.squared(sightRange)
 
 		if (!this.static) {
 			const ringOffset = unitScale > 3 ? 2 : 6
@@ -112,9 +114,6 @@ class Unit {
 				healthRegen: new Map(),
 				armor: new Map(),
 				attackCooldown: new Map(),
-			}
-			this.current = {
-				sightRange: this.stats.sightRange,
 			}
 			if (statBase.moveSpeed) {
 				this.modifiers.moveSpeed = new Map()
@@ -281,7 +280,15 @@ class Unit {
 		targetRing.position.y = y
 		targetRing.scale.x = 1
 		targetRing.scale.y = 1
-		targetingGround = true
+		targetRing.animations = []
+		targetRing.queueAnimation(null, 'scale', {
+			axis: 'xy',
+			from: 1,
+			to: 0,
+			pow: 0.7,
+			start: store.state.game.renderTime,
+			duration: 500,
+		})
 	}
 
 	setSelection (color) {
@@ -702,7 +709,6 @@ class Unit {
 
 Unit.init = function () {
 	allUnits = []
-	targetingGround = false
 }
 
 Unit.destroy = function () {
@@ -782,18 +788,7 @@ Unit.update = function (renderTime, timeDelta, tweening, isRetro) {
 		}
 	}
 
-	if (targetingGround) {
-		const targetRing = Local.game.map.targetRing
-		const remainingScale = targetRing.scale.x
-		const newScale = remainingScale <= 0.01 ? 0 : Math.pow(remainingScale - 0.007, 1.1)
-		if (newScale <= 0) {
-			targetRing.visible = false
-			targetingGround = false
-		} else {
-			targetRing.scale.x = newScale
-			targetRing.scale.y = newScale
-		}
-	}
+	Local.game.map.targetRing.updateAnimations(renderTime)
 }
 
 export default Unit
