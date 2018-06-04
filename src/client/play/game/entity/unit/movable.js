@@ -1,5 +1,3 @@
-// import TrigCache from '@/client/play/external/trigcache'
-
 import Local from '@/client/play/local'
 
 import Float from '@/client/play/game/helpers/float'
@@ -51,11 +49,6 @@ class Movable extends Unit {
 				this.moveTargetAngle = moveAngle
 				moveX = Math.floor(Float.cos(moveAngle) * 1000)
 				moveY = Math.floor(Float.sin(moveAngle) * 1000)
-				//DECIMAL
-				// this.moveTargetAngle = moveAngle.toNumber() / 1000 //DECIMAL
-				// const angleIndex = TrigCache.indexFor(moveAngle)
-				// moveX = TrigCache.cos(angleIndex)
-				// moveY = TrigCache.sin(angleIndex)
 			} else {
 				moveX = 0
 				moveY = 0
@@ -154,8 +147,6 @@ class Movable extends Unit {
 
 			moveByX = Math.round(Float.multiply(this.current.moveSpeed, this.moveX))
 			moveByY = Math.round(Float.multiply(this.current.moveSpeed, this.moveY))
-			// moveByX = this.current.moveSpeed.times(this.moveX).round().toNumber() //DECIMAL
-			// moveByY = this.current.moveSpeed.times(this.moveY).round().toNumber() //DECIMAL
 		}
 
 		let movingToX = cx + moveByX

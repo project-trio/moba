@@ -1,4 +1,3 @@
-// import TrigCache from '@/client/play/external/trigcache'
 import Float from '@/client/play/game/helpers/float'
 
 const PI = Math.PI
@@ -12,10 +11,9 @@ export default {
 
 	angleOf (dx, dy, fast) {
 		if (fast) {
-			return Math.atan2(dy, dx)
+			return Math.atan2(dy, dx) //TODO remove
 		}
 		return Float.atan(dy, dx)
-		// return TrigCache.atan(dy, dx) //DECIMAL
 	},
 
 	angleBetween (a, b, fast) {

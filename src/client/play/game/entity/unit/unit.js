@@ -1,5 +1,3 @@
-import Decimal from 'decimal.js'
-
 import store from '@/client/store'
 
 import Bridge from '@/client/play/events/bridge'
@@ -118,7 +116,7 @@ class Unit {
 			if (statBase.moveSpeed) {
 				this.modifiers.moveSpeed = new Map()
 				this.stats.moveSpeed = statBase.moveSpeed[0]
-				this.modify('Constant', 'moveSpeed', 'times', new Decimal(Local.tickDuration).dividedBy(2000))
+				this.modify('Constant', 'moveSpeed', 'multiply', Float.divide(Local.tickDuration, 2000))
 			}
 			this.updateModifiers()
 
@@ -251,19 +249,19 @@ class Unit {
 				statModifiers.set(modifierKey, [method, value, ending, callback])
 			}
 		}
-		let result = new Decimal(this.stats[statName])
+		let result = this.stats[statName]
 		for (const [_, mod] of statModifiers) {
 			const mathMethod = mod[0]
 			const byValue = mod[1]
-			result = result[mathMethod](byValue)
+			result = Float[mathMethod](result, byValue)
 		}
 		if (statName === 'moveSpeed') {
 			this.current[statName] = result //DECIMAL
-			this.cacheMoveSpeed = result.toNumber() / Local.tickDuration
+			this.cacheMoveSpeed = result / Local.tickDuration
 		} else {
-			this.current[statName] = result.toNumber()
+			this.current[statName] = result
 			if (Local.TESTING && !Number.isInteger(this.current[statName])) { //TODO testing
-				console.error('NON-INTEGER', modifierKey, statName, result.toNumber())
+				console.error('NON-INTEGER', modifierKey, statName, result)
 			}
 		}
 		if (updatingModifier && this.selected) {
@@ -474,11 +472,8 @@ class Unit {
 			// let armorMultiplier = 100 / (100 + Math.max(0, this.current.armor - pierce)) //TODO
 			let armor = 100 - Math.max(0, this.current.armor - pierce)
 			damage = Math.round(Float.multiply(damage, armor) / 100)
-			// const damageDecimal = new Decimal(damage).times(armor).dividedBy(100) //DECIMAL
-			// damage = damageDecimal.round().toNumber() //DECIMAL
 
 			if (this.reflectDamageRatio) {
-				// const reflectedDamage = damageDecimal.times(this.reflectDamageRatio).round().toNumber() //DECIMAL
 				const reflectedDamage = Math.floor(Float.multiply(damage, this.reflectDamageRatio))
 				source.takeDamage(this, renderTime, reflectedDamage, 0, true)
 			}
@@ -486,7 +481,6 @@ class Unit {
 				const duration = 2000
 				const ticks = Math.floor(duration / Local.tickDuration)
 				const healthPerTick = Math.floor(Float.multiply(this.repairDamageRatio, damage) / ticks)
-				// const healthPerTick = this.repairDamageRatio.times(damageDecimal).dividedBy(ticks).round().toNumber() //DECIMAL
 				this.modify(`${source.id}${renderTime}`, 'healthRegen', 'add', healthPerTick, renderTime + duration)
 			}
 		}

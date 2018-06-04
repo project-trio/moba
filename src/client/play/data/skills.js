@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
 
-import Decimal from 'decimal.js'
-
 import store from '@/client/store'
 
 import Render from '@/client/play/render/render'
@@ -21,8 +19,6 @@ import Unit from '@/client/play/game/entity/unit/unit'
 const TARGET_SELF = 1
 const TARGET_GROUND = 2
 const TARGET_ENEMY = 3
-
-const D1 = new Decimal(1)
 
 const levelMultiplier = function (base, level, multiplier) {
 	return base + (level - 1) * multiplier
@@ -64,7 +60,7 @@ export default {
 				return levelMultiplier(100, level, -4)
 			},
 			start (index, level, ship, target, startAt, endAt, cooldown) {
-				ship.modify(this.name, 'moveSpeed', 'times', 5)
+				ship.modify(this.name, 'moveSpeed', 'multiply', 5)
 				ship.uncontrollable = true
 				ship.disableAttacking = true
 				ship.opacity(0.75)
@@ -148,7 +144,6 @@ export default {
 			},
 			start (index, level, ship) {
 				ship.repairDamageRatio = Float.divide(this.getEffectStrength(level), 100)
-				// ship.repairDamageRatio = new Decimal(this.getEffectStrength(level)).dividedBy(100) //DECIMAL
 				ship.reflectDamageRatio = ship.repairDamageRatio / 2
 				ship.prickleMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
@@ -397,18 +392,20 @@ export default {
 				return levelMultiplier(90, level, -6)
 			},
 			activate (index, level, ship) {
+				const range = this.getRange(level)
+				const moveSpeed = Float.add(1, Float.divide(this.getEffectMoveSpeed(level), 100))
 				new AreaOfEffect(ship, {
 					dot: false,
 					follow: true,
 					color: 0xff7700,
 					opacity: 0.2,
-					radius: this.getRange(level),
+					radius: range,
 					allies: true,
 					modify: {
 						name: this.name,
 						stat: 'moveSpeed',
-						method: 'times',
-						value: D1.add(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)),
+						method: 'multiply',
+						value: moveSpeed,
 						expires: 1000,
 					},
 				})
@@ -433,6 +430,7 @@ export default {
 				return levelMultiplier(90, level, -6)
 			},
 			activate (index, level, ship) {
+				const attackCooldown = Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100))
 				new AreaOfEffect(ship, {
 					follow: true,
 					dot: false,
@@ -443,8 +441,8 @@ export default {
 					modify: {
 						name: this.name,
 						stat: 'attackCooldown',
-						method: 'times',
-						value: D1.minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)),
+						method: 'multiply',
+						value: attackCooldown,
 						expires: 1000,
 					},
 				})
@@ -479,7 +477,7 @@ export default {
 			},
 			start (index, level, ship, target) {
 				const damage = this.getEffectDamage(level) * 100
-				const moveSpeed = D1.minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
+				const moveSpeed = Float.subtract(1, Float.divide(this.getEffectMoveSpeed(level), 100))
 				const stunDuration = this.getEffectDuration(level)
 				const maxRange = this.getRange(level)
 				const bulletData = {
@@ -493,7 +491,7 @@ export default {
 					modify: {
 						name: 'Poison',
 						stat: 'moveSpeed',
-						method: 'times',
+						method: 'multiply',
 						value: moveSpeed,
 						expires: 1000,
 					},
@@ -531,7 +529,7 @@ export default {
 				const dps = this.getEffectDps(level)
 				const aoeRange = this.getEffectRange(level)
 				const effectDuration = this.getEffectDuration(level)
-				const moveSpeed = D1.minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100))
+				const moveSpeed = Float.subtract(1, Float.divide(this.getEffectMoveSpeed(level), 100))
 				const bulletData = {
 					dot: true,
 					hitsTowers: this.hitsTowers,
@@ -547,7 +545,7 @@ export default {
 					modify: {
 						name: 'Poison',
 						stat: 'moveSpeed',
-						method: 'times',
+						method: 'multiply',
 						value: moveSpeed,
 						expires: effectDuration,
 					},
@@ -577,8 +575,8 @@ export default {
 				return levelMultiplier(150, level, -5)
 			},
 			start (index, level, ship) {
-				ship.modify(this.name, 'attackCooldown', 'times', D1.minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
-				ship.modify(this.name, 'moveSpeed', 'times', D1.plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
+				ship.modify(this.name, 'attackCooldown', 'multiply', Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100)))
+				ship.modify(this.name, 'moveSpeed', 'multiply', Float.add(1, Float.divide(this.getEffectMoveSpeed(level), 100)))
 
 				ship.enrageMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
@@ -646,7 +644,7 @@ export default {
 				return levelMultiplier(150, level, -10)
 			},
 			start (index, level, ship, target, startAt, endAt, cooldown) {
-				ship.modify(this.name, 'moveSpeed', 'times', 3)
+				ship.modify(this.name, 'moveSpeed', 'multiply', 3)
 				ship.uncontrollable = true
 				ship.untargetable = true
 				ship.disableAttacking = true
@@ -711,7 +709,7 @@ export default {
 				return levelMultiplier(120, level, -5)
 			},
 			start (index, level, ship) {
-				ship.rebound = new Decimal(this.getEffectRebound(level)).dividedBy(100)
+				ship.rebound = Float.divide(this.getEffectRebound(level), 100)
 				ship.reboundMesh = Render.outline(ship.base.children[1], 0x0000ff, 1.07)
 			},
 			end (ship) {
@@ -794,7 +792,6 @@ export default {
 				const flingBullet = new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
 				Animate.apply(flingBullet)
 				const moveConstant = flingBullet.moveConstant
-				// const moveConstant = flingBullet.moveConstant.toNumber() //DECIMAL
 				const animationDuration = Math.sqrt(Util.pointDistance(ship.px, ship.py, target[0], target[1])) / moveConstant / 1000
 				flingBullet.queueAnimation('container', 'position', {
 					axis: 'z',
@@ -1068,8 +1065,8 @@ export default {
 				return levelMultiplier(150, level, 5)
 			},
 			start (index, level, ship, target, startAt, endAt) {
-				ship.modify(this.name, 'attackCooldown', 'times', D1.minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
-				ship.modify(this.name, 'armor', 'times', 0.5)
+				ship.modify(this.name, 'attackCooldown', 'multiply', Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100)))
+				ship.modify(this.name, 'armor', 'multiply', 0.5)
 				ship.bruteForceMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
 			end (ship) {
@@ -1101,7 +1098,7 @@ export default {
 			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.removeTarget()
 				ship.invisible = true
-				ship.modify(this.name, 'moveSpeed', 'times', D1.plus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(100)))
+				ship.modify(this.name, 'moveSpeed', 'multiply', Float.add(1, Float.divide(this.getEffectMoveSpeed(level), 100)))
 
 				const animDuration = 500
 				ship.queueAnimation(null, 'opacity', {
@@ -1150,7 +1147,7 @@ export default {
 			},
 			start (index, level, ship) {
 				ship.modify(this.name, 'healthRegen', 'add', this.getEffectRegen(level))
-				ship.modify(this.name, 'moveSpeed', 'times', 0.33)
+				ship.modify(this.name, 'moveSpeed', 'multiply', 0.33)
 
 				ship.salvageMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.07)
 			},

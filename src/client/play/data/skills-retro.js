@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
 
-import Decimal from 'decimal.js'
-
 import store from '@/client/store'
 
 import Local from '@/client/play/local'
@@ -22,8 +20,6 @@ import Unit from '@/client/play/game/entity/unit/unit'
 const TARGET_SELF = 1
 const TARGET_GROUND = 2
 const TARGET_ENEMY = 3
-
-const D1 = new Decimal(1)
 
 const levelMultiplier = function (base, level, multiplier) {
 	return base + (level - 1) * multiplier
@@ -129,7 +125,7 @@ export default {
 				return 120
 			},
 			start (index, level, ship) {
-				ship.modify(this.name, 'attackCooldown', 'times', D1.add(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
+				ship.modify(this.name, 'attackCooldown', 'multiply', Float.add(1, Float.divide(this.getEffectAttackSpeed(level), 100)))
 				ship.overloadMesh = Render.outline(ship.top.children[0], 0xffcc00, 1.07)
 			},
 			end (ship) {
@@ -247,7 +243,8 @@ export default {
 				return levelMultiplier(15, level, 12)
 			},
 			levelup (index, level, ship) {
-				ship.modify(this.name, 'moveSpeed', 'add', new Decimal(this.getEffectMoveSpeed(level)).times(Local.tickDuration).dividedBy(20000))
+				const moveSpeed = Float.divide(this.getEffectMoveSpeed(level) * Local.tickDuration, 20000)
+				ship.modify(this.name, 'moveSpeed', 'add', moveSpeed)
 			},
 		},
 	],
@@ -309,7 +306,7 @@ export default {
 			},
 			start (index, level, ship, target) {
 				const aoeRange = this.getEffectRange(level)
-				const moveSpeed = D1.minus(new Decimal(this.getEffectMoveSpeed(level)).dividedBy(2000))
+				const moveSpeed = Float.subtract(1, Float.divide(this.getEffectMoveSpeed(level), 20000))
 				const bulletData = {
 					dot: false,
 					opacity: 0.5,
@@ -322,7 +319,7 @@ export default {
 					modify: {
 						name: this.name,
 						stat: 'moveSpeed',
-						method: 'times',
+						method: 'multiply',
 						value: moveSpeed,
 						expires: this.getEffectDuration(level),
 					},
@@ -349,8 +346,9 @@ export default {
 				return 150
 			},
 			start (index, level, ship) {
-				ship.modify(this.name, 'attackCooldown', 'times', D1.minus(new Decimal(this.getEffectAttackSpeed(level)).dividedBy(100)))
-				ship.modify(this.name, 'moveSpeed', 'add', new Decimal(this.getEffectMoveSpeed(level)).times(Local.tickDuration).dividedBy(20000))
+				ship.modify(this.name, 'attackCooldown', 'multiply', Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100)))
+				const moveSpeed = Float.divide(this.getEffectMoveSpeed(level) * Local.tickDuration, 20000)
+				ship.modify(this.name, 'moveSpeed', 'add', moveSpeed)
 
 				ship.enrageMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
@@ -433,7 +431,6 @@ export default {
 				const flingBullet = new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
 				Animate.apply(flingBullet)
 				const moveConstant = flingBullet.moveConstant
-				// const moveConstant = flingBullet.moveConstant.toNumber() //DECIMAL
 				const animationDuration = Math.sqrt(Util.pointDistance(ship.px, ship.py, target[0], target[1])) / moveConstant / 1000
 				flingBullet.queueAnimation('container', 'position', {
 					axis: 'z',
@@ -592,7 +589,7 @@ export default {
 				return levelMultiplier(300, level, -10)
 			},
 			start (index, level, ship, target, startAt, endAt) {
-				ship.modify(this.name, 'attackCooldown', 'times', new Decimal(50).dividedBy(this.getEffectAttackSpeed(level)))
+				ship.modify(this.name, 'attackCooldown', 'multiply', Float.divide(50, this.getEffectAttackSpeed(level)))
 				ship.frenzyMesh = Render.outline(ship.top.children[0], 0xffaa00, 1.07)
 			},
 			end (ship) {
@@ -620,7 +617,8 @@ export default {
 			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.removeTarget()
 				ship.invisible = true
-				ship.modify(this.name, 'moveSpeed', 'add', new Decimal(this.getEffectMoveSpeed(level)).times(Local.tickDuration).dividedBy(20000))
+				const moveSpeed = Float.divide(this.getEffectMoveSpeed(level) * Local.tickDuration, 20000)
+				ship.modify(this.name, 'moveSpeed', 'add', moveSpeed)
 
 				const animDuration = 500
 				ship.queueAnimation(null, 'opacity', {

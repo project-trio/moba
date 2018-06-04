@@ -64,7 +64,7 @@ class Ship extends Movable {
 		this.respawned = true
 		this.isBlocking = false
 		this.reemergeAt = Local.TESTING ? 1000 : 4000
-		this.modify('Spawn', 'moveSpeed', 'times', 2)
+		this.modify('Spawn', 'moveSpeed', 'multiply', 2)
 
 		this.queuedForActivation = [false, false, false]
 		this.queuedForTarget = null
@@ -463,7 +463,7 @@ class Ship extends Movable {
 		this.isBlocking = false
 		this.isDying = false
 		this.stunnedUntil = 0
-		this.modify('Spawn', 'moveSpeed', 'times', 0.5)
+		this.modify('Spawn', 'moveSpeed', 'multiply', 0.5)
 
 		const spawnAt = this.player.spawnLocation()
 		this.setLocation(spawnAt[0], spawnAt[1])
