@@ -12,8 +12,8 @@
 				{{ selectedMode.description }}
 			</div>
 		</selection-group>
-		<h3>game size:</h3>
-		<game-sizes @onGameSize="onGameSize" :gameSizes="gameSizes" :selectedSize="selectedSize" />
+		<h3>{{ pvpMode ? 'max players' : 'game size' }}:</h3>
+		<game-sizes @onGameSize="onGameSize" :gameSizes="gameSizes" :selectedSize="selectedSize" :bots="!pvpMode" />
 		<h3>map:</h3>
 		<selection-group>
 			<button v-for="map in mapsForSize" @click="onMap(map)" class="selection interactive" :class="{ selected: map === selectedMap }" :key="map">{{ map }}</button>
@@ -124,4 +124,7 @@ export default {
 .mode-description
 	text-align center
 	margin auto
+
+button.big
+	margin-top 32px
 </style>

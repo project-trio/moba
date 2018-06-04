@@ -328,6 +328,36 @@ export default {
 		},
 	},
 
+	mounted () {
+		this.cooldownRing = new Sektor(`#cooldown-ring-${this.indexName}`, {
+			size: 80,
+			stroke: 40,
+			arc: true,
+			angle: this.activated ? 360 : 0,
+			sectorColor: '#68f',
+			circleColor: '#aaa',
+			fillCircle: true,
+		})
+		if (this.skill.getEffectCooldown) {
+			this.internalRing = new Sektor(`#internal-ring-${this.indexName}`, {
+				size: 80,
+				stroke: 40,
+				arc: true,
+				angle: 0,
+				sectorColor: '#888',
+			})
+		}
+		this.levelRing = new Sektor(`#level-ring-${this.indexName}`, {
+			size: 82,
+			stroke: 6,
+			arc: true,
+			angle: Math.floor(this.levelupProgress * 360),
+			sectorColor: '#8e9',
+			circleColor: 'transparent',
+			fillCircle: true,
+		})
+	},
+
 	methods: {
 		createRangeIndicator (forLevel) {
 			if (this.skill.getRange && Local.unit) {
@@ -425,36 +455,6 @@ export default {
 				}
 			}
 		},
-	},
-
-	mounted () {
-		this.cooldownRing = new Sektor(`#cooldown-ring-${this.indexName}`, {
-			size: 80,
-			stroke: 40,
-			arc: true,
-			angle: this.activated ? 360 : 0,
-			sectorColor: '#68f',
-			circleColor: '#aaa',
-			fillCircle: true,
-		})
-		if (this.skill.getEffectCooldown) {
-			this.internalRing = new Sektor(`#internal-ring-${this.indexName}`, {
-				size: 80,
-				stroke: 40,
-				arc: true,
-				angle: 0,
-				sectorColor: '#888',
-			})
-		}
-		this.levelRing = new Sektor(`#level-ring-${this.indexName}`, {
-			size: 82,
-			stroke: 6,
-			arc: true,
-			angle: Math.floor(this.levelupProgress * 360),
-			sectorColor: '#8e9',
-			circleColor: 'transparent',
-			fillCircle: true,
-		})
 	},
 }
 </script>

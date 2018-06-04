@@ -132,9 +132,13 @@ button.big
 	font-weight 500
 	background #d
 	display block
-	margin 32px auto
+	margin 16px auto
 	padding 0 16px
 	border-radius 3px
+
+button.outlined
+	background none
+	border 2px solid #d
 
 button.interactive:hover
 	opacity 0.8

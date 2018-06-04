@@ -15,6 +15,7 @@ export default {
 	props: {
 		selectedSize: Number,
 		gameSizes: Array,
+		bots: Boolean,
 	},
 
 	methods: {
@@ -23,8 +24,11 @@ export default {
 		},
 
 		sizeLabel (size) {
-			if (size === 0) {
-				return '1p'
+			if (this.bots) {
+				if (size <= 10) {
+					return `${size}p`
+				}
+				return 'horde'
 			}
 			if (size > 10) {
 				return `${size * 2}p`
