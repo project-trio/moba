@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js'
-import TrigCache from '@/client/play/external/trigcache'
 
 import Float from '@/client/play/game/helpers/float'
 import Util from '@/client/play/game/util'
@@ -47,8 +46,6 @@ console.log(basicValue, floatValue, value)
 
 //SETUP
 
-
-TrigCache.prepare()
 
 randomizePosition()
 console.log(`${iterations} iterations`, rx, ry)
@@ -120,14 +117,6 @@ console.log(value)
 // console.log(value.toNumber())
 
 
-console.time('TrigCache.cos')
-for (let i = 0; i < iterations; i += 1) {
-	value = TrigCache.cos(angleApprox)
-}
-console.timeEnd('TrigCache.cos')
-console.log(value / 1000)
-
-
 //SIN
 
 
@@ -147,14 +136,6 @@ console.log(value)
 // }
 // console.timeEnd('Decimal.sin')
 // console.log(value.toNumber())
-
-
-console.time('TrigCache.sin')
-for (let i = 0; i < iterations; i += 1) {
-	value = TrigCache.sin(angleApprox)
-}
-console.timeEnd('TrigCache.sin')
-console.log(value / 1000)
 
 
 //ANGLE COMPARISON
