@@ -127,7 +127,7 @@ class Movable extends Unit {
 		return this.hasDestination && !this.isAttackingTarget && this.stunnedUntil === 0
 	}
 
-	reachedDestination (needsNewDestination) {
+	reachedDestination (_needsNewDestination) {
 		this.hasDestination = false
 	}
 

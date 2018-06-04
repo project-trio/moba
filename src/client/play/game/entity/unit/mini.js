@@ -59,7 +59,7 @@ class Mini extends Movable {
 		this.invisible = false
 	}
 
-	setDestination (x, y, preadjusted, moveX, moveY, fixedMovement) {
+	setDestination (x, y, preadjusted, moveX, moveY, _fixedMovement) {
 		this.returningToPath = false
 		super.setDestination(x, y, preadjusted, moveX, moveY)
 
@@ -130,7 +130,7 @@ class Mini extends Movable {
 		}
 	}
 
-	blocked (bx, by) {
+	blocked (_bx, _by) {
 		return false
 	}
 

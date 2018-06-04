@@ -5,7 +5,7 @@
 			{{ player.name }}
 		</div>
 		<transition-group name="bubbling" tag="div" class="player-bubbles">
-			<div v-for="message in messages" class="bubble" :class="teamBackgroundClass" :key="`${message.id}${message.at}`">{{ message.body }}</div>
+			<div v-for="message in cachedMessages" class="bubble" :class="teamBackgroundClass" :key="`${message.id}${message.at}`">{{ message.body }}</div>
 		</transition-group>
 	</div>
 	<div v-else class="faint note">
@@ -42,33 +42,7 @@ export default {
 		},
 
 		playerMessages () {
-			let newMessage = false
-			const messages = store.state.chatMessages
-			for (let idx = messages.length - 1; idx >= 0; idx -= 1) {
-				const message = messages[idx]
-				if (message.id === this.player.id) {
-					const key = `${message.id}${message.at}`
-					if (this.cachedKeys.indexOf(key) === -1) {
-						this.cachedKeys.push(key)
-						this.cachedMessages.unshift(message)
-						newMessage = true
-					}
-				}
-			}
-			return newMessage
-		},
-		messages () {
-			if (!this.playerMessages) {
-				return this.cachedMessages
-			}
-			const now = Util.seconds()
-			for (let idx = this.cachedMessages.length - 1; idx >= 0; idx -= 1) {
-				const message = this.cachedMessages[idx]
-				if (now - message.at > 15) {
-					this.cachedMessages.splice(idx, 1)
-				}
-			}
-			return this.cachedMessages
+			return store.state.chatMessages
 		},
 
 		isLocal () {
@@ -81,6 +55,28 @@ export default {
 
 		teamBackgroundClass () {
 			return `team-${this.player.team + 1}-bg`
+		},
+	},
+
+	watch: {
+		playerMessages (playerMessages) {
+			const now = Util.seconds()
+			for (let idx = this.cachedMessages.length - 1; idx >= 0; idx -= 1) {
+				const message = this.cachedMessages[idx]
+				if (now - message.at > 15) {
+					this.cachedMessages.splice(idx, 1)
+				}
+			}
+			for (let idx = playerMessages.length - 1; idx >= 0; idx -= 1) {
+				const message = playerMessages[idx]
+				if (message.id === this.player.id) {
+					const key = `${message.id}${message.at}`
+					if (this.cachedKeys.indexOf(key) === -1) {
+						this.cachedKeys.push(key)
+						this.cachedMessages.unshift(message)
+					}
+				}
+			}
 		},
 	},
 }
