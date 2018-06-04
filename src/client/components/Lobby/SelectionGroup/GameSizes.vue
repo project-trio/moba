@@ -1,6 +1,6 @@
 <template>
 <selection-group>
-	<button v-for="size in gameSizes" @click="onGameSize(size)" class="selection interactive" :class="{ selected: size === selectedSize }" :key="size">{{ sizeLabel(size) }}</button>
+	<button v-for="size in gameSizes" @click="$emit('select', size)" class="selection interactive" :class="{ selected: size === selectedSize }" :key="size">{{ sizeLabel(size) }}</button>
 </selection-group>
 </template>
 
@@ -13,18 +13,14 @@ export default {
 	},
 
 	props: {
-		selectedSize: Number,
 		gameSizes: Array,
-		bots: Boolean,
+		selectedSize: Number,
+		pvpMode: Boolean,
 	},
 
 	methods: {
-		onGameSize (size) {
-			this.$emit('onGameSize', size)
-		},
-
 		sizeLabel (size) {
-			if (this.bots) {
+			if (!this.pvpMode) {
 				if (size <= 10) {
 					return `${size}p`
 				}

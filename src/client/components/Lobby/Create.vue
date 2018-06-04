@@ -13,11 +13,9 @@
 			</div>
 		</selection-group>
 		<h3>{{ pvpMode ? 'max players' : 'game size' }}:</h3>
-		<game-sizes @onGameSize="onGameSize" :gameSizes="gameSizes" :selectedSize="selectedSize" :bots="!pvpMode" />
+		<game-sizes @select="selectedSize = $event" :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="pvpMode" />
 		<h3>map:</h3>
-		<selection-group>
-			<button v-for="map in mapsForSize" @click="onMap(map)" class="selection interactive" :class="{ selected: map === selectedMap }" :key="map">{{ map }}</button>
-		</selection-group>
+		<game-maps @select="selectedMap = $event" :selectedSize="selectedSize" :selectedMap="selectedMap" />
 		<button @click="onSubmit" class="big interactive">confirm</button>
 	</div>
 </div>
@@ -27,17 +25,18 @@
 import router from '@/client/router'
 
 import CommonConsts from '@/common/constants'
-import commonMaps from '@/common/maps'
 
 import Local from '@/client/play/local'
 
 import LobbyEvents from '@/client/play/events/lobby'
 
 import SelectionGroup from '@/client/components/Lobby/SelectionGroup'
+import GameMaps from '@/client/components/Lobby/SelectionGroup/GameMaps'
 import GameSizes from '@/client/components/Lobby/SelectionGroup/GameSizes'
 
 export default {
 	components: {
+		GameMaps,
 		GameSizes,
 		SelectionGroup,
 	},
@@ -69,17 +68,6 @@ export default {
 			sizes.push(25)
 			return sizes
 		},
-
-		mapsForSize () {
-			const maps = []
-			for (const name in commonMaps) {
-				const map = commonMaps[name]
-				if (this.selectedSize >= map.minSize && (!map.maxSize || this.selectedSize <= map.maxSize)) {
-					maps.push(name)
-				}
-			}
-			return maps
-		},
 	},
 
 	methods: {
@@ -88,15 +76,6 @@ export default {
 			if (!this.pvpMode) {
 				this.onGameSize(1)
 			}
-		},
-		onGameSize (size) {
-			this.selectedSize = size
-			if (this.mapsForSize.indexOf(this.selectedMap) === -1) {
-				this.onMap(this.mapsForSize[0])
-			}
-		},
-		onMap (name) {
-			this.selectedMap = name
 		},
 
 		onSubmit () {

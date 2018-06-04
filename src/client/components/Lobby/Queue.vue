@@ -4,7 +4,7 @@
 		<h1>{{ queuedPlayers }} in queue</h1>
 	</div>
 	<h3>minimum game size:</h3>
-	<game-sizes @onGameSize="onGameSize" :gameSizes="gameSizes" :selectedSize="selectedSize" />
+	<game-sizes @select="onGameSize" :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="true" />
 	<div class="queue-action">
 		<div v-if="enoughPlayersForGame">
 			<button @click="onReady" class="ready-button big interactive" :class="{ selected: readyRequested }">{{ readyRequested ? 'ready!' : `ready? (${queueTimer - readyAt})` }}</button>
@@ -213,7 +213,7 @@ export default {
 	background-color #1ea
 
 .header, .queue-action
-	margin 64px auto
+	margin 48px auto
 
 .highlight
 	padding 2px 4px

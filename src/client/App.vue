@@ -105,6 +105,10 @@ body, .inherit
 	font-weight 400
 	color #111110
 
+h3
+	margin-top 16px
+	margin-bottom 4px
+
 .scrolls
 	-webkit-overflow-scrolling touch
 	overflow-x hidden
