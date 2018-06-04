@@ -108,13 +108,13 @@ class Unit {
 
 			// Modifiers
 			this.modifiers = {
-				shield: new Map(),
-				healthRegen: new Map(),
-				armor: new Map(),
-				attackCooldown: new Map(),
+				shield: [],
+				healthRegen: [],
+				armor: [],
+				attackCooldown: [],
 			}
 			if (statBase.moveSpeed) {
-				this.modifiers.moveSpeed = new Map()
+				this.modifiers.moveSpeed = []
 				this.stats.moveSpeed = statBase.moveSpeed[0]
 				this.modify('Constant', 'moveSpeed', 'multiply', Float.divide(Local.tickDuration, 2000))
 			}
@@ -183,22 +183,31 @@ class Unit {
 		}
 	}
 
-	hasModifier (statName, key) {
+	modifierIndex (statName, key) {
 		const statModifiers = this.modifiers[statName]
-		return statModifiers && statModifiers.get(key) !== undefined
+		if (statModifiers) {
+			for (let idx = statModifiers.length - 1; idx >= 0; idx -= 1) {
+				const mod = statModifiers[idx]
+				if (mod[0] === key) {
+					return idx
+				}
+			}
+		}
+		return null
 	}
 
 	cancelModifiers (statName) {
 		const statModifiers = this.modifiers[statName]
 		let canceled = false
-		for (const [key, mod] of statModifiers) {
+		for (let idx = statModifiers.length - 1; idx >= 0; idx -= 1) {
+			const mod = statModifiers[idx]
 			canceled = true
-			const oldCallback = mod[3]
+			const oldCallback = mod[4]
 			if (oldCallback) {
 				oldCallback()
 			}
-			statModifiers.delete(key)
 		}
+		this.modifiers[statName] = []
 		if (canceled) {
 			this.modify(null, statName)
 		}
@@ -208,15 +217,16 @@ class Unit {
 		for (const statName in this.modifiers) {
 			const statModifiers = this.modifiers[statName]
 			let expired = false
-			for (const [key, mod] of statModifiers) {
-				const expiresAt = mod[2]
+			for (let idx = statModifiers.length - 1; idx >= 0; idx -= 1) {
+				const mod = statModifiers[idx]
+				const expiresAt = mod[3]
 				if (expiresAt && renderTime >= expiresAt) {
 					expired = true
-					const oldCallback = mod[3]
+					const oldCallback = mod[4]
 					if (oldCallback) {
 						oldCallback()
 					}
-					statModifiers.delete(key)
+					statModifiers.splice(idx, 1)
 				}
 			}
 			if (expired) {
@@ -237,22 +247,24 @@ class Unit {
 		const updatingModifier = modifierKey !== null
 		if (updatingModifier) {
 			if (method === null) {
-				const mod = statModifiers.get(modifierKey)
-				if (mod) {
-					const oldCallback = mod[3]
+				const oldIndex = this.modifierIndex(statName, modifierKey)
+				if (oldIndex) {
+					const mod = statModifiers[oldIndex]
+					const oldCallback = mod[4]
 					if (oldCallback) {
 						oldCallback()
 					}
-					statModifiers.delete(modifierKey)
+					statModifiers.splice(oldIndex, 1)
 				}
 			} else {
-				statModifiers.set(modifierKey, [method, value, ending, callback])
+				const mod = [ modifierKey, method, value, ending, callback ]
+				statModifiers.push(mod)
 			}
 		}
 		let result = this.stats[statName]
-		for (const [_, mod] of statModifiers) {
-			const mathMethod = mod[0]
-			const byValue = mod[1]
+		for (const mod of statModifiers) {
+			const mathMethod = mod[1]
+			const byValue = mod[2]
 			result = Float[mathMethod](result, byValue)
 		}
 		if (statName === 'moveSpeed') {
