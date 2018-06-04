@@ -20,7 +20,7 @@ const waitToRespawn = 2000
 const expPerLevel = 1200
 const maxLevel = 30
 
-const EXP_PER_TICK = Local.TESTING ? 30 : 2
+const EXP_PER_TICK = Local.TESTING ? 20 : 2
 
 //CLASS
 
@@ -36,7 +36,7 @@ class Ship extends Movable {
 			actives: [0, 0, 0],
 			cooldowns: [0, 0, 0],
 			levels: [0, 0, 0],
-			leveled: (retro ? -3 : 0),
+			leveled: (retro ? -2 : 0),
 		}
 		this.tween = statBase.tween || null
 		this.onDeath = statBase.onDeath || null
