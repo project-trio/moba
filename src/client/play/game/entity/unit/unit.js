@@ -193,7 +193,7 @@ class Unit {
 				}
 			}
 		}
-		return null
+		return -1
 	}
 
 	cancelModifiers (statName) {
@@ -248,7 +248,7 @@ class Unit {
 		if (updatingModifier) {
 			const oldIndex = this.modifierIndex(statName, modifierKey)
 			if (method === null) {
-				if (oldIndex) {
+				if (oldIndex !== -1) {
 					const mod = statModifiers[oldIndex]
 					const oldCallback = mod[4]
 					if (oldCallback) {
@@ -258,7 +258,7 @@ class Unit {
 				}
 			} else {
 				const mod = [ modifierKey, method, value, ending, callback ]
-				if (oldIndex) {
+				if (oldIndex !== -1) {
 					statModifiers[oldIndex] = mod
 				} else {
 					statModifiers.push(mod)
