@@ -112,13 +112,14 @@ class Unit {
 				healthRegen: [],
 				armor: [],
 				attackCooldown: [],
+				sightRange: [],
 			}
+			this.updateModifiers()
 			if (statBase.moveSpeed) {
 				this.modifiers.moveSpeed = []
 				this.stats.moveSpeed = statBase.moveSpeed[0]
 				this.modify('Constant', 'moveSpeed', 'multiply', Float.divide(Local.tickDuration, 2000))
 			}
-			this.updateModifiers()
 
 			// Health Bar
 			let hpHeight, hpWidth, hpOffsetZ
@@ -272,14 +273,11 @@ class Unit {
 			const byValue = mod[2]
 			result = Float[mathMethod](result, byValue)
 		}
+		this.current[statName] = result
 		if (statName === 'moveSpeed') {
-			this.current[statName] = result //DECIMAL
 			this.cacheMoveSpeed = result / Local.tickDuration
-		} else {
-			this.current[statName] = result
-			if (Local.TESTING && !Number.isInteger(this.current[statName])) { //TODO testing
-				console.error('NON-INTEGER', modifierKey, statName, result)
-			}
+		} else if (statName === 'sightRange') {
+			this.sightRangeCheck = Util.squared(result)
 		}
 		if (updatingModifier && this.selected) {
 			store.modifierStats(this)

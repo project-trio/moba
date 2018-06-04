@@ -102,7 +102,7 @@ export default {
 				return levelMultiplier(10, level, 3)
 			},
 			levelup (index, level, ship) {
-				ship.bonusSightRange(this.getEffectRange(level))
+				ship.modify(this.name, 'sightRange', 'add', this.getEffectRange(level) * 100)
 			},
 		},
 	],
@@ -227,10 +227,10 @@ export default {
 				return 150
 			},
 			start (index, level, ship) {
-				ship.bonusSightRange(this.getEffectRange(level))
+				ship.modify(this.name, 'sightRange', 'add', this.getEffectRange(level) * 100)
 			},
 			end (ship) {
-				ship.bonusSightRange(0)
+				ship.modify(this.name, 'sightRange', null)
 			},
 		},
 		{
