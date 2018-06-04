@@ -37,13 +37,6 @@ const loop = function () {
 							player.updatesUntilAuto = Math.ceil(Math.random() * 50)
 						}
 					} else {
-						const levelupIndex = player.levelNext
-						if (levelupIndex !== null) {
-							playerActions.push({ skill: levelupIndex, level: true })
-							player.levelNext = null
-							submittingSkills[levelupIndex] = true
-						}
-
 						const pendingActionCount = player.actions.length
 						if (pendingActionCount) {
 							let hasTarget = false
@@ -66,6 +59,12 @@ const loop = function () {
 								playerActions.push(action)
 							}
 							player.actions = []
+						}
+
+						const levelupIndex = player.levelNext
+						if (levelupIndex !== null) {
+							playerActions.push({ skill: levelupIndex, level: true })
+							player.levelNext = null
 						}
 					}
 					if (playerActions.length > 0) {
