@@ -324,7 +324,7 @@ class Ship extends Movable {
 
 	// Health
 
-	endSkill (index, renderTime) {
+	endSkill (index, _renderTime) {
 		this.skills.actives[index] = 0
 		this.skills.data[index].end(this, this.skills.levels[index]) //TODO level when skill started
 
@@ -360,7 +360,7 @@ class Ship extends Movable {
 	enqueue (skill, target) {
 		if (target) {
 			this.targetingSkill = null
-			this.queuedForTarget = [skill !== undefined ? skill : null, target]
+			this.queuedForTarget = [ skill, target ]
 		} else {
 			this.queuedForActivation[skill] = true
 		}

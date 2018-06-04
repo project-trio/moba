@@ -132,12 +132,13 @@ export default function (gid, mode, size, mapName) {
 				}
 				for (let ai = playerActions.length - 1; ai >= 0; ai -= 1) {
 					const action = playerActions[ai]
-					const skillIndex = action.skill
-					if (action.level) {
+					const skillIndex = action[0]
+					const skillLevelup = action[1]
+					if (skillLevelup) {
 						ship.levelup(skillIndex)
 					} else {
-						const target = action.target
-						if (target || skillIndex !== undefined) {
+						const target = action[2]
+						if (target || skillIndex !== null) {
 							ship.enqueue(skillIndex, target)
 						}
 					}

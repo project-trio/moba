@@ -33,7 +33,7 @@ const loop = function () {
 						if (currentUpdate - player.actionUpdate > player.updatesUntilAuto) {
 							const clickX = Math.round(Math.random() * 100 * game.mapWidth)
 							const clickY = Math.round(Math.random() * 100 * game.mapHeight)
-							playerActions[0] = { target: [clickX, clickY] }
+							playerActions[0] = [ null, null, [clickX, clickY] ]
 							player.updatesUntilAuto = Math.ceil(Math.random() * 50)
 						}
 					} else {
@@ -56,14 +56,14 @@ const loop = function () {
 									}
 									submittingSkills[skillIndex] = true
 								}
-								playerActions.push(action)
+								playerActions.push([ skillIndex, null, target ])
 							}
 							player.actions = []
 						}
 
 						const levelupIndex = player.levelNext
 						if (levelupIndex !== null) {
-							playerActions.push({ skill: levelupIndex, level: true })
+							playerActions.push([ levelupIndex, true ])
 							player.levelNext = null
 						}
 					}
