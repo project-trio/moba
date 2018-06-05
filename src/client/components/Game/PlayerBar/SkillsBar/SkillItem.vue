@@ -1,5 +1,5 @@
 <template>
-<div class="skill-item" :class="{ selected: !disabled && isActiveSkill, disabled: disabled, cooldown: cooldownTime, showsLevelup: levelupReady }">
+<div class="skill-item" :class="{ selected: !disabled && isActiveSkill, disabled, cooldown: cooldownTime, showsLevelup: levelupReady }">
 	<div class="skill-content">
 		<div class="button-content">
 			<div :id="`cooldown-ring-${indexName}`" class="item-circle cooldown-ring" />
@@ -521,6 +521,9 @@ export default {
 	cursor pointer
 	border-radius 50%
 	font-weight 500
+
+.skill-item.disabled .skill-button
+	cursor not-allowed
 
 .skill-item .button-levelup
 	position absolute
