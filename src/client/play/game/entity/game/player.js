@@ -3,8 +3,6 @@ import store from '@/client/store'
 import Local from '@/client/play/local'
 import Ship from '@/client/play/game/entity/unit/ship'
 
-const PLAYER_INSET = 64
-
 //CONSTRUCTOR
 
 export default class Player {
@@ -24,14 +22,20 @@ export default class Player {
 //MANAGE
 
 	spawnLocation () {
+		let sx, sy
 		const teamMp = this.team == 0 ? 1 : -1
-		const indexMp = this.teamIndex % 2 == 0 ? -1 : 1
-
 		const mapWidthHalf = Local.game.map.centerX()
 		const mapHeightHalf = Local.game.map.centerY()
-		const offset = 76
-		const sx = mapWidthHalf + offset * (Math.floor(this.teamIndex / 2) + 1) * indexMp * teamMp
-		const sy = (mapHeightHalf - PLAYER_INSET) * teamMp + mapHeightHalf
+		if (Local.game.retro) {
+			const offset = 72
+			sx = mapWidthHalf + (8 + offset * (this.teamIndex + 1)) * teamMp
+		} else {
+			const indexMp = this.teamIndex % 2 == 0 ? -1 : 1
+			const offset = 76
+			sx = mapWidthHalf + offset * (Math.floor(this.teamIndex / 2) + 1) * indexMp * teamMp
+		}
+		const yInset = 60
+		sy = (mapHeightHalf - yInset) * teamMp + mapHeightHalf
 		return [sx, sy]
 	}
 
