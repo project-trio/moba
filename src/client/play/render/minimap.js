@@ -27,13 +27,16 @@ const onMouseDown = function (event) {
 }
 
 const onMouseMove = function (event) {
+	if (!event.buttons) {
+		clickActive = false
+	}
 	if (!clickActive) {
 		return false
 	}
 	track(event)
 }
 
-const onMouseCancel = function () {
+const onMouseUp = function () {
 	clickActive = false
 }
 
@@ -50,8 +53,7 @@ export default {
 
 		util.addListener(canvas, 'mousedown', onMouseDown)
 		util.addListener(canvas, 'mousemove', onMouseMove)
-		util.addListener(canvas, 'mouseup', onMouseCancel)
-		util.addListener(canvas, 'mouseleave', onMouseCancel)
+		util.addListener(canvas, 'mouseup', onMouseUp)
 
 		renderer = new THREE.WebGLRenderer({
 			antialias: true,
