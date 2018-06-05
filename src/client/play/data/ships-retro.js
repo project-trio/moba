@@ -26,9 +26,9 @@ export default {
 		sightRange: [160, 0],
 		attackRange: [115, 0], //80
 
-		attackDamage: [20, 1], //15 1
+		attackDamage: [18, 1], //15 1
 		attackPierce: [0, 0],
-		attackCooldown: [18, 0],
+		attackCooldown: [12, 0],
 
 		bulletSpeed: 11,
 		bulletSize: 4,
@@ -49,9 +49,9 @@ export default {
 		sightRange: [140, 0],
 		attackRange: [125, 0], //85
 
-		attackDamage: [25, 1], //27 3
+		attackDamage: [27, 4], //27 3
 		attackPierce: [0, 0],
-		attackCooldown: [19, 0],
+		attackCooldown: [13, 0],
 
 		bulletSpeed: 12,
 		bulletSize: 6,
@@ -74,9 +74,9 @@ export default {
 		sightRange: [155, 0],
 		attackRange: [155, 0], //100
 
-		attackDamage: [10, 1], //13 0.8
+		attackDamage: [13, 1], //13 0.8
 		attackPierce: [0, 0],
-		attackCooldown: [15, 0],
+		attackCooldown: [10, 0],
 
 		bulletSpeed: 10,
 		bulletSize: 3,
@@ -99,7 +99,7 @@ export default {
 		sightRange: [155, 0],
 		attackRange: [155, 0], //100
 
-		attackDamage: [10, 1], //10 +1
+		attackDamage: [12, 1], //10 1
 		attackPierce: [0, 0],
 		attackCooldown: [12, 0],
 
@@ -124,9 +124,9 @@ export default {
 		sightRange: [155, 0],
 		attackRange: [170, 0], //110
 
-		attackDamage: [70, 3], //8 +1
+		attackDamage: [15, 2], //8 +1
 		attackPierce: [0, 0],
-		attackCooldown: [22, 0],
+		attackCooldown: [19, 0],
 
 		bulletSpeed: 8,
 		bulletSize: 5,
@@ -149,14 +149,14 @@ export default {
 		sightRange: [140, 0],
 		attackRange: [100, 0], //70
 
-		attackDamage: [30, 3], //27  1
+		attackDamage: [27, 1], //27  1
 		attackPierce: [0, 0],
-		attackCooldown: [16, 0],
+		attackCooldown: [10, 0],
 
 		bulletSpeed: 11,
 		bulletSize: 4,
 
-		moveSpeed: [10, 0], //32
+		moveSpeed: [9, 0], //32
 		turnSpeed: 9,
 		collision: 16,
 
@@ -174,9 +174,9 @@ export default {
 		sightRange: [140, 0],
 		attackRange: [130, 0], //95
 
-		attackDamage: [10, 2], //15 1
+		attackDamage: [20, 1], //15 1
 		attackPierce: [0, 0],
-		attackCooldown: [15, 0],
+		attackCooldown: [13, 0],
 
 		bulletSpeed: 13,
 		bulletSize: 4,
