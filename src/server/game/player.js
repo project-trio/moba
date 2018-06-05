@@ -1,5 +1,5 @@
 const CommonConsts = require.main.require('../common/constants')
-const CommonUtils = require.main.require('../common/utils')
+const { randomItem } = require.main.require('../common/utils')
 
 const queue = require.main.require('./app/queue')
 
@@ -36,6 +36,7 @@ module.exports = class Player {
 		this.queueing = false
 		this.queueReady = false
 		this.queueMin = 1
+		this.queueMap = null
 	}
 
 	data () {
@@ -54,19 +55,22 @@ module.exports = class Player {
 		}
 	}
 
-	resetGame (team, teamIndex, retro) {
+	resetGame (team, teamIndex) {
 		this.team = team
 		this.teamIndex = teamIndex
 
 		this.isActive = true
-		const shipNames = retro ? CommonConsts.RETRO_SHIP_NAMES : CommonConsts.SHIP_NAMES
-		this.shipName = this.client ? shipNames[0] : CommonUtils.randomItem(shipNames)
 		this.switchUnit = null
 		this.actionUpdate = 0
 		this.serverUpdate = 0
 		this.actions = []
 		this.levelNext = null
 		this.chatAt = null
+	}
+
+	setRetro (retro) {
+		const shipNames = retro ? CommonConsts.RETRO_SHIP_NAMES : CommonConsts.SHIP_NAMES
+		this.shipName = this.client ? shipNames[0] : randomItem(shipNames)
 	}
 
 	// Rooms
@@ -111,6 +115,7 @@ module.exports = class Player {
 	updateQueue (data) {
 		this.queueReady = data.ready
 		this.queueMin = data.size
+		this.queueMap = data.map
 
 		queue.update()
 	}

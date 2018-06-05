@@ -4,7 +4,10 @@
 		<h1>{{ queuedPlayers }} in queue</h1>
 	</div>
 	<h3>minimum game size:</h3>
-	<game-sizes @select="onGameSize" :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="true" />
+	<game-sizes @select="selectedSize = $event" :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="true" />
+	<h3>vote for a map:</h3>
+	<game-maps @select="selectedMap = $event" :selectedSize="selectedSize" :selectedMap="selectedMap" />
+
 	<div class="queue-action">
 		<div v-if="enoughPlayersForGame">
 			<button @click="onReady" class="ready-button big interactive" :class="{ selected: readyRequested }">{{ readyRequested ? 'ready!' : `ready? (${queueTimer - readyAt})` }}</button>
@@ -44,10 +47,12 @@ import Bridge from '@/client/play/events/bridge'
 import LobbyEvents from '@/client/play/events/lobby'
 
 import LobbyChat from '@/client/components/Lobby/Chat'
+import GameMaps from '@/client/components/Lobby/SelectionGroup/GameMaps'
 import GameSizes from '@/client/components/Lobby/SelectionGroup/GameSizes'
 
 export default {
 	components: {
+		GameMaps,
 		GameSizes,
 		LobbyChat,
 	},
@@ -57,6 +62,7 @@ export default {
 			baseUrl: process.env.BASE_URL,
 			queueTimer: 20,
 			selectedSize: 1,
+			selectedMap: null,
 			readyRequested: false,
 			readyAt: 0,
 			readyInterval: null,
@@ -187,16 +193,13 @@ export default {
 			}
 		},
 
-		onGameSize (size) {
-			this.selectedSize = size
-		},
 		onReady () {
 			this.readyRequested = !this.readyRequested
 		},
 
 		sendQueue () {
 			this.setReadyTimer(this.enoughPlayersForGame)
-			Bridge.emit('queue', { size: this.selectedSize, ready: this.readyRequested })
+			Bridge.emit('queue', { size: this.selectedSize, map: this.selectedMap, ready: this.readyRequested })
 		},
 
 		onNotifications () {

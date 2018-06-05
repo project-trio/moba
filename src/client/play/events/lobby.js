@@ -91,11 +91,11 @@ export default {
 				//   window.alert('Game not found')
 				// }
 				warn('Game not found', data)
-				Local.game = new Game(data.gid, data.mode, data.size, data.map)
-			} else {
-				// p('Start game', data)
+				Local.game = new Game(data.gid, data.mode, data.size)
 			}
+			Local.game.setMap(data.map)
 			Local.game.updatePlayers(data)
+
 			if (Local.game.playerForId(store.state.playerId)) {
 				router.replace({ name: 'Game' })
 			} else {

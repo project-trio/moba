@@ -1,17 +1,22 @@
 const Socket = require('socket.io')
 
+const { randomItem } = require.main.require('../common/utils')
+
 //LOCAL
 
 const queuedPlayers = []
 
-const remove = function (player) {
+const removePlayer = function (player, index) {
 	player.queueing = false
-	const index = queuedPlayers.indexOf(player)
+	if (index === undefined) {
+		index = queuedPlayers.indexOf(player)
+	}
 	if (index === -1) {
 		console.error('UNKNOWN QUEUE PLAYER', player)
-		return
+		return false
 	}
 	queuedPlayers.splice(index, 1)
+	return true
 }
 
 //PUBLIC
@@ -35,7 +40,7 @@ module.exports = {
 		const maxCountSize = 10
 		const queuedSizes = new Array(maxCountSize).fill(0).map((_, idx) => { return (idx + 1) * 2 })
 		const readiedCounts = [...queuedSizes]
-		for (let idx = queuedCount - 1; idx >= 0; idx -= 1) {
+		for (let idx = 0; idx < queuedCount; idx += 1) {
 			const player = queuedPlayers[idx]
 			for (let size = maxCountSize; size >= player.queueMin; size -= 1) {
 				queuedSizes[size - 1] -= 1
@@ -50,10 +55,16 @@ module.exports = {
 				const map = size <= 2 ? 'tiny' : size <= 3 ? 'small' : size <= 6 ? 'standard' : 'large'
 				const game = new Game('pvp', size, map, true)
 
-				for (let idx = queuedCount - 1; idx >= 0; idx -= 1) {
+				const requestedMaps = []
+				for (let idx = 0; idx < queuedCount; idx += 1) {
 					const player = queuedPlayers[idx]
 					if (player.queueReady && player.queueMin <= size) {
-						remove(player)
+						if (removePlayer(player, idx)) {
+							idx -= 1
+						}
+						if (player.queueMap) {
+							requestedMaps.push(player.queueMap)
+						}
 						const joinData = game.add(player)
 						if (joinData.error) {
 							player.emit('queue', { error: joinData.error })
@@ -64,6 +75,9 @@ module.exports = {
 							break
 						}
 					}
+				}
+				if (requestedMaps.length) {
+					game.setMap(randomItem(requestedMaps))
 				}
 
 				return this.update()
@@ -79,7 +93,7 @@ module.exports = {
 	remove (player) {
 		player.leave('queue')
 		if (player.queueing) {
-			remove(player)
+			removePlayer(player)
 			this.update()
 		}
 	},

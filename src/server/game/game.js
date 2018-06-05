@@ -15,24 +15,19 @@ const games = []
 class Game {
 
 	constructor (mode, size, map, autoStart) {
-		const mapData = CommonMaps[map]
 		this.players = []
 		this.counts = [0, 0]
 		this.id = Util.uid()
 		this.mode = mode
 		this.botMode = mode === 'bots'
 		this.size = size
-		this.map = map
-		this.retro = map === 'retro'
-		this.mapWidth = mapData.width
-		this.mapHeight = mapData.height
 		this.game = null
 		this.state = 'OPEN'
 		this.serverUpdate = 0
 		this.idleCount = 0
 		this.started = false
 		this.hostId = null
-		this.autoStart = autoStart
+		this.autoStart = autoStart ? 1 : 0
 
 		console.log('Created game', this.id)
 		games.push(this)
@@ -43,7 +38,7 @@ class Game {
 			for (let teamIndex = 0; teamIndex < size; teamIndex += 1) {
 				const player = new Player(null)
 				this.players.push(player)
-				player.resetGame(botTeam, teamIndex, this.retro)
+				player.resetGame(botTeam, teamIndex)
 			}
 			if (CommonConsts.TESTING || size >= 10) {
 				botTeam = 0
@@ -51,10 +46,12 @@ class Game {
 				for (let teamIndex = 0; teamIndex < size - 1; teamIndex += 1) {
 					const player = new Player(null)
 					this.players.push(player)
-					player.resetGame(botTeam, teamIndex, this.retro)
+					player.resetGame(botTeam, teamIndex)
 				}
 			}
 		}
+
+		this.setMap(map)
 	}
 
 //PRIVATE
@@ -87,6 +84,17 @@ class Game {
 	}
 
 //STATE
+
+	setMap (map) {
+		const mapData = CommonMaps[map]
+		this.map = map
+		this.retro = map === 'retro'
+		this.mapWidth = mapData.width
+		this.mapHeight = mapData.height
+		for (const player of this.players) {
+			player.setRetro(this.retro)
+		}
+	}
 
 	canStart () {
 		if (this.botMode) {
@@ -125,7 +133,7 @@ class Game {
 			const teamSize = this.counts[team]
 			this.counts[team] += 1
 			this.players.push(player)
-			player.resetGame(team, teamSize, this.retro)
+			player.resetGame(team, teamSize)
 
 			if (this.checkFull()) {
 				this.state = 'FULL'

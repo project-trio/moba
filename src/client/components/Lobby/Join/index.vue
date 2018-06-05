@@ -104,7 +104,7 @@ export default {
 					warn('Game already exists', data)
 				} else {
 					// p('join', data)
-					const newGame = new Game(data.gid, data.mode, data.size, data.map)
+					const newGame = new Game(data.gid, data.mode, data.size)
 					newGame.updatePlayers(data)
 					Local.game = newGame
 				}

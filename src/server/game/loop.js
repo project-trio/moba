@@ -90,8 +90,12 @@ const loop = function () {
 			game.broadcast('update', { update: currentUpdate, actions: actionData })
 			game.serverUpdate = currentUpdate + 1
 		} else if (game.autoStart && game.checkFull()) {
-			game.start()
-			lobby.broadcastWith(false, true)
+			if (game.autoStart > 1) {
+				game.start()
+				lobby.broadcastWith(false, true)
+			} else {
+				game.autoStart += 1
+			}
 		}
 	}
 

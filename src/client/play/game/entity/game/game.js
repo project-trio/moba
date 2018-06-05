@@ -11,7 +11,7 @@ import Player from '@/client/play/game/entity/game/player'
 
 import Unit from '@/client/play/game/entity/unit/unit'
 
-export default function (gid, mode, size, mapName) {
+export default function (gid, mode, size) {
 	let players = []
 
 	let updateCount = 0
@@ -33,14 +33,6 @@ export default function (gid, mode, size, mapName) {
 	this.finished = false
 	this.serverUpdate = -1
 	this.bots = mode === 'bots'
-	this.retro = mapName === 'retro'
-
-	store.state.game.playing = false
-	store.state.game.retro = this.retro
-	if (this.retro) {
-		store.state.local.skills.levels = [1, 1, 1]
-		store.state.local.skills.leveled = 1
-	}
 
 	// Update
 
@@ -226,7 +218,7 @@ export default function (gid, mode, size, mapName) {
 
 		const gameContainer = Render.group()
 		this.container = gameContainer
-		this.map = new GameMap(mapName, gameContainer)
+		this.map = new GameMap(this.mapName, gameContainer)
 		Render.add(gameContainer)
 
 		ticksPerUpdate = updateDuration / tickDuration
@@ -304,6 +296,16 @@ export default function (gid, mode, size, mapName) {
 			store.state.game.host = gameData.host
 		}
 		store.state.game.ready = gameData.ready
+	}
+
+	this.setMap = function (mapName) {
+		this.mapName = mapName
+		this.retro = mapName === 'retro'
+		store.state.game.retro = this.retro
+		if (this.retro) {
+			store.state.local.skills.levels = [1, 1, 1]
+			store.state.local.skills.leveled = 1
+		}
 	}
 
 }
