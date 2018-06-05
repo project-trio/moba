@@ -28,6 +28,9 @@ class Ship extends Movable {
 
 	constructor (name, player, team, x, y, angle, isLocal, retro) {
 		const statBase = (retro ? retroShipStats : shipStats)[name]
+		if (!statBase) {
+			return console.error('No stats', name, retro)
+		}
 		super(team, statBase, 2, x, y, angle, isLocal)
 
 		this.skills = {

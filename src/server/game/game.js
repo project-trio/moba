@@ -33,20 +33,19 @@ class Game {
 		games.push(this)
 
 		if (this.botMode) {
-			let botTeam = 1
-			this.counts[botTeam] = size
+			const firstTeam = 1 //SAMPLE
+			this.counts[firstTeam] = size
 			for (let teamIndex = 0; teamIndex < size; teamIndex += 1) {
 				const player = new Player(null)
 				this.players.push(player)
-				player.resetGame(botTeam, teamIndex)
+				player.resetGame(firstTeam, teamIndex)
 			}
 			if (CommonConsts.TESTING || size >= 10) {
-				botTeam = 0
-				this.counts[botTeam] = size - 1
+				this.counts[1 - firstTeam] = size - 1
 				for (let teamIndex = 0; teamIndex < size - 1; teamIndex += 1) {
 					const player = new Player(null)
 					this.players.push(player)
-					player.resetGame(botTeam, teamIndex)
+					player.resetGame(1 - firstTeam, teamIndex)
 				}
 			}
 		}

@@ -90,7 +90,7 @@ export default {
 		onGameMode (mode) {
 			this.selectedMode = mode
 			if (!this.pvpMode) {
-				this.onGameSize(1)
+				this.selectedSize = 1
 			}
 		},
 
