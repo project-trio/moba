@@ -29,9 +29,6 @@ class Game {
 		this.hostId = null
 		this.autoStart = autoStart ? 1 : 0
 
-		console.log('Created game', this.id)
-		games.push(this)
-
 		if (this.botMode) {
 			const firstTeam = 1 //SAMPLE
 			this.counts[firstTeam] = size
@@ -41,16 +38,20 @@ class Game {
 				player.resetGame(firstTeam, teamIndex)
 			}
 			if (CommonConsts.TESTING || size >= 10) {
-				this.counts[1 - firstTeam] = size - 1
+				const secondTeam = 1 - firstTeam
+				this.counts[secondTeam] = size - 1
 				for (let teamIndex = 0; teamIndex < size - 1; teamIndex += 1) {
 					const player = new Player(null)
 					this.players.push(player)
-					player.resetGame(1 - firstTeam, teamIndex)
+					player.resetGame(secondTeam, teamIndex)
 				}
 			}
 		}
 
 		this.setMap(map)
+
+		console.log('Created game', this.id, mode, size, map)
+		games.push(this)
 	}
 
 //PRIVATE

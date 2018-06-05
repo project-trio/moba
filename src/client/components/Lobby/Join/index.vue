@@ -100,14 +100,10 @@ export default {
 			} else {
 				this.size = data.size
 				this.map = data.map
-				if (Local.game) {
-					warn('Game already exists', data)
-				} else {
-					// p('join', data)
-					const newGame = new Game(data.gid, data.mode, data.size)
-					newGame.updatePlayers(data)
-					Local.game = newGame
-				}
+				// p('join', data)
+				const newGame = new Game(data.gid, data.mode, data.size)
+				newGame.updatePlayers(data)
+				Local.game = newGame
 			}
 		})
 	},
