@@ -134,6 +134,7 @@ class Game {
 			this.counts[team] += 1
 			this.players.push(player)
 			player.resetGame(team, teamSize)
+			player.setRetro(this.retro)
 
 			if (this.checkFull()) {
 				this.state = 'FULL'
