@@ -125,7 +125,7 @@ export default {
 				return 120
 			},
 			start (index, level, ship) {
-				ship.modify(this.name, 'attackCooldown', 'multiply', Float.add(1, Float.divide(this.getEffectAttackSpeed(level), 100)))
+				ship.modify(this.name, 'attackCooldown', 'multiply', Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100)))
 				ship.overloadMesh = Render.outline(ship.top.children[0], 0xffcc00, 1.07)
 			},
 			end (ship) {
@@ -151,11 +151,11 @@ export default {
 				return 200
 			},
 			start (index, level, ship) {
-				ship.modify(this.name, 'attackPierce', 'add', this.getEffectPierce(level))
+				this.attackPierceBonus = this.getEffectPierce(level)
 				ship.pierceMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
 			end (ship) {
-				ship.modify(this.name, 'attackPierce', null)
+				this.attackPierceBonus = null
 				if (ship.pierceMesh) {
 					Render.remove(ship.pierceMesh)
 					ship.pierceMesh = null

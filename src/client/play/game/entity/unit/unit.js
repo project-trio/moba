@@ -40,6 +40,7 @@ class Unit {
 		this.disableAttacking = this.static
 		this.untargetable = this.static
 		this.stunnedUntil = 0
+		this.attackPierceBonus = 0
 
 		this.fogRadius = null
 		this.fogCircle = null
@@ -245,8 +246,8 @@ class Unit {
 		if (!statModifiers) {
 			return console.error('Invalid modifier', modifierKey, statName, value)
 		}
-		const updatingModifier = modifierKey !== null
-		if (updatingModifier) {
+		const changingModifier = modifierKey !== null
+		if (changingModifier) {
 			const oldIndex = this.modifierIndex(statName, modifierKey)
 			if (method === null) {
 				if (oldIndex !== -1) {
@@ -279,7 +280,7 @@ class Unit {
 		} else if (statName === 'sightRange') {
 			this.sightRangeCheck = Util.squared(result)
 		}
-		if (updatingModifier && this.selected) {
+		if (changingModifier && this.selected) {
 			store.modifierStats(this)
 		}
 	}
@@ -684,7 +685,7 @@ class Unit {
 	attack (enemy, renderTime) {
 		this.lastAttack = renderTime
 		if (!this.stats.bulletSpeed) {
-			enemy.takeDamage(this, renderTime, this.stats.attackDamage, this.stats.attackPierce)
+			enemy.takeDamage(this, renderTime, this.stats.attackDamage, this.stats.attackPierce + this.attackPierceBonus)
 		} else {
 			new Bullet(this, enemy, this.stats, this.px, this.py, this.base.rotation.z, this.stats.bulletOffset) //TODO top rotation
 		}

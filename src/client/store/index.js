@@ -187,7 +187,7 @@ export default {
 		const stats = this.state.selectedStats
 		stats.level = unit.level
 		stats.healthMax = unit.stats.healthMax / 100
-		stats.pierce = unit.stats.attackPierce
+		stats.pierce = unit.stats.attackPierce + unit.attackPierceBonus
 		stats.range = unit.stats.attackRange / 100
 		if (unit.maxLevel) {
 			stats.levelProgress = null
