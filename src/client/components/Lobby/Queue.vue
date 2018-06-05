@@ -61,7 +61,7 @@ export default {
 		return {
 			baseUrl: process.env.BASE_URL,
 			queueTimer: 20,
-			selectedSize: 1,
+			selectedSize: 2,
 			selectedMap: null,
 			readyRequested: false,
 			readyAt: 0,
