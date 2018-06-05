@@ -58,7 +58,7 @@ export default {
 			return store.state.signin.username
 		},
 		isMod () {
-			return this.username === 'kiko ' || this.username === 'mods'
+			return this.username === 'kiko ' || this.username === 'mod'
 		},
 
 		gameModes () {

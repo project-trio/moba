@@ -243,7 +243,7 @@ export default {
 				return levelMultiplier(15, level, 12)
 			},
 			levelup (index, level, ship) {
-				const moveSpeed = Float.divide(this.getEffectMoveSpeed(level), 10)
+				const moveSpeed = Float.divide(this.getEffectMoveSpeed(level), 15)
 				ship.modify(this.name, 'moveSpeed', 'add', moveSpeed)
 			},
 		},
@@ -331,6 +331,7 @@ export default {
 			name: 'Boost',
 			description: 'Boost attack speed [[AttackSpeed]], and movement speed by [[MoveSpeed]]',
 			suffixAttackSpeed: '%',
+			factorMoveSpeed: 10,
 			target: TARGET_SELF,
 			endOnDeath: true,
 			getEffectAttackSpeed (level) {

@@ -138,7 +138,7 @@ button.big
 	display block
 	margin 16px auto
 	padding 0 16px
-	border-radius 3px
+	border-radius 5px
 
 button.outlined
 	background none

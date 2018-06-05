@@ -919,7 +919,7 @@ export default {
 				return levelMultiplier(160, level, 30)
 			},
 			getEffectRange (level) {
-				return levelMultiplier(140, level, 20)
+				return levelMultiplier(80, level, 20)
 			},
 			getDuration (level) {
 				return levelMultiplier(25, level, 5)
