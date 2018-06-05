@@ -1,17 +1,19 @@
 <template>
 <div class="lobby-create inherit scrolls">
-	<h1>create game</h1>
+	<h1>{{ isMod ? 'create game' : 'training bots' }}</h1>
 	<div v-if="loading">
 		...
 	</div>
 	<div v-else>
-		<h3>game type:</h3>
-		<selection-group>
-			<button v-for="mode in gameModes" @click="onGameMode(mode)" class="selection interactive" :class="{ selected: mode === selectedMode }" :key="mode.name">{{ mode.name }}</button>
-			<div class="mode-description">
-				{{ selectedMode.description }}
-			</div>
-		</selection-group>
+		<div v-if="isMod">
+			<h3>game type:</h3>
+			<selection-group>
+				<button v-for="mode in gameModes" @click="onGameMode(mode)" class="selection interactive" :class="{ selected: mode === selectedMode }" :key="mode.name">{{ mode.name }}</button>
+				<div class="mode-description">
+					{{ selectedMode.description }}
+				</div>
+			</selection-group>
+		</div>
 		<h3>{{ pvpMode ? 'max players' : 'game size' }}:</h3>
 		<game-sizes @select="selectedSize = $event" :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="pvpMode" />
 		<h3>map:</h3>
@@ -23,6 +25,7 @@
 
 <script>
 import router from '@/client/router'
+import store from '@/client/store'
 
 import CommonConsts from '@/common/constants'
 
@@ -51,6 +54,13 @@ export default {
 	},
 
 	computed: {
+		username () {
+			return store.state.signin.username
+		},
+		isMod () {
+			return this.username === 'kiko ' || this.username === 'mods'
+		},
+
 		gameModes () {
 			return CommonConsts.GAME_MODES
 		},
@@ -68,6 +78,12 @@ export default {
 			sizes.push(25)
 			return sizes
 		},
+	},
+
+	created () {
+		if (!this.isMod) {
+			this.selectedMode = 'bots'
+		}
 	},
 
 	methods: {

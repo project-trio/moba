@@ -5,7 +5,7 @@
 	<h3>hello {{ username }}!</h3>
 	<div>{{ playersOnline }} online</div>
 	<router-link :to="{ name: 'Queue' }" tag="button" class="big interactive">enter queue</router-link>
-	<router-link :to="{ name: 'Create' }" tag="button" class="big interactive outlined">create game</router-link>
+	<router-link :to="{ name: 'Create' }" tag="button" class="big interactive outlined">{{ isMod ? 'create game' : 'training bots' }}</router-link>
 	<div>
 		<router-link v-for="game in games" :to="{ name: 'Join', params: { gid: game.id } }" tag="div" class="list-game interactive" :key="game.id">
 			<div>{{ game.mode }} game - {{ game.state }}</div>
@@ -30,6 +30,10 @@ export default {
 	computed: {
 		username () {
 			return store.state.signin.username
+		},
+
+		isMod () {
+			return this.username === 'kiko ' || this.username === 'mod'
 		},
 
 		playersOnline () {
