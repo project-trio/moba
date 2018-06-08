@@ -559,7 +559,7 @@ export default {
 .skill-item:hover:active button
 	transform scale(0.9)
 
-@media (max-width: 1023px)
+@media (max-width: 900px)
 	.skill-item .skill-label
 		display none
 </style>

@@ -97,7 +97,7 @@ export default {
 @media (max-width: 767px)
 	.minimap
 		display none
-@media (max-width: 1023px)
+@media (max-width: 900px)
 	.skills-bar
 		background none
 	.player-info
