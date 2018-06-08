@@ -66,7 +66,7 @@ export default {
 		},
 
 		pvpMode () {
-			return this.selectedMode === CommonConsts.GAME_MODES[0]
+			return this.selectedMode === this.gameModes[0]
 		},
 
 		gameSizes () {
@@ -82,7 +82,7 @@ export default {
 
 	created () {
 		if (!this.isMod) {
-			this.selectedMode = 'bots'
+			this.selectedMode = this.gameModes[1]
 		}
 	},
 
