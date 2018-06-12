@@ -170,6 +170,7 @@ export default {
 		renderer = null
 		pixelMultiplier = null
 		voxelCache = null
+		usePerspectiveCamera = null
 
 		audioListener = null
 		gameSound = null
