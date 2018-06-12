@@ -121,6 +121,9 @@ h3
 .bold
 	font-weight 600
 
+.capitalize
+	text-transform capitalize
+
 button
 	border 0
 	padding 0

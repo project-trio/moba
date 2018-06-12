@@ -85,8 +85,7 @@ export default {
 		if (canvas) {
 			util.removeListener(canvas, 'mousedown', onMouseDown)
 			util.removeListener(canvas, 'mousemove', onMouseMove)
-			util.removeListener(canvas, 'mouseup', onMouseCancel)
-			util.removeListener(canvas, 'mouseleave', onMouseCancel)
+			util.removeListener(canvas, 'mouseup', onMouseUp)
 		}
 
 		renderer = null

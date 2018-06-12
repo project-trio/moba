@@ -1,6 +1,6 @@
 <template>
 <div class="player-info">
-	<div class="bold">{{ stats.name }}</div>
+	<div class="bold capitalize">{{ stats.name }}</div>
 	<div>{{ healthDescription }}</div>
 	<div v-if="stats.level">{{ levelProgress }}</div>
 	<div>
