@@ -314,7 +314,7 @@ class Unit {
 	}
 
 	setSelection (color) {
-		const isVisible = color != null
+		const isVisible = color !== null
 		this.selectionIndicator.visible = isVisible
 		if (isVisible) {
 			this.selectionIndicator.material.color.setHex(color)
@@ -398,7 +398,7 @@ class Unit {
 		this.py = y * 100
 		this.container.position.set(x, y, 0)
 
-		const angle = this.startAngle || (-Math.PI * 1.5 * (this.team == 0 ? -1 : 1))
+		const angle = this.startAngle || (-Math.PI * 1.5 * (this.team === 0 ? -1 : 1))
 		this.top.rotation.z = angle
 		this.base.rotation.z = angle
 	}
@@ -456,7 +456,7 @@ class Unit {
 	}
 
 	updateHealth (newHealth) {
-		if (newHealth != null) {
+		if (newHealth !== null) {
 			if (!Number.isInteger(newHealth)) { //TODO debug only
 				console.error('newHealth', newHealth)
 			}
@@ -520,7 +520,7 @@ class Unit {
 			}
 		}
 		const newHealth = Math.max(this.healthRemaining - dealDamage, 0)
-		if (newHealth == 0) {
+		if (newHealth === 0) {
 			this.isDying = true
 		}
 		this.updateHealth(newHealth)

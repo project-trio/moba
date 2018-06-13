@@ -1,6 +1,6 @@
 module.exports = {
 
-	TESTING: process.env.NODE_ENV != 'production',
+	TESTING: process.env.NODE_ENV !== 'production',
 
 	seconds () {
 		return Math.round(Date.now() * 0.001)

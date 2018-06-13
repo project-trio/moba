@@ -124,7 +124,7 @@ class Mini extends Movable {
 			}
 		} else {
 			this.getAttackTarget(Unit.all())
-			if (!this.attackTarget) {
+			if (!this.attackTarget && this.currentDest) {
 				this.setDestination(this.currentDest[0], this.currentDest[1], false)
 				this.returningToPath = true
 			}
@@ -133,10 +133,6 @@ class Mini extends Movable {
 
 	blocked (_bx, _by) {
 		return false
-	}
-
-	shouldMove () {
-		return this.currentDest != null && super.shouldMove()
 	}
 
 	die () {

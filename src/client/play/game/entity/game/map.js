@@ -289,7 +289,7 @@ const GameMap = function (mapName, parent) {
 				mirrored = !mirrored
 				for (let team = 0; team < 2; team += 1) {
 					const firstTeam = team === 0
-					const tx = firstTeam != mirrored ? mapWidth - ox : ox
+					const tx = firstTeam !== mirrored ? mapWidth - ox : ox
 					const ty = firstTeam ? mapHeight - oy : oy
 					new Tower(team, towerType, tx, ty, retro)
 				}

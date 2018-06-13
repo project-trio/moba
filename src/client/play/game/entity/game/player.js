@@ -23,14 +23,14 @@ export default class Player {
 
 	spawnLocation () {
 		let sx, sy
-		const teamMp = this.team == 0 ? 1 : -1
+		const teamMp = this.team === 0 ? 1 : -1
 		const mapWidthHalf = Local.game.map.centerX()
 		const mapHeightHalf = Local.game.map.centerY()
 		if (Local.game.retro) {
 			const offset = 72
 			sx = mapWidthHalf + (8 + offset * (this.teamIndex + 1)) * teamMp
 		} else {
-			const indexMp = this.teamIndex % 2 == 0 ? -1 : 1
+			const indexMp = this.teamIndex % 2 === 0 ? -1 : 1
 			const offset = 76
 			sx = mapWidthHalf + offset * (Math.floor(this.teamIndex / 2) + 1) * indexMp * teamMp
 		}

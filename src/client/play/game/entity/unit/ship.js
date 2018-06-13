@@ -573,7 +573,7 @@ class Ship extends Movable {
 
 		this.updateModifiers()
 
-		this.updateHealth()
+		this.updateHealth(null)
 
 		if (this.selected) {
 			store.levelUpStats(this)

@@ -394,7 +394,7 @@ export default {
 		const segments = Math.ceil(radius / 16) * 8
 		const geometry = new THREE.CircleBufferGeometry(radius, segments)
 		const material = new THREE.MeshBasicMaterial({ color: options.color })
-		if (options.opacity != null) {
+		if (options.opacity !== undefined) {
 			material.transparent = true
 			material.opacity = options.opacity
 		}
@@ -408,7 +408,7 @@ export default {
 		const segments = options.segments || Math.ceil(innerRadius / 16) * 8
 		const geometry = new THREE.RingBufferGeometry(innerRadius, innerRadius + size, segments)
 		const material = options.team !== undefined ? teamMaterials[options.team] : new THREE.MeshBasicMaterial({ color: options.color })
-		if (options.opacity != null) {
+		if (options.opacity !== undefined) {
 			material.transparent = true
 			material.opacity = options.opacity
 		}
