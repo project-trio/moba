@@ -175,6 +175,14 @@ class Unit {
 		allUnits.push(this)
 	}
 
+	playSound (buffer) {
+		if (!buffer) {
+			return console.error('playSound')
+		}
+		this.audio.setBuffer(buffer)
+		this.audio.play()
+	}
+
 	allyNotLocal () {
 		return this.localAlly
 	}
@@ -682,12 +690,15 @@ class Unit {
 	//   return this.attackableStatus(unit) && this.inRangeFor(unit)
 	// }
 
-	attack (enemy, renderTime) {
+	attack (enemy, renderTime, sound) {
 		this.lastAttack = renderTime
 		if (!this.stats.bulletSpeed) {
 			enemy.takeDamage(this, renderTime, this.stats.attackDamage, this.stats.attackPierce + this.attackPierceBonus)
 		} else {
 			new Bullet(this, enemy, this.stats, this.px, this.py, this.base.rotation.z, this.stats.bulletOffset) //TODO top rotation
+			if (sound) {
+				this.playSound(sound)
+			}
 		}
 	}
 

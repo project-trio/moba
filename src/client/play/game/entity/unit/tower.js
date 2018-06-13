@@ -1,3 +1,5 @@
+import * as THREE from 'three'
+
 import store from '@/client/store'
 
 import towersData from '@/client/play/data/towers'
@@ -6,8 +8,20 @@ import retroTowersData from '@/client/play/data/towers-retro'
 import Local from '@/client/play/local'
 
 import Render from '@/client/play/render/render'
+import RenderSound from '@/client/play/render/sound'
 
 import Unit from '@/client/play/game/entity/unit/unit'
+
+//AUDIO
+
+const audioLoader = new THREE.AudioLoader()
+let attackAllyBuffer, attackEnemyBuffer
+audioLoader.load(require('@/client/assets/sounds/switch1.wav'), (buffer) => {
+	attackAllyBuffer = buffer
+})
+audioLoader.load(require('@/client/assets/sounds/switch2.wav'), (buffer) => {
+	attackEnemyBuffer = buffer
+})
 
 //CLASS
 
@@ -36,6 +50,8 @@ class Tower extends Unit {
 		this.isBlocking = true
 		this.model.position.z = stats.z
 		this.height = 50 + stats.z
+
+		this.audio = RenderSound.positional(this.top)
 	}
 
 	// Aim
@@ -76,6 +92,10 @@ class Tower extends Unit {
 			this.targetedAt = target ? closest : null
 		}
 		return target
+	}
+
+	attack (enemy, renderTime) {
+		super.attack(enemy, renderTime, this.localAlly ? attackAllyBuffer : attackEnemyBuffer)
 	}
 
 	// Damage

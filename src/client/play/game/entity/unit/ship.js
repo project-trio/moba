@@ -1,3 +1,5 @@
+import * as THREE from 'three'
+
 import store from '@/client/store'
 
 import Local from '@/client/play/local'
@@ -8,11 +10,24 @@ import skillsData from '@/client/play/data/skills'
 import retroSkillsData from '@/client/play/data/skills-retro'
 
 import Render from '@/client/play/render/render'
+import RenderSound from '@/client/play/render/sound'
 
 import Util from '@/client/play/game/util'
 
 import Movable from '@/client/play/game/entity/unit/movable'
 import Unit from '@/client/play/game/entity/unit/unit'
+
+//AUDIO
+
+const audioLoader = new THREE.AudioLoader()
+
+let attackAllyBuffer, attackEnemyBuffer
+audioLoader.load(require('@/client/assets/sounds/pop1.wav'), (buffer) => {
+	attackAllyBuffer = buffer
+})
+audioLoader.load(require('@/client/assets/sounds/pop2.wav'), (buffer) => {
+	attackEnemyBuffer = buffer
+})
 
 //LOCAL
 
@@ -65,7 +80,7 @@ class Ship extends Movable {
 		this.timeOfDeath = -9000
 		this.respawned = true
 		this.isBlocking = false
-		this.reemergeAt = Local.TESTING ? 1000 : 4000
+		this.reemergeAt = Local.TESTING ? 1000 : 4000 //SAMPLE
 		this.modify('Spawn', 'moveSpeed', 'multiply', 2)
 
 		this.queuedForActivation = [false, false, false]
@@ -78,6 +93,8 @@ class Ship extends Movable {
 		const scores = { pid: player.id, level: this.level, kills: 0, deaths: 0, damage: 0 }
 		store.state.game.ships.push(scores)
 		this.displayStats = scores
+
+		this.audio = RenderSound.positional(this.top)
 
 		// Unit
 
@@ -141,6 +158,9 @@ class Ship extends Movable {
 		super.move(timeDelta, tweening)
 
 		if (!tweening) {
+			// if (this.isLocal) { //SAMPLE
+			// 	this.playSound(attackAllyBuffer)
+			// }
 			if (this.isBlocked && this.onStopped) {
 				this.onStopped()
 			}
@@ -178,6 +198,10 @@ class Ship extends Movable {
 		} else {
 			super.checkUpdateTarget(renderTime)
 		}
+	}
+
+	attack (enemy, renderTime) {
+		super.attack(enemy, renderTime, this.localAlly ? attackAllyBuffer : attackEnemyBuffer)
 	}
 
 	// Skills
@@ -285,6 +309,7 @@ class Ship extends Movable {
 			this.skills.actives[index] = endDurationAt
 			if (this.isLocal) {
 				store.state.local.skills.actives.splice(index, 1, endDurationAt)
+				RenderSound.activateSkill()
 			}
 		}
 		const cooldownDuration = skill.getCooldown(skillLevel) * 100
@@ -311,6 +336,9 @@ class Ship extends Movable {
 				const skillData = this.skills.data[index]
 				if (skillData.levelup) {
 					skillData.levelup(index, nextLevel, this)
+					if (this.isLocal && this.level > 1) {
+						RenderSound.activateSkill()
+					}
 				}
 
 				if (this.isLocal) {
@@ -452,6 +480,8 @@ class Ship extends Movable {
 			store.state.local.dead = true
 			store.state.local.reemergeAt = this.reemergeAt
 			store.state.local.skills.toggle = null
+
+			RenderSound.die()
 		}
 	}
 
@@ -486,6 +516,7 @@ class Ship extends Movable {
 		this.infoContainer.visible = true
 		if (this.isLocal) {
 			store.state.local.dead = false
+			RenderSound.respawn()
 		}
 	}
 
@@ -551,6 +582,7 @@ class Ship extends Movable {
 
 		if (this.isLocal) {
 			store.state.local.level = this.level
+			RenderSound.levelup()
 		}
 	}
 
