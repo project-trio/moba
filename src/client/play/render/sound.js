@@ -1,5 +1,7 @@
 import * as THREE from 'three'
 
+import store from '@/client/store'
+
 let audioListener
 let dieBuffer, respawnBuffer, levelupBuffer, activateBuffer
 let respawnSound, levelSound, skillsSound
@@ -22,7 +24,7 @@ export default {
 
 	create () {
 		audioListener = new THREE.AudioListener()
-		// audioListener.setMasterVolume(1)
+		this.setVolume(store.state.settings.soundVolume)
 
 		const audioLoader = new THREE.AudioLoader()
 		audioLoader.load(require('@/client/assets/sounds/fizzle1.wav'), (buffer) => {
@@ -54,6 +56,10 @@ export default {
 		respawnSound = null
 		levelSound = null
 		skillsSound = null
+	},
+
+	setVolume (value) {
+		audioListener.setMasterVolume(value / 100)
 	},
 
 	levelup () {

@@ -26,6 +26,10 @@
 			<button @click="onOutline" class="interactive">{{ outline ? 'On' : 'Off' }}</button>
 			<div class="label">Outline effect</div>
 		</div>
+		<div class="setting">
+			<button @click="onSoundVolume" class="interactive">{{ soundVolume ? `${soundVolume}%` : 'Off '}}</button>
+			<div class="label">Sound</div>
+		</div>
 	</div>
 </div>
 </template>
@@ -64,6 +68,10 @@ export default {
 		outline () {
 			return store.state.settings.outline
 		},
+
+		soundVolume () {
+			return store.state.settings.soundVolume
+		},
 	},
 
 	methods: {
@@ -89,6 +97,10 @@ export default {
 
 		onOutline () {
 			store.applySetting('outline', !this.outline, false)
+		},
+
+		onSoundVolume () {
+			store.applySetting('soundVolume', (this.soundVolume + 50) % 150, false)
 		},
 	},
 }

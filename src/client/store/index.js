@@ -3,6 +3,7 @@ import storage from '@/client/helpers/storage'
 import Local from '@/client/play/local'
 
 import render from '@/client/play/render/render'
+import RenderSound from '@/client/play/render/sound'
 
 import Unit from '@/client/play/game/entity/unit/unit'
 
@@ -79,6 +80,7 @@ export default {
 			fullResolution: storage.getInt('fullResolution', false),
 			shadows: storage.getInt('shadows', 2),
 			outline: storage.getBool('outline', false),
+			soundVolume: storage.getInt('soundVolume', 0),
 		},
 
 		lobby: {
@@ -145,6 +147,8 @@ export default {
 		if (toggle !== null) {
 			if (name === 'outline') {
 				render.toggleOutline(value)
+			} else if (name === 'soundVolume') {
+				RenderSound.setVolume(value)
 			} else if (!toggle) {
 				render.resize()
 			} else {
