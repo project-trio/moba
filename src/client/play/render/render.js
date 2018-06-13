@@ -11,6 +11,7 @@ import OutlineEffect from '@/client/play/external/OutlineEffect'
 import pointer from '@/client/play/render/pointer'
 import RenderFog from '@/client/play/render/fog'
 import RenderMinimap from '@/client/play/render/minimap'
+import RenderSound from '@/client/play/render/sound'
 
 THREE.Cache.enabled = true
 
@@ -21,7 +22,7 @@ const CAMERA_HEIGHT = 256 / (CAMERA_FOV / 180)
 
 let gameScene, renderer, outlineEffect, gameLight
 let gameCamera, perspectiveCamera, orthoCamera
-let audioListener, gameSound, audioLoader
+let audioListener
 let pixelMultiplier = null
 let usePerspectiveCamera = null
 
@@ -55,7 +56,7 @@ const resize = function () {
 			gameCamera.position.y = oldY
 		}
 		gameCamera.position.z = CAMERA_HEIGHT
-		// gameCamera.add(audioListener) //TODO
+		gameCamera.add(audioListener)
 	}
 
 	let newPixelMultiplier = window.devicePixelRatio / (store.state.settings.fullResolution ? 1 : 2)
@@ -149,12 +150,10 @@ export default {
 		gameLight.shadow.mapSize.width = 2048
 		gameLight.shadow.mapSize.height = 2048
 
+		audioListener = RenderSound.create(audioListener)
+
 		// const helper = new THREE.CameraHelper(gameLight.shadow.camera)
 		// gameScene.add(helper)
-
-		audioListener = new THREE.AudioListener()
-		gameSound = new THREE.Audio(audioListener)
-		audioLoader = new THREE.AudioLoader()
 
 		this.createRenderer()
 
@@ -173,16 +172,8 @@ export default {
 		usePerspectiveCamera = null
 
 		audioListener = null
-		gameSound = null
-		audioLoader = null
 		RenderMinimap.destroy()
-	},
-
-	playSound (name) {
-		audioLoader.load(`${name}.mp3`, (buffer) => {
-			gameSound.setBuffer(buffer)
-			gameSound.play()
-		})
+		RenderSound.destroy()
 	},
 
 	positionCamera (x, y) {
@@ -278,11 +269,6 @@ export default {
 		mesh.castShadow = true
 		mesh.receiveShadow = true
 		mesh.owner = options.owner
-		if (options.audio) {
-			const audio = new THREE.PositionalAudio(audioListener)
-			mesh.add(audio)
-			mesh.owner.audio = audio
-		}
 		return mesh
 	},
 
