@@ -90,10 +90,11 @@ class Mini extends Movable {
 			if (nextDest[2] && this.pathFlip === this.mirrored) {
 				nextDest[2] = -nextDest[2]
 			}
-			if ((this.team === 0) != this.pathFlip) {
+			const firstTeam = this.team === 0
+			if (firstTeam !== this.pathFlip) {
 				nextDest[1] = Local.game.map.height() - nextDest[1]
 			}
-			if (nextDest[3] && this.team === 1) {
+			if (!firstTeam && nextDest[3]) {
 				nextDest[3] = -nextDest[3]
 			}
 		}
@@ -106,7 +107,7 @@ class Mini extends Movable {
 		}
 		if (this.pathing) {
 			if (needsNewDestination) {
-				if (this.pathFlip || this.pathProgress == this.path.length - 1) {
+				if (this.pathFlip || this.pathProgress === this.path.length - 1) {
 					this.pathProgress -= 1
 					if (this.pathProgress < 0) {
 						return false
@@ -157,10 +158,11 @@ class Mini extends Movable {
 	getAttackTarget (units) {
 		let closest = this.sightRangeCheck
 		let target = null
+		const team = this.team, px = this.px, py = this.py
 		for (let idx = units.length - 1; idx >= 0; idx -= 1) {
 			const unit = units[idx]
-			if (this.attackableStatus(unit)) {
-				const dist = this.distanceTo(unit)
+			if (team !== unit.team && unit.targetableStatus()) {
+				const dist = unit.distanceToPoint(px, py)
 				if (dist < closest) {
 					target = unit
 					closest = dist

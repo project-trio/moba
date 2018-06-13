@@ -261,11 +261,11 @@ class Bullet {
 	// Collision
 
 	checkCollision (renderTime, units) {
+		const team = this.team, px = this.px, py = this.py
 		for (let idx = units.length - 1; idx >= 0; idx -= 1) {
 			const unit = units[idx]
-			if (unit.hittableStatus() && unit.team !== this.team && (!unit.tower || this.hitsTowers)) {
-				const dist = Util.pointDistance(this.px, this.py, unit.px, unit.py)
-				// if (Util.withinSquared(dist, this.collisionSize + unit.stats.collision)) { //TODO support bullet size
+			if (team !== unit.team && unit.targetableStatus() && (!unit.tower || this.hitsTowers)) {
+				const dist = unit.distanceToPoint(px, py)
 				if (dist <= unit.collisionCheck * 2) {
 					if (!this.explosionRadius) {
 						this.unitTarget = unit

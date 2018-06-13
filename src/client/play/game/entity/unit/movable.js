@@ -114,7 +114,7 @@ class Movable extends Unit {
 		const units = Unit.all()
 		for (let idx = units.length - 1; idx >= 0; idx -= 1) {
 			const unit = units[idx]
-			if (unit.isBlocking && this.id != unit.id) {
+			if (this !== unit && unit.isBlocking) {
 				const dist = Util.pointDistance(bx, by, unit.px, unit.py)
 				if (Util.withinSquared(dist, collisionSize + unit.stats.collision)) {
 					return true

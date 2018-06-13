@@ -77,22 +77,19 @@ class AreaOfEffect {
 
 	apply (renderTime, units) {
 		const fromUnit = this.source
+		const positionUnit = this.withUnit ? fromUnit : this
+		const team = fromUnit.team, px = positionUnit.px, py = positionUnit.py
 		for (let idx = units.length - 1; idx >= 0; idx -= 1) {
 			const target = units[idx]
 			if (target.isDead || target.untargetable || (target.tower && !this.hitsTowers)) {
 				continue
 			}
-			const isAlly = fromUnit.alliedTo(target)
+			const isAlly = team === target.team
 			if (isAlly !== this.allies) {
 				continue
 			}
-			let distance
-			if (this.withUnit) {
-				distance = fromUnit.distanceTo(target)
-			} else {
-				distance = Util.pointDistance(this.px, this.py, target.px, target.py)
-			}
-			if (Util.withinSquared(distance, this.collisionSize + target.stats.collision)) {
+			const dist = target.distanceToPoint(px, py)
+			if (Util.withinSquared(dist, this.collisionSize + target.stats.collision)) {
 				if (this.modify) {
 					target.modifyData(renderTime, this.modify)
 				}

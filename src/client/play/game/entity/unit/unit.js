@@ -611,10 +611,10 @@ class Unit {
 	// Aim
 
 	angleTo (container, destAngle, timeDelta) {
-		let currAngle = container.rotation.z
+		const currAngle = container.rotation.z
+		const angleDiff = Util.distanceBetweenAngles(currAngle, destAngle)
+		const turnSpeed = this.stats.turnSpeed * timeDelta / 2000
 		let newAngle
-		let angleDiff = Util.distanceBetweenAngles(currAngle, destAngle)
-		let turnSpeed = this.stats.turnSpeed * timeDelta / 2000
 		if (Math.abs(angleDiff) < turnSpeed) {
 			newAngle = destAngle
 		} else {
@@ -649,16 +649,12 @@ class Unit {
 
 	// Visibility
 
-	inSightRange (unit) {
-		return this.distanceTo(unit) < this.sightRangeCheck
-	}
-
 	isGloballyVisible () {
 		return this.isDying || this.isFiring || this.renderInBackground
 	}
 
 	hasSightOf (unit) {
-		return !this.isDead && this.inSightRange(unit)
+		return !this.isDead && this.distanceTo(unit) < this.sightRangeCheck
 	}
 
 	canSee (enemy) {
@@ -667,28 +663,14 @@ class Unit {
 
 	// Attack
 
-	alliedTo (target) {
-		return this.team == target.team
-	}
-
 	inRangeFor (unit) {
 		const rangeCheck = this.targetingSkill ? this.targetingSkill.rangeCheck : this.attackRangeCheck
 		return this.distanceTo(unit) < rangeCheck
 	}
 
-	hittableStatus () {
-		return !this.isDead && !this.untargetable
-	}
 	targetableStatus () {
-		return !this.invisible && this.hittableStatus()
+		return !this.isDead && !this.untargetable && !this.invisible
 	}
-	attackableStatus (unit) {
-		return unit.targetableStatus() && !this.alliedTo(unit)
-	}
-
-	// canAttack (unit) {
-	//   return this.attackableStatus(unit) && this.inRangeFor(unit)
-	// }
 
 	attack (enemy, renderTime, sound) {
 		this.lastAttack = renderTime

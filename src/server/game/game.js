@@ -155,7 +155,7 @@ class Game {
 		this.players = {}
 
 		for (let idx = games.length - 1; idx >= 0; idx -= 1) {
-			if (games[idx].id === this.id) {
+			if (this === games[idx]) {
 				games.splice(idx, 1)
 				return
 			}
