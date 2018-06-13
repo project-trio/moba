@@ -27,7 +27,7 @@
 			<div class="label">Outline effect</div>
 		</div>
 		<div class="setting">
-			<button @click="onSoundVolume" class="interactive">{{ soundVolume ? `${soundVolume}%` : 'Off '}}</button>
+			<button @click="onSoundVolume" class="interactive">{{ soundVolume ? `${soundVolume}%` : 'Off ' }}</button>
 			<div class="label">Sound</div>
 		</div>
 	</div>
