@@ -20,4 +20,7 @@ export default {
 	height 200px
 	border-radius 4px 0 0 0
 	overflow hidden
+
+canvas
+	cursor move
 </style>
