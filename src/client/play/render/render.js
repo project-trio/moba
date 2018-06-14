@@ -66,20 +66,24 @@ const resize = function () {
 	}
 	renderer.setSize(width, height)
 
+	let visibleWidth, visibleHeight
 	if (usePerspectiveCamera) {
 		gameCamera.aspect = width / height
+		const visibleFOV = gameCamera.fov * Math.PI / 180
+		visibleHeight = 2 * Math.tan(visibleFOV / 2) * CAMERA_HEIGHT
+		visibleWidth = visibleHeight * gameCamera.aspect
 	} else {
 		const cameraZoom = height / 440
-		gameCamera.left = -width / cameraZoom
-		gameCamera.right = width / cameraZoom
-		gameCamera.top = height / cameraZoom
-		gameCamera.bottom = -height / cameraZoom
+		const zoomWidth = width / cameraZoom
+		const zoomHeight = height / cameraZoom
+		gameCamera.left = -zoomWidth
+		gameCamera.right = zoomWidth
+		gameCamera.top = zoomHeight
+		gameCamera.bottom = -zoomHeight
+		visibleWidth = zoomWidth * 2
+		visibleHeight = zoomHeight * 2
 	}
 	gameCamera.updateProjectionMatrix()
-
-	const visibleFOV = gameCamera.fov * Math.PI / 180
-	const visibleHeight = 2 * Math.tan(visibleFOV / 2) * gameCamera.position.z
-	const visibleWidth = visibleHeight * gameCamera.aspect
 	RenderMinimap.drawCameraOutline(visibleWidth, visibleHeight)
 }
 
