@@ -69,11 +69,11 @@ export default {
 			return store.state.game.players
 		},
 		teamPlayers () {
-			const result = [Array(this.size), Array(this.size)]
+			const results = [ [], [] ]
 			for (const player of this.players) {
-				result[player.team][player.teamIndex] = player
+				results[player.team].push(player)
 			}
-			return result
+			return results
 		},
 
 		url () {

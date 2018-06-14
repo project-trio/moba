@@ -64,16 +64,11 @@ export default {
 		},
 
 		teamPlayers () {
-			const result = [Array(this.size), Array(this.size)]
-			let foundPlayer = false
+			const results = [ [], [] ]
 			for (const player of this.players) {
-				result[player.team][player.teamIndex] = player
-				foundPlayer = true
+				results[player.team].push(player)
 			}
-			if (!foundPlayer) {
-				return [[], []]
-			}
-			return result
+			return results
 		},
 	},
 

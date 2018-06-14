@@ -9,8 +9,8 @@ module.exports = class Player {
 
 	constructor (client) {
 		this.bot = !client
+		this.client = client
 		if (client) {
-			this.client = client
 			this.id = client.pid
 			this.name = client.name
 		} else {
@@ -21,7 +21,6 @@ module.exports = class Player {
 
 		this.game = null
 		this.team = null
-		this.teamIndex = null
 		this.isActive = false
 
 		this.shipName = null
@@ -45,7 +44,6 @@ module.exports = class Player {
 			name: this.name,
 			shipName: this.shipName,
 			team: this.team,
-			teamIndex: this.teamIndex,
 		}
 	}
 
@@ -55,10 +53,8 @@ module.exports = class Player {
 		}
 	}
 
-	resetGame (team, teamIndex) {
+	reset (team) {
 		this.team = team
-		this.teamIndex = teamIndex
-
 		this.isActive = true
 		this.switchUnit = null
 		this.actionUpdate = 0

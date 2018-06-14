@@ -171,8 +171,11 @@ export default function (gid, mode, size) {
 			console.error('game already playing')
 			return
 		}
+		const teamsIndex = [ 0, 0 ]
 		for (const player of players) {
-			player.createShip()
+			const teamIndex = teamsIndex[player.team]
+			teamsIndex[player.team] += 1
+			player.createShip(teamIndex)
 		}
 		Local.unit = Local.player.unit
 		store.setSelectedUnit(Local.unit)

@@ -48,6 +48,8 @@ class Ship extends Movable {
 		}
 		super(team, statBase, 2, x, y, angle, isLocal)
 
+		this.ox = x
+		this.oy = y
 		this.skills = {
 			data: (retro ? retroSkillsData : skillsData)[name],
 			started: [0, 0, 0],
@@ -497,8 +499,7 @@ class Ship extends Movable {
 		this.stunnedUntil = 0
 		this.modify('Spawn', 'moveSpeed', 'multiply', 0.5)
 
-		const spawnAt = this.player.spawnLocation()
-		this.setLocation(spawnAt[0], spawnAt[1])
+		this.setLocation(this.ox, this.oy)
 
 		if (this.isLocal) {
 			Local.game.centerOnUnit()

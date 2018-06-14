@@ -16,7 +16,6 @@ class Game {
 
 	constructor (mode, size, map, autoStart) {
 		this.players = []
-		this.counts = [0, 0]
 		this.id = Util.uid()
 		this.mode = mode
 		this.botMode = mode === 'bots'
@@ -31,19 +30,15 @@ class Game {
 
 		if (this.botMode) {
 			const firstTeam = 1 //SAMPLE
-			this.counts[firstTeam] = size
 			for (let teamIndex = 0; teamIndex < size; teamIndex += 1) {
 				const player = new Player(null)
-				this.players.push(player)
-				player.resetGame(firstTeam, teamIndex)
+				this.team(player, firstTeam)
 			}
 			if (CommonConsts.TESTING || size >= 10) {
 				const secondTeam = 1 - firstTeam
-				this.counts[secondTeam] = size - 1
 				for (let teamIndex = 0; teamIndex < size - 1; teamIndex += 1) {
 					const player = new Player(null)
-					this.players.push(player)
-					player.resetGame(secondTeam, teamIndex)
+					this.team(player, secondTeam)
 				}
 			}
 		}
@@ -76,7 +71,7 @@ class Game {
 	}
 
 	playerCount () {
-		return this.counts[0] + this.counts[1]
+		return this.players.length
 	}
 
 	checkFull () {
@@ -96,13 +91,24 @@ class Game {
 		}
 	}
 
-	canStart () {
-		if (this.botMode) {
-			return this.counts[0]
+	teamCounts () {
+		const results = [ 0, 0 ]
+		for (const player of this.players) {
+			results[player.team] += 1
 		}
-		if (this.counts[0] === this.counts[1]) {
-			// const minSize = Math.ceil(this.size / 2) //TODO later
-			return true
+		return results
+	}
+
+	canStart () {
+		const playerCount = this.players.length
+		if (playerCount) {
+			if (this.botMode) {
+				return true
+			}
+			if (playerCount % 2 === 0) {
+				// const minSize = Math.ceil(this.size / 2) //TODO later
+				return true
+			}
 		}
 		return false
 	}
@@ -117,6 +123,11 @@ class Game {
 		return broadcastPlayers
 	}
 
+	team (player, team) {
+		this.players.push(player)
+		player.reset(team)
+	}
+
 	add (player) {
 		const pid = player.id
 		if (this.playerById(pid)) {
@@ -129,11 +140,8 @@ class Game {
 			if (!this.hostId) {
 				this.hostId = pid
 			}
-			const team = this.counts[0] <= this.counts[1] ? 0 : 1
-			const teamSize = this.counts[team]
-			this.counts[team] += 1
-			this.players.push(player)
-			player.resetGame(team, teamSize)
+			const teamCounts = this.teamCounts()
+			this.team(player, teamCounts[0] <= teamCounts[1] ? 0 : 1)
 			player.setRetro(this.retro)
 
 			if (this.checkFull()) {
@@ -177,7 +185,6 @@ class Game {
 			if (this.started) {
 				removePlayer.isActive = false
 			} else {
-				this.counts[removePlayer.team] -= 1
 				this.players.splice(removeIndex, 1)
 			}
 
@@ -187,11 +194,6 @@ class Game {
 			}
 			if (!this.started) {
 				this.state = 'OPEN'
-				for (const remainingPlayer of this.players) {
-					if (remainingPlayer.team === removePlayer.team && remainingPlayer.teamIndex > removePlayer.teamIndex) {
-						remainingPlayer.teamIndex -= 1
-					}
-				}
 				this.broadcast('players', { ready: this.canStart(), players: this.formattedPlayers() })
 				return true
 			}
