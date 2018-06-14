@@ -28,7 +28,9 @@ export default class Player {
 		const mapHeightHalf = Local.game.map.centerY()
 		if (Local.game.retro) {
 			const offset = 72
-			sx = mapWidthHalf + (8 + offset * (this.teamIndex + 1)) * teamMp
+			const index = (this.teamIndex % 6) + 1
+			const indexMp = this.teamIndex > 5 ? -1 : 1
+			sx = mapWidthHalf + (8 + offset * index) * teamMp * indexMp
 		} else {
 			const indexMp = this.teamIndex % 2 === 0 ? -1 : 1
 			const offset = 76

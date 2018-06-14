@@ -21,7 +21,7 @@ export default {
 	methods: {
 		sizeLabel (size) {
 			if (!this.pvpMode) {
-				if (size <= 10) {
+				if (size <= 12) {
 					return `${size}p`
 				}
 				return 'horde'

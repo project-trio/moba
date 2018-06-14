@@ -8,7 +8,7 @@ module.exports = {
 
 	TESTING: testing,
 
-	GAME_SIZES: [1, 2, 4, 6, 8, 10, 25],
+	GAME_SIZES: [ 1, 2, 4, 6, 8, 12, 25 ],
 
 	SHIP_NAMES: [ 'boxy', 'sinker', 'glitch', 'proppy', 'pulter', 'beedle', 'stitches', 'tempest', 'charger' ],
 	RETRO_SHIP_NAMES: [ 'splodge', 'basher', 'doc', 'stinger', 'shouty', 'sneaky', 'dash' ],

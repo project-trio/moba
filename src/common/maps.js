@@ -127,7 +127,7 @@ const maps = {}
 	hH = STANDARD_HEIGHT / 2
 	maps.standard = {
 		minSize: 2,
-		maxSize: 10,
+		maxSize: 12,
 
 		width: STANDARD_WIDTH,
 		height: STANDARD_HEIGHT,
@@ -258,7 +258,7 @@ const maps = {}
 	hH = RETRO_HEIGHT / 2
 	maps.retro = {
 		minSize: 1,
-		maxSize: 10,
+		maxSize: 12,
 
 		width: RETRO_WIDTH,
 		height: RETRO_HEIGHT,

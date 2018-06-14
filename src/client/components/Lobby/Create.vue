@@ -75,6 +75,7 @@ export default {
 				return sizes
 			}
 			sizes = sizes.slice(0, 2)
+			sizes.push(12)
 			sizes.push(25)
 			return sizes
 		},
