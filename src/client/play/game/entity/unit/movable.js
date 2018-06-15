@@ -23,6 +23,7 @@ class Movable extends Unit {
 		this.movable = true
 		this.customPosition = false
 		this.moveTargetAngle = null
+		this.moveDestination = null
 	}
 
 	// Position
@@ -45,7 +46,7 @@ class Movable extends Unit {
 		const dy = y - this.py
 		if (moveX === undefined) {
 			if (dx !== 0 || dy !== 0) {
-				const moveAngle = Util.angleOf(dx, dy, false)
+				const moveAngle = Float.atan(dy, dx)
 				this.moveTargetAngle = moveAngle
 				moveX = Math.floor(Float.cos(moveAngle) * 1000)
 				moveY = Math.floor(Float.sin(moveAngle) * 1000)
@@ -62,7 +63,7 @@ class Movable extends Unit {
 		this.destX = x
 		this.destY = y
 
-		this.hasDestination = true
+		this.moveDestination = true
 	}
 
 	updatePosition (moveToX, moveToY) {
@@ -122,11 +123,11 @@ class Movable extends Unit {
 	}
 
 	shouldMove () {
-		return this.hasDestination && !this.isAttackingTarget && this.stunnedUntil === 0
+		return this.moveDestination && this.aimingToMove && !this.isAttackingTarget && this.stunnedUntil === 0
 	}
 
 	reachedDestination (_needsNewDestination) {
-		this.hasDestination = false
+		this.moveDestination = false
 	}
 
 	move (timeDelta, tweening) {
@@ -189,7 +190,7 @@ class Movable extends Unit {
 	}
 
 	die (renderTime, isRetro) {
-		this.hasDestination = false
+		this.moveDestination = false
 
 		super.die(renderTime, isRetro)
 	}

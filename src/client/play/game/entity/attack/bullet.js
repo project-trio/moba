@@ -107,7 +107,7 @@ class Bullet {
 		const dy = y - this.py
 		let moveX, moveY
 		if (dx !== 0 || dy !== 0) {
-			const moveAngle = Util.angleOf(dx, dy, false)
+			const moveAngle = Float.atan(dy, dx)
 			this.moveAngle = moveAngle
 			moveX = Math.floor(Float.cos(moveAngle) * 1000)
 			moveY = Math.floor(Float.sin(moveAngle) * 1000)

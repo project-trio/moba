@@ -281,7 +281,7 @@ export default {
 					bulletSpeed: 8,
 					stunDuration: this.getEffectDuration(level),
 				}
-				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.top.aim)
 			},
 		},
 		{
@@ -324,7 +324,7 @@ export default {
 						expires: this.getEffectDuration(level),
 					},
 				}
-				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.top.aim)
 			},
 		},
 		{
@@ -393,7 +393,7 @@ export default {
 					bulletSpeed: 8,
 					maxRange: maxRange,
 				}
-				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.top.aim)
 			},
 		},
 		{
@@ -429,7 +429,7 @@ export default {
 					explosionRadius: aoeRange,
 					firstCollision: false,
 				}
-				const flingBullet = new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+				const flingBullet = new Bullet(ship, target, bulletData, ship.px, ship.py, ship.top.aim)
 				Animate.apply(flingBullet)
 				const moveConstant = flingBullet.moveConstant
 				const animationDuration = Math.sqrt(Util.pointDistance(ship.px, ship.py, target[0], target[1])) / moveConstant / 1000

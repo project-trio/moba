@@ -761,7 +761,7 @@ class Ship extends Movable {
 						// sightTarget.container.visible = true //SAMPLE
 					}
 				}
-				revealUnit = isInSight && (updatedVisibility || sightTarget.hasDestination)
+				revealUnit = isInSight && (updatedVisibility || sightTarget.moveDestination)
 			}
 			if (revealUnit && sightTarget.movable && !sightTarget.customPosition) {
 				sightTarget.updatePosition()

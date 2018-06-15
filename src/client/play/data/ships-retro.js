@@ -32,6 +32,7 @@ export default {
 
 		moveSpeed: [9, 0], //31
 		turnSpeed: 6,
+		turnToMove: true,
 		collision: 24,
 
 		create: createMeshes,
@@ -55,6 +56,7 @@ export default {
 
 		moveSpeed: [9, 0], //31
 		turnSpeed: 5,
+		turnToMove: true,
 		collision: 24,
 
 		create: createMeshes,
@@ -78,6 +80,7 @@ export default {
 		bulletSize: 3,
 
 		moveSpeed: [8, 0], //31
+		turnToMove: true,
 		turnSpeed: 8,
 		collision: 22,
 
@@ -103,6 +106,7 @@ export default {
 
 		moveSpeed: [7, 0], //29
 		turnSpeed: 8,
+		turnToMove: true,
 		collision: 20,
 
 		create: createMeshes,
@@ -127,6 +131,7 @@ export default {
 
 		moveSpeed: [8, 0], //30
 		turnSpeed: 5,
+		turnToMove: true,
 		collision: 22,
 
 		create: createMeshes,
@@ -151,6 +156,7 @@ export default {
 
 		moveSpeed: [9, 0], //32
 		turnSpeed: 9,
+		turnToMove: false,
 		collision: 16,
 
 		create: createMeshes,
@@ -175,6 +181,7 @@ export default {
 
 		moveSpeed: [9, 0], //31
 		turnSpeed: 12,
+		turnToMove: true,
 		collision: 18,
 
 		create: createMeshes,

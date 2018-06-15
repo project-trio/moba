@@ -31,6 +31,7 @@ class Unit {
 		this.renderInBackground = renderInBackground
 		this.movable = false
 		this.attackTarget = null
+		this.attackTargetAim = null
 		this.isAttackingTarget = false
 		this.requiresSightOfTarget = true
 		this.bulletCount = 0
@@ -95,11 +96,15 @@ class Unit {
 			this.stats.attackCooldown = statBase.attackCooldown[0] * 100
 			this.stats.bulletSpeed = statBase.bulletSpeed
 			this.stats.bulletOffset = statBase.bulletOffset
-			this.stats.turnSpeed = statBase.turnSpeed || 8
 			this.stats.collision = statBase.collision * 100
 			this.collisionCheck = Util.squared(this.stats.collision)
 			this.stats.bulletSize = statBase.bulletSize
 			this.stats.bulletColor = statBase.bulletColor
+
+			this.turnSpeed = statBase.turnSpeed || 8
+			this.turnToMove = statBase.turnToMove || false
+			this.aimingToAttack = !this.turnToMove
+			this.aimingToMove = !this.turnToMove
 
 			this.healthRemaining = this.stats.healthMax
 			this.attackRangeCheck = Util.squared(this.stats.attackRange)
@@ -397,8 +402,10 @@ class Unit {
 		this.py = y * 100
 		this.container.position.set(x, y, 0)
 
-		const angle = this.startAngle || (-Math.PI * 1.5 * (this.team === 0 ? -1 : 1))
+		const angle = this.startAngle || (Float.multiply(-Math.PI, 1.5 * (this.team === 0 ? -1 : 1)))
+		this.top.aim = angle
 		this.top.rotation.z = angle
+		this.base.aim = angle
 		this.base.rotation.z = angle
 	}
 
@@ -609,40 +616,67 @@ class Unit {
 
 	// Aim
 
-	angleTo (container, destAngle, timeDelta) {
-		const currAngle = container.rotation.z
-		const angleDiff = Util.distanceBetweenAngles(currAngle, destAngle)
-		const turnSpeed = this.stats.turnSpeed * timeDelta / 2000
+	angleTo (container, destAngle, timeDelta, tweening) {
+		const currentAngle = tweening ? container.rotation.z : container.aim
+		const angleDiff = Util.radianDistance(currentAngle, destAngle, tweening)
+		const turnDistance = tweening ? (this.turnSpeed * timeDelta / 2000) : Float.divide(this.turnSpeed * timeDelta, 2000)
 		let newAngle
-		if (Math.abs(angleDiff) < turnSpeed) {
+		if (Math.abs(angleDiff) < turnDistance) {
 			newAngle = destAngle
 		} else {
 			let spinDirection = angleDiff < 0 ? -1 : 1
-			newAngle = currAngle + (turnSpeed * spinDirection)
+			if (tweening) {
+				newAngle = currentAngle + (turnDistance * spinDirection)
+			} else {
+				newAngle = Float.add(currentAngle, Float.multiply(turnDistance, spinDirection))
+			}
 		}
 		container.rotation.z = newAngle
+		if (!tweening) {
+			container.aim = newAngle
+		}
 		return newAngle
 	}
 
-	updateAim (timeDelta) {
+	updateAim (timeDelta, tweening) {
 		let aimTop
 		if (this.attackTarget) {
-			aimTop = Util.angleBetween(this, this.attackTarget, true)
+			if (tweening) {
+				aimTop = this.attackTargetAim
+			} else {
+				aimTop = Util.radiansBetween(this, this.attackTarget)
+				this.attackTargetAim = aimTop
+			}
 		}
-		let aimBase = (!this.attackTarget || this.shouldMove()) ? this.moveTargetAngle : null
+		const priorityAngle = (this.moveDestination && !this.moveToTarget) ? this.moveTargetAngle : null
+		let aimingToMove = !tweening && this.turnToMove ? null : undefined
 		if (!aimTop) {
-			aimTop = aimBase
+			aimTop = priorityAngle
 		}
 		if (this.player) {
+			let aimBase = priorityAngle
 			if (!aimBase) {
 				aimBase = aimTop
 			}
 			if (aimBase) {
-				this.angleTo(this.base, aimBase, timeDelta)
+				const newAngle = this.angleTo(this.base, aimBase, timeDelta, tweening)
+				if (aimingToMove === null) {
+					aimingToMove = newAngle === aimBase
+				}
 			}
 		}
 		if (aimTop) {
-			this.angleTo(this.top, aimTop, timeDelta)
+			const newAngle = this.angleTo(this.top, aimTop, timeDelta * 2, tweening)
+			if (!tweening) {
+				const aimingToAttack = newAngle === aimTop
+				this.aimingToAttack = aimingToAttack
+				if (aimingToMove === null) {
+					aimingToMove = aimingToAttack
+				}
+			}
+		}
+		if (aimingToMove !== null && aimingToMove !== undefined) {
+			this.aimingToMove = aimingToMove
 		}
 	}
 
@@ -676,7 +710,7 @@ class Unit {
 		if (!this.stats.bulletSpeed) {
 			enemy.takeDamage(this, renderTime, this.stats.attackDamage, this.stats.attackPierce + this.attackPierceBonus)
 		} else {
-			new Bullet(this, enemy, this.stats, this.px, this.py, this.base.rotation.z, this.stats.bulletOffset) //TODO top rotation
+			new Bullet(this, enemy, this.stats, this.px, this.py, this.top.aim, this.stats.bulletOffset) //TODO top rotation
 			if (sound) {
 				this.playSound(sound)
 			}
@@ -695,7 +729,7 @@ class Unit {
 	}
 
 	checkAttack (renderTime) {
-		if (this.stunnedUntil > 0) {
+		if (this.stunnedUntil > 0 || !this.aimingToAttack || !this.isAttackOffCooldown(renderTime)) {
 			return
 		}
 		const attackForTick = this.getAttackTarget(allUnits)
@@ -732,15 +766,9 @@ Unit.get = function (id) {
 
 Unit.update = function (renderTime, timeDelta, tweening, isRetro) {
 	if (!tweening) {
-		// Update before deaths
 		for (const unit of allUnits) {
 			if (!unit.static) {
 				unit.update(renderTime, timeDelta, isRetro)
-			}
-		}
-		for (const unit of allUnits) {
-			if (!unit.isDead && unit.isAttackOffCooldown(renderTime)) { //TODO diff for minis?
-				unit.checkAttack(renderTime)
 			}
 		}
 		// Die
@@ -750,19 +778,24 @@ Unit.update = function (renderTime, timeDelta, tweening, isRetro) {
 				unit.die(renderTime, isRetro)
 				if (unit.remove) {
 					allUnits.splice(idx, 1)
+				} else {
+					unit.expireModifiers(renderTime)
 				}
 			}
 		}
-		// Update after deaths
-		for (const unit of allUnits) {
-			if (!unit.isDying) {
-				unit.checkTarget(renderTime)
-			}
-			unit.expireModifiers(renderTime)
+	}
+	for (const unit of allUnits) {
+		if (unit.isDead) {
+			continue
+		}
+		if (!tweening) {
+			unit.checkTarget(renderTime)
+		}
+		unit.updateAim(timeDelta, tweening)
+		if (!tweening) {
+			unit.checkAttack(renderTime)
 		}
 	}
-
-	// Tween
 	for (const unit of allUnits) {
 		if (unit.updateAnimations) {
 			unit.updateAnimations(renderTime)
@@ -773,13 +806,11 @@ Unit.update = function (renderTime, timeDelta, tweening, isRetro) {
 		if (unit.tween) {
 			unit.tween(renderTime)
 		}
-		unit.updateAim(timeDelta)
 
-		if (tweening && (!unit.isRendering || unit.isBlocked)) {
-			continue
-		}
-		if (unit.shouldMove()) {
-			unit.move(timeDelta, tweening)
+		if (!tweening || (unit.isRendering && !unit.isBlocked)) {
+			if (unit.shouldMove()) {
+				unit.move(timeDelta, tweening)
+			}
 		}
 	}
 

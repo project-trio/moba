@@ -1,7 +1,7 @@
 import Float from '@/client/play/game/helpers/float'
 
-const PI = Math.PI
-const PIt2 = PI * 2
+const MATH_PI = Math.PI
+const PRECISION_PI = Float.integer(MATH_PI)
 
 //PUBLIC
 
@@ -9,22 +9,21 @@ export default {
 
 	// Angle
 
-	angleOf (dx, dy, fast) {
-		if (fast) {
-			return Math.atan2(dy, dx) //TODO remove
+	radiansBetween (a, b) {
+		let ax = a.px, ay = a.py, bx = b.px, by = b.py
+		return Float.add(Float.atan(ay - by, ax - bx), MATH_PI)
+	},
+
+	radianDistance (a, b, tweening) {
+		const pi = tweening ? MATH_PI : PRECISION_PI
+		const pi2 = pi * 2
+		if (!tweening) {
+			a = Float.integer(a)
+			b = Float.integer(b)
 		}
-		return Float.atan(dy, dx)
-	},
-
-	angleBetween (a, b, fast) {
-		const positionA = a.container.position
-		const positionB = b.container.position
-		return this.angleOf(positionA.x - positionB.x, positionA.y - positionB.y, fast) + PI
-	},
-
-	distanceBetweenAngles (a, b) {
-		let diff = ((b - a + PI) % PIt2) - PI
-		return (diff < -PI ? diff + PIt2 : diff)
+		let diff = ((b - a + pi) % pi2) - pi
+		const result = diff < -pi ? diff + pi2 : diff
+		return tweening ? result : result / Float.PRECISION
 	},
 
 	// Distance
