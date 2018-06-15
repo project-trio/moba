@@ -6,7 +6,7 @@
 	"scripts": {
 		"serve": "vue-cli-service serve --open",
 		"start": "node src/server/index.js",
-		"build": "vue-cli-service build",
+		"build": "vue-cli-service build --modern",
 		"lint": "vue-cli-service lint"
 	},
 	"engines": {
