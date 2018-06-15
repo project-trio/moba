@@ -174,8 +174,7 @@ class Bullet {
 			const targetTeam = this.target.team
 			let nearestUnit
 			let nearestDistance = Util.squared(this.propagateRange * 100)
-			for (let idx = units.length - 1; idx >= 0; idx -= 1) {
-				const unit = units[idx]
+			for (const unit of units) {
 				if (unit.team === targetTeam && unit.targetableStatus() && this.targeted.indexOf(unit.id) === -1) {
 					const distance = unit.distanceTo(this.target)
 					if (distance < nearestDistance) {
@@ -262,8 +261,7 @@ class Bullet {
 
 	checkCollision (renderTime, units) {
 		const team = this.team, px = this.px, py = this.py
-		for (let idx = units.length - 1; idx >= 0; idx -= 1) {
-			const unit = units[idx]
+		for (const unit of units) {
 			if (team !== unit.team && unit.targetableStatus() && (!unit.tower || this.hitsTowers)) {
 				const dist = unit.distanceToPoint(px, py)
 				if (dist <= unit.collisionCheck * 2) {
@@ -305,12 +303,10 @@ Bullet.all = function () {
 }
 
 Bullet.update = function (renderTime, timeDelta, tweening) {
-	let startIndex = allBullets.length - 1
-
 	if (!tweening) {
 		// Update
 		const units = Unit.all()
-		for (let idx = startIndex; idx >= 0; idx -= 1) {
+		for (let idx = allBullets.length - 1; idx >= 0; idx -= 1) {
 			const bullet = allBullets[idx]
 			if (bullet.unitTarget) {
 				bullet.updateTarget(false)
@@ -319,14 +315,12 @@ Bullet.update = function (renderTime, timeDelta, tweening) {
 			}
 			if (bullet.remove) {
 				allBullets.splice(idx, 1)
-				startIndex -= 1
 			}
 		}
 	}
 
 	// Move
-	for (let idx = startIndex; idx >= 0; idx -= 1) {
-		const bullet = allBullets[idx]
+	for (const bullet of allBullets) {
 		bullet.move(renderTime, timeDelta, tweening)
 		if (bullet.updateAnimations) {
 			bullet.updateAnimations(renderTime)

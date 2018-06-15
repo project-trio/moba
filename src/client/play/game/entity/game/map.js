@@ -223,19 +223,17 @@ const GameMap = function (mapName, parent) {
 			}, Math.random() * 2000 + 1000)
 		}
 
-		for (let idx = 0; idx < layout.minions.length; idx += 1) {
-			const minionSpawn = layout.minions[idx]
+		for (const minionSpawn of layout.minions) {
 			for (let team = 0; team < 2; team += 1) {
-				for (let pidx = 0; pidx < minionSpawn.paths.length; pidx += 1) {
-					const mini = Mini.spawn(team, minionSpawn.type, minionSpawn.paths[pidx], minionSpawn.mirrored, retro)
+				for (const path of minionSpawn.paths) {
+					const mini = Mini.spawn(team, minionSpawn.type, path, minionSpawn.mirrored, retro)
 					mini.isDying = true
 				}
 			}
 		}
 
 		const wallArray = []
-		for (let idx = 0; idx < layout.walls.length; idx += 1) {
-			const wall = layout.walls[idx]
+		for (const wall of layout.walls) {
 			const radius = wall.radius
 			for (let team = 0; team < 2; team += 1) {
 				const firstTeam = team === 0

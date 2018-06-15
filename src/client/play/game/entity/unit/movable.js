@@ -92,8 +92,7 @@ class Movable extends Unit {
 		const uy1 = by - collisionSize
 		const ux2 = ux1 + collisionSize * 2
 		const uy2 = uy1 + collisionSize * 2
-		for (let idx = walls.length - 1; idx >= 0; idx -= 1) {
-			const wall = walls[idx]
+		for (const wall of walls) {
 			const wx = wall[0]
 			const wy = wall[1]
 			const ww = wall[2]
@@ -112,8 +111,7 @@ class Movable extends Unit {
 
 		// Units
 		const units = Unit.all()
-		for (let idx = units.length - 1; idx >= 0; idx -= 1) {
-			const unit = units[idx]
+		for (const unit of units) {
 			if (this !== unit && unit.isBlocking) {
 				const dist = Util.pointDistance(bx, by, unit.px, unit.py)
 				if (Util.withinSquared(dist, collisionSize + unit.stats.collision)) {

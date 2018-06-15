@@ -79,8 +79,7 @@ class AreaOfEffect {
 		const fromUnit = this.source
 		const positionUnit = this.withUnit ? fromUnit : this
 		const team = fromUnit.team, px = positionUnit.px, py = positionUnit.py
-		for (let idx = units.length - 1; idx >= 0; idx -= 1) {
-			const target = units[idx]
+		for (const target of units) {
 			if (target.isDead || target.untargetable || (target.tower && !this.hitsTowers)) {
 				continue
 			}

@@ -61,8 +61,7 @@ const createGame = function (player, mode, size, map, joining, autoStart) {
 
 const join = function(player, gid, callback) {
 	const games = Game.all
-	for (let idx = games.length - 1; idx >= 0; idx -= 1) {
-		const game = games[idx]
+	for (const game of games) {
 		if (game.id === gid) {
 			const gameData = game.add(player)
 			if (gameData.error) {
@@ -78,8 +77,7 @@ const join = function(player, gid, callback) {
 
 const quickJoin = function (player, mode, size, map) {
 	const games = Game.all
-	for (let idx = games.length - 1; idx >= 0; idx -= 1) {
-		const game = games[idx]
+	for (const game of games) {
 		if (game.mode === game && game.size === size && game.map === map) {
 			const gameData = game.add(player)
 			if (!gameData.error) {

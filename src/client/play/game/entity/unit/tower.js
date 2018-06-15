@@ -70,8 +70,7 @@ class Tower extends Unit {
 			}
 		}
 		const team = this.team, px = this.px, py = this.py
-		for (let idx = units.length - 1; idx >= 0; idx -= 1) {
-			const unit = units[idx]
+		for (const unit of units) {
 			if (unit !== target && unit.movable && team !== unit.team && unit.targetableStatus()) {
 				const dist = unit.distanceToPoint(px, py)
 				if (dist < closest) {

@@ -40,8 +40,7 @@ module.exports = {
 		const maxCountSize = 10
 		const queuedSizes = new Array(maxCountSize).fill(0).map((_, idx) => { return (idx + 1) * 2 })
 		const readiedCounts = [...queuedSizes]
-		for (let idx = 0; idx < queuedCount; idx += 1) {
-			const player = queuedPlayers[idx]
+		for (const player of queuedPlayers) {
 			for (let size = maxCountSize; size >= player.queueMin; size -= 1) {
 				queuedSizes[size - 1] -= 1
 				if (player.queueReady) {

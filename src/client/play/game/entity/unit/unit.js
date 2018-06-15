@@ -723,8 +723,7 @@ Unit.all = function () {
 }
 
 Unit.get = function (id) {
-	for (let idx = allUnits.length - 1; idx >= 0; idx -= 1) {
-		const unit = allUnits[idx]
+	for (const unit of allUnits) {
 		if (unit.id === id) {
 			return unit
 		}
@@ -733,35 +732,30 @@ Unit.get = function (id) {
 }
 
 Unit.update = function (renderTime, timeDelta, tweening, isRetro) {
-	let startIndex = allUnits.length - 1
 	if (!tweening) {
 		// Update before deaths
-		for (let idx = startIndex; idx >= 0; idx -= 1) {
-			const unit = allUnits[idx]
+		for (const unit of allUnits) {
 			if (!unit.static) {
 				unit.update(renderTime, timeDelta, isRetro)
 			}
 		}
-		for (let idx = startIndex; idx >= 0; idx -= 1) {
-			const unit = allUnits[idx]
+		for (const unit of allUnits) {
 			if (!unit.isDead && unit.isAttackOffCooldown(renderTime)) { //TODO diff for minis?
 				unit.checkAttack(renderTime)
 			}
 		}
 		// Die
-		for (let idx = startIndex; idx >= 0; idx -= 1) {
+		for (let idx = allUnits.length - 1; idx >= 0; idx -= 1) {
 			const unit = allUnits[idx]
 			if (unit.isDying && !unit.isDead) {
 				unit.die(renderTime, isRetro)
 				if (unit.remove) {
 					allUnits.splice(idx, 1)
-					startIndex -= 1
 				}
 			}
 		}
 		// Update after deaths
-		for (let idx = startIndex; idx >= 0; idx -= 1) {
-			const unit = allUnits[idx]
+		for (const unit of allUnits) {
 			if (!unit.isDying) {
 				unit.checkTarget(renderTime)
 			}
@@ -770,8 +764,7 @@ Unit.update = function (renderTime, timeDelta, tweening, isRetro) {
 	}
 
 	// Tween
-	for (let idx = startIndex; idx >= 0; idx -= 1) {
-		const unit = allUnits[idx]
+	for (const unit of allUnits) {
 		if (unit.updateAnimations) {
 			unit.updateAnimations(renderTime)
 		}

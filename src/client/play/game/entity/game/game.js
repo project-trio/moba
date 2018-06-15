@@ -94,7 +94,7 @@ export default function (gid, mode, size) {
 		updateQueue[updateCount] = null
 		updateCount += 1
 
-		for (let idx = 0; idx < nextUpdate.length; idx += 1) { // 'action' response
+		for (let idx = nextUpdate.length - 1; idx >= 0; idx -= 1) { // 'action' response
 			const playerActions = nextUpdate[idx]
 			if (!playerActions) {
 				continue
