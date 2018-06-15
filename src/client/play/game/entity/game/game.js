@@ -188,7 +188,8 @@ export default function (gid, mode, size) {
 
 	// Setup
 
-	this.close = function () {
+	this.destroy = function () {
+		Local.destroy()
 		Unit.destroy()
 		Bullet.destroy()
 		AreaOfEffect.destroy()
@@ -196,10 +197,6 @@ export default function (gid, mode, size) {
 		if (this.map) {
 			this.map.destroy()
 		}
-
-		Local.game = null
-		Local.unit = null
-		Local.player = null
 		store.resetGameState()
 	}
 

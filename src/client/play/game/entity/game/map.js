@@ -6,7 +6,7 @@ import Local from '@/client/play/local'
 
 import Bridge from '@/client/play/events/bridge'
 
-import pointer from '@/client/play/render/pointer'
+import Pointer from '@/client/play/render/pointer'
 import Render from '@/client/play/render/render'
 import RenderMinimap from '@/client/play/render/minimap'
 
@@ -32,7 +32,7 @@ const GameMap = function (mapName, parent) {
 	parent.add(container)
 	this.floorContainer = floorContainer
 
-	pointer.init(floorContainer)
+	Pointer.init(floorContainer)
 
 	const collisionWalls = []
 
@@ -297,6 +297,7 @@ const GameMap = function (mapName, parent) {
 
 	this.destroy = function () {
 		Mini.destroy()
+		Pointer.destroy()
 
 		if (automateTimer) {
 			clearInterval(automateTimer)

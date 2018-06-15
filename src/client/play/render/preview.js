@@ -172,6 +172,7 @@ export default {
 			scene = null
 		}
 		renderer = null
+		outlineEffect = null
 		camera = null
 		cameraTarget = null
 		container = null

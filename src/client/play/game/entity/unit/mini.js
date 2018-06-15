@@ -10,6 +10,7 @@ import Unit from '@/client/play/game/entity/unit/unit'
 
 //CLASS
 
+let cache
 let spawnCount
 
 class Mini extends Movable {
@@ -177,9 +178,7 @@ class Mini extends Movable {
 
 }
 
-//CACHE
-
-let cache
+//STATIC
 
 Mini.spawn = function (team, type, path, mirrored, retro) {
 	const cachedMini = cache[type][team].pop()

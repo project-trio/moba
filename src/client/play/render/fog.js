@@ -78,4 +78,11 @@ export default {
 		mmRenderer.render(fogScene, fogCamera, fogTarget)
 	},
 
+	destroy () {
+		fogScene = null
+		fogCamera = null
+		fogTarget = null
+		circleMaterial = null
+	},
+
 }

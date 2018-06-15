@@ -56,7 +56,7 @@ export default {
 
 	beforeDestroy () {
 		if (Local.game) {
-			Local.game.close()
+			Local.game.destroy()
 		}
 		Loop.stop()
 

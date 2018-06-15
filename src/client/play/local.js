@@ -1,4 +1,4 @@
-export default window.local = {
+export default {
 
 	TESTING: process.env.NODE_ENV !== 'production',
 
@@ -12,5 +12,11 @@ export default window.local = {
 	player: null,
 	unit: null,
 	tickDuration: null,
+
+	destroy () {
+		this.game = null
+		this.unit = null
+		this.player = null
+	},
 
 }

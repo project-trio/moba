@@ -8,7 +8,7 @@ import dataConstants from '@/client/play/data/constants'
 import Vox from '@/client/play/external/vox'
 import OutlineEffect from '@/client/play/external/OutlineEffect'
 
-import pointer from '@/client/play/render/pointer'
+import Pointer from '@/client/play/render/pointer'
 import RenderFog from '@/client/play/render/fog'
 import RenderMinimap from '@/client/play/render/minimap'
 import RenderSound from '@/client/play/render/sound'
@@ -171,13 +171,17 @@ export default {
 		perspectiveCamera = null
 		orthoCamera = null
 		renderer = null
+		outlineEffect = null
 		pixelMultiplier = null
 		voxelCache = null
 		usePerspectiveCamera = null
-
+		gameLight = null
 		audioListener = null
+		font = null
+
 		RenderMinimap.destroy()
 		RenderSound.destroy()
+		RenderFog.destroy()
 	},
 
 	positionCamera (x, y) {
@@ -186,7 +190,7 @@ export default {
 	},
 
 	render (units) {
-		pointer.reposition(gameCamera)
+		Pointer.reposition(gameCamera)
 
 		if (outlineEffect) {
 			outlineEffect.render(gameScene, gameCamera)
