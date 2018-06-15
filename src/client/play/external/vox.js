@@ -135,9 +135,6 @@ export default vox;
 				this._currentChunkSize = 0;
 		};
 		DataHolder.prototype.next = function() {
-				if (this.uint8Array.byteLength <= this.cursor) {
-						throw new Error("uint8Array index out of bounds: " + this.uint8Array.byteLength);
-				}
 				return this.uint8Array[this.cursor++];
 		};
 		DataHolder.prototype.hasNext = function() {

@@ -66,7 +66,6 @@ class Ship extends Movable {
 		this.id = player.id
 		this.player = player
 		this.name = name
-		this.split = statBase.split
 		this.uncontrollable = false
 		this.rebound = null
 

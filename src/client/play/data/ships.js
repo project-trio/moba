@@ -6,9 +6,7 @@ import Render from '@/client/play/render/render'
 const createMeshes = function (name, team, top, base, ship, inGame) {
 	const opacity = inGame ? 0.5 : undefined
 	Render.voxel(team, 'ships', `${name}-top`, { parent: top, z: this.offsetTop, owner: ship, opacity })
-	if (this.split && !this.noBaseModel) {
-		Render.voxel(team, 'ships', `${name}-base`, { parent: base, owner: ship, opacity })
-	}
+	Render.voxel(team, 'ships', `${name}-base`, { parent: base, owner: ship, opacity })
 }
 
 //SHIPS
@@ -117,8 +115,6 @@ export default {
 	},
 
 	stitches: {
-		split: true,
-
 		healthMax: [700, 10],
 		healthRegen: [10, 1],
 		armor: [0, 0],
@@ -141,8 +137,6 @@ export default {
 	},
 
 	beedle: {
-		split: true,
-
 		healthMax: [600, 10],
 		healthRegen: [40, 1],
 		armor: [10, 0],
@@ -165,7 +159,6 @@ export default {
 	},
 
 	proppy: {
-		split: true,
 		offsetTop: -12,
 		topOffset: [14, 0, 55],
 
@@ -210,8 +203,6 @@ export default {
 	},
 
 	pulter: {
-		split: true,
-
 		healthMax: [600, 10],
 		healthRegen: [30, 1],
 		armor: [10, 0],
@@ -234,8 +225,6 @@ export default {
 	},
 
 	boxy: {
-		split: true,
-
 		healthMax: [800, 40],
 		healthRegen: [40, 2],
 		armor: [20, 0],
@@ -258,8 +247,6 @@ export default {
 	},
 
 	glitch: {
-		split: false,
-
 		healthMax: [500, 10],
 		healthRegen: [40, 1],
 		armor: [30, 0],
@@ -282,8 +269,6 @@ export default {
 	},
 
 	sinker: {
-		split: true,
-
 		healthMax: [800, 20],
 		healthRegen: [60, 1],
 		armor: [10, 1],

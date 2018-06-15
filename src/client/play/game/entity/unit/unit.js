@@ -35,7 +35,6 @@ class Unit {
 		this.requiresSightOfTarget = true
 		this.bulletCount = 0
 		this.height = 0
-		this.split = false
 		this.static = !statBase.healthMax
 		this.disableAttacking = this.static
 		this.untargetable = this.static
@@ -634,7 +633,7 @@ class Unit {
 		if (!aimTop) {
 			aimTop = aimBase
 		}
-		if (this.split) {
+		if (this.player) {
 			if (!aimBase) {
 				aimBase = aimTop
 			}

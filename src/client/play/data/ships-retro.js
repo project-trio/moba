@@ -6,9 +6,7 @@ const createMeshes = function (name, team, top, base, ship, inGame) {
 	const opacity = inGame ? 0.5 : undefined
 	const modelName = ship.statBase.name
 	Render.voxel(team, 'ships', `${modelName}-top`, { parent: top, z: this.offsetTop, owner: ship, opacity })
-	if (this.split && !this.noBaseModel) {
-		Render.voxel(team, 'ships', `${modelName}-base`, { parent: base, owner: ship, opacity })
-	}
+	Render.voxel(team, 'ships', `${modelName}-base`, { parent: base, owner: ship, opacity })
 }
 
 //SHIPS
@@ -17,7 +15,6 @@ export default {
 
 	splodge: {
 		name: 'boxy',
-		split: true,
 
 		healthMax: [250, 20],
 		healthRegen: [15, 0],
@@ -65,7 +62,6 @@ export default {
 
 	doc: {
 		name: 'stitches',
-		split: true,
 
 		healthMax: [180, 10],
 		healthRegen: [15, 0],
@@ -90,7 +86,6 @@ export default {
 
 	stinger: {
 		name: 'beedle',
-		split: true,
 
 		healthMax: [150, 10],
 		healthRegen: [15, 0],
@@ -115,7 +110,6 @@ export default {
 
 	shouty: {
 		name: 'pulter',
-		split: true,
 
 		healthMax: [150, 8],
 		healthRegen: [15, 0],
@@ -140,7 +134,6 @@ export default {
 
 	sneaky: {
 		name: 'sinker',
-		split: true,
 
 		healthMax: [150, 5],
 		healthRegen: [15, 0],
@@ -165,7 +158,6 @@ export default {
 
 	dash: {
 		name: 'glitch',
-		split: false,
 
 		healthMax: [125, 3],
 		healthRegen: [15, 0],
