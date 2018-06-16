@@ -79,6 +79,7 @@ export default {
 		shipContainer = Render.group()
 		container.rotation.z = unitRotation
 		container.add(shipContainer)
+		container.model = shipContainer
 
 		renderer = new THREE.WebGLRenderer({
 			antialias: true,

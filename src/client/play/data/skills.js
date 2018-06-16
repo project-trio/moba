@@ -693,7 +693,7 @@ export default {
 		},
 		{
 			name: 'Rebound',
-			description: 'Basic attacks return to heal [[Rebound]] of damage dealt',
+			description: 'Attacking heals for [[Rebound]] of damage dealt',
 			suffixRebound: '%',
 			target: TARGET_SELF,
 			disabledBy: [false, true, null],

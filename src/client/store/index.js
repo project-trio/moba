@@ -77,7 +77,7 @@ export default {
 			perspective: storage.getBool('perspective', true),
 			fpsCap: storage.getBool('fpsCap', false),
 			// antialias: storage.getBool('antialias', true),
-			fullResolution: storage.getInt('fullResolution', false),
+			fullResolution: storage.getBool('fullResolution', false),
 			shadows: storage.getInt('shadows', 2),
 			outline: storage.getBool('outline', false),
 			soundVolume: storage.getInt('soundVolume', 0),

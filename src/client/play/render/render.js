@@ -73,7 +73,7 @@ const resize = function () {
 		visibleHeight = 2 * Math.tan(visibleFOV / 2) * CAMERA_HEIGHT
 		visibleWidth = visibleHeight * gameCamera.aspect
 	} else {
-		const cameraZoom = height / 440
+		const cameraZoom = height / 444
 		const zoomWidth = width / cameraZoom
 		const zoomHeight = height / cameraZoom
 		gameCamera.left = -zoomWidth

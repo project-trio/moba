@@ -80,7 +80,7 @@ export default {
 				cloudGroup.add(sphere)
 			}
 
-			bottom.add(cloudGroup)
+			ship.model.add(cloudGroup)
 			ship.cloudGroup = cloudGroup
 			this.createMeshes(name, team, top, bottom, ship)
 		},
