@@ -46,7 +46,7 @@ export default {
 			target: TARGET_GROUND,
 			hitsTowers: false,
 			isDisabledBy: null,
-			continuesToDestination: true,
+			continueToDestination: true,
 			getRange (level) {
 				return levelMultiplier(120, level, 10)
 			},
@@ -633,7 +633,7 @@ export default {
 			target: TARGET_GROUND,
 			isDisabledBy: null,
 			startsImmediately: true,
-			continuesToDestination: true,
+			continueToDestination: true,
 			getRange (level) {
 				return levelMultiplier(120, level, 10) //TODO calculate
 			},
@@ -645,6 +645,8 @@ export default {
 			},
 			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.modify(this.name, 'moveSpeed', 'multiply', 3)
+				ship.base.aim = ship.moveTargetAngle
+				ship.base.rotation.z = ship.moveTargetAngle
 				ship.uncontrollable = true
 				ship.untargetable = true
 				ship.disableAttacking = true

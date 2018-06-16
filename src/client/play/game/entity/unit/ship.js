@@ -190,13 +190,7 @@ class Ship extends Movable {
 	}
 
 	checkUpdateTarget (renderTime) {
-		if (!this.moveToTarget) {
-			return
-		}
-		if (this.checkQueuedSkill && this.checkQueuedSkill(renderTime)) {
-			this.setTarget(null)
-			this.reachedDestination(false)
-		} else {
+		if (this.moveToTarget) {
 			super.checkUpdateTarget(renderTime)
 		}
 	}
@@ -219,7 +213,11 @@ class Ship extends Movable {
 			}
 			if (closeEnough) {
 				if (this.performSkill(renderTime, targetSkill.index, targetSkill.target)) {
-					if (!unitTarget && !skillData.continuesToDestination) {
+					if (skillData.continueToDestination) {
+						if (unitTarget) {
+							this.moveToTarget = true
+						}
+					} else {
 						this.reachedDestination(false)
 					}
 					this.targetingSkill = null

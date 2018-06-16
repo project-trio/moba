@@ -41,6 +41,8 @@ class Unit {
 		this.untargetable = this.static
 		this.stunnedUntil = 0
 		this.attackPierceBonus = 0
+		this.isDead = false
+		this.isDying = false
 
 		this.fogRadius = null
 		this.fogCircle = null
@@ -785,14 +787,14 @@ Unit.update = function (renderTime, timeDelta, tweening, isRetro) {
 		}
 	}
 	for (const unit of allUnits) {
-		if (unit.isDead) {
+		if (unit.isDying) {
 			continue
 		}
 		if (!tweening) {
 			unit.checkTarget(renderTime)
 		}
 		unit.updateAim(timeDelta, tweening)
-		if (!tweening) {
+		if (!tweening && !unit.isDead) {
 			unit.checkAttack(renderTime)
 		}
 	}

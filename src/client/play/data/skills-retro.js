@@ -258,6 +258,7 @@ export default {
 			suffixMoveSpeed: '%',
 			hitsTowers: true,
 			target: TARGET_ENEMY,
+			continueToDestination: true,
 			getEffectDuration (level) {
 				return levelMultiplier(20, level, 1) * 100
 			},
@@ -371,12 +372,13 @@ export default {
 			name: `Missile`,
 			description: 'Deals [[Damage]] to the target, ignoring armor',
 			hitsTowers: true,
+			continueToDestination: false,
 			target: TARGET_ENEMY,
 			getEffectDamage (level) {
 				return levelMultiplier(30, level, 5)
 			},
 			getRange (level) {
-				return 170 // 130
+				return 180 // 130
 			},
 			getCooldown (level) {
 				return 120
