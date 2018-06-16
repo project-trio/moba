@@ -390,7 +390,8 @@ export default {
 					bulletColor: 0x00dddd,
 					attackDamage: damage,
 					attackPierce: 100,
-					bulletSpeed: 8,
+					bulletSpeed: 4,
+					bulletAcceleration: true,
 					maxRange: maxRange,
 				}
 				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.top.aim)

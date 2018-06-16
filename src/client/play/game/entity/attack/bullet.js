@@ -1,7 +1,7 @@
+import store from '@/client/store'
+
 import Local from '@/client/play/local'
-
 import Render from '@/client/play/render/render'
-
 import Float from '@/client/play/game/helpers/float'
 import Util from '@/client/play/game/util'
 
@@ -55,6 +55,10 @@ class Bullet {
 		this.attackDamage = data.attackDamage
 		this.attackPierce = data.attackPierce
 		this.moveConstant = Float.divide(data.bulletSpeed, 500)
+		if (data.bulletAcceleration) {
+			this.moveAcceleration = 0.00000005
+			this.startTime = store.state.game.renderTime
+		}
 
 		if (source.height) {
 			this.dropRate = 1400000 * this.moveConstant / Math.sqrt(source.distanceTo(target))
@@ -223,8 +227,13 @@ class Bullet {
 			cy = this.py
 
 			// Cache
-			this.currentSpeed = this.moveConstant
-			const moveScalar = Float.multiply(this.currentSpeed, timeDelta)
+			let speed = this.moveConstant
+			if (this.moveAcceleration) {
+				const timeElapsed = Math.min(3000, renderTime - this.startTime)
+				speed += Float.multiply(this.moveAcceleration, timeElapsed * timeElapsed)
+			}
+			this.currentSpeed = speed
+			const moveScalar = Float.multiply(speed, timeDelta)
 			moveByX = Math.round(Float.multiply(moveScalar, this.moveX))
 			moveByY = Math.round(Float.multiply(moveScalar, this.moveY))
 		}
