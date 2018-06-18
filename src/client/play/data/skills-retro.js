@@ -478,13 +478,13 @@ export default {
 			target: TARGET_GROUND,
 			hitsTowers: true,
 			getEffectRange (level) {
-				return levelMultiplier(70, level, 2) // 70 1
+				return levelMultiplier(30, level, 3) // ? 1
 			},
 			getEffectDamage (level) {
 				return levelMultiplier(25, level, 6)
 			},
 			getRange (level) {
-				return levelMultiplier(80, level, 5)
+				return levelMultiplier(85, level, 2)
 			},
 			getCooldown (level) {
 				return 80
@@ -492,17 +492,16 @@ export default {
 			start (index, level, ship, target, startAt) {
 				const damage = this.getEffectDamage(level) * 100
 				const aoeRange = this.getEffectRange(level)
-				new AreaOfEffect(ship, {
-					dot: false,
+				const bulletData = {
 					hitsTowers: this.hitsTowers,
-					color: 0xff0000,
-					opacity: 0.5,
-					px: target[0], py: target[1],
-					radius: aoeRange,
-					time: startAt,
+					bulletSize: 10,
+					bulletColor: 0xdd0000,
 					attackDamage: damage,
 					attackPierce: 0,
-				})
+					bulletSpeed: 13,
+					explosionRadius: aoeRange,
+				}
+				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.top.aim)
 			},
 		},
 		{
