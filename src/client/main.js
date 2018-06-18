@@ -32,7 +32,7 @@ new Vue({
 	components: { App },
 	data: store,
 	router,
-	render: (createElement) => {
+	render (createElement) {
 		return createElement(App)
 	},
 })

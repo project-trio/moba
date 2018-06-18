@@ -648,7 +648,7 @@ export default {
 				})
 
 				ship.endInvisible = function () {
-					p('cancel invisibility')
+					// p('cancel invisibility')
 					ship.cancelAnimation(null, 'opacity')
 					ship.opacity(1)
 					ship.updateCooldown(index, store.state.game.renderTime, cooldown)

@@ -8,7 +8,7 @@ window.p = console.log
 new Vue({
 	el: '#app',
 	components: { App },
-	render: (createElement) => {
+	render (createElement) {
 		return createElement(App)
 	},
 })

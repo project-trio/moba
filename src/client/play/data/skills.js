@@ -66,7 +66,7 @@ export default {
 				ship.opacity(0.75)
 
 				ship.onStopped = function () {
-					p('cancel charge')
+					// p('cancel charge')
 					ship.endSkill(index)
 				}
 			},
@@ -653,7 +653,7 @@ export default {
 				ship.opacity(0.75)
 
 				ship.onStopped = function () {
-					p('cancel barrel roll')
+					// p('cancel barrel roll')
 					ship.updateCooldown(index, store.state.game.renderTime, cooldown)
 					ship.endSkill(index)
 				}
@@ -1118,7 +1118,7 @@ export default {
 				})
 
 				ship.endInvisible = function () {
-					p('cancel invisibility')
+					// p('cancel invisibility')
 					ship.cancelAnimation(null, 'opacity')
 					ship.opacity(1)
 					ship.updateCooldown(index, store.state.game.renderTime, cooldown)
