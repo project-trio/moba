@@ -442,7 +442,7 @@ export default {
 					from: 0,
 					to: 0,
 					parabola: 2,
-					max: maxRange + 50,
+					max: maxRange,
 					start: startAt,
 					duration: animationDuration,
 				})

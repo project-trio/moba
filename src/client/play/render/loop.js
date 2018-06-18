@@ -79,24 +79,23 @@ export default {
 	start () {
 		animationId = window.requestAnimationFrame(animate)
 
-		// if (!Local.TESTING) {
-		//   return
-		// }
-		updatePanel = new Stats()
-		updatePanel.showPanel(1)
-		document.body.appendChild(updatePanel.dom)
-
-		tickPanel = new Stats()
-		tickPanel.showPanel(1)
-		document.body.appendChild(tickPanel.dom)
-		tickPanel.dom.style.top = '48px'
-
 		framePanel = new Stats()
 		framePanel.showPanel(0)
 		document.body.appendChild(framePanel.dom)
-		framePanel.dom.style.top = '96px'
 
-		Local.game.updatePanel = updatePanel
+		const username = store.state.signin.username
+		if (username === 'kiko ' || username === 'mod') {
+			tickPanel = new Stats()
+			tickPanel.showPanel(1)
+			document.body.appendChild(tickPanel.dom)
+			tickPanel.dom.style.top = '48px'
+
+			updatePanel = new Stats()
+			updatePanel.showPanel(1)
+			document.body.appendChild(updatePanel.dom)
+			Local.game.updatePanel = updatePanel
+			framePanel.dom.style.top = '96px'
+		}
 	},
 
 	stop () {
@@ -107,7 +106,7 @@ export default {
 			Local.game.started = false
 			Local.game.updatePanel = null
 		}
-		if (tickPanel) {
+		if (framePanel) {
 			updatePanel.dom.remove()
 			tickPanel.dom.remove()
 			framePanel.dom.remove()

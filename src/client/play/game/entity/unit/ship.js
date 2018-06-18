@@ -103,7 +103,7 @@ class Ship extends Movable {
 			this.setSelection(0xffff00)
 		}
 
-		statBase.create(name, team, this.top, this.base, this, true)
+		statBase.create(name, team, this.top, this.base, this, Local.game.size < 10)
 
 		const displayName = player.name
 		const displayTextSize = displayName.length < 4 ? 10 : 10 - (displayName.length - 4) / 4

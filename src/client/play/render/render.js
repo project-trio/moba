@@ -18,7 +18,8 @@ THREE.Cache.enabled = true
 const WALL_HEIGHT = 50
 
 const CAMERA_FOV = 60
-const CAMERA_HEIGHT = 256 / (CAMERA_FOV / 180)
+const CAMERA_OFF = 256
+const CAMERA_HEIGHT = CAMERA_OFF / (CAMERA_FOV / 180)
 
 let gameScene, renderer, outlineEffect, gameLight
 let gameCamera, perspectiveCamera, orthoCamera
@@ -73,7 +74,7 @@ const resize = function () {
 		visibleHeight = 2 * Math.tan(visibleFOV / 2) * CAMERA_HEIGHT
 		visibleWidth = visibleHeight * gameCamera.aspect
 	} else {
-		const cameraZoom = height / 444
+		const cameraZoom = height / (CAMERA_OFF / 0.575)
 		const zoomWidth = width / cameraZoom
 		const zoomHeight = height / cameraZoom
 		gameCamera.left = -zoomWidth

@@ -4,7 +4,7 @@
 	<div class="start-countdown">
 		<h2>starting in {{ countdownTime }}s</h2>
 	</div>
-	<h1>choose your unit</h1>
+	<h1 v-if="tall">choose your unit</h1>
 	<div class="unit-selection">
 		<div class="chosen-box selection-half">
 			<canvas id="preview" />
@@ -39,6 +39,10 @@ export default {
 	computed: {
 		countdownTime () {
 			return Math.round(-store.state.game.renderTime / 1000)
+		},
+
+		tall () {
+			return window.innerHeight > 640
 		},
 
 		players () {

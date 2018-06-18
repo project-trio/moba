@@ -5,11 +5,11 @@
 	<div v-if="stats.level">{{ levelProgress }}</div>
 	<div>
 		<span>{{ stats.dps }} dps</span>
-		<span>{{ stats.range }} range</span>
+		<span class="second">{{ stats.range }} range</span>
 	</div>
 	<div>
 		<span>{{ stats.armor }}% armor</span>
-		<span>{{ stats.moveSpeed }} kph</span>
+		<span class="second">{{ stats.moveSpeed }} kph</span>
 	</div>
 </div>
 </template>
@@ -38,5 +38,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-// .player-info
+.player-info
+	font-size 14px
+	line-height 22px
+
+.second
+	margin-left 4px
 </style>
