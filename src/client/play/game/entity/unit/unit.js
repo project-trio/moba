@@ -608,7 +608,7 @@ class Unit {
 
 	checkTarget (renderTime) {
 		if (this.attackTarget) {
-			if (!this.attackTarget.targetableStatus() || !this.canSee(this.attackTarget)) {
+			if (!this.attackTarget.targetable() || !this.canSee(this.attackTarget)) {
 				this.checkLoseTarget()
 			} else {
 				this.checkUpdateTarget(renderTime)
@@ -703,7 +703,10 @@ class Unit {
 		return this.distanceTo(unit) < rangeCheck
 	}
 
-	targetableStatus () {
+	damageable () {
+		return !this.isDead && !this.untargetable
+	}
+	targetable () {
 		return !this.isDead && !this.untargetable && !this.invisible
 	}
 

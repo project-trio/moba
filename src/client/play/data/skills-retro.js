@@ -395,6 +395,7 @@ export default {
 					bulletSpeed: 4,
 					bulletAcceleration: true,
 					maxRange: maxRange,
+					dodgeable: true,
 				}
 				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.top.aim)
 			},
@@ -534,6 +535,14 @@ export default {
 				}
 
 				const duration = endAt - startAt
+				ship.queueAnimation(null, 'opacity', {
+					from: 1,
+					to: 1,
+					parabola: 2,
+					max: -0.6,
+					start: startAt,
+					duration: duration,
+				})
 				ship.queueAnimation('container', 'position', {
 					axis: 'x',
 					from: ship.px / 100,

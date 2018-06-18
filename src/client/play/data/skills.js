@@ -753,6 +753,7 @@ export default {
 					attackPierce: 100,
 					bulletSpeed: 8,
 					maxRange: maxRange,
+					dodgeable: true,
 				}
 				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
 			},

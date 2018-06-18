@@ -62,7 +62,7 @@ class Tower extends Unit {
 		let target = this.attackTarget
 		let updateTarget = true
 		if (target) {
-			if (target.targetableStatus() && this.distanceTo(target) < closest) {
+			if (target.targetable() && this.distanceTo(target) < closest) {
 				closest = this.targetedAt - minChange
 				updateTarget = false
 			} else {
@@ -71,7 +71,7 @@ class Tower extends Unit {
 		}
 		const team = this.team, px = this.px, py = this.py
 		for (const unit of units) {
-			if (unit !== target && unit.movable && team !== unit.team && unit.targetableStatus()) {
+			if (unit !== target && unit.movable && team !== unit.team && unit.targetable()) {
 				const dist = unit.distanceToPoint(px, py)
 				if (dist < closest) {
 					target = unit

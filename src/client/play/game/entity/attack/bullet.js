@@ -41,6 +41,7 @@ class Bullet {
 		this.explosionRadius = data.explosionRadius
 		this.effectDuration = data.effectDuration
 		this.stunDuration = data.stunDuration
+		this.dodgeable = data.dodgeable
 
 		this.propagated = 0
 		this.propagateRange = data.propagateRange
@@ -179,7 +180,7 @@ class Bullet {
 			let nearestUnit
 			let nearestDistance = Util.squared(this.propagateRange * 100)
 			for (const unit of units) {
-				if (unit.team === targetTeam && unit.targetableStatus() && this.targeted.indexOf(unit.id) === -1) {
+				if (unit.team === targetTeam && unit.targetable() && this.targeted.indexOf(unit.id) === -1) {
 					const distance = unit.distanceTo(this.target)
 					if (distance < nearestDistance) {
 						nearestDistance = distance
@@ -271,7 +272,7 @@ class Bullet {
 	checkCollision (renderTime, units) {
 		const team = this.team, px = this.px, py = this.py
 		for (const unit of units) {
-			if (team !== unit.team && unit.targetableStatus() && (!unit.tower || this.hitsTowers)) {
+			if (team !== unit.team && unit.damageable() && (!unit.tower || this.hitsTowers)) {
 				const dist = unit.distanceToPoint(px, py)
 				if (dist <= unit.collisionCheck * 2) {
 					if (!this.explosionRadius) {
@@ -288,11 +289,12 @@ class Bullet {
 	// Aim
 
 	updateTarget (force) {
-		if (!force && this.target.isDead) {
+		const targ = this.target
+		if (!force && (targ.isDead || (this.dodgeable && (targ.invisible || targ.untargetable)))) {
 			this.unitTarget = false
 			return
 		}
-		this.setDestination(this.target.px, this.target.py)
+		this.setDestination(targ.px, targ.py)
 	}
 
 }
@@ -321,6 +323,8 @@ Bullet.update = function (renderTime, timeDelta, tweening) {
 				bullet.updateTarget(false)
 			} else if (bullet.firstCollision) {
 				bullet.checkCollision(renderTime, units)
+			} else if (bullet.dodgeable) {
+				bullet.checkCollision(renderTime, [ bullet.target ])
 			}
 			if (bullet.remove) {
 				allBullets.splice(idx, 1)

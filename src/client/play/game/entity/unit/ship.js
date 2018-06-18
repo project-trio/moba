@@ -624,7 +624,7 @@ class Ship extends Movable {
 
 	setTargetId (id) {
 		const target = Unit.get(id)
-		if (target && target.targetableStatus()) {
+		if (target && target.targetable()) {
 			const dist = this.distanceTo(target)
 			this.moveToTarget = true
 			return this.setTarget(target, dist, this.isLocal)
@@ -634,7 +634,7 @@ class Ship extends Movable {
 	getAttackTarget (units) {
 		let closest = this.attackRangeCheck
 		let target = this.attackTarget
-		if (target && this.moveToTarget && target.targetableStatus()) {
+		if (target && this.moveToTarget && target.targetable()) {
 			const dist = this.distanceTo(target)
 			this.setTarget(target, dist)
 			if (this.cacheAttackCheck && this.endInvisible) {
@@ -646,7 +646,7 @@ class Ship extends Movable {
 			return null
 		}
 		if (target) {
-			if (target.targetableStatus()) {
+			if (target.targetable()) {
 				const dist = this.distanceTo(target)
 				if (dist <= closest) {
 					return this.setTarget(target, dist)
@@ -656,7 +656,7 @@ class Ship extends Movable {
 		}
 		const team = this.team, px = this.px, py = this.py
 		for (const unit of units) {
-			if (unit !== target && team !== unit.team && unit.targetableStatus()) {
+			if (unit !== target && team !== unit.team && unit.targetable()) {
 				const dist = unit.distanceToPoint(px, py)
 				if (dist < closest) {
 					target = unit
