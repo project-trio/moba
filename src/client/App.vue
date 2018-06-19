@@ -117,7 +117,11 @@ h3
 
 .interactive, button
 	cursor pointer
+
+.panel-button
 	pointer-events auto
+	height 44px
+	width 256px
 
 .bold
 	font-weight 600

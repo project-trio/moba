@@ -132,11 +132,6 @@ export default {
 	text-shadow -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000
 	pointer-events none
 
-button
-	pointer-events auto
-	height 44px
-	width 256px
-
 .panel
 	padding 16px
 	width 480px
