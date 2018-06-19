@@ -46,6 +46,7 @@ class Mini extends Movable {
 	}
 
 	refresh (team, path, mirrored) {
+		this.isRendering = this.localAlly
 		this.isDead = false
 		this.isDying = false
 		this.updateHealth(this.stats.healthMax)

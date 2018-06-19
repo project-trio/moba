@@ -22,6 +22,7 @@ class Unit {
 	constructor (team, statBase, unitScale, sx, sy, startAngle, isLocal, renderInBackground) {
 		this.team = team
 		this.localAlly = Local.player && team === Local.player.team
+		this.isRendering = this.localAlly
 		this.startAngle = startAngle
 		this.damagers = {}
 		this.isLocal = isLocal

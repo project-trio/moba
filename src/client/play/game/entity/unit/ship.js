@@ -539,7 +539,7 @@ class Ship extends Movable {
 		}
 	}
 
-	levelUp (over, silent) {
+	levelUp (over) {
 		this.level += 1
 		this.displayStats.level = this.level
 		if (this.level >= maxLevel && !store.state.game.retro) {
@@ -733,17 +733,13 @@ class Ship extends Movable {
 
 	updateVisibility () {
 		const units = Unit.all()
-		for (let idx = units.length - 1; idx >= 0; idx -= 1) {
-			const sightTarget = units[idx]
+		for (const sightTarget of units) {
 			let revealUnit = sightTarget.localAlly
-			if (revealUnit) {
-				sightTarget.isRendering = true
-			} else {
+			if (!revealUnit) {
 				let isInSight = !sightTarget.invisible
 				if (isInSight && (!sightTarget.attackTarget || !sightTarget.cacheAttackCheck)) {
 					isInSight = false
-					for (let sidx = units.length - 1; sidx >= 0; sidx -= 1) {
-						const checkSightFromUnit = units[sidx]
+					for (const checkSightFromUnit of units) {
 						if (checkSightFromUnit.localAlly && checkSightFromUnit.hasSightOf(sightTarget)) {
 							isInSight = true
 							break
