@@ -25,7 +25,7 @@ export default {
 			const maps = []
 			for (const name in commonMaps) {
 				const map = commonMaps[name]
-				if (this.selectedSize >= map.minSize && (!map.maxSize || this.selectedSize <= map.maxSize)) {
+				if (this.selectedSize >= map.minSize && this.selectedSize <= map.maxSize) {
 					maps.push(name)
 				}
 			}
@@ -34,10 +34,13 @@ export default {
 	},
 
 	watch: {
-		selectedSize () {
-			if (this.mapsForSize.indexOf(this.selectedMap) === -1) {
-				this.onMap(this.mapsForSize[0])
-			}
+		selectedSize: {
+			immediate: true,
+			handler () {
+				if (this.mapsForSize.indexOf(this.selectedMap) === -1) {
+					this.onMap(this.mapsForSize[0])
+				}
+			},
 		},
 	},
 

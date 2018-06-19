@@ -239,7 +239,7 @@ const maps = {}
 	hH = LARGE_HEIGHT / 2
 	maps.large = {
 		minSize: 6,
-		maxSize: null,
+		maxSize: 25,
 
 		width: LARGE_WIDTH,
 		height: LARGE_HEIGHT,

@@ -16,9 +16,11 @@
 		</div>
 		<h3>{{ pvpMode ? 'max players' : 'game size' }}:</h3>
 		<game-sizes @select="selectedSize = $event" :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="pvpMode" />
-		<h3>map:</h3>
-		<game-maps @select="selectedMap = $event" :selectedSize="selectedSize" :selectedMap="selectedMap" />
-		<button @click="onSubmit" class="big interactive">confirm</button>
+		<div v-if="selectedSize > 0">
+			<h3>map:</h3>
+			<game-maps @select="selectedMap = $event" :selectedSize="selectedSize" :selectedMap="selectedMap" />
+			<button @click="onSubmit" class="big interactive">confirm</button>
+		</div>
 	</div>
 </div>
 </template>
@@ -70,14 +72,7 @@ export default {
 		},
 
 		gameSizes () {
-			let sizes = CommonConsts.GAME_SIZES
-			if (this.pvpMode) {
-				return sizes
-			}
-			sizes = sizes.slice(0, 2)
-			sizes.push(12)
-			sizes.push(25)
-			return sizes
+			return this.pvpMode ? CommonConsts.GAME_SIZES : [ 1, 12, 25 ]
 		},
 	},
 
@@ -91,7 +86,7 @@ export default {
 		onGameMode (mode) {
 			this.selectedMode = mode
 			if (!this.pvpMode) {
-				this.selectedSize = 1
+				this.selectedSize = 0
 			}
 		},
 
