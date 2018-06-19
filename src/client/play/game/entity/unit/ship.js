@@ -35,7 +35,7 @@ const waitToRespawn = 2000
 const expPerLevel = 1200
 const maxLevel = 30
 
-const EXP_PER_TICK = Local.TESTING ? 20 : 2
+const EXP_PER_TICK = Local.TESTING ? 2 : 2
 
 //CLASS
 
@@ -119,9 +119,9 @@ class Ship extends Movable {
 		}
 
 		if (retro) {
-			this.levelup(0)
-			this.levelup(1)
-			this.levelup(2)
+			this.levelupSkill(0)
+			this.levelupSkill(1)
+			this.levelupSkill(2)
 		}
 	}
 
@@ -326,7 +326,7 @@ class Ship extends Movable {
 		return true
 	}
 
-	levelup (index) {
+	levelupSkill (index) {
 		if (this.skills.leveled < this.level) {
 			const nextLevel = this.skills.levels[index] + 1
 			if (nextLevel <= 10) {
@@ -539,7 +539,7 @@ class Ship extends Movable {
 		}
 	}
 
-	levelUp (over) {
+	levelUp (over, silent) {
 		this.level += 1
 		this.displayStats.level = this.level
 		if (this.level >= maxLevel && !store.state.game.retro) {
@@ -578,7 +578,7 @@ class Ship extends Movable {
 		}
 		this.renderLevelText()
 
-		if (this.isLocal) {
+		if (this.isLocal && over < this.expPerLevel) {
 			store.state.local.level = this.level
 			RenderSound.levelup()
 		}

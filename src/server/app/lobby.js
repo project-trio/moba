@@ -24,9 +24,9 @@ const createGame = function (player, mode, size, map, joining, autoStart) {
 	const response = {}
 	if (player.game) {
 		response.error = 'Already in a game'
-	} else if (CommonConsts.GAME_MODES.map((mode) => mode.name).indexOf(mode) === -1) {
+	} else if (mode !== 'tutorial' && CommonConsts.GAME_MODES.map((mode) => mode.name).indexOf(mode) === -1) {
 		response.error = 'Invalid game mode'
-	} else if (CommonConsts.GAME_SIZES.indexOf(size) === -1) {
+	} else if (mode !== 'tutorial' && CommonConsts.GAME_SIZES.indexOf(size) === -1) {
 		response.error = 'Invalid game size'
 	} else if (mode !== 'bots' && size > 1 && !CommonConsts.TESTING && player.name !== 'kiko ') {
 		response.error = 'You need to register before creating a game larger than 1v1'

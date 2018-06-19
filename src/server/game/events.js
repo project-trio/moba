@@ -4,8 +4,6 @@ const CommonConsts = require.main.require('../common/constants')
 
 const Util = require.main.require('./utils/util')
 
-const Config = require.main.require('./game/config')
-
 //PUBLIC
 
 module.exports = {
@@ -24,11 +22,12 @@ module.exports = {
 		})
 
 		socket.on('action', (data) => {
-			if (!player.game) {
+			const game = player.game
+			if (!game) {
 				console.log('Action ERR: No game for player')
 				return
 			}
-			if (player.game.serverUpdate < Config.updatesUntilStart) {
+			if (game.serverUpdate < game.updatesUntilStart) {
 				console.log('Action ERR: Game not started yet')
 				return
 			}

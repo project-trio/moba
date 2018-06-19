@@ -64,9 +64,9 @@ module.exports = class Player {
 		this.chatAt = null
 	}
 
-	setRetro (retro) {
+	setRetro (retro, tutorial) {
 		const shipNames = retro ? CommonConsts.RETRO_SHIP_NAMES : CommonConsts.SHIP_NAMES
-		this.shipName = this.client ? shipNames[0] : randomItem(shipNames)
+		this.shipName = this.client ? shipNames[tutorial ? 3 : 0] : randomItem(shipNames)
 	}
 
 	// Rooms

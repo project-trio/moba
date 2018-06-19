@@ -6,8 +6,9 @@ import Local from '@/client/play/local'
 
 import Render from '@/client/play/render/render'
 
-import Bullet from '@/client/play/game/entity/attack/bullet'
+import Tutorial from '@/client/play/game/tutorial'
 
+import Bullet from '@/client/play/game/entity/attack/bullet'
 import Unit from '@/client/play/game/entity/unit/unit'
 
 let previousTimestamp = 0
@@ -44,6 +45,10 @@ const animate = function (timestamp) {
 			if (processUpdate) {
 				tickPanel.end()
 			}
+			const tutorial = store.state.game.tutorial
+			if (tutorial && tutorial.check && tutorial.check(Local.unit)) {
+				Tutorial.advance()
+			}
 		}
 		lastTickTime = timestamp
 	} else if (isPlaying) { // Tween
@@ -56,7 +61,7 @@ const animate = function (timestamp) {
 		Unit.update(renderTime, tweenTimeDelta, true)
 	}
 
-	if (isPlaying) {
+	if (isPlaying) { //TODO isStarted
 		if (!store.state.manualCamera || store.state.trackCamera) {
 			const position = Local.unit.container.position
 			game.map.track(position.x, position.y, false)
@@ -107,12 +112,14 @@ export default {
 			Local.game.updatePanel = null
 		}
 		if (framePanel) {
-			updatePanel.dom.remove()
-			tickPanel.dom.remove()
 			framePanel.dom.remove()
-			updatePanel = null
-			tickPanel = null
 			framePanel = null
+			if (updatePanel) {
+				updatePanel.dom.remove()
+				tickPanel.dom.remove()
+				updatePanel = null
+				tickPanel = null
+			}
 		}
 	},
 

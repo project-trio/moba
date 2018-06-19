@@ -1,9 +1,9 @@
 <template>
 <div class="game-status scrollable">
-	<div v-if="gameOver">
+	<tutorial-panel v-if="tutorial && tutorial.title" :tutorial="tutorial" />
+	<div v-else-if="gameOver">
 		<div class="bar-section panel">
-			<h1>game over</h1>
-			<h2 :class="`team-${winningTeam + 1}`">team {{ winningTeamColor }} won!</h2>
+			<h1 :class="`team-${winningTeam + 1}`">{{ victory ? 'Victory!' : 'Defeat' }}</h1>
 			<button @click="onReturnToLobby" class="panel-button interactive">leave</button>
 		</div>
 		<player-scores />
@@ -27,6 +27,9 @@ import store from '@/client/store'
 import HelpPanel from '@/client/components/Game/GameStatus/HelpPanel'
 import PlayerScores from '@/client/components/Game/GameStatus/PlayerScores'
 import SettingsPanel from '@/client/components/Game/GameStatus/SettingsPanel'
+import TutorialPanel from '@/client/components/Game/GameStatus/Tutorial'
+
+import Local from '@/client/play/local'
 
 const KEY_TAB = 9
 const KEY_ESCAPE = 27
@@ -36,6 +39,7 @@ export default {
 		HelpPanel,
 		PlayerScores,
 		SettingsPanel,
+		TutorialPanel,
 	},
 
 	data () {
@@ -54,15 +58,18 @@ export default {
 		playing () {
 			return store.state.game.playing
 		},
-
-		gameOver () {
-			return this.winningTeam !== null
+		tutorial () {
+			return store.state.game.tutorial
 		},
+
 		winningTeam () {
 			return store.state.game.winningTeam
 		},
-		winningTeamColor () {
-			return this.winningTeam === 0 ? 'blue' : 'pink'
+		gameOver () {
+			return this.winningTeam !== null
+		},
+		victory () {
+			return this.winningTeam === Local.player.team
 		},
 
 		currentPress () {

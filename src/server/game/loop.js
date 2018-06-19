@@ -15,7 +15,7 @@ const loop = function () {
 			let actionFound = false
 			const actionData = []
 			const currentUpdate = game.serverUpdate
-			const onSelectionScreen = currentUpdate <= Config.updatesUntilStart
+			const onSelectionScreen = currentUpdate <= game.updatesUntilStart
 			const gamePlayers = game.players
 			for (let pidx = 0; pidx < gamePlayers.length; pidx += 1) {
 				const player = gamePlayers[pidx]

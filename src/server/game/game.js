@@ -27,6 +27,7 @@ class Game {
 		this.started = false
 		this.hostId = null
 		this.autoStart = autoStart ? 1 : 0
+		this.updatesUntilStart = mode === 'tutorial' ? 0 : Config.updatesUntilStart
 
 		if (this.botMode) {
 			const firstTeam = 1 //SAMPLE
@@ -142,7 +143,7 @@ class Game {
 			}
 			const teamCounts = this.teamCounts()
 			this.team(player, teamCounts[0] <= teamCounts[1] ? 0 : 1)
-			player.setRetro(this.retro)
+			player.setRetro(this.retro, this.mode === 'tutorial')
 
 			if (this.checkFull()) {
 				this.state = 'FULL'
@@ -213,7 +214,7 @@ class Game {
 			players: this.formattedPlayers(),
 			updates: Config.updateDuration,
 			ticks: Config.tickDuration,
-			updatesUntilStart: Config.updatesUntilStart,
+			updatesUntilStart: this.updatesUntilStart,
 		})
 		this.state = 'STARTED'
 		this.started = true

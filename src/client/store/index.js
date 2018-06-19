@@ -26,6 +26,7 @@ const defaultGameState = () => {
 		},
 		renderTime: 0,
 		ships: [],
+		tutorial: null,
 	}
 }
 

@@ -4,6 +4,58 @@ const maps = {}
 	const WALL_RADIUS = 24
 	let wH, hH
 
+	// Tutorial
+
+	const TUTORIAL_WIDTH = 400
+	const TUTORIAL_HEIGHT = 1000
+	wH = TUTORIAL_WIDTH / 2
+	hH = TUTORIAL_HEIGHT / 2
+	const WALL_Y = hH - 80
+	const WALL_LENGTH = 116
+	maps.tutorial = {
+		minSize: 0,
+		maxSize: 0,
+
+		width: TUTORIAL_WIDTH,
+		height: TUTORIAL_HEIGHT,
+
+		towers: [
+			['base', wH, 44, false],
+			['turret', WALL_LENGTH + 4, WALL_Y, false],
+		],
+
+		walls: [
+			{
+				start: { x: TUTORIAL_WIDTH / 2, y: 0 },
+				radius: WALL_RADIUS,
+				move: [
+					{ dx: TUTORIAL_WIDTH / 4, dy: 0},
+					{ dx: 0, dy: WALL_Y / 2 },
+					{ dx: -(WALL_LENGTH) / 2 + WALL_RADIUS, dy: 0 },
+				],
+				mirror: false,
+				endCap: true,
+			},
+		],
+
+		spawn: {
+			interval: 25,
+			initialDelay: 10,
+		},
+
+		minions: [
+			{
+				type: 'ranged',
+				paths: [
+					[[wH - 40, 74, 0, 0], [wH - 40, hH, 0, -1000]],
+					[[wH, 80, 0, 0], [wH, hH, 0, -1000]],
+					[[wH + 40, 74, 0, 0], [wH + 40, hH, 0, -1000]],
+				],
+				mirror: false,
+			},
+		],
+	}
+
 	// Tiny
 
 	const TINY_WIDTH = 900

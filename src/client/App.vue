@@ -117,6 +117,7 @@ h3
 
 .interactive, button
 	cursor pointer
+	pointer-events auto
 
 .bold
 	font-weight 600

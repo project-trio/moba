@@ -6,9 +6,10 @@ import Render from '@/client/play/render/render'
 import AreaOfEffect from '@/client/play/game/entity/attack/aoe'
 import Bullet from '@/client/play/game/entity/attack/bullet'
 
+import Tutorial from '@/client/play/game/tutorial'
+
 import GameMap from '@/client/play/game/entity/game/map'
 import Player from '@/client/play/game/entity/game/player'
-
 import Unit from '@/client/play/game/entity/unit/unit'
 
 export default function (gid, mode, size) {
@@ -33,6 +34,7 @@ export default function (gid, mode, size) {
 	this.finished = false
 	this.serverUpdate = -1
 	this.bots = mode === 'bots'
+	this.tutorial = mode === 'tutorial'
 
 	// Update
 
@@ -127,7 +129,7 @@ export default function (gid, mode, size) {
 					const skillIndex = action[0]
 					const skillLevelup = action[1]
 					if (skillLevelup) {
-						ship.levelup(skillIndex)
+						ship.levelupSkill(skillIndex)
 					} else {
 						const target = action[2]
 						if (target || skillIndex !== null) {
@@ -184,6 +186,10 @@ export default function (gid, mode, size) {
 		store.state.game.playing = true
 
 		this.centerOnUnit()
+
+		if (mode === 'tutorial') {
+			Tutorial.start()
+		}
 	}
 
 	// Setup
