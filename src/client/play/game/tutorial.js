@@ -39,7 +39,7 @@ const Tutorial = {
 	data: [
 		{
 			title: 'Welcome to moba!',
-			body: `This quick tutorial will introduce the game and controls.`,
+			body: `This quick tutorial will introduce the game and its controls.`,
 			init (ship) {
 				ship.stunnedUntil = 999999999
 				ship.reemergeAt = 999999999
@@ -69,9 +69,9 @@ const Tutorial = {
 		},
 		{
 			title: 'You leveled up!',
-			body: `Click the red upgrade button above one of your 3 abilities at the bottom of the screen to unlock it.`,
+			body: `Click the red upgrade button (or press shift + 1/2/3) above one of your 3 abilities at the bottom of the screen to unlock it.`,
 			init (ship) {
-				ship.awardExperience(ship.expPerLevel)
+				ship.levelUp(0)
 			},
 			check (ship) {
 				return ship.skills.leveled > 1
@@ -120,7 +120,9 @@ const Tutorial = {
 			title: 'Great work!',
 			body: `Use your abilities to keep pushing into the base for the win. Here's a bunch of levels to make this quick!`,
 			init (ship) {
-				ship.awardExperience(ship.expPerLevel * 30)
+				for (let i = 0; i < 26; i += 1) {
+					ship.levelUp(0)
+				}
 			},
 			continue: true,
 		},
