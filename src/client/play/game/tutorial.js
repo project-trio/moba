@@ -1,3 +1,4 @@
+import storage from '@/client/helpers/storage'
 import store from '@/client/store'
 
 import Local from '@/client/play/local'
@@ -132,6 +133,9 @@ const Tutorial = {
 			title: 'You win!',
 			body: `Okay, so maybe that was a little easy for you. Now that you know the basics, you're ready to play against other people - and that's where the real fun begins!`,
 			noDelay: true,
+			init () {
+				storage.set('tutorial', 1)
+			},
 			continue: true,
 		},
 	],

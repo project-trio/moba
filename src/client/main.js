@@ -4,6 +4,7 @@ import router from '@/client/router'
 
 import store from '@/client/store'
 import util from '@/client/helpers/util'
+import storage from '@/client/helpers/storage'
 
 import Local from '@/client/play/local'
 
@@ -26,6 +27,26 @@ if (hasSignin) {
 
 util.addListener(window, 'touchstart', emptyFunction)
 
+//GUARD
+
+router.beforeEach((to, from, next) => {
+	if (to.name === 'Start') {
+		if (store.state.signin.username) {
+			return next({name: 'Lobby'})
+		}
+	} else if (!store.state.signin.username) {
+		if (!store.state.signin.email) {
+			return next({name: 'Start'})
+		}
+	} else if (to.name === 'Lobby') {
+		p(storage.get('tutorial'))
+		if (!storage.get('tutorial')) {
+			return next({name: 'Tutorial'})
+		}
+	}
+	next()
+})
+
 /* eslint-disable no-new */
 new Vue({
 	el: '#app',
@@ -37,7 +58,7 @@ new Vue({
 	},
 })
 
-// Guard routes
+//INIT
 
 const startupRoute = function () {
 	if (!Local.TESTING) {
@@ -67,16 +88,3 @@ if (hasSignin) {
 } else {
 	router.replace({ name: 'Start' })
 }
-
-router.beforeEach((to, from, next) => {
-	if (to.name === 'Start') {
-		if (store.state.signin.username) {
-			return next({name: 'Lobby'})
-		}
-	} else if (!store.state.signin.username && to.name !== 'Start') {
-		if (!store.state.signin.email) {
-			return next({name: 'Start'})
-		}
-	}
-	next()
-})

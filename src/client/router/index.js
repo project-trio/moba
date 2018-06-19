@@ -5,6 +5,7 @@ import Start from '@/client/components/Start'
 import Lobby from '@/client/components/Lobby'
 import LobbyCreate from '@/client/components/Lobby/Create'
 import LobbyJoin from '@/client/components/Lobby/Join'
+import LobbyTutorial from '@/client/components/Lobby/Tutorial'
 import LobbyQueue from '@/client/components/Lobby/Queue'
 import Game from '@/client/components/Game'
 
@@ -32,6 +33,11 @@ export default new Router({
 			path: '/lobby/create',
 			name: 'Create',
 			component: LobbyCreate,
+		},
+		{
+			path: '/tutorial',
+			name: 'Tutorial',
+			component: LobbyTutorial,
 		},
 		{
 			path: '/join/:gid',
