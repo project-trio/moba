@@ -281,6 +281,7 @@ export default {
 					attackPierce: 0,
 					bulletSpeed: 8,
 					stunDuration: this.getEffectDuration(level),
+					dodgeable: true,
 				}
 				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.top.aim)
 			},

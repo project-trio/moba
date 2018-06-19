@@ -496,6 +496,7 @@ export default {
 						expires: 1000,
 					},
 					stunDuration: stunDuration,
+					dodgeable: true,
 				}
 				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
 			},
@@ -550,7 +551,6 @@ export default {
 						expires: effectDuration,
 					},
 				}
-				p(target)
 				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
 			},
 		},
