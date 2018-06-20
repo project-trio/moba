@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { TESTING } from '@/common/constants'
+
 import store from '@/client/store'
 import util from '@/client/helpers/util'
 
@@ -67,7 +69,7 @@ export default {
 	methods: {
 		confirmExit (event) {
 			if (store.state.game.active) {
-				if (Local.TESTING) {
+				if (TESTING) {
 					return
 				}
 				const message = 'Game in progress. You will be left afk in the game and may be unable to join a new game due to leaving. Are you sure?'

@@ -35,14 +35,14 @@
 </template>
 
 <script>
-import store from '@/client/store'
+import { TICK_DURATION } from '@/common/constants'
 
-import Local from '@/client/play/local'
+import store from '@/client/store'
 
 export default {
 	computed: {
 		fpsDescription () {
-			return this.fpsCap ? 1000 / (Local.tickDuration || 50) : 60
+			return this.fpsCap ? 1000 / TICK_DURATION : 60
 		},
 
 		fpsCap () {

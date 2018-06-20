@@ -1,3 +1,5 @@
+import { TICK_DURATION } from '@/common/constants'
+
 import store from '@/client/store'
 
 import Bridge from '@/client/play/events/bridge'
@@ -131,7 +133,7 @@ class Unit {
 			if (statBase.moveSpeed) {
 				this.modifiers.moveSpeed = []
 				this.stats.moveSpeed = statBase.moveSpeed[0]
-				this.modify('Constant', 'moveSpeed', 'multiply', Float.divide(Local.tickDuration, 2000))
+				this.modify('Constant', 'moveSpeed', 'multiply', Float.divide(TICK_DURATION, 2000))
 			}
 
 			// Health Bar
@@ -296,7 +298,7 @@ class Unit {
 		}
 		this.current[statName] = result
 		if (statName === 'moveSpeed') {
-			this.cacheMoveSpeed = result / Local.tickDuration
+			this.cacheMoveSpeed = result / TICK_DURATION
 		} else if (statName === 'sightRange') {
 			this.sightRangeCheck = Util.squared(result)
 		}
@@ -517,7 +519,7 @@ class Unit {
 			}
 			if (this.repairDamageRatio) {
 				const duration = 2000
-				const ticks = Math.floor(duration / Local.tickDuration)
+				const ticks = Math.floor(duration / TICK_DURATION)
 				const healthPerTick = Math.floor(Float.multiply(this.repairDamageRatio, damage) / ticks)
 				this.modify(`${source.id}${renderTime}`, 'healthRegen', 'add', healthPerTick, renderTime + duration)
 			}

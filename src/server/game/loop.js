@@ -1,9 +1,12 @@
+const { TESTING, UPDATE_DURATION } = require.main.require('../common/constants')
+
 const lobby = require.main.require('./app/lobby')
 
-const Config = require.main.require('./game/config')
 const Game = require.main.require('./game/game')
 
 const startTime = process.hrtime()
+
+const MAX_IDLE_UPDATES = TESTING ? 1000 : 1000
 
 //LOCAL
 
@@ -79,7 +82,7 @@ const loop = function () {
 			}
 			if (actionFound) {
 				game.idleCount = 0
-			} else if (game.idleCount > Config.maxIdleUpdates) {
+			} else if (game.idleCount > MAX_IDLE_UPDATES) {
 				console.log(game.id, 'Game timed out due to inactivity')
 				game.broadcast('closed')
 				game.destroy()
@@ -102,7 +105,7 @@ const loop = function () {
 	const diff = process.hrtime(startTime)
 	const msSinceStart = diff[0] * 1000 + diff[1] / 1000000
 	loopCount += 1
-	setTimeout(loop, Config.updateDuration * loopCount - msSinceStart)
+	setTimeout(loop, UPDATE_DURATION * loopCount - msSinceStart)
 }
 
 //PUBLIC

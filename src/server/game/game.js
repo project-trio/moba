@@ -1,11 +1,10 @@
 const SocketIO = require('socket.io')
 
-const CommonConsts = require.main.require('../common/constants')
+const { TESTING, UPDATE_DURATION } = require.main.require('../common/constants')
 const CommonMaps = require.main.require('../common/maps')
 
 const Util = require.main.require('./utils/util')
 
-const Config = require.main.require('./game/config')
 const Player = require.main.require('./game/player')
 
 //CONSTRUCTOR
@@ -27,7 +26,7 @@ class Game {
 		this.started = false
 		this.hostId = null
 		this.autoStart = autoStart ? 1 : 0
-		this.updatesUntilStart = mode === 'tutorial' ? 0 : Config.updatesUntilStart
+		this.updatesUntilStart = mode === 'tutorial' ? 0 : ((TESTING ? 5 : 20) * 1000 / UPDATE_DURATION)
 
 		if (this.botMode) {
 			const firstTeam = 1 //SAMPLE
@@ -35,7 +34,7 @@ class Game {
 				const player = new Player(null)
 				this.team(player, firstTeam)
 			}
-			if (CommonConsts.TESTING || size >= 10) {
+			if (TESTING || size >= 10) {
 				const secondTeam = 1 - firstTeam
 				for (let teamIndex = 0; teamIndex < size - 1; teamIndex += 1) {
 					const player = new Player(null)
@@ -212,8 +211,6 @@ class Game {
 			size: this.size,
 			map: this.map,
 			players: this.formattedPlayers(),
-			updates: Config.updateDuration,
-			ticks: Config.tickDuration,
 			updatesUntilStart: this.updatesUntilStart,
 		})
 		this.state = 'STARTED'

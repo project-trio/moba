@@ -26,12 +26,10 @@
 </template>
 
 <script>
-import router from '@/client/router'
-import store from '@/client/store'
-
 import CommonConsts from '@/common/constants'
 
-import Local from '@/client/play/local'
+import router from '@/client/router'
+import store from '@/client/store'
 
 import LobbyEvents from '@/client/play/events/lobby'
 
@@ -94,7 +92,7 @@ export default {
 			LobbyEvents.connect('create', { mode: this.selectedMode.name, size: this.selectedSize, map: this.selectedMap }, (data) => {
 				if (data.error) {
 					const errorMessage = `Unable to create game: ${data.error}`
-					if (Local.TESTING) {
+					if (CommonConsts.TESTING) {
 						warn(errorMessage)
 					} else {
 						window.alert(errorMessage)

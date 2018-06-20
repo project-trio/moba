@@ -1,3 +1,4 @@
+import { TESTING } from '@/common/constants'
 import commonMaps from '@/common/maps'
 
 import store from '@/client/store'
@@ -213,7 +214,7 @@ const GameMap = function (mapName, parent) {
 			return true
 		}
 
-		if (!Local.game.tutorial && (Local.TESTING || Local.player.name === 'bot')) {
+		if (!Local.game.tutorial && (TESTING || Local.player.name === 'bot')) {
 			automateTimer = setInterval(() => { //SAMPLE
 				if (Local.player) {
 					const dx = Math.round(Math.random() * 100 * layout.width)

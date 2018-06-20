@@ -1,3 +1,5 @@
+import { TESTING, TICK_DURATION, UPDATE_DURATION } from '@/common/constants'
+
 import store from '@/client/store'
 
 import Local from '@/client/play/local'
@@ -18,8 +20,6 @@ export default function (gid, mode, size) {
 	let updateCount = 0
 	let updateQueue = {}
 
-	let updateDuration
-	let tickDuration
 	let ticksPerUpdate
 	let renderedSinceUpdate = false
 	let ticksRendered = 0
@@ -39,8 +39,8 @@ export default function (gid, mode, size) {
 	// Update
 
 	this.calculateTicksToRender = function (currentTime) {
-		const tickOffsetTime = tickOffsets * ticksPerUpdate * tickDuration / 2
-		return Math.floor((currentTime - lastTickTime - tickOffsetTime) / tickDuration)
+		const tickOffsetTime = tickOffsets * ticksPerUpdate * TICK_DURATION / 2
+		return Math.floor((currentTime - lastTickTime - tickOffsetTime) / TICK_DURATION)
 	}
 
 	this.performTicks = function (ticksToRender) {
@@ -48,7 +48,7 @@ export default function (gid, mode, size) {
 		let ticksRenderedForFrame = 0
 		const maxTicksToRender = ticksToRender > 9 ? Math.min(1000, Math.pow(ticksToRender, 0.75)) : 1
 		while (ticksToRender > 0) {
-			renderTime = ticksRendered * tickDuration
+			renderTime = ticksRendered * TICK_DURATION
 			store.state.game.renderTime = renderTime
 
 			if (ticksRendered % ticksPerUpdate === 0) {
@@ -56,7 +56,7 @@ export default function (gid, mode, size) {
 					store.state.game.missingUpdate = false
 				} else {
 					tickOffsets += 1
-					if (ticksToRender > ticksPerUpdate) {
+					if (renderTime > 0 && ticksToRender > ticksPerUpdate) {
 						store.state.game.missingUpdate = true
 					}
 					// p('Missing update', ticksToRender, tickOffsets)
@@ -65,8 +65,8 @@ export default function (gid, mode, size) {
 			}
 			if (renderTime > 0) {
 				AreaOfEffect.update(renderTime, Unit.all())
-				Bullet.update(renderTime, tickDuration, false)
-				Unit.update(renderTime, tickDuration, false, this.retro)
+				Bullet.update(renderTime, TICK_DURATION, false)
+				Unit.update(renderTime, TICK_DURATION, false, this.retro)
 				this.map.update(renderTime, this.retro)
 			} else if (renderTime === 0) {
 				this.startPlaying()
@@ -74,7 +74,7 @@ export default function (gid, mode, size) {
 
 			ticksRendered += 1
 			ticksToRender -= 1
-			lastTickTime += tickDuration
+			lastTickTime += TICK_DURATION
 
 			if (ticksRenderedForFrame >= maxTicksToRender) {
 				break
@@ -116,7 +116,7 @@ export default function (gid, mode, size) {
 				const ship = player.unit
 				if (!ship) {
 					console.error('Update invalid for ship', idx, player, nextUpdate, Unit.all())
-					if (Local.TESTING) {
+					if (TESTING) {
 						window.alert('No ship')
 					}
 					continue
@@ -227,9 +227,9 @@ export default function (gid, mode, size) {
 		this.map = new GameMap(this.mapName, gameContainer)
 		Render.add(gameContainer)
 
-		ticksPerUpdate = updateDuration / tickDuration
+		ticksPerUpdate = UPDATE_DURATION / TICK_DURATION
 		ticksRendered = -updatesUntilStart * ticksPerUpdate
-		// p('STARTED', updateDuration, tickDuration, ticksPerUpdate, ticksRendered)
+		// p('STARTED', ticksPerUpdate, ticksRendered)
 
 		// status = 'STARTED'
 		lastTickTime = performance.now()
@@ -292,10 +292,7 @@ export default function (gid, mode, size) {
 			playerInfo.isActive = true
 		}
 
-		if (gameData.updates !== undefined) {
-			updateDuration = gameData.updates
-			tickDuration = gameData.ticks
-			Local.tickDuration = tickDuration
+		if (gameData.updatesUntilStart !== undefined) {
 			updatesUntilStart = gameData.updatesUntilStart
 		}
 		if (gameData.host) {

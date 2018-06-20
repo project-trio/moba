@@ -1,12 +1,13 @@
-const testing = process.env.NODE_ENV !== 'production'
-
 module.exports = {
 
 	PORT: 8091,
 
 	VERSION: '0.0.1',
 
-	TESTING: testing,
+	TESTING: process.env.NODE_ENV !== 'production',
+
+	TICK_DURATION: 50,
+	UPDATE_DURATION: 200,
 
 	GAME_SIZES: [ 1, 2, 4, 6, 8, 12, 25 ],
 

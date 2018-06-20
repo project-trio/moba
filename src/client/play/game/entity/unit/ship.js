@@ -1,5 +1,7 @@
 import * as THREE from 'three'
 
+import { TESTING } from '@/common/constants'
+
 import store from '@/client/store'
 
 import Local from '@/client/play/local'
@@ -35,7 +37,7 @@ const waitToRespawn = 2000
 const expPerLevel = 1200
 const maxLevel = 30
 
-const EXP_PER_TICK = Local.TESTING ? 2 : 2
+const EXP_PER_TICK = TESTING ? 2 : 2
 
 //CLASS
 
@@ -81,7 +83,7 @@ class Ship extends Movable {
 		this.timeOfDeath = -9000
 		this.respawned = true
 		this.isBlocking = false
-		this.reemergeAt = Local.TESTING ? 1000 : 4000 //SAMPLE
+		this.reemergeAt = TESTING ? 1000 : 4000 //SAMPLE
 		this.modify('Spawn', 'moveSpeed', 'multiply', 2)
 
 		this.queuedForActivation = [false, false, false]

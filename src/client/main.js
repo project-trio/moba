@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import App from './App'
-import router from '@/client/router'
 
+import { TESTING } from '@/common/constants'
+
+import router from '@/client/router'
 import store from '@/client/store'
 import util from '@/client/helpers/util'
 import storage from '@/client/helpers/storage'
@@ -61,7 +63,7 @@ new Vue({
 //INIT
 
 const startupRoute = function () {
-	if (!Local.TESTING) {
+	if (!TESTING) {
 		router.replace({ name: 'Lobby' })
 	} else {
 		// LobbyEvents.connect('quick', { mode: 'tutorial', size: 0, map: 'tutorial' }, (response) => { //SAMPLE

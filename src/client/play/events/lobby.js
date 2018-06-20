@@ -1,3 +1,5 @@
+import { TESTING } from '@/common/constants'
+
 import router from '@/client/router'
 import store from '@/client/store'
 
@@ -80,14 +82,14 @@ export default {
 			if (Local.game) {
 				// p('update player', data)
 				Local.game.updatePlayer(data)
-			} else if (!Local.TESTING) {
+			} else if (!TESTING) {
 				warn('No game for player update', data)
 			}
 		})
 
 		Bridge.on('start game', (data) => {
 			if (!Local.game) {
-				// if (Local.TESTING) { //TODO remove backfilling
+				// if (TESTING) { //TODO remove backfilling
 				//   window.alert('Game not found')
 				// }
 				warn('Game not found', data)

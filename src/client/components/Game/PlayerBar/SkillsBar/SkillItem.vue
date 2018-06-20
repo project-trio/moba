@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { TICK_DURATION } from '@/common/constants'
+
 import store from '@/client/store'
 
 import Sektor from '@/client/play/external/sektor'
@@ -136,10 +138,10 @@ export default {
 				} else if (substitution === 'Range') {
 					suffix = ' range'
 				} else if (substitution === 'Dps') {
-					factor = Local.tickDuration
+					factor = TICK_DURATION
 					suffix = ' dps'
 				} else if (substitution === 'Regen') {
-					factor = Local.tickDuration / 10
+					factor = TICK_DURATION / 10
 					suffix = ' hp / s'
 				} else if (substitution === 'Duration' || substitution === 'Delay' || substitution === 'Cooldown') {
 					factor = 1000
