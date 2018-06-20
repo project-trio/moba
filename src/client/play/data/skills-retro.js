@@ -84,7 +84,7 @@ export default {
 			},
 			start (index, level, ship) {
 				ship.modify(this.name, 'healthRegen', 'add', this.getEffectRegen(level))
-				ship.healMesh = Render.outline(ship.top.children[0], 0x00ff00, 1.07)
+				ship.healMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.1)
 			},
 			end (ship) {
 				ship.modify(this.name, 'healthRegen', null)
@@ -129,7 +129,7 @@ export default {
 				ship.overloadMesh = Render.outline(ship.top.children[0], 0xffcc00, 1.07)
 			},
 			end (ship) {
-				ship.modify(this.name, 'armor', null)
+				ship.modify(this.name, 'attackCooldown', null)
 				if (ship.overloadMesh) {
 					Render.remove(ship.overloadMesh)
 					ship.overloadMesh = null
