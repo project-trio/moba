@@ -392,7 +392,7 @@ export default {
 					bulletSize: 10,
 					bulletColor: 0x00dddd,
 					attackDamage: damage,
-					attackPierce: 100,
+					attackPierce: 9001,
 					bulletSpeed: 4,
 					bulletAcceleration: true,
 					maxRange: maxRange,

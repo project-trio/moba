@@ -17,6 +17,10 @@ import Bullet from '@/client/play/game/entity/attack/bullet'
 
 let allUnits = null
 
+const calculateArmor = (armor) => {
+	return armor <= 0 ? 1 : Float.divide(100, Float.add(100, Float.divide(armor, 2)))
+}
+
 //CLASS
 
 class Unit {
@@ -119,6 +123,7 @@ class Unit {
 
 			this.healthRemaining = this.stats.healthMax
 			this.attackRangeCheck = Util.squared(this.stats.attackRange)
+			this.armorCheck = calculateArmor(this.stats.armor)
 
 			this.lastAttack = 0
 
@@ -326,6 +331,8 @@ class Unit {
 			this.cacheMoveSpeed = result / TICK_DURATION
 		} else if (statName === 'sightRange') {
 			this.sightRangeCheck = Util.squared(result)
+		} else if (statName === 'armor') {
+			this.armorCheck = calculateArmor(result)
 		}
 		if (changingModifier && this.selected) {
 			store.modifierStats(this)
@@ -534,7 +541,9 @@ class Unit {
 	takeDamage (source, renderTime, amount, pierce, reflected) {
 		let damage = amount
 		if (!reflected) {
-			const armorMultiplier = Float.divide(100, Float.add(100, Float.divide(Math.max(0, this.current.armor - pierce), 2)))
+			const armorMultiplier = pierce
+					? (pierce > 9000 ? 1 : calculateArmor(this.current.armor - pierce))
+					: this.armorCheck
 			damage = Math.round(Float.multiply(damage, armorMultiplier))
 
 			if (this.reflectDamageRatio) {
@@ -857,5 +866,7 @@ Unit.update = function (renderTime, timeDelta, tweening, isRetro) {
 
 	Local.game.map.targetRing.updateAnimations(renderTime)
 }
+
+Unit.calculateArmor = calculateArmor
 
 export default Unit

@@ -554,7 +554,6 @@ class Ship extends Movable {
 		this.addHealth(healthIncrease)
 
 		this.stats.healthRegen += this.statBase.healthRegen[1]
-		this.stats.armor += this.statBase.armor[1]
 		this.stats.attackPierce += this.statBase.attackPierce[1] * 100
 		this.stats.attackCooldown += this.statBase.attackCooldown[1] * 100
 		this.stats.sightRange += this.statBase.sightRange[1] * 100
@@ -564,6 +563,12 @@ class Ship extends Movable {
 			this.stats.attackRange += addAttackRange * 100
 			this.attackRangeCheck = Util.squared(this.stats.attackRange)
 		}
+		const addArmor = this.statBase.armor[1]
+		if (addArmor) {
+			this.stats.armor += addArmor
+			this.armorCheck = Unit.calculateArmor(this.stats.armor)
+		}
+
 		const addDamage = this.statBase.attackDamage[1]
 		if (addDamage) {
 			this.addAttackDamage(addDamage, false)

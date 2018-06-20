@@ -8,8 +8,9 @@ import retroShipStats from '@/client/play/data/ships-retro'
 import Animate from '@/client/play/game/helpers/animate'
 
 import OutlineEffect from '@/client/play/external/OutlineEffect'
-
 import Render from '@/client/play/render/render'
+
+import Unit from '@/client/play/game/entity/unit/unit'
 
 let renderer, outlineEffect, scene, camera, cameraTarget, container, shipContainer, canvas, animationId
 let renderWidth, renderHeight
@@ -147,10 +148,10 @@ export default {
 				attackDamage: statBase.attackDamage[0],
 			},
 			current: {
-				armor: statBase.armor[0],
 				attackCooldown: statBase.attackCooldown[0],
 			},
 			cacheMoveSpeed: statBase.moveSpeed[0] / 2000,
+			armorCheck: Unit.calculateArmor(statBase.armor[0]),
 		})
 
 		const renderTime = performance.now()

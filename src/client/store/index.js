@@ -208,7 +208,7 @@ export default {
 	},
 	modifierStats (unit) {
 		const stats = this.state.selectedStats
-		stats.armor = Math.round((1 - 100 / (100 + Math.max(0, unit.current.armor) / 2)) * 100)
+		stats.armor = Math.round((1 - unit.armorCheck) * 100)
 		stats.dps = Math.round(unit.stats.attackDamage * (10 / unit.current.attackCooldown))
 		stats.moveSpeed = unit.cacheMoveSpeed ? Math.round(unit.cacheMoveSpeed * 2000) + 22 : 0
 	},
