@@ -31,6 +31,7 @@ class Unit {
 		this.isLocal = isLocal
 		this.cacheMoveSpeed = 0
 		this.cacheAttackCheck = false
+		this.expiringModifiers = []
 
 		this.renderInBackground = renderInBackground
 		this.movable = false
@@ -234,28 +235,39 @@ class Unit {
 		this.modifiers[statName] = []
 		if (canceled) {
 			this.modify(null, statName)
+			if (this.selected) {
+				store.modifierStats(this)
+			}
 		}
 	}
 
 	expireModifiers (renderTime) {
-		for (const statName in this.modifiers) {
-			const statModifiers = this.modifiers[statName]
-			let expired = false
-			for (let idx = statModifiers.length - 1; idx >= 0; idx -= 1) {
-				const mod = statModifiers[idx]
-				const expiresAt = mod[3]
-				if (expiresAt && renderTime >= expiresAt) {
-					expired = true
-					const oldCallback = mod[4]
-					if (oldCallback) {
-						oldCallback()
+		let expiredAny = false
+		const expiringModifiers = this.expiringModifiers
+		for (let expireIndex = expiringModifiers.length - 1; expireIndex >= 0; expireIndex -= 1) {
+			const expiring = expiringModifiers[expireIndex]
+			if (renderTime >= expiring[2]) {
+				const modifierKey = expiring[0]
+				const statName = expiring[1]
+				const statModifiers = this.modifiers[statName]
+				for (let modifierIndex = statModifiers.length - 1; modifierIndex >= 0; modifierIndex -= 1) {
+					const mod = statModifiers[modifierIndex]
+					if (modifierKey === mod[0]) {
+						expiredAny = true
+						expiringModifiers.splice(expireIndex, 1)
+						statModifiers.splice(modifierIndex, 1)
+						this.modify(null, statName)
+						const oldCallback = mod[4]
+						if (oldCallback) {
+							oldCallback()
+						}
+						break
 					}
-					statModifiers.splice(idx, 1)
 				}
 			}
-			if (expired) {
-				this.modify(null, statName)
-			}
+		}
+		if (expiredAny && this.selected) {
+			store.modifierStats(this)
 		}
 	}
 
@@ -286,6 +298,19 @@ class Unit {
 					statModifiers[oldIndex] = mod
 				} else {
 					statModifiers.push(mod)
+				}
+				if (ending) {
+					let existingEnding = false
+					for (const expiring of this.expiringModifiers) {
+						if (expiring[0] === modifierKey) {
+							existingEnding = true
+							expiring[2] = ending
+							break
+						}
+					}
+					if (!existingEnding) {
+						this.expiringModifiers.push([ modifierKey, statName, ending ])
+					}
 				}
 			}
 		}
@@ -791,10 +816,10 @@ Unit.update = function (renderTime, timeDelta, tweening, isRetro) {
 				unit.die(renderTime, isRetro)
 				if (unit.remove) {
 					allUnits.splice(idx, 1)
-				} else {
-					unit.expireModifiers(renderTime)
+					continue
 				}
 			}
+			unit.expireModifiers(renderTime)
 		}
 	}
 	for (const unit of allUnits) {
