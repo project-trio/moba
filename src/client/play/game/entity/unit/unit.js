@@ -21,8 +21,9 @@ class Unit {
 
 	constructor (team, statBase, unitScale, sx, sy, startAngle, isLocal, renderInBackground) {
 		this.team = team
-		this.localAlly = Local.player && team === Local.player.team
-		this.isRendering = this.localAlly
+		const localAlly = team === Local.player.team
+		this.localAlly = localAlly
+		this.isRendering = localAlly
 		this.startAngle = startAngle
 		this.damagers = {}
 		this.isLocal = isLocal
@@ -55,11 +56,15 @@ class Unit {
 		this.top = Render.group()
 		this.floor = Render.group()
 
-		this.container.add(this.floor)
 		this.model.add(this.base)
 		this.model.add(this.top)
 		this.container.add(this.model)
+		this.container.add(this.floor)
 		Local.game.map.floorContainer.add(this.container)
+
+		if (!localAlly && !renderInBackground) {
+			this.container.visible = false
+		}
 
 		Animate.apply(this)
 
