@@ -534,9 +534,8 @@ class Unit {
 	takeDamage (source, renderTime, amount, pierce, reflected) {
 		let damage = amount
 		if (!reflected) {
-			// let armorMultiplier = 100 / (100 + Math.max(0, this.current.armor - pierce)) //TODO
-			let armor = 100 - Math.max(0, this.current.armor - pierce)
-			damage = Math.round(Float.multiply(damage, armor) / 100)
+			const armorMultiplier = Float.divide(100, Float.add(100, Float.divide(Math.max(0, this.current.armor - pierce), 2)))
+			damage = Math.round(Float.multiply(damage, armorMultiplier))
 
 			if (this.reflectDamageRatio) {
 				const reflectedDamage = Math.floor(Float.multiply(damage, this.reflectDamageRatio))
@@ -550,7 +549,7 @@ class Unit {
 			}
 		}
 		let dealDamage = damage
-		if (this.current.shield) {
+		if (!reflected && this.current.shield) {
 			this.current.shield -= dealDamage
 			if (this.current.shield <= 0) {
 				dealDamage = -this.current.shield
@@ -560,25 +559,29 @@ class Unit {
 				dealDamage = 0
 			}
 		}
-		const newHealth = Math.max(this.healthRemaining - dealDamage, 0)
-		if (newHealth === 0) {
-			this.isDying = true
+		if (dealDamage) {
+			const newHealth = Math.max(this.healthRemaining - dealDamage, 0)
+			if (newHealth === 0) {
+				this.isDying = true
+			}
+			this.updateHealth(newHealth)
 		}
-		this.updateHealth(newHealth)
 
-		if (source.displayStats) {
-			source.displayStats.damage += damage
-		}
-		const sid = source.player ? source.id : source.name
-		const damager = this.damagers[sid]
-		if (damager) {
-			damager.at = renderTime
-			damager.total += damage
-		} else {
-			this.damagers[sid] = {
-				at: renderTime,
-				total: damage,
-				unit: source,
+		if (!reflected && damage > 0) {
+			if (source.displayStats) {
+				source.displayStats.damage += damage
+			}
+			const sid = source.player ? source.id : source.name
+			const damager = this.damagers[sid]
+			if (damager) {
+				damager.at = renderTime
+				damager.total += damage
+			} else {
+				this.damagers[sid] = {
+					at: renderTime,
+					total: damage,
+					unit: source,
+				}
 			}
 		}
 		return damage

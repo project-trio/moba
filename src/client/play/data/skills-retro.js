@@ -38,7 +38,7 @@ export default {
 			target: TARGET_SELF,
 			endOnDeath: true,
 			getEffectArmor (level) {
-				return levelMultiplier(21, level, 5)
+				return levelMultiplier(40, level, 20)
 			},
 			getDuration (level) {
 				return levelMultiplier(30, level, 5)
@@ -142,7 +142,7 @@ export default {
 			target: TARGET_SELF,
 			endOnDeath: true,
 			getEffectPierce (level) {
-				return levelMultiplier(10, level, 1)
+				return levelMultiplier(5, level, 1)
 			},
 			getDuration (level) {
 				return 50
