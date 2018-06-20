@@ -4,7 +4,7 @@
 	"author": "Kyle Coburn",
 	"private": true,
 	"scripts": {
-		"serve": "vue-cli-service serve --open",
+		"serve": "vue-cli-service serve",
 		"start": "node src/server/index.js",
 		"build": "vue-cli-service build --modern",
 		"lint": "vue-cli-service lint"

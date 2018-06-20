@@ -120,7 +120,7 @@ const Tutorial = {
 			title: 'Great work!',
 			body: `Use your abilities to keep pushing into the base for the win. Here's a bunch of levels to make this quick!`,
 			init (ship) {
-				for (let i = 0; i < 26; i += 1) {
+				for (let i = 0; i < 24; i += 1) {
 					ship.levelUp(0)
 				}
 			},
@@ -133,7 +133,7 @@ const Tutorial = {
 		},
 		{
 			title: 'You win!',
-			body: `Okay, so maybe that was a little easy for you. Now that you know the basics, you're ready to play against other people - and that's where the real fun begins!`,
+			body: `Okay, so maybe that was a little easy for you. Now you know the basics, you're ready to play against other people - and that's where the real fun begins!`,
 			noDelay: true,
 			init () {
 				storage.set('tutorial', 1)

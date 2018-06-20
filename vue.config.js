@@ -1,5 +1,4 @@
 module.exports = {
-
 	lintOnSave: true,
 	productionSourceMap: false,
 
@@ -31,5 +30,4 @@ module.exports = {
 						},
 					})
 	},
-
 }
