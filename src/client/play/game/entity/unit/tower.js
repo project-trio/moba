@@ -51,7 +51,7 @@ class Tower extends Unit {
 		this.model.position.z = stats.z
 		this.height = 50 + stats.z
 
-		this.audio = RenderSound.positional(this.top)
+		this.audio = RenderSound.positional(this.floor)
 	}
 
 	// Aim

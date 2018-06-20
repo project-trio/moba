@@ -97,7 +97,7 @@ class Ship extends Movable {
 		store.state.game.ships.push(scores)
 		this.displayStats = scores
 
-		this.audio = RenderSound.positional(this.top)
+		this.audio = RenderSound.positional(this.floor)
 
 		// Unit
 
