@@ -37,7 +37,11 @@ class Bullet {
 		}
 
 		this.dot = data.dot
-		this.firstCollision = data.firstCollision
+		this.collides = data.collides
+		this.pierces = data.pierces
+		if (this.pierces) {
+			this.collidedWith = []
+		}
 		this.hitsTowers = data.hitsTowers
 		this.allies = data.allies
 		this.modify = data.modify
@@ -166,7 +170,7 @@ class Bullet {
 			this.target.addHealth(this.heal)
 		} else if (this.unitTarget && !this.target.isDead) {
 			if (this.attackDamage) {
-				const damage = this.target.takeDamage(this.source, renderTime, this.attackDamage, this.attackPierce)
+				const damage = this.dealDamageTo(this.target, renderTime)
 				if (this.rebound && !this.source.isDead) {
 					const heal = Math.round(Float.multiply(damage, this.rebound))
 					const data = { bulletColor: 0x00ff00, heal: heal, bulletSize: 8, bulletSpeed: 10 }
@@ -275,18 +279,29 @@ class Bullet {
 
 	// Collision
 
+	dealDamageTo (target, renderTime) {
+		return target.takeDamage(this.source, renderTime, this.attackDamage, this.attackPierce)
+	}
+
 	checkCollision (renderTime, units) {
 		const team = this.team, px = this.px, py = this.py
 		for (const unit of units) {
 			if (team !== unit.team && unit.damageable() && (!unit.tower || this.hitsTowers)) {
+				if (this.collidedWith && this.collidedWith.includes(unit.id)) {
+					continue
+				}
 				const dist = unit.distanceToPoint(px, py)
 				if (dist <= unit.collisionCheck * 2) {
-					if (!this.explosionRadius) {
-						this.unitTarget = unit
-						this.target = unit
+					if (!this.pierces) {
+						if (!this.explosionRadius) {
+							this.unitTarget = unit
+							this.target = unit
+						}
+						this.reachedDestination(renderTime)
+						return true
 					}
-					this.reachedDestination(renderTime)
-					return true
+					this.collidedWith.push(unit.id)
+					this.dealDamageTo(unit, renderTime)
 				}
 			}
 		}
@@ -327,7 +342,7 @@ Bullet.update = function (renderTime, timeDelta, tweening) {
 			const bullet = allBullets[idx]
 			if (bullet.unitTarget) {
 				bullet.updateTarget(false)
-			} else if (bullet.firstCollision) {
+			} else if (bullet.collides) {
 				bullet.checkCollision(renderTime, units)
 			} else if (bullet.dodgeable) {
 				bullet.checkCollision(renderTime, [ bullet.target ])

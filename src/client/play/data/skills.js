@@ -119,7 +119,7 @@ export default {
 					color: 0xffaa00,
 					opacity: 0.5,
 					radius: aoeRange,
-					time: startAt,
+					startAt,
 					delay: stunDelay,
 					stunDuration: stunDuration,
 				})
@@ -195,7 +195,7 @@ export default {
 					opacity: 0.9,
 					px: target[0], py: target[1],
 					radius: aoeRange,
-					time: startAt,
+					startAt,
 					delay: delay,
 					attackDamage: damage,
 					attackPierce: 0,
@@ -236,7 +236,7 @@ export default {
 					if (diff > 0) {
 						const cooldownEnd = ship.skills.cooldowns[index]
 						ship.updateCooldown(index, cooldownEnd, diff * 3)
-						p(diff)
+						// p(diff)
 					}
 				}
 				ship.scudAt = startAt
@@ -357,8 +357,8 @@ export default {
 			},
 			activate (index, level, ship) {
 				new AreaOfEffect(ship, {
-					follow: true,
 					dot: false,
+					follow: true,
 					color: 0x00ff77,
 					opacity: 0.2,
 					radius: this.getRange(level),
@@ -432,8 +432,8 @@ export default {
 			activate (index, level, ship) {
 				const attackCooldown = Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100))
 				new AreaOfEffect(ship, {
-					follow: true,
 					dot: false,
+					follow: true,
 					color: 0xff00cc,
 					opacity: 0.2,
 					radius: this.getRange(level),
@@ -622,7 +622,8 @@ export default {
 					attackPierce: 10,
 					bulletSpeed: 12,
 					maxRange: maxRange,
-					firstCollision: true,
+					collides: true,
+					pierces: false,
 				}
 				new Bullet(ship, target, bulletData)
 			},
@@ -728,32 +729,34 @@ export default {
 
 	pulter: [
 		{
-			name: `Homer`,
-			description: 'Deals [[Damage]] to the target',
+			name: 'Scorpio',
+			description: 'Pierces all enemies hit for [[Damage]], ignoring armor',
+			target: TARGET_GROUND,
 			hitsTowers: true,
-			target: TARGET_ENEMY,
 			isDisabledBy: null,
-			getEffectDamage (level) {
-				return levelMultiplier(100, level, 10)
-			},
 			getRange (level) {
-				return 170
+				return 200
 			},
 			getCooldown (level) {
 				return 120
 			},
+			getEffectDamage (level) {
+				return levelMultiplier(100, level, 10)
+			},
 			start (index, level, ship, target) {
-				const damage = this.getEffectDamage(level) * 100
+				const damage = this.getEffectDamage(level)
 				const maxRange = this.getRange(level)
 				const bulletData = {
 					hitsTowers: this.hitsTowers,
-					bulletSize: 10,
-					bulletColor: 0x00dddd,
-					attackDamage: damage,
-					attackPierce: 100,
-					bulletSpeed: 8,
+					bulletSize: 9,
+					bulletColor: 0xcc00ff,
+					attackDamage: damage * 100,
+					attackPierce: 9001,
+					bulletSpeed: 5,
 					maxRange: maxRange,
-					dodgeable: true,
+					toMaxRange: true,
+					collides: true,
+					pierces: true,
 				}
 				new Bullet(ship, target, bulletData)
 			},
@@ -790,7 +793,6 @@ export default {
 					bulletSpeed: bulletSpeed,
 					maxRange: maxRange,
 					explosionRadius: aoeRange,
-					firstCollision: false,
 				}
 				const flingBullet = new Bullet(ship, target, bulletData)
 				Animate.apply(flingBullet)
@@ -905,8 +907,8 @@ export default {
 						value: armor,
 						expires: 200,
 					},
-					time: startAt,
-					duration: endAt - startAt,
+					startAt,
+					endAt,
 				})
 			},
 			end (ship) {
@@ -949,16 +951,13 @@ export default {
 	sinker: [
 		{
 			name: 'Torpedo',
-			description: 'Explodes on the first enemy hit, damaging within [[Range]] for [[Damage]]',
-			target: TARGET_GROUND,
+			description: 'Fires a self-propelled torpedo that deals [[Damage]].',
+			target: TARGET_ENEMY,
 			hitsTowers: true,
-			disabledBy: [null, true, false],
+			disabledBy: [null, false, true],
 			isDisabledBy: isDisabledBy,
 			getRange (level) {
 				return 200
-			},
-			getEffectRange (level) {
-				return 60
 			},
 			getEffectDamage (level) {
 				return levelMultiplier(100, level, 10)
@@ -967,19 +966,15 @@ export default {
 				return levelMultiplier(100, level, -5)
 			},
 			start (index, level, ship, target) {
-				const damage = this.getEffectDamage(level)
-				const maxRange = this.getRange(level)
-				const aoeRange = this.getEffectRange(level)
+				const attackDamage = this.getEffectDamage(level) * 100
 				const bulletData = {
 					hitsTowers: this.hitsTowers,
 					bulletSize: 9,
 					bulletColor: 0xcc00ff,
-					attackDamage: damage * 100,
+					attackDamage,
 					attackPierce: 10,
-					bulletSpeed: 7,
-					maxRange: maxRange,
-					explosionRadius: aoeRange,
-					firstCollision: true,
+					bulletSpeed: 1,
+					bulletAcceleration: true,
 				}
 				new Bullet(ship, target, bulletData)
 			},
@@ -1010,16 +1005,17 @@ export default {
 
 				const radius = this.getRange(level)
 				const damage = this.getEffectDps(level)
-				ship.diveCircle = new AreaOfEffect(ship, {
+				new AreaOfEffect(ship, {
+					dot: true,
 					follow: true,
 					hitsTowers: this.hitsTowers,
-					dot: true,
 					color: 0x0066aa,
 					opacity: 0.5,
 					radius: radius,
 					attackDamage: damage,
 					attackPierce: 0,
-					parent: ship.container,
+					startAt,
+					endAt,
 				})
 
 				ship.queueAnimation('model', 'position', {
@@ -1037,13 +1033,7 @@ export default {
 				ship.untargetable = false
 				ship.disableAttacking = false
 
-				ship.diveCircle.destroy()
-				ship.diveCircle = null
 			},
-		},
-		{
-			name: '[TBD]',
-			description: '',
 		},
 	],
 
