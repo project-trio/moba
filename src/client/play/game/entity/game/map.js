@@ -1,11 +1,11 @@
 import { TESTING } from '@/common/constants'
-import commonMaps from '@/common/maps'
 
 import store from '@/client/store'
 
 import Local from '@/client/play/local'
-
 import Bridge from '@/client/play/events/bridge'
+
+import mapsData from '@/client/play/data/maps'
 
 import Pointer from '@/client/play/render/pointer'
 import Render from '@/client/play/render/render'
@@ -106,7 +106,7 @@ const GameMap = function (mapName, parent) {
 	this.build = function (playerCount) {
 		const retro = store.state.game.retro
 		// mapName = 'tiny' //SAMPLE
-		layout = commonMaps[mapName]
+		layout = mapsData[mapName]
 		waveNumber = 0
 		waveInterval = layout.spawn.interval * 1000
 		waveDelay = layout.spawn.initialDelay * 1000

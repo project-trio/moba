@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import commonMaps from '@/common/maps'
+import mapsData from '@/client/play/data/maps'
 
 import SelectionGroup from '@/client/components/Lobby/SelectionGroup'
 
@@ -23,8 +23,8 @@ export default {
 	computed: {
 		mapsForSize () {
 			const maps = []
-			for (const name in commonMaps) {
-				const map = commonMaps[name]
+			for (const name in mapsData) {
+				const map = mapsData[name]
 				if (this.selectedSize >= map.minSize && this.selectedSize <= map.maxSize) {
 					maps.push(name)
 				}

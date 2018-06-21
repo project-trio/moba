@@ -36,6 +36,7 @@ export default class Player {
 		this.isLocal = data.id === store.state.playerId
 		this.chatAt = 0
 		this.isActive = true
+		this.bot = data.bot
 	}
 
 	createShip (teamIndex) {

@@ -44,6 +44,7 @@ module.exports = class Player {
 			name: this.name,
 			shipName: this.shipName,
 			team: this.team,
+			bot: this.bot,
 		}
 	}
 

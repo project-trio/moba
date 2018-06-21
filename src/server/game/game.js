@@ -1,7 +1,6 @@
 const SocketIO = require('socket.io')
 
 const { TESTING, UPDATE_DURATION } = require.main.require('../common/constants')
-const CommonMaps = require.main.require('../common/maps')
 
 const Util = require.main.require('./utils/util')
 
@@ -81,11 +80,8 @@ class Game {
 //STATE
 
 	setMap (map) {
-		const mapData = CommonMaps[map]
 		this.map = map
 		this.retro = map === 'retro'
-		this.mapWidth = mapData.width
-		this.mapHeight = mapData.height
 		for (const player of this.players) {
 			player.setRetro(this.retro)
 		}

@@ -1,7 +1,6 @@
 const Socket = require('socket.io')
 
 const CommonConsts = require.main.require('../common/constants')
-const CommonMaps = require.main.require('../common/maps')
 
 const queue = require.main.require('./app/queue')
 
@@ -33,13 +32,8 @@ const createGame = function (player, mode, size, map, joining, autoStart) {
 	} else if (!map) {
 		response.error = 'Please choose a map'
 	} else {
-		const mapData = CommonMaps[map]
-		if (!mapData) {
-			response.error = 'Invalid map'
-		} else if (!joining && size < mapData.minSize) { //TODO remove joining
-			response.error = 'Chosen map too big for game size'
-		} else if (!joining && size > mapData.maxSize) {
-			response.error = 'Chosen map too small for game size'
+		if (size < 0 || size > 25) { //TODO validate game settings
+			response.error = 'Invalid game size'
 		} else {
 			const game = new Game(mode, size, map, autoStart)
 			if (joining) {

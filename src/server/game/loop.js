@@ -34,8 +34,8 @@ const loop = function () {
 
 					if (player.bot) {
 						if (currentUpdate - player.actionUpdate > player.updatesUntilAuto) {
-							const clickX = Math.round(Math.random() * 100 * game.mapWidth)
-							const clickY = Math.round(Math.random() * 100 * game.mapHeight)
+							const clickX = Math.round(Math.random() * 10) / 10
+							const clickY = Math.round(Math.random() * 10) / 10
 							playerActions[0] = [ null, null, [clickX, clickY] ]
 							player.updatesUntilAuto = Math.ceil(Math.random() * 50)
 						}

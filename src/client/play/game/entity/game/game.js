@@ -14,6 +14,8 @@ import GameMap from '@/client/play/game/entity/game/map'
 import Player from '@/client/play/game/entity/game/player'
 import Unit from '@/client/play/game/entity/unit/unit'
 
+import Float from '@/client/play/game/helpers/float'
+
 export default function (gid, mode, size) {
 	let players = []
 
@@ -52,7 +54,7 @@ export default function (gid, mode, size) {
 			store.state.game.renderTime = renderTime
 
 			if (ticksRendered % ticksPerUpdate === 0) {
-				if (dequeueUpdate(renderTime)) {
+				if (this.dequeueUpdate(renderTime)) {
 					store.state.game.missingUpdate = false
 				} else {
 					tickOffsets += 1
@@ -87,7 +89,7 @@ export default function (gid, mode, size) {
 		return true
 	}
 
-	const dequeueUpdate = function (_renderTime) {
+	this.dequeueUpdate = function (_renderTime) {
 		const nextUpdate = updateQueue[updateCount]
 		if (!nextUpdate) {
 			return false
@@ -131,7 +133,12 @@ export default function (gid, mode, size) {
 					if (skillLevelup) {
 						ship.levelupSkill(skillIndex)
 					} else {
-						const target = action[2]
+						let target = action[2]
+						if (target && player.bot) {
+							const mapWidth = this.map.width()
+							const mapHeight = this.map.height()
+							target = [ Math.round(Float.multiply(target[0], mapWidth) * 100), Math.round(Float.multiply(target[0], mapHeight) * 100) ]
+						}
 						if (target || skillIndex !== null) {
 							ship.enqueue(skillIndex, target)
 						}
