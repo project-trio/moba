@@ -17,7 +17,7 @@ export default {
 		name: 'boxy',
 
 		healthMax: [250, 20],
-		healthRegen: [15, 0],
+		healthRegen: [70, 6], // 70 5.55
 		armor: [30, 0],
 
 		sightRange: [160, 0],
@@ -30,7 +30,7 @@ export default {
 		bulletSpeed: 11,
 		bulletSize: 4,
 
-		moveSpeed: [9, 0], //31
+		moveSpeed: [31, 0],
 		turnSpeed: 6,
 		turnToMove: true,
 		collision: 24,
@@ -41,8 +41,8 @@ export default {
 	basher: {
 		name: 'charger',
 		healthMax: [190, 15],
-		healthRegen: [15, 0],
-		armor: [0, 1], //0 0.5?
+		healthRegen: [50, 4], //5.333? 0.4
+		armor: [0, 1],
 
 		sightRange: [140, 0],
 		attackRange: [125, 0], //85
@@ -54,7 +54,7 @@ export default {
 		bulletSpeed: 12,
 		bulletSize: 6,
 
-		moveSpeed: [9, 0], //31
+		moveSpeed: [31, 0],
 		turnSpeed: 5,
 		turnToMove: true,
 		collision: 24,
@@ -66,7 +66,7 @@ export default {
 		name: 'stitches',
 
 		healthMax: [180, 10],
-		healthRegen: [15, 0],
+		healthRegen: [55, 1], //?
 		armor: [0, 1],
 
 		sightRange: [155, 0],
@@ -79,7 +79,7 @@ export default {
 		bulletSpeed: 10,
 		bulletSize: 3,
 
-		moveSpeed: [8, 0], //31
+		moveSpeed: [30, 0], //31
 		turnToMove: true,
 		turnSpeed: 8,
 		collision: 22,
@@ -91,8 +91,8 @@ export default {
 		name: 'beedle',
 
 		healthMax: [150, 10],
-		healthRegen: [15, 0],
-		armor: [0, 1], //0 0.5?
+		healthRegen: [40, 2],
+		armor: [0, 1],
 
 		sightRange: [155, 0],
 		attackRange: [155, 0], //100
@@ -104,7 +104,7 @@ export default {
 		bulletSpeed: 10,
 		bulletSize: 3,
 
-		moveSpeed: [7, 0], //29
+		moveSpeed: [29, 0],
 		turnSpeed: 8,
 		turnToMove: true,
 		collision: 20,
@@ -116,7 +116,7 @@ export default {
 		name: 'pulter',
 
 		healthMax: [150, 8],
-		healthRegen: [15, 0],
+		healthRegen: [40, 3],
 		armor: [0, 0],
 
 		sightRange: [155, 0],
@@ -129,7 +129,7 @@ export default {
 		bulletSpeed: 8,
 		bulletSize: 5,
 
-		moveSpeed: [8, 0], //30
+		moveSpeed: [30, 0],
 		turnSpeed: 5,
 		turnToMove: true,
 		collision: 22,
@@ -141,7 +141,7 @@ export default {
 		name: 'sinker',
 
 		healthMax: [150, 5],
-		healthRegen: [15, 0],
+		healthRegen: [40, 0],
 		armor: [50, 2],
 
 		sightRange: [140, 0],
@@ -166,7 +166,7 @@ export default {
 		name: 'glitch',
 
 		healthMax: [125, 3],
-		healthRegen: [15, 0],
+		healthRegen: [40, 1],
 		armor: [50, 4],
 
 		sightRange: [140, 0],
@@ -179,7 +179,7 @@ export default {
 		bulletSpeed: 13,
 		bulletSize: 4,
 
-		moveSpeed: [9, 0], //31
+		moveSpeed: [31, 0],
 		turnSpeed: 12,
 		turnToMove: true,
 		collision: 18,

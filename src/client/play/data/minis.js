@@ -13,7 +13,7 @@ export default {
 
 		bulletSpeed: 0,
 
-		moveSpeed: [10, 0],
+		moveSpeed: [25, 0],
 		collision: 10,
 	},
 
@@ -34,7 +34,7 @@ export default {
 		bulletSize: 3,
 		bulletColor: 0x888888,
 
-		moveSpeed: [7, 0],
+		moveSpeed: [20, 0],
 		collision: 10,
 	},
 }

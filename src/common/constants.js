@@ -1,3 +1,5 @@
+const TICK_DURATION = 50
+
 module.exports = {
 
 	PORT: 8091,
@@ -6,7 +8,8 @@ module.exports = {
 
 	TESTING: process.env.NODE_ENV !== 'production',
 
-	TICK_DURATION: 50,
+	TICK_DURATION,
+	TICKS_PER_SECOND: 1000 / TICK_DURATION,
 	UPDATE_DURATION: 200,
 
 	GAME_SIZES: [ 1, 2, 4, 6, 8, 12, 25 ],

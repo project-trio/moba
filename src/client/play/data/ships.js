@@ -28,7 +28,7 @@ export default {
 		bulletSpeed: 12,
 		bulletSize: 6,
 
-		moveSpeed: [8, 0],
+		moveSpeed: [30, 0],
 		turnSpeed: 10,
 		turnToMove: true,
 		collision: 24,
@@ -51,7 +51,7 @@ export default {
 		bulletSpeed: 10,
 		bulletSize: 3,
 
-		moveSpeed: [10, 0],
+		moveSpeed: [34, 0],
 		turnSpeed: 10,
 		turnToMove: false,
 		collision: 12,
@@ -118,7 +118,7 @@ export default {
 
 	stitches: {
 		healthMax: [700, 10],
-		healthRegen: [10, 1],
+		healthRegen: [20, 1],
 		armor: [0, 0],
 
 		sightRange: [180, 0],
@@ -131,7 +131,7 @@ export default {
 		bulletSpeed: 10,
 		bulletSize: 3,
 
-		moveSpeed: [10, 0],
+		moveSpeed: [30, 0],
 		turnSpeed: 10,
 		turnToMove: true,
 		collision: 16,
@@ -154,7 +154,7 @@ export default {
 		bulletSpeed: 10,
 		bulletSize: 3,
 
-		moveSpeed: [9, 0],
+		moveSpeed: [30, 0],
 		turnSpeed: 10,
 		turnToMove: true,
 		collision: 16,
@@ -167,7 +167,7 @@ export default {
 		topOffset: [14, 0, 55],
 
 		healthMax: [600, 5],
-		healthRegen: [40, 2],
+		healthRegen: [40, 0],
 		armor: [0, 1],
 
 		sightRange: [160, 1],
@@ -180,7 +180,7 @@ export default {
 		bulletSpeed: 14,
 		bulletSize: 4,
 
-		moveSpeed: [11, 0],
+		moveSpeed: [32, 0],
 		turnSpeed: 10,
 		turnToMove: true,
 		collision: 20,
@@ -222,7 +222,7 @@ export default {
 		bulletSpeed: 8,
 		bulletSize: 5,
 
-		moveSpeed: [7, 0],
+		moveSpeed: [28, 0],
 		turnSpeed: 10,
 		turnToMove: true,
 		collision: 22,
@@ -245,7 +245,7 @@ export default {
 		bulletSpeed: 11,
 		bulletSize: 4,
 
-		moveSpeed: [8, 0],
+		moveSpeed: [29, 0],
 		turnSpeed: 10,
 		turnToMove: true,
 		collision: 24,
@@ -268,7 +268,7 @@ export default {
 		bulletSpeed: 13,
 		bulletSize: 4,
 
-		moveSpeed: [10, 0],
+		moveSpeed: [30, 0],
 		turnSpeed: 10,
 		turnToMove: true,
 		collision: 16,
@@ -291,7 +291,7 @@ export default {
 		bulletSpeed: 11,
 		bulletSize: 4,
 
-		moveSpeed: [10, 0],
+		moveSpeed: [30, 0],
 		turnSpeed: 10,
 		turnToMove: true,
 		collision: 18,

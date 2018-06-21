@@ -150,7 +150,7 @@ export default {
 			current: {
 				attackCooldown: statBase.attackCooldown[0],
 			},
-			cacheMoveSpeed: statBase.moveSpeed[0] / 2000,
+			cacheMoveSpeed: statBase.moveSpeed[0] / 5000,
 			armorCheck: Unit.calculateArmor(statBase.armor[0]),
 		})
 

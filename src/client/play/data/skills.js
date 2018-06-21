@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 
+import { TICKS_PER_SECOND } from '@/common/constants'
+
 import store from '@/client/store'
 
 import Render from '@/client/play/render/render'
@@ -347,7 +349,7 @@ export default {
 			isDisabledBy: isDisabledBy,
 			endOnDeath: true,
 			getEffectRegen (level) {
-				return levelMultiplier(50, level, 5)
+				return levelMultiplier(100, level, 10)
 			},
 			getRange (level) {
 				return 140
@@ -356,18 +358,20 @@ export default {
 				return levelMultiplier(90, level, -6)
 			},
 			activate (index, level, ship) {
+				const regen = this.getEffectRegen(level)
+				const regenRange = this.getRange(level)
 				new AreaOfEffect(ship, {
 					dot: false,
 					follow: true,
 					color: 0x00ff77,
 					opacity: 0.2,
-					radius: this.getRange(level),
+					radius: regenRange,
 					allies: true,
 					modify: {
 						name: this.name,
 						stat: 'healthRegen',
 						method: 'add',
-						value: this.getEffectRegen(level),
+						value: regen,
 						expires: 1000,
 					},
 				})
@@ -521,13 +525,13 @@ export default {
 				return levelMultiplier(25, level, 2)
 			},
 			getEffectDps (level) {
-				return levelMultiplier(400, level, 50)
+				return levelMultiplier(40, level, 5)
 			},
 			getCooldown (level) {
 				return levelMultiplier(180, level, -10)
 			},
 			start (index, level, ship, target) {
-				const dps = this.getEffectDps(level)
+				const dps = this.getEffectDps(level) * 100
 				const aoeRange = this.getEffectRange(level)
 				const effectDuration = this.getEffectDuration(level)
 				const moveSpeed = Float.subtract(1, Float.divide(this.getEffectMoveSpeed(level), 100))
@@ -981,7 +985,7 @@ export default {
 		},
 		{
 			name: 'Whirlpool',
-			description: 'Deals [[Dps]], increasing by [[DpsGrowth]]. When your next [[Dive:]] ends, heal for all damage you dealt to enemies in [[Whirlpool:whirlpool]].',
+			description: 'Deals [[Dps]], increasing by [[DpsGrowth]]. When [[Dive:]] ends, heal half your damage to [[Whirlpooled:whirlpool]] enemies.',
 			target: TARGET_GROUND,
 			hitsTowers: false,
 			isDisabledBy: null,
@@ -995,7 +999,7 @@ export default {
 				return levelMultiplier(70, level, 5)
 			},
 			getEffectDps (level) {
-				return levelMultiplier(40, level, 5)
+				return levelMultiplier(100, level, 5)
 			},
 			getEffectDpsGrowth (level) {
 				return 10
@@ -1006,8 +1010,8 @@ export default {
 			start (index, level, ship, target, startAt, endAt) {
 				this.whirlpoolDamage = 0
 
-				const dps = this.getEffectDps(level)
-				const dpsGrowth = this.getEffectDpsGrowth(level)
+				const dps = this.getEffectDps(level) * 100
+				const dpsGrowth = this.getEffectDpsGrowth(level) * 100
 				const aoeRange = this.getEffectRange(level)
 				new AreaOfEffect(ship, {
 					dot: true,
@@ -1030,7 +1034,7 @@ export default {
 		},
 		{
 			name: 'Dive',
-			description: 'Dive down to safety, dealing [[Dps]]. When you resurface, heal for all [[Whirlpool:whirlpool]] damage.',
+			description: 'Dive: deal [[Dps]]. Resurface: heal half your damage to [[Whirlpooled:whirlpool]] enemies.',
 			target: TARGET_SELF,
 			hitsTowers: false,
 			isDisabledBy: null,
@@ -1038,8 +1042,11 @@ export default {
 			getRange (level) {
 				return 100
 			},
+			getEffectMoveSpeed (level) {
+				return 25
+			},
 			getEffectDps (level) {
-				return levelMultiplier(300, level, 30)
+				return levelMultiplier(30, level, 3)
 			},
 			getDuration (level) {
 				return levelMultiplier(35, level, 2)
@@ -1048,12 +1055,13 @@ export default {
 				return levelMultiplier(150, level, -10)
 			},
 			start (index, level, ship, target, startAt, endAt) {
+				ship.modify(this.name, 'moveSpeed', 'multiply', Float.add(1, Float.divide(this.getEffectMoveSpeed(level), 100)))
 				ship.removeTarget()
 				ship.untargetable = true
 				ship.disableAttacking = true
 
 				const radius = this.getRange(level)
-				const damage = this.getEffectDps(level)
+				const damage = this.getEffectDps(level) * 100
 				new AreaOfEffect(ship, {
 					dot: true,
 					follow: true,
@@ -1078,12 +1086,13 @@ export default {
 				})
 			},
 			end (ship) {
+				ship.modify(this.name, 'moveSpeed', null)
 				ship.model.position.z = 0
 				ship.untargetable = false
 				ship.disableAttacking = false
 
 				if (ship.whirlpoolDamage) {
-					ship.addHealth(ship.whirlpoolDamage)
+					ship.addHealth(Math.floor(ship.whirlpoolDamage / 2))
 					ship.whirlpoolDamage = 0
 				}
 			},

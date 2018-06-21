@@ -180,11 +180,11 @@ export default {
 	doc: [
 		{
 			name: 'Repair All',
-			description: 'Repairs allies inside for [[Regen]]',
+			description: 'Repairs allies inside for [[Regen]] for [[Duration]]',
 			target: TARGET_SELF,
 			endOnDeath: true,
 			getEffectRegen (level) {
-				return levelMultiplier(30, level, 6)
+				return levelMultiplier(100, level, 20)
 			},
 			getRange (level) {
 				return levelMultiplier(100, level, 2) //70 1
@@ -196,17 +196,19 @@ export default {
 				return 150
 			},
 			start (index, level, ship) {
+				const regenRange = this.getRange(level)
+				const regen = this.getEffectRegen(level)
 				new AreaOfEffect(ship, {
 					dot: false,
 					color: 0x0033ff,
 					opacity: 0.2,
-					radius: this.getRange(level),
+					radius: regenRange,
 					allies: true,
 					modify: {
 						name: this.name,
 						stat: 'healthRegen',
 						method: 'add',
-						value: this.getEffectRegen(level),
+						value: regen,
 						expires: 3000,
 					},
 				})
@@ -237,7 +239,7 @@ export default {
 			name: 'Engine',
 			description: 'Permanently increases move speed by [[MoveSpeed]]',
 			suffixMoveSpeed: 'kph',
-			factorMoveSpeed: 10,
+			divisorMoveSpeed: 10,
 			target: TARGET_SELF,
 			getEffectMoveSpeed (level) {
 				return levelMultiplier(15, level, 12)
@@ -333,7 +335,7 @@ export default {
 			name: 'Boost',
 			description: 'Boost attack speed [[AttackSpeed]], and movement speed by [[MoveSpeed]]',
 			suffixAttackSpeed: '%',
-			factorMoveSpeed: 10,
+			divisorMoveSpeed: 10,
 			target: TARGET_SELF,
 			endOnDeath: true,
 			getEffectAttackSpeed (level) {
@@ -666,7 +668,7 @@ export default {
 			description: 'Permanently increases hp regen by [[Regen]]',
 			target: TARGET_SELF,
 			getEffectRegen (level) {
-				return levelMultiplier(2, level, 2) // 0.4 0.2
+				return levelMultiplier(4, level, 4)
 			},
 			levelup (index, level, ship) {
 				ship.modify(this.name, 'healthRegen', 'add', this.getEffectRegen(level))

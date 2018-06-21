@@ -1,4 +1,4 @@
-import { TICK_DURATION } from '@/common/constants'
+import { TICK_DURATION, TICKS_PER_SECOND } from '@/common/constants'
 
 import store from '@/client/store'
 
@@ -142,8 +142,9 @@ class Unit {
 			if (statBase.moveSpeed) {
 				this.modifiers.moveSpeed = []
 				this.stats.moveSpeed = statBase.moveSpeed[0]
-				this.modify('Constant', 'moveSpeed', 'multiply', Float.divide(TICK_DURATION, 2000))
+				this.modify('Constant', 'moveSpeed', 'divide', TICKS_PER_SECOND * 5)
 			}
+			this.modify('Constant', 'healthRegen', 'divide', TICKS_PER_SECOND / 10)
 
 			// Health Bar
 			let hpHeight, hpWidth, hpOffsetZ
@@ -301,6 +302,9 @@ class Unit {
 					statModifiers.splice(oldIndex, 1)
 				}
 			} else {
+				if (ending) {
+					ending -= TICK_DURATION
+				}
 				const mod = [ modifierKey, method, value, ending, callback ]
 				if (oldIndex !== -1) {
 					statModifiers[oldIndex] = mod
@@ -555,9 +559,8 @@ class Unit {
 			}
 			if (this.repairDamageRatio) {
 				const duration = 2000
-				const ticks = Math.floor(duration / TICK_DURATION)
-				const healthPerTick = Math.floor(Float.multiply(this.repairDamageRatio, damage) / ticks)
-				this.modify(`${source.id}${renderTime}`, 'healthRegen', 'add', healthPerTick, renderTime + duration)
+				const healthPer = Math.floor(Float.multiply(this.repairDamageRatio, damage) / (duration / 100))
+				this.modify(`${source.id}${renderTime}`, 'healthRegen', 'add', healthPer, renderTime + duration)
 			}
 		}
 		let dealDamage = damage

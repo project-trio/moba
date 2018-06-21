@@ -37,7 +37,7 @@ const checkTarget = function (target) {
 		return false
 	}
 	if (store.state.local.skills.withAlliance !== target.localAlly) {
-		p('target not for alliance', store.state.local.skills.withAlliance, target.localAlly)
+		// p('target not for alliance', store.state.local.skills.withAlliance, target.localAlly)
 		return false
 	}
 	return true
@@ -132,31 +132,31 @@ export default {
 				}
 
 				const substitutionFunction = this.skill[`getEffect${substitution}`]
-				let factor, suffix
+				let divisor, suffix
 				if (substitution === 'Damage') {
 					suffix = ' damage'
 				} else if (substitution === 'Range') {
 					suffix = ' range'
-				} else if (substitution === 'Dps') {
-					factor = TICK_DURATION
+				} else if (substitution.startsWith('Dps')) {
+					divisor = 10
 					suffix = ' dps'
 				} else if (substitution === 'Regen') {
-					factor = TICK_DURATION / 10
+					divisor = 10
 					suffix = ' hp / s'
 				} else if (substitution === 'Duration' || substitution === 'Delay' || substitution === 'Cooldown') {
-					factor = 1000
+					divisor = 1000
 					suffix = ' seconds'
 				} else {
-					factor = this.skill[`factor${substitution}`]
+					divisor = this.skill[`divisor${substitution}`]
 					suffix = this.skill[`suffix${substitution}`] || ''
 				}
 
 				const valueForLevel = substitutionFunction(this.level === 0 ? 1 : this.level)
-				let effectText = `${!factor ? valueForLevel : (valueForLevel / factor)}`
+				let effectText = `${!divisor ? valueForLevel : (valueForLevel / divisor)}`
 				if (this.showsDiff) {
 					const diff = substitutionFunction(this.level + 1) - valueForLevel
 					if (diff) {
-						effectText += ` <span class="diff">(${diff >= 0 ? '+' : ''}${!factor ? diff : (diff / factor)})</span>`
+						effectText += ` <span class="diff">(${diff >= 0 ? '+' : ''}${!divisor ? diff : (diff / divisor)})</span>`
 					}
 				}
 				return `<span class="bold">${effectText}${suffix}</span>`
