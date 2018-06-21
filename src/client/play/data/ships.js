@@ -296,7 +296,18 @@ export default {
 		turnToMove: true,
 		collision: 18,
 
+		properties: {
+			whirlpoolDamage: 0,
+		},
+
 		create: createMeshes,
+
+		onDamageDealt (renderTime, source, target, damage) {
+			const whirpooledAt = target.afflictions['Whirlpool'][source.id]
+			if (whirpooledAt && renderTime < whirpooledAt + 1000) {
+				source.whirlpoolDamage += damage
+			}
+		},
 	},
 
 }

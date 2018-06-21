@@ -980,8 +980,57 @@ export default {
 			},
 		},
 		{
+			name: 'Whirlpool',
+			description: 'Deals [[Dps]], increasing by [[DpsGrowth]]. When your next [[Dive:]] ends, heal for all damage you dealt to enemies in [[Whirlpool:whirlpool]].',
+			target: TARGET_GROUND,
+			hitsTowers: false,
+			isDisabledBy: null,
+			getRange (level) {
+				return 160
+			},
+			getDuration (level) {
+				return 50
+			},
+			getEffectRange (level) {
+				return levelMultiplier(70, level, 5)
+			},
+			getEffectDps (level) {
+				return levelMultiplier(40, level, 5)
+			},
+			getEffectDpsGrowth (level) {
+				return 10
+			},
+			getCooldown (level) {
+				return levelMultiplier(170, level, -5)
+			},
+			start (index, level, ship, target, startAt, endAt) {
+				this.whirlpoolDamage = 0
+
+				const dps = this.getEffectDps(level)
+				const dpsGrowth = this.getEffectDpsGrowth(level)
+				const aoeRange = this.getEffectRange(level)
+				new AreaOfEffect(ship, {
+					dot: true,
+					px: target[0],
+					py: target[1],
+					hitsTowers: this.hitsTowers,
+					color: 0x0066ff,
+					opacity: 0.5,
+					radius: aoeRange,
+					attackDamage: dps,
+					attackDamageGrowth: dpsGrowth,
+					attackPierce: 0,
+					afflicts: this.name,
+					startAt,
+					endAt,
+				})
+			},
+			end (ship) {
+			},
+		},
+		{
 			name: 'Dive',
-			description: 'Dive down to safety, dealing [[Dps]] to enemies around you',
+			description: 'Dive down to safety, dealing [[Dps]]. When you resurface, heal for all [[Whirlpool:whirlpool]] damage.',
 			target: TARGET_SELF,
 			hitsTowers: false,
 			isDisabledBy: null,
@@ -1033,6 +1082,10 @@ export default {
 				ship.untargetable = false
 				ship.disableAttacking = false
 
+				if (ship.whirlpoolDamage) {
+					ship.addHealth(ship.whirlpoolDamage)
+					ship.whirlpoolDamage = 0
+				}
 			},
 		},
 	],
