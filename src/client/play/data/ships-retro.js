@@ -141,7 +141,7 @@ export default {
 		name: 'sinker',
 
 		healthMax: [150, 5],
-		healthRegen: [40, 0],
+		healthRegen: [40, 2], //4 0.15?
 		armor: [50, 2],
 
 		sightRange: [140, 0],

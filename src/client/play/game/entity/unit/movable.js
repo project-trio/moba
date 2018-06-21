@@ -123,7 +123,7 @@ class Movable extends Unit {
 	}
 
 	shouldMove () {
-		return this.moveDestination && this.aimingToMove && !this.isAttackingTarget && this.stunnedUntil === 0
+		return this.moveDestination && this.aimingToMove && !this.isAttackingTargetedUnit && this.stunnedUntil === 0
 	}
 
 	reachedDestination (_needsNewDestination) {
@@ -204,12 +204,14 @@ class Movable extends Unit {
 	}
 
 	checkUpdateTarget (_renderTime) {
-		this.isAttackingTarget = this.inRangeFor(this.attackTarget)
-		if (!this.isAttackingTarget) {
+		this.isAttackingTargetedUnit = this.inRangeFor(this.attackTarget)
+		if (!this.isAttackingTargetedUnit) {
 			this.setDestination(this.attackTarget.px, this.attackTarget.py, true)
 		}
 	}
 
 }
+
+var attacking = null
 
 export default Movable

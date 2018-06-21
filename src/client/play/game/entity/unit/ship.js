@@ -556,7 +556,7 @@ class Ship extends Movable {
 		this.stats.healthMax += healthIncrease
 		this.addHealth(healthIncrease)
 
-		this.stats.healthRegen += this.statBase.healthRegen[1]
+		this.addHealthRegen(this.statBase.healthRegen[1])
 		this.stats.attackPierce += this.statBase.attackPierce[1] * 100
 		this.stats.attackCooldown += this.statBase.attackCooldown[1] * 100
 		this.stats.sightRange += this.statBase.sightRange[1] * 100
@@ -683,7 +683,7 @@ class Ship extends Movable {
 		this.updateSkills(renderTime)
 		if (!isRetro || !this.isDead) {
 			let exp = EXP_PER_TICK
-			if (isRetro && this.isAttackingTarget && (this.attackTarget.player || this.attackTarget.tower)) {
+			if (isRetro && this.isFiring && this.attackTarget && (this.attackTarget.player || this.attackTarget.tower)) {
 				exp *= 2
 			}
 			this.awardExperience(exp)

@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 
+import { TICK_DURATION } from '@/common/constants'
+
 import store from '@/client/store'
 
 import Local from '@/client/play/local'
@@ -83,11 +85,11 @@ export default {
 				return 200
 			},
 			start (index, level, ship) {
-				ship.modify(this.name, 'healthRegen', 'add', this.getEffectRegen(level))
+				ship.modify(this.name, 'dot', 'subtract', this.getEffectRegen(level))
 				ship.healMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.1)
 			},
 			end (ship) {
-				ship.modify(this.name, 'healthRegen', null)
+				ship.modify(this.name, 'dot', null)
 				if (ship.healMesh) {
 					Render.remove(ship.healMesh)
 					ship.healMesh = null
@@ -198,6 +200,7 @@ export default {
 			start (index, level, ship) {
 				const regenRange = this.getRange(level)
 				const regen = this.getEffectRegen(level)
+				const effectDuration = this.getEffectDuration(level) - TICK_DURATION
 				new AreaOfEffect(ship, {
 					dot: false,
 					color: 0x0033ff,
@@ -206,10 +209,10 @@ export default {
 					allies: true,
 					modify: {
 						name: this.name,
-						stat: 'healthRegen',
-						method: 'add',
+						stat: 'dot',
+						method: 'subtract',
 						value: regen,
-						expires: 3000,
+						duration: effectDuration,
 					},
 				})
 			},
@@ -311,6 +314,7 @@ export default {
 			start (index, level, ship, target) {
 				const aoeRange = this.getEffectRange(level)
 				const moveSpeed = Float.subtract(1, Float.divide(this.getEffectMoveSpeed(level), 100))
+				const effectDuration = this.getEffectDuration(level)
 				const bulletData = {
 					dot: false,
 					opacity: 0.5,
@@ -325,7 +329,7 @@ export default {
 						stat: 'moveSpeed',
 						method: 'multiply',
 						value: moveSpeed,
-						expires: this.getEffectDuration(level),
+						duration: effectDuration,
 					},
 				}
 				new Bullet(ship, target, bulletData)
@@ -671,7 +675,7 @@ export default {
 				return levelMultiplier(4, level, 4)
 			},
 			levelup (index, level, ship) {
-				ship.modify(this.name, 'healthRegen', 'add', this.getEffectRegen(level))
+				ship.addHealthRegen(this.getEffectRegen(1))
 			},
 		},
 	],

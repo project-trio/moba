@@ -369,10 +369,10 @@ export default {
 					allies: true,
 					modify: {
 						name: this.name,
-						stat: 'healthRegen',
-						method: 'add',
+						stat: 'dot',
+						method: 'subtract',
 						value: regen,
-						expires: 1000,
+						duration: 1000,
 					},
 				})
 			},
@@ -410,7 +410,7 @@ export default {
 						stat: 'moveSpeed',
 						method: 'multiply',
 						value: moveSpeed,
-						expires: 1000,
+						duration: 1000,
 					},
 				})
 			},
@@ -447,7 +447,7 @@ export default {
 						stat: 'attackCooldown',
 						method: 'multiply',
 						value: attackCooldown,
-						expires: 1000,
+						duration: 1000,
 					},
 				})
 			},
@@ -497,7 +497,7 @@ export default {
 						stat: 'moveSpeed',
 						method: 'multiply',
 						value: moveSpeed,
-						expires: 1000,
+						duration: 1000,
 					},
 					stunDuration: stunDuration,
 					dodgeable: true,
@@ -552,7 +552,7 @@ export default {
 						stat: 'moveSpeed',
 						method: 'multiply',
 						value: moveSpeed,
-						expires: effectDuration,
+						duration: effectDuration,
 					},
 				}
 				new Bullet(ship, target, bulletData)
@@ -909,7 +909,7 @@ export default {
 						stat: 'armor',
 						method: 'add',
 						value: armor,
-						expires: 200,
+						duration: 200,
 					},
 					startAt,
 					endAt,
@@ -1201,13 +1201,13 @@ export default {
 				return 100
 			},
 			start (index, level, ship) {
-				ship.modify(this.name, 'healthRegen', 'add', this.getEffectRegen(level))
+				ship.modify(this.name, 'dot', 'subtract', this.getEffectRegen(level))
 				ship.modify(this.name, 'moveSpeed', 'multiply', 0.33)
 
 				ship.salvageMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.07)
 			},
 			end (ship) {
-				ship.modify(this.name, 'healthRegen', null)
+				ship.modify(this.name, 'dot', null)
 				ship.modify(this.name, 'moveSpeed', null)
 
 				if (ship.salvageMesh) {

@@ -44,7 +44,7 @@ class Unit {
 		this.movable = false
 		this.attackTarget = null
 		this.attackTargetAim = null
-		this.isAttackingTarget = false
+		this.isAttackingTargetedUnit = false
 		this.requiresSightOfTarget = true
 		this.bulletCount = 0
 		this.height = 0
@@ -83,9 +83,11 @@ class Unit {
 		const sightRange = statBase.sightRange[0] * 100
 		this.stats = {
 			sightRange,
+			dot: 0,
 		}
 		this.current = {
 			sightRange,
+			dot: 0,
 		}
 		this.sightRangeCheck = Util.squared(sightRange)
 
@@ -127,13 +129,16 @@ class Unit {
 			this.healthRemaining = this.stats.healthMax
 			this.attackRangeCheck = Util.squared(this.stats.attackRange)
 			this.armorCheck = calculateArmor(this.stats.armor)
+			if (this.stats.healthRegen) {
+				this.addHealthRegen(0)
+			}
 
 			this.lastAttack = 0
 
 			// Modifiers
 			this.modifiers = {
 				shield: [],
-				healthRegen: [],
+				dot: [],
 				armor: [],
 				attackCooldown: [],
 				sightRange: [],
@@ -144,7 +149,7 @@ class Unit {
 				this.stats.moveSpeed = statBase.moveSpeed[0]
 				this.modify('Constant', 'moveSpeed', 'divide', TICKS_PER_SECOND * 5)
 			}
-			this.modify('Constant', 'healthRegen', 'divide', TICKS_PER_SECOND / 10)
+			this.modify('Constant', 'dot', 'divide', TICKS_PER_SECOND / 10)
 
 			// Health Bar
 			let hpHeight, hpWidth, hpOffsetZ
@@ -197,6 +202,13 @@ class Unit {
 
 		Render.addUnit(this, this.stats.collision)
 		allUnits.push(this)
+	}
+
+	addHealthRegen (regen) {
+		this.stats.healthRegen += regen
+		const regenPerTick = Float.divide(this.stats.healthRegen, TICKS_PER_SECOND / 10)
+		this.healthRegenCheck = Math.round(regenPerTick)
+		this.healthRegenCheckCombat = Math.round(Float.divide(regenPerTick, 3))
 	}
 
 	playSound (buffer) {
@@ -281,7 +293,7 @@ class Unit {
 	}
 
 	modifyData (renderTime, data) {
-		this.modify(data.name, data.stat, data.method, data.value, renderTime + data.expires)
+		this.modify(data.name, data.stat, data.method, data.value, renderTime + data.duration)
 	}
 
 	modify (modifierKey, statName, method, value, ending, callback) {
@@ -302,9 +314,6 @@ class Unit {
 					statModifiers.splice(oldIndex, 1)
 				}
 			} else {
-				if (ending) {
-					ending -= TICK_DURATION
-				}
 				const mod = [ modifierKey, method, value, ending, callback ]
 				if (oldIndex !== -1) {
 					statModifiers[oldIndex] = mod
@@ -539,8 +548,13 @@ class Unit {
 	}
 
 	doRegenerate () {
-		const regen = this.current.healthRegen
-		if (regen !== 0) {
+		let regen = this.healthRegenCheck
+		const dot = this.current.dot
+		if (regen || dot) {
+			if (regen && this.isFiring) {
+				regen = this.healthRegenCheckCombat
+			}
+			regen -= dot
 			this.addHealth(regen)
 		}
 	}
@@ -560,7 +574,7 @@ class Unit {
 			if (this.repairDamageRatio) {
 				const duration = 2000
 				const healthPer = Math.floor(Float.multiply(this.repairDamageRatio, damage) / (duration / 100))
-				this.modify(`${source.id}${renderTime}`, 'healthRegen', 'add', healthPer, renderTime + duration)
+				this.modify(`${source.id}${renderTime}`, 'dot', 'subtract', healthPer, renderTime + duration)
 			}
 		}
 		let dealDamage = damage
@@ -639,9 +653,8 @@ class Unit {
 			}
 			if (target) {
 				this.attackTarget = target
-			} else {
-				this.isAttackingTarget = false
 			}
+			this.isAttackingTargetedUnit = false
 		}
 		if (target) {
 			this.cacheAttackCheck = distance <= this.attackRangeCheck
@@ -788,12 +801,17 @@ class Unit {
 	}
 
 	checkAttack (renderTime) {
-		if (this.stunnedUntil > 0 || !this.aimingToAttack || !this.isAttackOffCooldown(renderTime)) {
+		if (this.stunnedUntil > 0) {
+			this.isFiring = false
+			return
+		}
+		if (!this.aimingToAttack || !this.isAttackOffCooldown(renderTime)) {
 			return
 		}
 		const attackForTick = this.getAttackTarget(allUnits)
-		this.isFiring = attackForTick && this.cacheAttackCheck
-		if (this.isFiring) {
+		const firing = attackForTick !== null && this.cacheAttackCheck
+		this.isFiring = firing
+		if (firing) {
 			this.attack(attackForTick, renderTime)
 		}
 	}
