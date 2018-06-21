@@ -63,6 +63,13 @@ class Ship extends Movable {
 		this.tween = statBase.tween || null
 		this.onDeath = statBase.onDeath || null
 		this.onRespawn = statBase.onRespawn || null
+		this.onDamageDealt =  statBase.onDamageDealt || null
+		const statProperties = statBase.properties
+		if (statProperties) {
+			for (const prop in statProperties) {
+				this[prop] = statProperties[prop]
+			}
+		}
 
 		this.statBase = statBase
 		this.id = player.id
@@ -115,10 +122,6 @@ class Ship extends Movable {
 			parent: this.infoContainer,
 		})
 		this.renderLevelText()
-
-		if (name === 'tempest') {
-			this.scudAt = null
-		}
 
 		if (retro) {
 			this.levelupSkill(0)

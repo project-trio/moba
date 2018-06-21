@@ -128,7 +128,7 @@ export default {
 			let description = this.skill.description.replace(MATCH_BRACKET_FORMATTING, (match, substitution) => {
 				const split = substitution.split(':')
 				if (split.length > 1) {
-					return `<span class="${split[1]}">${split[0]}</span>`
+					return `<span class="highlight ${split[1]}">${split[0]}</span>`
 				}
 
 				const substitutionFunction = this.skill[`getEffect${substitution}`]
@@ -508,10 +508,6 @@ export default {
 .skill-item .description-text
 	margin-bottom 2px
 
-.skill-item .poison
-	color #00cc00
-	font-weight 600
-
 .skill-item .skill-button
 	padding 4px
 	margin 6px
@@ -564,4 +560,15 @@ export default {
 @media (max-width: 900px)
 	.skill-item .skill-label
 		display none
+
+//STATUS EFFECTS
+
+.skill-item .highlight
+	font-weight 600
+
+.skill-item .poison
+	color #00cc00
+
+.skill-item .whirlpool
+	color #0088ff
 </style>

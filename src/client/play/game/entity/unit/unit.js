@@ -36,6 +36,9 @@ class Unit {
 		this.cacheMoveSpeed = 0
 		this.cacheAttackCheck = false
 		this.expiringModifiers = []
+		this.afflictions = {
+			Whirlpool: {},
+		}
 
 		this.renderInBackground = renderInBackground
 		this.movable = false
@@ -505,9 +508,9 @@ class Unit {
 
 	updateHealth (newHealth) {
 		if (newHealth !== null) {
-			if (!Number.isInteger(newHealth)) { //TODO debug only
-				console.error('newHealth', newHealth)
-			}
+			// if (!Number.isInteger(newHealth)) { //TODO debug only
+			// 	console.error('newHealth', newHealth)
+			// }
 			this.healthRemaining = newHealth
 		} else {
 			newHealth = this.healthRemaining
@@ -579,6 +582,9 @@ class Unit {
 		if (!reflected && damage > 0) {
 			if (source.displayStats) {
 				source.displayStats.damage += damage
+			}
+			if (source.onDamageDealt) {
+				source.onDamageDealt(renderTime, source, this, damage)
 			}
 			const sid = source.player ? source.id : source.name
 			const damager = this.damagers[sid]

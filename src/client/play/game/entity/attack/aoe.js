@@ -19,10 +19,11 @@ class AreaOfEffect {
 		this.source = source
 		this.withUnit = data.follow
 		this.dot = data.dot
-		this.startAt = data.delay ? data.time + data.delay : null
-		this.endAt = data.duration ? data.time + data.duration : null
+		this.startAt = data.delay ? data.startAt + data.delay : null
+		this.endAt = data.duration ? data.startAt + data.duration : data.endAt
 		this.active = true
 		this.hitsTowers = data.hitsTowers
+		this.afflicts = data.afflicts
 		if (data.allies !== undefined) {
 			this.allies = data.allies
 		} else {
@@ -30,7 +31,8 @@ class AreaOfEffect {
 		}
 		this.modify = data.modify
 
-		const startingOpacity = this.startAt ? 0 : data.opacity
+		const flashes = this.startAt && !this.endAt
+		const startingOpacity = flashes ? 0 : data.opacity
 		this.container = Render.group()
 		this.circle = Render.circle(data.radius, { color: data.color, opacity: startingOpacity, parent: this.container })
 		const showsRing = this.px || data.duration > 500
@@ -64,12 +66,12 @@ class AreaOfEffect {
 		areaofEffects.push(this)
 		Animate.apply(this)
 
-		if (this.startAt) {
+		if (flashes) {
 			this.queueAnimation('circle', 'opacity', {
 				from: 0,
 				to: 0.1,
 				final: data.opacity,
-				start: data.time,
+				start: data.startAt,
 				duration: data.delay,
 			})
 		}
@@ -93,6 +95,9 @@ class AreaOfEffect {
 					target.modifyData(renderTime, this.modify)
 				}
 				if (!isAlly) {
+					if (this.afflicts) {
+						target.afflictions[this.afflicts][fromUnit.id] = renderTime
+					}
 					if (this.attackDamage) {
 						target.takeDamage(fromUnit, renderTime, this.attackDamage, this.attackPierce)
 					}
