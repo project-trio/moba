@@ -760,7 +760,7 @@ class Unit {
 		if (!this.stats.bulletSpeed) {
 			enemy.takeDamage(this, renderTime, this.stats.attackDamage, this.stats.attackPierce + this.attackPierceBonus)
 		} else {
-			new Bullet(this, enemy, this.stats, this.px, this.py, this.top.aim, this.stats.bulletOffset) //TODO top rotation
+			new Bullet(this, enemy, this.stats, this.stats.bulletOffset)
 			if (sound) {
 				this.playSound(sound)
 			}

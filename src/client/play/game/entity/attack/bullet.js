@@ -20,7 +20,12 @@ class Bullet {
 
 	// Constructor
 
-	constructor (source, target, data, x, y, startAngle, initialDistance) {
+	constructor (source, target, data, initialDistance, sx, sy, startAngle) {
+		if (sx === undefined) {
+			sx = source.px
+			sy = source.py
+			startAngle = source.top.aim
+		}
 		this.team = source.team
 		this.source = source
 		this.unitTarget = target.stats !== undefined
@@ -67,7 +72,7 @@ class Bullet {
 		if (!this.unitTarget) {
 			this.collisionCheck = Util.squared(data.collisionSize || data.bulletSpeed * 50)
 		}
-		this.setLocation(x, y, source.height || 10, startAngle)
+		this.setLocation(sx, sy, source.height || 10, startAngle)
 		this.setTarget(target)
 		if (initialDistance) {
 			initialDistance *= 100
@@ -164,7 +169,8 @@ class Bullet {
 				const damage = this.target.takeDamage(this.source, renderTime, this.attackDamage, this.attackPierce)
 				if (this.rebound && !this.source.isDead) {
 					const heal = Math.round(Float.multiply(damage, this.rebound))
-					new Bullet(this.target, this.source, { bulletColor: 0x00ff00, heal: heal, bulletSize: 8, bulletSpeed: 10 }, this.px, this.py, this.container.rotation.z)
+					const data = { bulletColor: 0x00ff00, heal: heal, bulletSize: 8, bulletSpeed: 10 }
+					new Bullet(this.target, this.source, data, 0, this.px, this.py, this.container.rotation.z) //TODO rotation
 				}
 			}
 			if (this.stunDuration && (this.hitsTowers || !this.target.tower) && (!this.modify || this.target.modifierIndex('moveSpeed', 'Poison') !== -1)) {

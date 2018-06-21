@@ -330,7 +330,7 @@ export default {
 					bulletSpeed: 7,
 					propagateRange: this.getEffectRange(level),
 				}
-				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+				new Bullet(ship, target, bulletData)
 			},
 		},
 	],
@@ -498,7 +498,7 @@ export default {
 					stunDuration: stunDuration,
 					dodgeable: true,
 				}
-				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+				new Bullet(ship, target, bulletData)
 			},
 		},
 		{
@@ -551,7 +551,7 @@ export default {
 						expires: effectDuration,
 					},
 				}
-				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+				new Bullet(ship, target, bulletData)
 			},
 		},
 		{
@@ -624,7 +624,7 @@ export default {
 					maxRange: maxRange,
 					firstCollision: true,
 				}
-				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+				new Bullet(ship, target, bulletData)
 			},
 		},
 		{
@@ -755,7 +755,7 @@ export default {
 					maxRange: maxRange,
 					dodgeable: true,
 				}
-				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+				new Bullet(ship, target, bulletData)
 			},
 		},
 		{
@@ -792,7 +792,7 @@ export default {
 					explosionRadius: aoeRange,
 					firstCollision: false,
 				}
-				const flingBullet = new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+				const flingBullet = new Bullet(ship, target, bulletData)
 				Animate.apply(flingBullet)
 				const moveConstant = flingBullet.moveConstant
 				const animationDuration = Math.sqrt(Util.pointDistance(ship.px, ship.py, target[0], target[1])) / moveConstant / 1000
@@ -981,7 +981,7 @@ export default {
 					explosionRadius: aoeRange,
 					firstCollision: true,
 				}
-				new Bullet(ship, target, bulletData, ship.px, ship.py, ship.base.rotation.z)
+				new Bullet(ship, target, bulletData)
 			},
 		},
 		{
