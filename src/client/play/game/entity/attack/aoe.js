@@ -1,8 +1,11 @@
+import { TICKS_PER_SECOND } from '@/common/constants'
+
 import Local from '@/client/play/local'
 
 import Render from '@/client/play/render/render'
 
 import Animate from '@/client/play/game/helpers/animate'
+import Float from '@/client/play/game/helpers/float'
 import Util from '@/client/play/game/util'
 
 const POSITION_MAGNITUDE_OFFSET = 100
@@ -59,7 +62,11 @@ class AreaOfEffect {
 			this.container.position.y = ay / POSITION_MAGNITUDE_OFFSET
 		}
 		this.collisionSize = data.radius * POSITION_MAGNITUDE_OFFSET
-		this.attackDamage = data.attackDamage
+		if (this.dot && data.attackDamage) {
+			this.attackDamage = Math.round(Float.divide(data.attackDamage, TICKS_PER_SECOND))
+		} else {
+			this.attackDamage = data.attackDamage
+		}
 		this.attackPierce = data.attackPierce
 		this.stunDuration = data.stunDuration
 
@@ -98,8 +105,9 @@ class AreaOfEffect {
 					if (this.afflicts) {
 						target.afflictions[this.afflicts][fromUnit.id] = renderTime
 					}
-					if (this.attackDamage) {
-						target.takeDamage(fromUnit, renderTime, this.attackDamage, this.attackPierce)
+					const attackDamage = this.attackDamage
+					if (attackDamage) {
+						target.takeDamage(fromUnit, renderTime, attackDamage, this.attackPierce)
 					}
 					if (this.stunDuration) {
 						target.stun(renderTime, this.stunDuration)

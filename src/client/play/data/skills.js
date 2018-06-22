@@ -985,7 +985,7 @@ export default {
 		},
 		{
 			name: 'Whirlpool',
-			description: 'Deals [[Dps]], increasing by [[DpsGrowth]]. When [[Dive:]] ends, heal half your damage to [[Whirlpooled:whirlpool]] enemies.',
+			description: 'Deals [[Dps]]. When [[Dive:]] ends, heal half your damage to [[Whirlpooled:whirlpool]] enemies.',
 			target: TARGET_GROUND,
 			hitsTowers: false,
 			isDisabledBy: null,
@@ -1001,9 +1001,6 @@ export default {
 			getEffectDps (level) {
 				return levelMultiplier(100, level, 5)
 			},
-			getEffectDpsGrowth (level) {
-				return 10
-			},
 			getCooldown (level) {
 				return levelMultiplier(170, level, -5)
 			},
@@ -1011,7 +1008,6 @@ export default {
 				this.whirlpoolDamage = 0
 
 				const dps = this.getEffectDps(level) * 100
-				const dpsGrowth = this.getEffectDpsGrowth(level) * 100
 				const aoeRange = this.getEffectRange(level)
 				new AreaOfEffect(ship, {
 					dot: true,
@@ -1022,7 +1018,6 @@ export default {
 					opacity: 0.5,
 					radius: aoeRange,
 					attackDamage: dps,
-					attackDamageGrowth: dpsGrowth,
 					attackPierce: 0,
 					afflicts: this.name,
 					startAt,

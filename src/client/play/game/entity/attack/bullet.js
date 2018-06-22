@@ -162,7 +162,7 @@ class Bullet {
 				radius: this.explosionRadius,
 				attackDamage: this.attackDamage,
 				attackPierce: this.attackPierce,
-				time: renderTime,
+				startAt: renderTime,
 				duration: this.effectDuration,
 				parent: Local.game.map.floorContainer,
 			})
