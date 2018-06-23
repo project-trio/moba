@@ -193,8 +193,8 @@ Mini.spawn = function (team, type, path, mirrored, retro) {
 Mini.init = function () {
 	spawnCount = 0
 	cache = {
-		melee: [[], []],
-		ranged: [[], []],
+		melee: [ [], [] ],
+		ranged: [ [], [] ],
 	}
 }
 

@@ -90,7 +90,7 @@ class Ship extends Movable {
 		this.timeOfDeath = -9000
 		this.respawned = true
 		this.isBlocking = false
-		this.reemergeAt = TESTING ? 1000 : 4000 //SAMPLE
+		this.reemergeAt = TESTING ? 2000 : 4000 //SAMPLE
 		this.modify('Spawn', 'moveSpeed', 'multiply', 2)
 
 		this.queuedForActivation = [false, false, false]
@@ -296,7 +296,7 @@ class Ship extends Movable {
 		}
 		const skill = this.skills.data[index]
 		if (!skill.getCooldown) {
-			p('Invalid skill', this.name, index)
+			p('Invalid skill', this.name, index + 1)
 			return false
 		}
 		if (skill.isDisabledBy && skill.isDisabledBy(this.skills.actives)) {
@@ -350,7 +350,7 @@ class Ship extends Movable {
 					store.state.local.skills.levels.splice(index, 1, nextLevel)
 				}
 			} else {
-				// p('Skill already maxed', index, currentLevel)
+				// p('Skill already maxed', index + 1, currentLevel)
 			}
 		} else {
 			console.error('levelup not ready', index, this.skills.leveled, this.level)
