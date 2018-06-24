@@ -6,7 +6,7 @@ module.exports = {
 		open: true,
 		port: 8090,
 		proxy: {
-			'/api': {
+			'/socket.io': {
 				target: 'http://192.168.0.11:8091',
 				changeOrigin: true,
 			},

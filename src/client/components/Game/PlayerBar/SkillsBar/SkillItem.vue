@@ -20,8 +20,6 @@
 </template>
 
 <script>
-import { TICK_DURATION } from '@/common/constants'
-
 import store from '@/client/store'
 
 import Sektor from '@/client/play/external/sektor'

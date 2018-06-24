@@ -1,9 +1,6 @@
 const TICK_DURATION = 50
 
 module.exports = {
-
-	PORT: 8091,
-
 	VERSION: '0.0.1',
 
 	TESTING: process.env.NODE_ENV !== 'production',

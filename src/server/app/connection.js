@@ -2,8 +2,6 @@ const Socket = require('socket.io')
 
 const CommonConsts = require.main.require('../common/constants')
 
-// const User = require.main.require('./app/entity/user')
-
 const lobby = require.main.require('./app/lobby')
 
 const Game = require.main.require('./game/game')

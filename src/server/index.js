@@ -36,7 +36,7 @@ app.get('*', (request, response, _next) => {
 
 //LISTEN
 
-const port = process.env.PORT || CommonConsts.PORT
+const port = process.env.PORT || 8091
 
 http.listen(port)
 

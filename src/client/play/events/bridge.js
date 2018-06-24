@@ -1,6 +1,6 @@
 import SocketIO from 'socket.io-client'
 
-import CommonConsts from '@/common/constants'
+import { TESTING, VERSION } from '@/common/constants'
 
 import store from '@/client/store'
 
@@ -26,11 +26,14 @@ export default {
 			return
 		}
 		store.state.signin.loading = true
-		const socketUrl = CommonConsts.TESTING ? `http://localhost:${CommonConsts.PORT}` : window.location.origin
-		const username = store.state.signin.username || 'test'
-		const params = {query: `name=${username}&v=${CommonConsts.VERSION}`}
-		socket = SocketIO(socketUrl, params)
 
+		const username = store.state.signin.username || 'test'
+		const params = {query: `name=${username}&v=${VERSION}`}
+		socket = SocketIO(params)
+
+		socket.on('error', (error) => {
+			p('error', error)
+		})
 		socket.on('connect', () => {
 			store.state.playerId = socket.id
 			p('Connected', store.state.playerId)
@@ -42,7 +45,7 @@ export default {
 
 			socket.on('disconnect', (data) => {
 				p('disconnect', data)
-				if (!CommonConsts.TESTING) {
+				if (!TESTING) {
 					window.alert('Disconnected from the server. Reloading the page.')
 				}
 				window.location.reload(false)

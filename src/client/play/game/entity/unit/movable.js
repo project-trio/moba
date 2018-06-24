@@ -212,6 +212,4 @@ class Movable extends Unit {
 
 }
 
-var attacking = null
-
 export default Movable
