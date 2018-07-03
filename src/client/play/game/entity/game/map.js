@@ -45,8 +45,6 @@ const GameMap = function (mapName, parent) {
 	let maxMapX, maxMapY
 	let waveNumber, waveInterval, waveDelay, wavesBetweenRanged, waveRangedDelay
 
-	container.interactive = true
-
 //MANAGE
 
 	const sightsArray = []

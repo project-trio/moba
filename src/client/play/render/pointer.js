@@ -36,7 +36,6 @@ export default {
 		const canvas = document.getElementById('canvas')
 		util.addListener(canvas, 'mousedown', onClick)
 		util.addListener(canvas, 'mousemove', onMouseMove)
-		util.addListener(canvas, 'contextmenu', onClick)
 	},
 
 	destroy () {
@@ -48,7 +47,6 @@ export default {
 		if (canvas) {
 			util.removeListener(canvas, 'mousedown', onClick)
 			util.removeListener(canvas, 'mousemove', onMouseMove)
-			util.removeListener(canvas, 'contextmenu', onClick)
 		}
 	},
 

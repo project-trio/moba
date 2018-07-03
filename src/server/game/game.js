@@ -156,7 +156,7 @@ class Game {
 			player.leaveGameRoom()
 			player.game = null
 		}
-		this.players = {}
+		this.players = []
 
 		for (let idx = games.length - 1; idx >= 0; idx -= 1) {
 			if (this === games[idx]) {

@@ -166,7 +166,6 @@ class Unit {
 				hpWidth = 72
 				hpOffsetZ = 40
 			}
-			this.healthWidth = hpWidth
 			this.infoContainer = Render.group()
 			this.infoContainer.position.y = 40
 			this.infoContainer.position.z = 30 + hpOffsetZ

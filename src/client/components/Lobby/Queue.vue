@@ -65,7 +65,7 @@ export default {
 			selectedMap: null,
 			readyRequested: false,
 			readyAt: 0,
-			readyInterval: null,
+			readyTimer: null,
 			notificationPermission: null,
 			hasFocusedWindow: false,
 		}
@@ -176,7 +176,7 @@ export default {
 					} else {
 						this.readyAt += 1
 						this.checkFocus()
-						if (this.readyAt === 3 && !this.hasFocusedWindow && this.notificationPermission === 'granted') {
+						if (this.readyAt === 3 && !this.readyRequested && !this.hasFocusedWindow && this.notificationPermission === 'granted') {
 							this.notification = new Notification('moba queue ready!', {
 								icon: `${this.baseUrl}icon.png`,
 							})

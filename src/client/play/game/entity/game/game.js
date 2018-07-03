@@ -275,7 +275,7 @@ export default function (gid, mode, size) {
 
 	this.updatePlayer = function (gameData) {
 		const pid = gameData.pid
-		const player = players[pid]
+		const player = this.playerForId(pid)
 		const storePlayer = store.state.game.players[pid]
 		if (!player || !storePlayer) {
 			console.error('Updated player DNE', player, storePlayer, gameData, players)

@@ -164,7 +164,7 @@ class Bullet {
 				attackPierce: this.attackPierce,
 				startAt: renderTime,
 				duration: this.effectDuration,
-				parent: Local.game.map.floorContainer,
+				parent: this.container.parent,
 			})
 		} else if (this.heal) {
 			this.target.addHealth(this.heal)
@@ -328,10 +328,6 @@ Bullet.init = function () {
 
 Bullet.destroy = function () {
 	allBullets = null
-}
-
-Bullet.all = function () {
-	return allBullets
 }
 
 Bullet.update = function (renderTime, timeDelta, tweening) {
