@@ -386,7 +386,10 @@ class Unit {
 		const isTransluscent = opacity < 1
 		this.model.traverse((node) => {
 			if (node.material && !node.fixedTransparency) {
-				node.material.transparent = isTransluscent
+				if (node.material.transparent !== isTransluscent) {
+					node.material.transparent = isTransluscent
+					node.castShadow = !isTransluscent
+				}
 				if (isTransluscent) {
 					node.material.opacity = opacity
 				}

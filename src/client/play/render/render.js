@@ -276,8 +276,10 @@ export default {
 		if (options.opacity !== undefined) {
 			mesh.material.transparent = true
 			mesh.material.opacity = options.opacity
+			mesh.castShadow = false
+		} else {
+			mesh.castShadow = true
 		}
-		mesh.castShadow = true
 		mesh.receiveShadow = true
 		mesh.owner = options.owner
 		return mesh
