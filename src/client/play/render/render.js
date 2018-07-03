@@ -74,9 +74,9 @@ const resize = function () {
 		visibleHeight = 2 * Math.tan(visibleFOV / 2) * CAMERA_HEIGHT
 		visibleWidth = visibleHeight * gameCamera.aspect
 	} else {
-		const cameraZoom = height / (CAMERA_OFF / 0.575)
-		const zoomWidth = width / cameraZoom
-		const zoomHeight = height / cameraZoom
+		const zoom = 3.03
+		const zoomWidth = width / zoom
+		const zoomHeight = height / zoom
 		gameCamera.left = -zoomWidth
 		gameCamera.right = zoomWidth
 		gameCamera.top = zoomHeight
@@ -136,24 +136,24 @@ export default {
 
 		gameScene = new THREE.Scene()
 
-		const ambientLight = new THREE.AmbientLight(0x666666, 1)
+		const ambientLight = new THREE.AmbientLight(0x888888, 1)
 		gameScene.add(ambientLight)
 
-		gameLight = new THREE.DirectionalLight(0xdddddd, 1)
+		gameLight = new THREE.DirectionalLight(0xaaaaaa, 1)
 		gameScene.add(gameLight)
-		gameLight.position.set(10, -50, 20)
-		gameLight.target.position.set(15, -40, 0)
+		gameLight.position.set(0, 0, 128)
+		gameLight.target.position.set(64, 64, -128)
 		gameScene.add(gameLight.target)
 
-		const projectionSize = 1500
-		gameLight.shadow.camera.left = -projectionSize
-		gameLight.shadow.camera.right = projectionSize
-		gameLight.shadow.camera.top = projectionSize
-		gameLight.shadow.camera.bottom = -projectionSize
+		const projectionSize = 1024
+		gameLight.shadow.camera.left = -64
+		gameLight.shadow.camera.right = projectionSize * 2 - 64
+		gameLight.shadow.camera.top = projectionSize * 2 - 128
+		gameLight.shadow.camera.bottom = -128
 		gameLight.shadow.camera.near = 1
-		gameLight.shadow.camera.far = 2048
-		gameLight.shadow.mapSize.width = 2048
-		gameLight.shadow.mapSize.height = 2048
+		gameLight.shadow.camera.far = 1024
+		gameLight.shadow.mapSize.width = 1024
+		gameLight.shadow.mapSize.height = 1024
 
 		audioListener = RenderSound.create(audioListener)
 
@@ -262,6 +262,8 @@ export default {
 		}
 		return sprite
 	},
+
+	// Voxels
 
 	voxelMesh (mesh, team, options) {
 		mesh.rotation.x = Math.PI / 2
