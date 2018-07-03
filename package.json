@@ -25,7 +25,7 @@
 		"stats.js": "^0.17.0",
 		"stylus": "^0.54.5",
 		"stylus-loader": "^3.0.2",
-		"three": "^0.93.0",
+		"three": "^0.94.0",
 		"vue": "^2.5.16",
 		"vue-router": "^3.0.1",
 		"vue-template-compiler": "^2.5.16"
