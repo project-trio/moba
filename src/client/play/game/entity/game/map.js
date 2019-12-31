@@ -23,7 +23,7 @@ const GameMap = function (mapName, parent) {
 	let layout
 	let automateTimer = null
 
-	let container = Render.group()
+	const container = Render.group()
 	const floorContainer = Render.group()
 	const wallContainer = Render.group()
 	const fogContainer = Render.group()
@@ -37,7 +37,7 @@ const GameMap = function (mapName, parent) {
 
 	const collisionWalls = []
 
-//LISTEN
+	//LISTEN
 
 	let previousPositionX = null
 	let previousPositionY = null
@@ -45,7 +45,7 @@ const GameMap = function (mapName, parent) {
 	let maxMapX, maxMapY
 	let waveNumber, waveInterval, waveDelay, wavesBetweenRanged, waveRangedDelay
 
-//MANAGE
+	//MANAGE
 
 	const sightsArray = []
 
@@ -236,8 +236,8 @@ const GameMap = function (mapName, parent) {
 			const radius = wall.radius
 			for (let team = 0; team < 2; team += 1) {
 				const firstTeam = team === 0
-				let teamX = firstTeam ? mapWidth - wall.start.x : wall.start.x
-				let teamY = firstTeam ? mapHeight - wall.start.y : wall.start.y
+				const teamX = firstTeam ? mapWidth - wall.start.x : wall.start.x
+				const teamY = firstTeam ? mapHeight - wall.start.y : wall.start.y
 				const teamMp = firstTeam ? -1 : 1
 				for (let mirror = 0; mirror < (wall.mirror ? 2 : 1); mirror += 1) {
 					const mirrored = mirror > 0
@@ -368,7 +368,7 @@ const GameMap = function (mapName, parent) {
 		const spawnIntervalPoint = renderTime % waveInterval
 		let spawnMinionWave = false
 		let spawnRanged = false
-		let spawnOneType = !!wavesBetweenRanged
+		const spawnOneType = !!wavesBetweenRanged
 		if (spawnIntervalPoint === waveDelay) {
 			spawnMinionWave = true
 		} else if (spawnOneType && waveNumber % wavesBetweenRanged === 1) {
@@ -385,7 +385,7 @@ const GameMap = function (mapName, parent) {
 		}
 	}
 
-//DIMENSIONS
+	//DIMENSIONS
 
 	this.width = function () {
 		return layout.width

@@ -1,5 +1,5 @@
 module.exports = {
-	lintOnSave: true,
+
 	productionSourceMap: false,
 
 	devServer: {
@@ -7,7 +7,7 @@ module.exports = {
 		port: 8090,
 		proxy: {
 			'/socket.io': {
-				target: 'http://192.168.0.11:8091',
+				target: 'http://localhost:8091',
 				changeOrigin: true,
 			},
 		},
@@ -29,5 +29,9 @@ module.exports = {
 				esModule: false,
 			})
 			.end()
+		config.optimization.minimizer('terser').tap((args) => {
+			args[0].terserOptions.compress.drop_console = true
+			return args
+		})
 	},
 }

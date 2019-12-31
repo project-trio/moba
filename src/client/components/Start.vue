@@ -5,7 +5,7 @@
 		...
 	</div>
 	<div v-else>
-		<input v-model.trim="enteringName" @keyup.enter="onEnterName" placeholder="enter a username">
+		<input v-model.trim="enteringName" placeholder="enter a username" @keyup.enter="onEnterName">
 		<p class="note">note: there is no account system yet, just choose a name of your liking.</p>
 	</div>
 </div>

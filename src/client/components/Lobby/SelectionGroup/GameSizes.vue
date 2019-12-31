@@ -1,7 +1,7 @@
 <template>
-<selection-group>
-	<button v-for="size in gameSizes" @click="$emit('select', size)" class="selection interactive" :class="{ selected: size === selectedSize }" :key="size">{{ sizeLabel(size) }}</button>
-</selection-group>
+<SelectionGroup>
+	<button v-for="size in gameSizes" :key="size" class="selection interactive" :class="{ selected: size === selectedSize }" @click="$emit('select', size)">{{ sizeLabel(size) }}</button>
+</SelectionGroup>
 </template>
 
 <script>

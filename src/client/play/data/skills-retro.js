@@ -1,10 +1,7 @@
-/* eslint-disable no-unused-vars */
-
 import { TICK_DURATION } from '@/common/constants'
 
 import store from '@/client/store'
 
-import Local from '@/client/play/local'
 import Render from '@/client/play/render/render'
 
 import Animate from '@/client/play/game/helpers/animate'
@@ -13,8 +10,6 @@ import Util from '@/client/play/game/util'
 
 import AreaOfEffect from '@/client/play/game/entity/attack/aoe'
 import Bullet from '@/client/play/game/entity/attack/bullet'
-
-import Unit from '@/client/play/game/entity/unit/unit'
 
 //LOCAL
 
@@ -31,7 +26,7 @@ const levelMultiplier = function (base, level, multiplier) {
 
 export default {
 
-//SPLODGE
+	//SPLODGE
 
 	splodge: [
 		{
@@ -109,7 +104,7 @@ export default {
 		},
 	],
 
-//BASHER
+	//BASHER
 
 	basher: [
 		{
@@ -177,7 +172,7 @@ export default {
 		},
 	],
 
-//DOC
+	//DOC
 
 	doc: [
 		{
@@ -254,7 +249,7 @@ export default {
 		},
 	],
 
-//STINGER
+	//STINGER
 
 	stinger: [
 		{
@@ -372,7 +367,7 @@ export default {
 		},
 	],
 
-//SHOUTY
+	//SHOUTY
 
 	shouty: [
 		{
@@ -475,7 +470,7 @@ export default {
 		},
 	],
 
-//SNEAKY
+	//SNEAKY
 
 	sneaky: [
 		{
@@ -588,7 +583,7 @@ export default {
 		},
 	],
 
-//DASH
+	//DASH
 
 	dash: [
 		{

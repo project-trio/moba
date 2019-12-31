@@ -4,13 +4,13 @@
 		<h1>{{ queuedPlayers }} in queue</h1>
 	</div>
 	<h3>minimum game size:</h3>
-	<game-sizes @select="selectedSize = $event" :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="true" />
+	<GameSizes :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="true" @select="selectedSize = $event" />
 	<h3>vote for a map:</h3>
-	<game-maps @select="selectedMap = $event" :selectedSize="selectedSize" :selectedMap="selectedMap" />
+	<GameMaps :selectedSize="selectedSize" :selectedMap="selectedMap" @select="selectedMap = $event" />
 
 	<div class="queue-action">
 		<div v-if="enoughPlayersForGame">
-			<button @click="onReady" class="ready-button big interactive" :class="{ selected: readyRequested }">{{ readyRequested ? 'ready!' : `ready? (${queueTimer - readyAt})` }}</button>
+			<button class="ready-button big interactive" :class="{ selected: readyRequested }" @click="onReady">{{ readyRequested ? 'ready!' : `ready? (${queueTimer - readyAt})` }}</button>
 		</div>
 		<div v-else>
 			<h2>waiting for {{ pluralize(waitingForSize, 'player') }}...</h2>
@@ -25,11 +25,11 @@
 			To be notified when a game becomes available while this page is in the background, please enable notifications for this site in your browser settings.
 		</div>
 		<div v-else>
-			<button @click="onNotifications" class="big interactive" :class="{ selected: readyRequested }">Enable notifications!</button>
+			<button class="big interactive" :class="{ selected: readyRequested }" @click="onNotifications">Enable notifications!</button>
 			Lets you know when a game is available while the page is in the background.
 		</div>
 	</div>
-	<lobby-chat />
+	<LobbyChat />
 </div>
 </template>
 

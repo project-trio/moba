@@ -7,19 +7,19 @@
 	<div v-else>
 		<div v-if="isMod">
 			<h3>game type:</h3>
-			<selection-group>
-				<button v-for="mode in gameModes" @click="onGameMode(mode)" class="selection interactive" :class="{ selected: mode === selectedMode }" :key="mode.name">{{ mode.name }}</button>
+			<SelectionGroup>
+				<button v-for="mode in gameModes" :key="mode.name" class="selection interactive" :class="{ selected: mode === selectedMode }" @click="onGameMode(mode)">{{ mode.name }}</button>
 				<div class="mode-description">
 					{{ selectedMode.description }}
 				</div>
-			</selection-group>
+			</SelectionGroup>
 		</div>
 		<h3>{{ pvpMode ? 'max players' : 'game size' }}:</h3>
-		<game-sizes @select="selectedSize = $event" :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="pvpMode" />
+		<GameSizes :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="pvpMode" @select="selectedSize = $event" />
 		<div v-if="selectedSize > 0">
 			<h3>map:</h3>
-			<game-maps @select="selectedMap = $event" :selectedSize="selectedSize" :selectedMap="selectedMap" />
-			<button @click="onSubmit" class="big interactive">confirm</button>
+			<GameMaps :selectedSize="selectedSize" :selectedMap="selectedMap" @select="selectedMap = $event" />
+			<button class="big interactive" @click="onSubmit">confirm</button>
 		</div>
 	</div>
 </div>

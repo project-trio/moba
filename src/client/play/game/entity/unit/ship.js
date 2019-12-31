@@ -444,7 +444,7 @@ class Ship extends Movable {
 		let lastDamageAt = 0
 		let playerAssisted = false
 		let killCreditUnit = null
-		for (let did in this.damagers) {
+		for (const did in this.damagers) {
 			const enemyDamage = this.damagers[did]
 			const damagedAt = enemyDamage.at
 			const damageUnit = enemyDamage.unit

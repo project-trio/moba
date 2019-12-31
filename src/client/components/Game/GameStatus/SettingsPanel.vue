@@ -3,15 +3,15 @@
 	<h1>Settings</h1>
 	<div class="settings">
 		<div class="setting">
-			<button @click="onFps" class="interactive">{{ fpsDescription }}</button>
+			<button class="interactive" @click="onFps">{{ fpsDescription }}</button>
 			<div class="label">FPS Cap</div>
 		</div>
 		<div class="setting">
-			<button @click="onResolution" class="interactive">{{ fullResolution ? 'Full' : 'Low' }}</button>
+			<button class="interactive" @click="onResolution">{{ fullResolution ? 'Full' : 'Low' }}</button>
 			<div class="label">Resolution</div>
 		</div>
 		<div class="setting">
-			<button @click="onShadows" class="interactive">{{ shadows === 0 ? 'Off' : shadows === 1 ? 'Low' : 'High' }}</button>
+			<button class="interactive" @click="onShadows">{{ shadows === 0 ? 'Off' : shadows === 1 ? 'Low' : 'High' }}</button>
 			<div class="label">Shadows</div>
 		</div>
 		<!-- <div class="setting">
@@ -19,15 +19,15 @@
 			<div class="label">Antialias</div>
 		</div> -->
 		<div class="setting">
-			<button @click="onPerspective" class="interactive">{{ perspective ? '3D' : '2D' }}</button>
+			<button class="interactive" @click="onPerspective">{{ perspective ? '3D' : '2D' }}</button>
 			<div class="label">Perspective</div>
 		</div>
 		<div class="setting">
-			<button @click="onOutline" class="interactive">{{ outline ? 'On' : 'Off' }}</button>
+			<button class="interactive" @click="onOutline">{{ outline ? 'On' : 'Off' }}</button>
 			<div class="label">Outline effect</div>
 		</div>
 		<div class="setting">
-			<button @click="onSoundVolume" class="interactive">{{ soundVolume ? `${soundVolume}%` : 'Off ' }}</button>
+			<button class="interactive" @click="onSoundVolume">{{ soundVolume ? `${soundVolume}%` : 'Off ' }}</button>
 			<div class="label">Sound</div>
 		</div>
 	</div>

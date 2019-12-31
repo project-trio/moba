@@ -5,8 +5,8 @@
 			<div :id="`cooldown-ring-${indexName}`" class="item-circle cooldown-ring" />
 			<div v-show="!cooldownRemaining" :id="`internal-ring-${indexName}`" />
 			<div :id="`level-ring-${indexName}`" class="item-circle" />
-			<button @click="onSkill(true)" @mouseenter="overButton(true)" @mouseleave="overButton(false)" class="skill-button">{{ indexName }}</button>
-			<div v-if="showingLevelupIndicator" @click="onLevelup" @mouseenter="overLevelup(true)" @mouseleave="overLevelup(false)" class="button-levelup interactive">
+			<button class="skill-button" @click="onSkill(true)" @mouseenter="overButton(true)" @mouseleave="overButton(false)">{{ indexName }}</button>
+			<div v-if="showingLevelupIndicator" class="button-levelup interactive" @click="onLevelup" @mouseenter="overLevelup(true)" @mouseleave="overLevelup(false)">
 				⬆︎
 			</div>
 		</div>
@@ -104,9 +104,6 @@ export default {
 		},
 
 		hintText () {
-			if (this.skill.target <= 1) {
-				return null
-			}
 			if (this.skill.target === 2) {
 				return `Select a ground ${this.skill.getEffectRange ? 'area' : 'point'} to target`
 			}
@@ -116,6 +113,7 @@ export default {
 			if (this.skill.target === 4) {
 				return 'Select an ally to target'
 			}
+			return null
 		},
 
 		showsDiff () {
@@ -123,7 +121,7 @@ export default {
 		},
 
 		descriptionHtml () {
-			let description = this.skill.description.replace(MATCH_BRACKET_FORMATTING, (match, substitution) => {
+			const description = this.skill.description.replace(MATCH_BRACKET_FORMATTING, (match, substitution) => {
 				const split = substitution.split(':')
 				if (split.length > 1) {
 					return `<span class="highlight ${split[1]}">${split[0]}</span>`

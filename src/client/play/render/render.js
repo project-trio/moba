@@ -60,7 +60,7 @@ const resize = function () {
 		gameCamera.add(audioListener)
 	}
 
-	let newPixelMultiplier = window.devicePixelRatio / (store.state.settings.fullResolution ? 1 : 2)
+	const newPixelMultiplier = window.devicePixelRatio / (store.state.settings.fullResolution ? 1 : 2)
 	if (newPixelMultiplier !== pixelMultiplier) {
 		pixelMultiplier = newPixelMultiplier
 		renderer.setPixelRatio(newPixelMultiplier)

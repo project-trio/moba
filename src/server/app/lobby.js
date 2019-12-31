@@ -1,3 +1,5 @@
+/* eslint-disable no-use-before-define */
+
 const Socket = require('socket.io')
 
 const CommonConsts = require.main.require('../common/constants')
@@ -53,7 +55,7 @@ const createGame = function (player, mode, size, map, joining, autoStart) {
 	return response
 }
 
-const join = function(player, gid, callback) {
+const join = function (player, gid, callback) {
 	const games = Game.all
 	for (const game of games) {
 		if (game.id === gid) {

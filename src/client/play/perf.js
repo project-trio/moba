@@ -8,18 +8,16 @@ const iterations = 99999
 let rx = -60, ry = 30
 let value
 
-function getRandomInt(min, max) {
+function getRandomInt (min, max) {
 	return Math.floor(Math.random() * (max - min)) + min
 }
 
-function randomizePosition() {
+function randomizePosition () {
 	rx = getRandomInt(-100, 100)
 	ry = getRandomInt(-100, 100)
 }
 
-
 //FLOAT
-
 
 console.time('Basic math')
 for (let i = 0; i < iterations; i += 1) {
@@ -35,7 +33,6 @@ for (let i = 0; i < iterations; i += 1) {
 const floatValue = value
 console.timeEnd('Float.multiply')
 
-
 console.time('Decimal.multiply')
 for (let i = 0; i < iterations; i += 1) {
 	value = new Decimal(ry).times(rx).round().toNumber()
@@ -43,16 +40,12 @@ for (let i = 0; i < iterations; i += 1) {
 console.timeEnd('Decimal.multiply')
 console.log(basicValue, floatValue, value)
 
-
 //SETUP
-
 
 randomizePosition()
 console.log(`${iterations} iterations`, rx, ry)
 
-
 //ATAN
-
 
 console.log('\nATAN')
 
@@ -64,7 +57,6 @@ for (let i = 0; i < iterations; i += 1) {
 console.timeEnd('Math.atan2')
 console.log(value)
 
-
 // console.time('Decimal.atan2')
 // for (let i = 0; i < iterations; i += 1) {
 //   // randomizePosition()
@@ -72,7 +64,6 @@ console.log(value)
 // }
 // console.timeEnd('Decimal.atan2')
 // console.log(value)
-
 
 // console.time('Util.angleApproximate')
 // for (let i = 0; i < iterations; i += 1) {
@@ -82,7 +73,6 @@ console.log(value)
 // console.timeEnd('Util.angleApproximate')
 // console.log(value.toNumber())
 
-
 console.time('Util.angleOf')
 for (let i = 0; i < iterations; i += 1) {
 	// randomizePosition()
@@ -91,15 +81,12 @@ for (let i = 0; i < iterations; i += 1) {
 console.timeEnd('Util.angleOf')
 console.log(value / 1000)
 
-
 //COS
-
 
 console.log('\nCOS')
 
 const anglePrecise = Math.atan2(ry, rx)
-const angleApprox = Util.angleOf(rx, ry, false)
-
+// const angleApprox = Util.angleOf(rx, ry, false)
 
 console.time('Math.cos')
 for (let i = 0; i < iterations; i += 1) {
@@ -108,7 +95,6 @@ for (let i = 0; i < iterations; i += 1) {
 console.timeEnd('Math.cos')
 console.log(value)
 
-
 // console.time('Decimal.cos')
 // for (let i = 0; i < iterations; i += 1) {
 //   value = Decimal.cos(anglePrecise)
@@ -116,9 +102,7 @@ console.log(value)
 // console.timeEnd('Decimal.cos')
 // console.log(value.toNumber())
 
-
 //SIN
-
 
 console.log('\nSIN')
 
@@ -129,7 +113,6 @@ for (let i = 0; i < iterations; i += 1) {
 console.timeEnd('Math.sin')
 console.log(value)
 
-
 // console.time('Decimal.sin')
 // for (let i = 0; i < iterations; i += 1) {
 //   value = Decimal.sin(anglePrecise)
@@ -137,9 +120,7 @@ console.log(value)
 // console.timeEnd('Decimal.sin')
 // console.log(value.toNumber())
 
-
 //ANGLE COMPARISON
-
 
 // let an = 0
 // while (an < Math.PI*8 + 0.1) {

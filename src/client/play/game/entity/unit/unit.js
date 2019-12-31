@@ -565,8 +565,8 @@ class Unit {
 		let damage = amount
 		if (!reflected) {
 			const armorMultiplier = pierce
-					? (pierce > 9000 ? 1 : calculateArmor(this.current.armor - pierce))
-					: this.armorCheck
+				? (pierce > 9000 ? 1 : calculateArmor(this.current.armor - pierce))
+				: this.armorCheck
 			damage = Math.round(Float.multiply(damage, armorMultiplier))
 
 			if (this.reflectDamageRatio) {
@@ -695,7 +695,7 @@ class Unit {
 		if (Math.abs(angleDiff) < turnDistance) {
 			newAngle = destAngle
 		} else {
-			let spinDirection = angleDiff < 0 ? -1 : 1
+			const spinDirection = angleDiff < 0 ? -1 : 1
 			if (tweening) {
 				newAngle = currentAngle + (turnDistance * spinDirection)
 			} else {

@@ -41,7 +41,6 @@ router.beforeEach((to, from, next) => {
 			return next({name: 'Start'})
 		}
 	} else if (to.name === 'Lobby') {
-		p(storage.get('tutorial'))
 		if (!storage.get('tutorial')) {
 			return next({name: 'Tutorial'})
 		}
@@ -49,7 +48,6 @@ router.beforeEach((to, from, next) => {
 	next()
 })
 
-/* eslint-disable no-new */
 new Vue({
 	el: '#app',
 	components: { App },
@@ -87,6 +85,6 @@ if (hasSignin) {
 	} else if (router.currentRoute.name === 'Start') {
 		startupRoute()
 	}
-} else {
+} else if (router.currentRoute.name !== 'Start') {
 	router.replace({ name: 'Start' })
 }

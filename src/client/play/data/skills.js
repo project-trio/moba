@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-vars */
-
-import { TICKS_PER_SECOND } from '@/common/constants'
-
 import store from '@/client/store'
 
 import Render from '@/client/play/render/render'
@@ -39,7 +35,7 @@ const isDisabledBy = function (actives) {
 
 export default {
 
-//CHARGER
+	//CHARGER
 
 	charger: [
 		{
@@ -160,7 +156,7 @@ export default {
 		},
 	],
 
-//TEMPEST
+	//TEMPEST
 
 	tempest: [
 		{
@@ -337,7 +333,7 @@ export default {
 		},
 	],
 
-//STITCHES
+	//STITCHES
 
 	stitches: [
 		{
@@ -454,7 +450,7 @@ export default {
 		},
 	],
 
-//BEEDLE
+	//BEEDLE
 
 	beedle: [
 		{
@@ -595,7 +591,7 @@ export default {
 		},
 	],
 
-//PROPPY
+	//PROPPY
 
 	proppy: [
 		{
@@ -729,7 +725,7 @@ export default {
 		},
 	],
 
-//PULTER
+	//PULTER
 
 	pulter: [
 		{
@@ -840,7 +836,7 @@ export default {
 		},
 	],
 
-//BOXY
+	//BOXY
 
 	boxy: [
 		{
@@ -950,7 +946,7 @@ export default {
 		},
 	],
 
-//SINKER
+	//SINKER
 
 	sinker: [
 		{
@@ -1094,7 +1090,7 @@ export default {
 		},
 	],
 
-//GLITCH
+	//GLITCH
 
 	glitch: [
 		{

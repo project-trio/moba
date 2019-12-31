@@ -48,7 +48,7 @@ class Game {
 		games.push(this)
 	}
 
-//PRIVATE
+	//PRIVATE
 
 	playerById (id) {
 		for (const player of this.players) {
@@ -77,7 +77,7 @@ class Game {
 		return this.playerCount() >= this.size * 2
 	}
 
-//STATE
+	//STATE
 
 	setMap (map) {
 		this.map = map
@@ -109,7 +109,7 @@ class Game {
 		return false
 	}
 
-//JOIN
+	//JOIN
 
 	formattedPlayers () {
 		const broadcastPlayers = []
@@ -198,7 +198,7 @@ class Game {
 		}
 	}
 
-//METHODS
+	//METHODS
 
 	start () {
 		this.broadcast('start game', {

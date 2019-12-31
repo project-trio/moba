@@ -2,13 +2,13 @@
 <div class="game-container inherit">
 	<canvas id="canvas" class="inherit" />
 
-	<unit-select v-if="!playing && winningTeam === null" />
+	<UnitSelect v-if="!playing && winningTeam === null" />
 
-	<game-status />
+	<GameStatus />
 
-	<settings-buttons class="bar-section" />
+	<SettingsButtons class="bar-section" />
 
-	<player-bar class="ui-bar" />
+	<PlayerBar class="ui-bar" />
 </div>
 </template>
 

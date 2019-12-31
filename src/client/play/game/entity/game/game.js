@@ -20,7 +20,7 @@ export default function (gid, mode, size) {
 	let players = []
 
 	let updateCount = 0
-	let updateQueue = {}
+	const updateQueue = {}
 
 	let ticksPerUpdate
 	let renderedSinceUpdate = false

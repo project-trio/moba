@@ -1,8 +1,8 @@
 <template>
 <div class="settings-buttons">
-	<button @click="onHelp" class="interactive">?</button>
-	<button @click="onSettings" class="interactive">⚙</button>
-	<button @click="onFullscreen" class="interactive">⤢</button>
+	<button class="interactive" @click="onHelp">?</button>
+	<button class="interactive" @click="onSettings">⚙</button>
+	<button class="interactive" @click="onFullscreen">⤢</button>
 </div>
 </template>
 

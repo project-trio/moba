@@ -10,17 +10,17 @@
 			<canvas id="preview" />
 		</div>
 		<div class="units-list selection-half" :class="`team-${localTeam + 1}`">
-			<button v-for="name in shipNames" @click="onUnit(name)" class="unit-box interactive" :class="{ selected: chosenUnit === name }" :key="name">{{ name }}</button>
+			<button v-for="name in shipNames" :key="name" class="unit-box interactive" :class="{ selected: chosenUnit === name }" @click="onUnit(name)">{{ name }}</button>
 		</div>
 	</div>
 
 	<div class="player-teams scrolls">
 		<h1>teams</h1>
 		<div class="team-players team-1">
-			<div v-for="player in teamPlayers[0]" :player="player" class="player-ship animated" :class="{ selected: player && player.id === localId }" :key="player.id">{{ player && player.shipName }}</div>
+			<div v-for="player in teamPlayers[0]" :key="player.id" :player="player" class="player-ship animated" :class="{ selected: player && player.id === localId }">{{ player && player.shipName }}</div>
 		</div>
 		<div class="team-players team-2">
-			<div v-for="player in teamPlayers[1]" :player="player" class="player-ship animated" :class="{ selected: player && player.id === localId }" :key="player.id">{{ player && player.shipName }}</div>
+			<div v-for="player in teamPlayers[1]" :key="player.id" :player="player" class="player-ship animated" :class="{ selected: player && player.id === localId }">{{ player && player.shipName }}</div>
 		</div>
 	</div>
 </div>

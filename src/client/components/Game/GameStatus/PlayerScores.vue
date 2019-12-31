@@ -1,9 +1,9 @@
 <template>
 <div class="bar-section panel">
-	<score-bar />
+	<ScoreBar />
 	<table class="player-scores">
 		<tr><th>name</th><th>level</th><th>ship</th><th>{{ retro ? 'kills' : 'assists' }}</th><th>deaths</th><th>damage</th></tr>
-		<tr v-for="result in playerResults" :class="`team-${result.team + 1} ${result.active ? 'active' : 'inactive'}`" :key="result.name">
+		<tr v-for="result in playerResults" :key="result.name" :class="`team-${result.team + 1} ${result.active ? 'active' : 'inactive'}`">
 			<td>{{ result.name }}</td><td>{{ result.level }}</td><td>{{ result.ship }}</td><td>{{ result.kills }}</td><td>{{ result.deaths }}</td><td>{{ Math.round(result.damage / 100) }}</td>
 		</tr>
 	</table>

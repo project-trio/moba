@@ -249,8 +249,8 @@ class Bullet {
 			moveByY = Math.round(Float.multiply(moveScalar, this.moveY))
 		}
 
-		let movingToX = cx + moveByX
-		let movingToY = cy + moveByY
+		const movingToX = cx + moveByX
+		const movingToY = cy + moveByY
 		if (tweening) {
 			this.updatePosition(movingToX, movingToY)
 		} else {

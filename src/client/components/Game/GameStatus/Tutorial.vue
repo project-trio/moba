@@ -2,7 +2,7 @@
 <div class="bar-section panel">
 	<h1>{{ tutorial.title }}</h1>
 	<p>{{ tutorial.body }}</p>
-	<button v-if="tutorial.continue" @click="onContinue" class="panel-button interactive">Continue</button>
+	<button v-if="tutorial.continue" class="panel-button interactive" @click="onContinue">Continue</button>
 </div>
 </template>
 

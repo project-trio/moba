@@ -9,18 +9,18 @@
 		<div class="player-teams scrolls">
 			<div class="team-players team-1">
 				<h3 class="vertical">Team Blue</h3>
-				<player-box v-for="(player, index) in teamPlayers[0]" :player="player" :key="player ? player.id : index" />
+				<PlayerBox v-for="(player, index) in teamPlayers[0]" :key="player ? player.id : index" :player="player" />
 			</div>
 			<div class="team-players team-2">
 				<h3 class="vertical">Team Pink</h3>
-				<player-box v-for="(player, index) in teamPlayers[1]" :player="player" :key="player ? player.id : index" />
+				<PlayerBox v-for="(player, index) in teamPlayers[1]" :key="player ? player.id : index" :player="player" />
 			</div>
 		</div>
 		<div class="invite-link faint note">
 			Invite a friend: <a :href="url" onclick="return false">{{ url }}</a>
 		</div>
-		<button @click="onStart" v-if="isHost" class="big interactive">{{ startText }}</button>
-		<lobby-chat />
+		<button v-if="isHost" class="big interactive" @click="onStart">{{ startText }}</button>
+		<LobbyChat />
 	</div>
 </div>
 </template>

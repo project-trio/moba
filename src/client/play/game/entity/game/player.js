@@ -4,10 +4,10 @@ import Local from '@/client/play/local'
 import Ship from '@/client/play/game/entity/unit/ship'
 
 const spawnLocation = function (team, teamIndex) {
-	let sx, sy
 	const teamMp = team === 0 ? 1 : -1
 	const mapWidthHalf = Local.game.map.centerX()
 	const mapHeightHalf = Local.game.map.centerY()
+	let sx
 	if (Local.game.retro) {
 		const offset = 72
 		const index = (teamIndex % 6) + 1
@@ -19,7 +19,7 @@ const spawnLocation = function (team, teamIndex) {
 		sx = mapWidthHalf + offset * (Math.floor(teamIndex / 2) + 1) * indexMp * teamMp
 	}
 	const yInset = 60
-	sy = (mapHeightHalf - yInset) * teamMp + mapHeightHalf
+	const sy = (mapHeightHalf - yInset) * teamMp + mapHeightHalf
 	return [sx, sy]
 }
 

@@ -10,7 +10,7 @@ export default {
 	// Angle
 
 	radiansBetween (a, b) {
-		let ax = a.px, ay = a.py, bx = b.px, by = b.py
+		const ax = a.px, ay = a.py, bx = b.px, by = b.py
 		return Float.add(Float.atan(ay - by, ax - bx), MATH_PI)
 	},
 
@@ -21,7 +21,7 @@ export default {
 			a = Float.integer(a)
 			b = Float.integer(b)
 		}
-		let diff = ((b - a + pi) % pi2) - pi
+		const diff = ((b - a + pi) % pi2) - pi
 		const result = diff < -pi ? diff + pi2 : diff
 		return tweening ? result : result / Float.PRECISION
 	},

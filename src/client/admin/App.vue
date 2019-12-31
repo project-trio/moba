@@ -3,7 +3,7 @@
 	<h1>{{ players.length }} online</h1>
 	<div>{{ players.join(', ') }}</div>
 	<h1>{{ games.length }} games</h1>
-	<div v-for="game in games" class="game" :key="game.id">
+	<div v-for="game in games" :key="game.id" class="game">
 		<div>Mode: {{ game.mode }}</div>
 		<div>Status: {{ game.state }}</div>
 		<div>Size: {{ game.size }}</div>

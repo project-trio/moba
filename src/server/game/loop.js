@@ -112,8 +112,6 @@ const loop = function () {
 
 module.exports = {
 
-	init () {
-		loop()
-	},
+	init: loop,
 
 }

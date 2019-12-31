@@ -7,7 +7,7 @@
 	<router-link :to="{ name: 'Queue' }" tag="button" class="big interactive">enter queue</router-link>
 	<router-link :to="{ name: 'Create' }" tag="button" class="big interactive outlined">{{ isMod ? 'create game' : 'training bots' }}</router-link>
 	<div>
-		<router-link v-for="game in games" :to="{ name: 'Join', params: { gid: game.id } }" tag="div" class="list-game interactive" :key="game.id">
+		<router-link v-for="game in games" :key="game.id" :to="{ name: 'Join', params: { gid: game.id } }" tag="div" class="list-game interactive">
 			<div>{{ game.mode }} game - {{ game.state }}</div>
 			<div>{{ game.players.length }} of {{ game.size * 2 }} players</div>
 			<div>{{ game.map }} map</div>

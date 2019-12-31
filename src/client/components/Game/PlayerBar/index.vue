@@ -1,9 +1,9 @@
 <template>
 <div class="player-bar">
-	<chat-bar />
-	<player-info class="bar-section" />
-	<skills-bar class="bar-section" />
-	<minimap v-show="playing" class="bar-section" />
+	<ChatBar />
+	<PlayerInfo class="bar-section" />
+	<SkillsBar class="bar-section" />
+	<Minimap v-show="playing" class="bar-section" />
 </div>
 </template>
 

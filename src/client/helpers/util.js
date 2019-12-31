@@ -3,6 +3,7 @@ try {
 	const options = Object.defineProperty({}, 'passive', {
 		get () {
 			passiveOption = { passive: true }
+			return passiveOption
 		},
 	})
 	window.addEventListener('test', null, options)

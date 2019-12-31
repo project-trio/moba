@@ -1,7 +1,7 @@
 <template>
-<selection-group>
-	<button v-for="map in mapsForSize" @click="onMap(map)" class="selection interactive" :class="{ selected: map === selectedMap }" :key="map">{{ map }}</button>
-</selection-group>
+<SelectionGroup>
+	<button v-for="map in mapsForSize" :key="map" class="selection interactive" :class="{ selected: map === selectedMap }" @click="onMap(map)">{{ map }}</button>
+</SelectionGroup>
 </template>
 
 <script>

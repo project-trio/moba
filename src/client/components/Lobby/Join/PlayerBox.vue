@@ -5,7 +5,7 @@
 			{{ player.name }}
 		</div>
 		<transition-group name="bubbling" tag="div" class="player-bubbles">
-			<div v-for="message in cachedMessages" class="bubble" :class="teamBackgroundClass" :key="`${message.id}${message.at}`">{{ message.body }}</div>
+			<div v-for="message in cachedMessages" :key="`${message.id}${message.at}`" class="bubble" :class="teamBackgroundClass">{{ message.body }}</div>
 		</transition-group>
 	</div>
 	<div v-else class="faint note">
