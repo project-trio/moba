@@ -21,13 +21,13 @@ module.exports = {
 	chainWebpack (config) {
 		config.module
 			.rule('vox')
-				.test(/\.(vox|typeface)$/)
-				.use('url')
-					.loader('url-loader')
-					.options({
-						query: {
-							limit: 1,
-						},
-					})
+			.test(/\.(vox|typeface)$/)
+			.use('url')
+			.loader('url-loader')
+			.options({
+				limit: 1024,
+				esModule: false,
+			})
+			.end()
 	},
 }
