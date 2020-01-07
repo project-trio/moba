@@ -1,5 +1,5 @@
 <template>
-<div class="skills-bar">
+<div class="relative p-1">
 	<SkillItem v-for="(skill, index) in skills" :key="skill.name" :index="index" :skill="skill" />
 </div>
 </template>
@@ -36,9 +36,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="stylus" scoped>
-.skills-bar
-	position relative
-	padding 4px
-</style>

@@ -9,28 +9,16 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.selection-group
-	margin auto
-	width 480px
-	max-width 100%
-	display flex
-	flex-wrap wrap
+<style lang="postcss" scoped>
+.selection-group {
+	@apply mx-auto w-128 max-w-full  flex flex-wrap;
+}
 
-.selection
-	margin 4px
-	height 56px
-	flex-grow 1
-	flex-basis 16%
-	box-sizing border-box
-	border-radius 1px
-
-.selection
-	background #ddd
-
-.selection.selected
-	background #dd6677
-
-.selection-group button
-	border-radius 30px
+.big {
+	@apply flex-grow  m-1 rounded-full;
+	flex-basis: 16%;
+	&.selected {
+		background: #dd6677;
+	}
+}
 </style>

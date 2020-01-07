@@ -5,8 +5,8 @@
 		...
 	</div>
 	<div v-else>
-		<input v-model.trim="enteringName" placeholder="enter a username" @keyup.enter="onEnterName">
-		<p class="note">note: there is no account system yet, just choose a name of your liking.</p>
+		<input v-model.trim="enteringName" placeholder="enter a username" class="text-center w-64 h-16 text-2xl font-light border" @keyup.enter="onEnterName">
+		<p class="text-note">note: there is no account system yet, just choose a name of your liking.</p>
 	</div>
 </div>
 </template>
@@ -43,16 +43,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="stylus" scoped>
-input
-	text-align center
-	height 64px
-	width 300px
-	font-size 1.9em
-	font-weight 300
-	border 1px solid #ddd
-
-.note
-	font-style italic
-</style>

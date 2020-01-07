@@ -1,6 +1,6 @@
 <template>
 <div class="player-info">
-	<div class="bold capitalize">{{ stats.name }}</div>
+	<div class="font-bold capitalize">{{ stats.name }}</div>
 	<div>{{ healthDescription }}</div>
 	<div v-if="stats.level">{{ levelProgress }}</div>
 	<div>
@@ -37,11 +37,12 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.player-info
-	font-size 14px
-	line-height 22px
+<style lang="postcss" scoped>
+.player-info {
+	@apply text-sm leading-relaxed;
+}
 
-.second
-	margin-left 4px
+.second {
+	@apply ml-1;
+}
 </style>

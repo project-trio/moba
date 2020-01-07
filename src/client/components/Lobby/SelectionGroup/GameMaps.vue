@@ -1,6 +1,6 @@
 <template>
 <SelectionGroup>
-	<button v-for="map in mapsForSize" :key="map" class="selection interactive" :class="{ selected: map === selectedMap }" @click="onMap(map)">{{ map }}</button>
+	<button v-for="map in mapsForSize" :key="map" class="big interactive" :class="{ selected: map === selectedMap }" @click="onMap(map)">{{ map }}</button>
 </SelectionGroup>
 </template>
 
@@ -51,7 +51,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="stylus" scoped>
-
-</style>

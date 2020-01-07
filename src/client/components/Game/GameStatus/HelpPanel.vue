@@ -1,30 +1,16 @@
 <template>
-<div class="help-panel bar-section panel">
+<div class="bar-section panel  pointer-events-none w-64">
 	<h1>Help</h1>
 	<p>Click the gear icon to access quality settings. Tweak these settings as needed if your framerate is dropping below 30.</p>
 	<h2>Hotkeys</h2>
-	<h4>Skills</h4>
+	<h3>Skills</h3>
 	<p>Activate: <b>1</b>, <b>2</b>, <b>3</b></p>
 	<p>Upgrade: <b>shift</b>/<b>ctrl</b>/<b>alt</b> + <b>1</b>, <b>2</b>, <b>3</b></p>
-	<h4>Chat</h4>
+	<h3>Chat</h3>
 	<p>With team: <b>enter</b></p>
 	<p>Globally: <b>shift</b>/<b>ctrl</b>/<b>alt</b> + <b>enter</b></p>
-	<h4>Overlays</h4>
+	<h3>Overlays</h3>
 	<p>Scoreboard: hold <b>tab</b></p>
 	<p>Use <b>Esc</b> to exit fullscreen, cancel chat input, or close overlays</p>
 </div>
 </template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style lang="stylus" scoped>
-.help-panel
-	pointer-events none
-
-h4
-	margin-bottom 0
-</style>

@@ -1,6 +1,6 @@
 <template>
-<div class="game-container inherit">
-	<canvas id="canvas" class="inherit" />
+<div class="wh-full select-none">
+	<canvas id="canvas" class="wh-full" />
 
 	<UnitSelect v-if="!playing && winningTeam === null" />
 
@@ -8,7 +8,7 @@
 
 	<SettingsButtons class="bar-section" />
 
-	<PlayerBar class="ui-bar" />
+	<PlayerBar class="ui-bar  absolute left-0 right-0 flex justify-center select-none pointer-events-none" />
 </div>
 </template>
 
@@ -90,24 +90,8 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-.game-container
-	user-select none
-
-.ui-bar
-	position absolute
-	left 0
-	right 0
-	display flex
-	justify-content center
-	user-select none
-	color #fffffe
-	pointer-events none
-
-.bar-section
-	background rgba(80, 80, 80, 0.85)
-	margin 0 8px
-	padding 8px
-	box-sizing border-box
-	pointer-events auto
+<style lang="postcss" scoped>
+.ui-bar {
+	color: #fffffe;
+}
 </style>

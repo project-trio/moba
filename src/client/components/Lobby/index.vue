@@ -1,13 +1,13 @@
 <template>
-<div class="lobby inherit scrolls">
+<div class="lobby scrolls">
 <div class="content">
 	<h1>moba lobby</h1>
-	<h3>hello {{ username }}!</h3>
-	<div>{{ playersOnline }} online</div>
-	<router-link :to="{ name: 'Queue' }" tag="button" class="big interactive">enter queue</router-link>
+	<h2>hello {{ username }}!</h2>
+	<h3>{{ playersOnline }} online</h3>
+	<router-link :to="{ name: 'Queue' }" tag="button" class="big interactive  my-2">enter queue</router-link>
 	<router-link :to="{ name: 'Create' }" tag="button" class="big interactive outlined">{{ isMod ? 'create game' : 'training bots' }}</router-link>
 	<div>
-		<router-link v-for="game in games" :key="game.id" :to="{ name: 'Join', params: { gid: game.id } }" tag="div" class="list-game interactive">
+		<router-link v-for="game in games" :key="game.id" :to="{ name: 'Join', params: { gid: game.id } }" tag="div" class="list-game interactive  m-2 p-4">
 			<div>{{ game.mode }} game - {{ game.state }}</div>
 			<div>{{ game.players.length }} of {{ game.size * 2 }} players</div>
 			<div>{{ game.map }} map</div>
@@ -60,19 +60,19 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.content
-	max-width 720px
-	margin auto
+<style lang="postcss" scoped>
+.content {
+	@apply mx-auto;
+	max-width: 720px;
+}
 
-.list-game
-	background #eee
-	padding 16px
-	margin 8px
-
-.list-game:hover
-	background #ddd
-
-.list-game:hover:active
-	background #ccc
+.list-game {
+	@apply bg-gray-100;
+	&:hover {
+		@apply bg-gray-300;
+		&:active {
+			@apply bg-gray-200;
+		}
+	}
+}
 </style>

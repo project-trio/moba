@@ -1,6 +1,6 @@
 <template>
 <div class="game-status scrollable">
-	<TutorialPanel v-if="tutorial && tutorial.title" :tutorial="tutorial" />
+	<TutorialPanel v-if="tutorial && tutorial.title" :tutorial="tutorial" class="panel" />
 	<div v-else-if="gameOver">
 		<div class="bar-section panel">
 			<h1 :class="`team-${winningTeam + 1}`">{{ victory ? 'Victory!' : 'Defeat' }}</h1>
@@ -117,31 +117,19 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.game-status
-	display flex
-	align-items center
-	justify-content center
-	position absolute
-	top 0
-	left 0
-	right 0
-	bottom 64px
-	margin auto
-	color #fffffe
-	text-shadow -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000
-	pointer-events none
+<style lang="postcss" scoped>
+.game-status {
+	@apply absolute top-0 left-0 right-0 mx-auto pointer-events-none  flex align-middle justify-center;
+	bottom: 64px;
+	color: #fffffe;
+	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
 
-.panel
-	padding 16px
-	width 480px
-	max-width 100%
+.panel {
+	@apply p-4 w-128 max-w-full;
+}
 
-.player-scores
-	width 100%
-	text-shadow none
-
-th, td
-	background #333
-	font-weight 500
+th, td {
+	@apply bg-gray-800 font-semibold;
+}
 </style>

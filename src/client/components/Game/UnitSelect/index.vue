@@ -1,29 +1,35 @@
 <template>
-<div class="unit-select">
-<div class="content">
-	<div class="start-countdown">
-		<h2>starting in {{ countdownTime }}s</h2>
-	</div>
-	<h1 v-if="tall">choose your unit</h1>
-	<div class="unit-selection">
-		<div class="chosen-box selection-half">
-			<canvas id="preview" />
+<div class="absolute inset-0 wh-full mx-auto">
+	<div class="contents  wh-full p-4">
+		<div class="start-countdown">
+			<h1>starting in {{ countdownTime }}s</h1>
 		</div>
-		<div class="units-list selection-half" :class="`team-${localTeam + 1}`">
-			<button v-for="name in shipNames" :key="name" class="unit-box interactive" :class="{ selected: chosenUnit === name }" @click="onUnit(name)">{{ name }}</button>
+		<h1 v-if="tall">choose your unit</h1>
+		<div class="flex justify-center flex-wrap">
+			<div class="selection-half  mb-8 rounded-lg bg-gray-100">
+				<canvas id="preview" class="wh-full" />
+			</div>
+			<div class="selection-half  flex justify-center flex-wrap" :class="`team-${localTeam + 1}`">
+				<button
+					v-for="name in shipNames" :key="name"
+					class="unit-box interactive  wh-20 m-2 bg-gray-100 rounded" :class="{ selected: chosenUnit === name }"
+					@click="onUnit(name)"
+				>
+					{{ name }}
+				</button>
+			</div>
 		</div>
-	</div>
 
-	<div class="player-teams scrolls">
-		<h1>teams</h1>
-		<div class="team-players team-1">
-			<div v-for="player in teamPlayers[0]" :key="player.id" :player="player" class="player-ship animated" :class="{ selected: player && player.id === localId }">{{ player && player.shipName }}</div>
-		</div>
-		<div class="team-players team-2">
-			<div v-for="player in teamPlayers[1]" :key="player.id" :player="player" class="player-ship animated" :class="{ selected: player && player.id === localId }">{{ player && player.shipName }}</div>
+		<div class="player-teams scrolls  w-full overflow-x-auto  flex flex-col justify-between">
+			<h1>teams</h1>
+			<div class="team-players team-1">
+				<div v-for="player in teamPlayers[0]" :key="player.id" :player="player" class="player-ship animated" :class="{ selected: player && player.id === localId }">{{ player && player.shipName }}</div>
+			</div>
+			<div class="team-players team-2">
+				<div v-for="player in teamPlayers[1]" :key="player.id" :player="player" class="player-ship animated" :class="{ selected: player && player.id === localId }">{{ player && player.shipName }}</div>
+			</div>
 		</div>
 	</div>
-</div>
 </div>
 </template>
 
@@ -103,104 +109,44 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-h1
-	color #aaa
+<style lang="postcss" scoped>
+h1 {
+	@apply text-gray-400;
+}
 
-.unit-select
-	position absolute
-	top 0
-	left 0
-	right 0
-	bottom 0
-	width 100%
-	height 100%
-	margin auto
-	// padding 32px
-	box-sizing border-box
+.contents {
+	background: rgba(0, 0, 0, 0.67);
+	-webkit-backdrop-filter: blur(10px);
+	color: #fffffe;
+}
 
-.content
-	background rgba(0, 0, 0, 0.67)
-	-webkit-backdrop-filter blur(10px)
-	width 100%
-	height 100%
-	box-sizing border-box
-	padding 16px
-	color #fffffe
+.selection-half {
+	width: 300px;
+	height: 300px;
+}
 
-//LOCAL
+.unit-box.selected, .player-ship.selected {
+	border-width: 5px;
+	border-style: solid;
+	border-color: inherit;
+}
 
-.unit-selection
-	display flex
-	justify-content center
-	flex-wrap wrap
+.team-players {
+	@apply p-2  flex flex-row justify-center;
+}
 
-.selection-half
-	width 300px
-	height 300px
+.player-ship {
+	@apply wh-20 text-2xl font-semibold bg-gray-100 rounded-lg  flex items-center justify-center;
+	flex-basis: 80px;
+}
 
-#preview
-	width 100%
-	height 100%
-
-.units-list
-	display flex
-	justify-content center
-	flex-wrap wrap
-.unit-box
-	margin 8px
-	width 80px
-	height 80px
-	background #eee
-	border-radius 3px
-.unit-box.selected
-	border-width 5px
-	border-style solid
-	border-color inherit
-	box-sizing border-box
-
-.chosen-box
-	background #e7e7e7
-	border-radius 8px
-	margin-bottom 32px
-
-//PLAYERS
-
-.player-teams
-	display flex
-	flex-direction column
-	width 100%
-	overflow-x auto
-	justify-content space-between
-.team-players
-	padding 8px
-	display flex
-	flex-direction row
-	justify-content center
-
-.player-ship
-	width 80px
-	height 80px
-	flex-basis 80px
-	border-radius 8px
-	background #eee
-	display flex
-	align-items center
-	justify-content center
-	font-weight 500
-	font-size 1.5em
-.player-ship.selected
-	border-width 5px
-	border-style solid
-	border-color inherit
-	box-sizing border-box
-
-@media (max-width: 768px)
-	.player-teams
-		flex-direction row
-		height auto
-	.team-players
-		flex-direction column
-		flex-basis 50%
-
+@screen md-max {
+	.player-teams {
+		@apply flex-row h-auto;
+	}
+	.team-players {
+		@apply flex-col;
+		flex-basis: 50%;
+	}
+}
 </style>

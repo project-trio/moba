@@ -1,20 +1,20 @@
 <template>
-<div class="lobby-queue inherit scrolls">
-	<div class="header">
+<div class="lobby-queue wh-full scrolls">
+	<div class="m-header">
 		<h1>{{ queuedPlayers }} in queue</h1>
 	</div>
-	<h3>minimum game size:</h3>
+	<h2>minimum game size:</h2>
 	<GameSizes :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="true" @select="selectedSize = $event" />
-	<h3>vote for a map:</h3>
+	<h2>vote for a map:</h2>
 	<GameMaps :selectedSize="selectedSize" :selectedMap="selectedMap" @select="selectedMap = $event" />
 
-	<div class="queue-action">
+	<div class="m-header">
 		<div v-if="enoughPlayersForGame">
 			<button class="ready-button big interactive" :class="{ selected: readyRequested }" @click="onReady">{{ readyRequested ? 'ready!' : `ready? (${queueTimer - readyAt})` }}</button>
 		</div>
 		<div v-else>
 			<h2>waiting for {{ pluralize(waitingForSize, 'player') }}...</h2>
-			<p v-if="enoughWithOneMore">Reduce size to <span class="highlight">{{ enoughWithOneMore }} v {{ enoughWithOneMore }}</span> to start now!</p>
+			<p v-if="enoughWithOneMore">Reduce size to <span class="bg-gray-300 font-semibold">{{ enoughWithOneMore }} v {{ enoughWithOneMore }}</span> to start now!</p>
 		</div>
 	</div>
 	<div v-if="notificationPermission !== 'granted'" class="queue-notification">
@@ -211,15 +211,12 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.ready-button.selected
-	background-color #1ea
+<style lang="postcss" scoped>
+.ready-button.selected {
+	background-color: #1ea;
+}
 
-.header, .queue-action
-	margin 48px auto
-
-.highlight
-	padding 2px 4px
-	background-color #ddd
-	font-weight 500
+.m-header {
+	@apply mx-auto my-12;
+}
 </style>

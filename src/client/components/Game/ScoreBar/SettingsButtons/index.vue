@@ -1,5 +1,5 @@
 <template>
-<div class="settings-buttons">
+<div class="absolute top-0 right-0 p-1 rounded-bl  flex ">
 	<button class="interactive" @click="onHelp">?</button>
 	<button class="interactive" @click="onSettings">⚙</button>
 	<button class="interactive" @click="onFullscreen">⤢</button>
@@ -33,22 +33,8 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.settings-buttons
-	position absolute
-	display flex
-	right 0
-	top 0
-	margin 0
-	border-radius 0 0 0 4px !important
-	// height 80px
-	padding 4px
-
-button
-	padding 0
-	font-size 1.1em
-	width 32px
-	height 32px
-	margin 4px
-	border-radius 2px
+<style lang="postcss" scoped>
+button {
+	@apply wh-8 m-1 p-0 rounded-sm text-xl;
+}
 </style>

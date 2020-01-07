@@ -49,17 +49,20 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.player-scores
-	width 100%
-	text-shadow none
+<style lang="postcss" scoped>
+.player-scores {
+	@apply w-full;
+	text-shadow: none;
+}
 
-th, .active td
-	background #222
-	font-weight 500
+th, .active td {
+	@apply bg-gray-900 font-semibold;
+}
 
-.active td
-	background #333
-.inactive td
-	background #555
+.active td {
+	@apply bg-gray-800;
+}
+.inactive td {
+	@apply bg-gray-700;
+}
 </style>

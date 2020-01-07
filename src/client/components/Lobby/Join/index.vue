@@ -1,12 +1,12 @@
 <template>
-<div class="lobby-join inherit scrolls">
+<div class="scrolls  wh-full pb-16">
 	<div v-if="size === null">
 		<h1>Loading...</h1>
 	</div>
 	<div v-else>
 		<h1>{{ size }} v {{ size }}</h1>
 		<h2>{{ map }} map</h2>
-		<div class="player-teams scrolls">
+		<div class="scrolls  w-full h-80 overflow-x-auto  md-max:flex-row md-max:h-auto  flex flex-col justify-between">
 			<div class="team-players team-1">
 				<h3 class="vertical">Team Blue</h3>
 				<PlayerBox v-for="(player, index) in teamPlayers[0]" :key="player ? player.id : index" :player="player" />
@@ -16,7 +16,7 @@
 				<PlayerBox v-for="(player, index) in teamPlayers[1]" :key="player ? player.id : index" :player="player" />
 			</div>
 		</div>
-		<div class="invite-link faint note">
+		<div class="my-8 mx-2 text-note">
 			Invite a friend: <a :href="url" onclick="return false">{{ url }}</a>
 		</div>
 		<button v-if="isHost" class="big interactive" @click="onStart">{{ startText }}</button>
@@ -124,38 +124,21 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.lobby-join
-	padding-bottom 64px
-	box-sizing border-box
+<style lang="postcss" scoped>
+.team-players {
+	@apply p-2  flex flex-row;
+}
 
-.vertical
-	display none
+@screen md {
+	.vertical {
+		@apply hidden;
+	}
+}
 
-.player-teams
-	display flex
-	flex-direction column
-	width 100%
-	overflow-x auto
-	height 360px
-	justify-content space-between
-
-.team-players
-	padding 8px
-	display flex
-	flex-direction row
-
-.invite-link
-	margin 32px 8px
-
-@media (max-width: 768px)
-	.vertical
-		display block
-
-	.player-teams
-		flex-direction row
-		height auto
-	.team-players
-		flex-direction column
-		flex-basis 50%
+@screen md-max {
+	.team-players {
+		@apply flex-col;
+		flex-basis: 50%;
+	}
+}
 </style>

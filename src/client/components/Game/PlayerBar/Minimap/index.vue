@@ -1,26 +1,5 @@
 <template>
-<div class="minimap">
-	<canvas id="minimap" />
+<div class="minimap  absolute right-0 bottom-0 h-48 overflow-hidden rounded-tl">
+	<canvas id="minimap" class="cursor-move" />
 </div>
 </template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style lang="stylus" scoped>
-.minimap
-	position absolute
-	right 0
-	bottom 0
-	margin 0
-	padding 0
-	height 200px
-	border-radius 4px 0 0 0
-	overflow hidden
-
-canvas
-	cursor move
-</style>

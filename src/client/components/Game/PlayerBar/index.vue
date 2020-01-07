@@ -1,9 +1,9 @@
 <template>
-<div class="player-bar">
+<div class="bottom-0">
 	<ChatBar />
-	<PlayerInfo class="bar-section" />
-	<SkillsBar class="bar-section" />
-	<Minimap v-show="playing" class="bar-section" />
+	<PlayerInfo class="bar-section section-centered  lg-max:hidden" />
+	<SkillsBar class="bar-section section-centered  lg-max:bg-transparent" />
+	<Minimap v-show="playing" class="bar-section  md-max:hidden" />
 </div>
 </template>
 
@@ -87,19 +87,8 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.player-bar
-	bottom 0
-
-.bar-section
-	border-radius 4px 4px 0 0
-
-@media (max-width: 767px)
-	.minimap
-		display none
-@media (max-width: 900px)
-	.skills-bar
-		background none
-	.player-info
-		display none
+<style lang="postcss" scoped>
+.section-centered {
+	@apply mx-2 p-2 rounded-t;
+}
 </style>

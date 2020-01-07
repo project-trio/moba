@@ -1,16 +1,19 @@
 <template>
-<div class="skill-item" :class="{ selected: !disabled && isActiveSkill, disabled, cooldown: cooldownTime, showsLevelup: levelupReady }">
+<div class="skill-item  inline-block m-1" :class="{ selected: !disabled && isActiveSkill, disabled, cooldown: cooldownTime, showsLevelup: levelupReady }">
 	<div class="skill-content">
 		<div class="button-content">
 			<div :id="`cooldown-ring-${indexName}`" class="item-circle cooldown-ring" />
 			<div v-show="!cooldownRemaining" :id="`internal-ring-${indexName}`" />
 			<div :id="`level-ring-${indexName}`" class="item-circle" />
 			<button class="skill-button" @click="onSkill(true)" @mouseenter="overButton(true)" @mouseleave="overButton(false)">{{ indexName }}</button>
-			<div v-if="showingLevelupIndicator" class="button-levelup interactive" @click="onLevelup" @mouseenter="overLevelup(true)" @mouseleave="overLevelup(false)">
-				⬆︎
+			<div
+				v-if="showingLevelupIndicator" class="button-levelup interactive"
+				@click="onLevelup" @mouseenter="overLevelup(true)" @mouseleave="overLevelup(false)"
+			>
+				⇧
 			</div>
 		</div>
-		<div class="skill-label">
+		<div class="max-lg:hidden">
 			{{ skill.name }}
 		</div>
 	</div>
@@ -124,7 +127,7 @@ export default {
 			const description = this.skill.description.replace(MATCH_BRACKET_FORMATTING, (match, substitution) => {
 				const split = substitution.split(':')
 				if (split.length > 1) {
-					return `<span class="highlight ${split[1]}">${split[0]}</span>`
+					return `<span class="font-bold ${split[1]}">${split[0]}</span>`
 				}
 
 				const substitutionFunction = this.skill[`getEffect${substitution}`]
@@ -155,10 +158,10 @@ export default {
 						effectText += ` <span class="diff">(${diff >= 0 ? '+' : ''}${!divisor ? diff : (diff / divisor)})</span>`
 					}
 				}
-				return `<span class="bold">${effectText}${suffix}</span>`
+				return `<span class="font-bold">${effectText}${suffix}</span>`
 			})
 
-			const rows = [`<div class="description-text">${description}</div>`]
+			const rows = [`<div class="mb-px">${description}</div>`]
 			if (this.skill.getDuration && !this.skill.hideDuration) {
 				let durationText = `${this.activeDuration / 1000}`
 				if (this.showsDiff) {
@@ -167,7 +170,7 @@ export default {
 						durationText += ` <span class="diff">(${diff >= 0 ? '+' : ''}${diff / 1000})</span>`
 					}
 				}
-				rows.push(`<div>Duration: <span class="bold">${durationText}</span> seconds</div>`)
+				rows.push(`<div>Duration: <span class="font-bold">${durationText}</span> seconds</div>`)
 			}
 			if (this.skill.getCooldown) {
 				let cooldownText = `${this.cooldownDuration / 1000}`
@@ -177,7 +180,7 @@ export default {
 						cooldownText += ` <span class="diff">(${diff === 0 ? '-' : (diff > 0 ? '+' : '')}${diff / 1000})</span>`
 					}
 				}
-				rows.push(`<div>Cooldown: <span class="bold">${cooldownText}</span> seconds</div>`)
+				rows.push(`<div>Cooldown: <span class="font-bold">${cooldownText}</span> seconds</div>`)
 			}
 			return rows.join('')
 		},
@@ -457,114 +460,97 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-.skill-item
-	display inline-block
-	margin 4px
+<style lang="postcss">
+.skill-item .skill-content {
+	width: 104px;
+}
+.skill-item .button-content {
+	@apply relative m-auto;
+	width: 88px;
+	height: 88px;
+}
 
-.skill-item .skill-content
-	width 104px
-.skill-item .button-content
-	position relative
-	width 88px
-	height 88px
-	margin auto
-// .skill-item .skill-label
+.skill-item.selected .skill-button {
+	box-shadow: inset 0 0 32px #f0d;
+}
 
-.skill-item.selected .skill-button
-	box-shadow inset 0 0 32px #f0d
+.skill-item .Sektor {
+	@apply absolute top-0 left-0;
+	z-index: 10;
+}
 
-.skill-item .Sektor
-	position absolute
-	top 0
-	left 0
-	z-index 10
+.skill-item .description-tooltip {
+	@apply absolute left-0 right-0 hidden m-0 z-0 pointer-events-none;
+}
 
-.skill-item .description-tooltip
-	display none
-	position absolute
-	left 0
-	right 0
-	margin 0
-	z-index 0
-	pointer-events none
-.skill-item .tooltip-small
-	height 28px
-	top -28px
-	text-shadow -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000
-	font-size 1.1em
-.skill-item .tooltip-large
-	text-align left
-	height 92px
-	top -92px
-.skill-item.showsLevelup .tooltip-large
-	height 116px
-	top -116px
+.skill-item .tooltip-small {
+	@apply text-lg;
+	height: 28px;
+	top: -28px;
+	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+.skill-item .tooltip-large {
+	@apply text-left;
+	height: 92px;
+	top: -92px;
+}
+.skill-item.showsLevelup .tooltip-large{
+	height: 116px;
+	top: -116px;
+}
 
-.skill-item .description-text
-	margin-bottom 2px
+.skill-item .skill-button {
+	@apply relative m-1 p-1 font-semibold bg-transparent rounded-full cursor-pointer;
+	/* TODO wh-full? */
+	width: 76px;
+	height: 76px;
+	z-index: 100;
+}
+.skill-item.disabled .skill-button {
+	@apply cursor-not-allowed;
+}
 
-.skill-item .skill-button
-	padding 4px
-	margin 6px
-	width 76px
-	height 76px
-	background transparent
-	z-index 100
-	position relative
-	cursor pointer
-	border-radius 50%
-	font-weight 500
+.skill-item .button-levelup {
+	@apply absolute h-16;
+	top: -24px;
+	left: 1px;
+	right: 1px;
+	background: #d55;
+	z-index: 1;
+}
 
-.skill-item.disabled .skill-button
-	cursor not-allowed
+.skill-item .diff {
+	color: #8e9;
+}
+.skill-item .levelup {
+	color: #d55;
+}
+.skill-item .button-levelup:hover {
+	@apply opacity-75;
+}
+.skill-item.disabled .cooldown-ring .Sektor-circle {
+	stroke: #666;
+}
+.skill-item .skill-button, .skill-item .cooldown-ring {
+	transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.skill-item:hover .cooldown-ring, .skill-item.selected .cooldown-ring {
+	background: rgba(170, 170, 170, 0.8);
+}
+.skill-item:hover .description-tooltip, .skill-item.selected .description-tooltip {
+	@apply block;
+}
+.skill-item:hover:active .cooldown-ring, .skill-item:hover:active .cooldown-ring {
+	background: rgba(170, 170, 170, 0.5);
+}
+.skill-item:hover:active button {
+	transform: scale(0.9);
+}
 
-.skill-item .button-levelup
-	position absolute
-	top -24px
-	left 1px
-	right 1px
-	background #d55
-	height 64px
-	z-index 1
-
-.skill-item .diff
-	color #8e9
-
-.skill-item .levelup
-	color #d55
-
-.skill-item .button-levelup:hover
-	opacity 0.8
-
-.skill-item.disabled .cooldown-ring .Sektor-circle
-	stroke #666
-
-.skill-item .skill-button, .skill-item .cooldown-ring
-	transition transform 0.4s ease, opacity 0.4s ease
-
-.skill-item:hover .cooldown-ring, .skill-item.selected .cooldown-ring
-	background rgba(170, 170, 170, 0.8)
-.skill-item:hover .description-tooltip, .skill-item.selected .description-tooltip
-	display block
-
-.skill-item:hover:active .cooldown-ring, .skill-item:hover:active .cooldown-ring
-	background rgba(170, 170, 170, 0.5)
-.skill-item:hover:active button
-	transform scale(0.9)
-
-@media (max-width: 900px)
-	.skill-item .skill-label
-		display none
-
-//STATUS EFFECTS
-
-.skill-item .highlight
-	font-weight 600
-
-.skill-item .poison
-	color #00cc00
-
-.skill-item .whirlpool
-	color #0088ff
+.skill-item .poison {
+	color: #00cc00;
+}
+.skill-item .whirlpool {
+	color: #0088ff;
+}
 </style>

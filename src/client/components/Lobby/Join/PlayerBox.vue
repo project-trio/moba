@@ -4,11 +4,14 @@
 		<div class="player-info">
 			{{ player.name }}
 		</div>
-		<transition-group name="bubbling" tag="div" class="player-bubbles">
+		<transition-group
+			name="bubbling" tag="div"
+			class="player-bubbles  absolute left-0 right-0 w-full h-32 overflow-hidden  flex flex-column items-center  max-md:hidden"
+		>
 			<div v-for="message in cachedMessages" :key="`${message.id}${message.at}`" class="bubble" :class="teamBackgroundClass">{{ message.body }}</div>
 		</transition-group>
 	</div>
-	<div v-else class="faint note">
+	<div v-else class="text-note">
 		waiting
 	</div>
 </div>
@@ -82,100 +85,75 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.player-box
-	position relative
-	font-size 1.5em
-	background #ddd
-	height 64px
-	flex-basis 144px
-	margin 0 8px
-	flex-grow 1
-	flex-shrink 0
-	border-radius 1px
-	box-sizing border box
+<style lang="postcss" scoped>
+.player-box {
+	@apply flex-grow flex-shrink-0  relative h-16 mx-2 text-gray-200 text-2xl rounded-sm  flex items-center justify-center;
+	flex-basis: 144px;
+	&.empty {
+		@apply text-gray-100 text-lg;
+	}
+}
 
-	display flex
-	align-items center
-	justify-content center
+.local {
+	border-width: 2px;
+	& .player-info {
+		@apply font-semibold;
+	}
+}
 
-.local
-	border-width 2px
-	box-sizing border-box
-.local .player-info
-	font-weight 500
+.top .player-bubbles {
+	@apply top-0  flex-col;
+	bottom: -96px;
+}
+.bottom .player-bubbles {
+	@apply bottom-0  flex-col-reverse;
+	top: -96px;
+}
 
-.player-box.empty
-	background #eee
-	font-size 1.1em
+.bubble {
+	@apply relative inline-block max-w-full mt-1 px-2 pb-px text-sm rounded-sm;
+	color: #fffffe;
+	word-wrap: break-word;
+	min-width: 8px;
+	transition-timing-function: ease;
+}
+.bottom .bubble {
+	@apply mt-0 mb-1;
+}
+.top .bubble::before, .bottom .bubble::after {
+	@apply absolute left-0 right-0 m-auto;
+	width: 10px;
+	background: inherit;
+	content: '';
+	height: 5px;
+	z-index: -10;
+}
+.top .bubble::before {
+	top: -5px;
+}
+.bottom .bubble::after {
+	bottom: -5px;
+}
 
-.player-bubbles
-	position absolute
-	left 0
-	right 0
-	bottom -96px
-	width 100%
-	height 96px
-	overflow hidden
-	display flex
-	flex-direction column
-	align-items center
-
-.bottom .player-bubbles
-	bottom 0
-	top -96px
-	flex-direction column-reverse
-
-.bubble
-	color #fffffe
-	font-size 16px
-	word-wrap break-word
-	margin-top 4px
-	display inline-block
-	padding 0 8px
-	padding-bottom 1px
-	min-width 8px
-	max-width 100%
-	border-radius 2px
-	transition-timing-function ease
-	position relative
-
-.bottom .bubble
-	margin-top 0
-	margin-bottom 4px
-.top .bubble::before, .bottom .bubble::after
-	width 10px
-	background inherit
-	content ''
-	height 5px
-	position absolute
-	left 0
-	right 0
-	margin auto
-	z-index -10
-.top .bubble::before
-	top -5px
-.bottom .bubble::after
-	bottom -5px
-
-.bubbling-enter-active, .bubbling-leave-active, .bubbling-move
-	transition all 1s
-.bubbling-enter, .bubbling-leave-to
-	opacity 0
-	transform translateY(-24px)
-.bubbling-leave-to
-	transform translateY(24px)
-	position absolute
-.bottom .bubbling-enter, .bottom .bubbling-leave-to
-	transform translateY(24px)
-.bottom .bubbling-leave-to
-	transform translateY(-24px)
-
-.bottom .bubble-bar
-	top 0
-	bottom -16px
-
-@media (max-width: 768px)
-	.player-bubbles
-		display none
+.bubbling-enter-active, .bubbling-leave-active, .bubbling-move {
+	transition: all 1s;
+}
+.bubbling-enter, .bubbling-leave-to {
+	@apply opacity-0;
+	transform: translateY(-24px);
+}
+.bubbling-leave-to {
+	@apply absolute;
+	transform: translateY(24px);
+}
+.bottom .bubbling-enter, .bottom .bubbling-leave-to {
+	transform: translateY(24px);
+}
+.bottom .bubbling-leave-to {
+	transform: translateY(-24px);
+}
+.bottom .bubble-bar {
+	@apply top-0;
+	bottom: -16px;
+}
 </style>

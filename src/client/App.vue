@@ -1,7 +1,7 @@
 <template>
-	<div id="app" class="inherit">
-		<router-view />
-	</div>
+<div id="app" class="wh-full text-center">
+	<router-view />
+</div>
 </template>
 
 <script>
@@ -80,111 +80,100 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-html
-	height 100%
-	width 100%
+<style lang="postcss">
+@import 'assets/styles/tailwind.postcss';
 
-body
-	margin 0
-	overflow hidden
-	background-color #fffffe
-	-webkit-touch-callout none
+body {
+	@apply overflow-hidden;
+	background-color: #fffffe;
+	-webkit-touch-callout: none;
+}
 
-body, .inherit
-	width inherit
-	height inherit
+html, body {
+	@apply wh-full;
+}
 
-#app
-	text-align center
+#app, button {
+	@apply antialiased;
+	color: #111110;
+}
 
-#app, button
-	font-family 'Avenir', Helvetica, Arial, sans-serif
-	-webkit-font-smoothing antialiased
-	-moz-osx-font-smoothing grayscale
-	font-weight 400
-	color #111110
+h1 {
+	@apply text-5xl;
+}
+h2 {
+	@apply text-3xl;
+}
+h3 {
+	@apply text-2xl;
+}
+h4 {
+	@apply text-xl;
+}
 
-h3
-	margin-top 16px
-	margin-bottom 4px
+.scrolls {
+	@apply relative scrolling-touch overflow-x-hidden overflow-y-auto;
+}
 
-.scrolls
-	-webkit-overflow-scrolling touch
-	overflow-x hidden
-	overflow-y auto
-	position relative
+.interactive, button {
+	@apply cursor-pointer;
+}
 
-.interactive, button
-	cursor pointer
+.panel-button {
+	@apply w-64 h-touch pointer-events-auto;
+}
 
-.panel-button
-	pointer-events auto
-	height 44px
-	width 256px
+button {
+	@apply outline-none !important;
+	&.big {
+		@apply block mx-auto px-2 w-64 text-xl max-w-full h-14 rounded  bg-gray-300;
+	}
+	&.outlined {
+		@apply bg-transparent border;
+		border-width: 2px;
+	}
+	&.interactive:hover {
+		@apply opacity-75;
+		&:active {
+			@apply opacity-50;
+		}
+	}
+}
 
-.bold
-	font-weight 600
+.animated, .interactive {
+	transition: 0.3s ease;
+}
 
-.capitalize
-	text-transform capitalize
+.team-1 {
+	color: #5599cc;
+	border-color: #5599cc;
+}
+.team-2 {
+	color: #dd6677;
+	border-color: #dd6677;
+}
+.team-1-bg {
+	background-color: #5599cc;
+}
+.team-2-bg {
+	background: #dd6677;
+}
+.team-1-border {
+	border: 1px solid #5599cc;
+}
+.team-2-border {
+	border: 1px solid #dd6677;
+}
 
-button
-	border 0
-	padding 0
-	outline none
-	text-align center
-	font-size 1.5em
+.text-secondary {
+	@apply text-gray-500;
+}
+.text-note {
+	@apply italic text-gray-500;
+}
 
-button.big
-	min-width 300px
-	max-width 100%
-	height 64px
-	font-size 32px
-	font-weight 500
-	background #d
-	display block
-	margin 16px auto
-	padding 0 16px
-	border-radius 5px
-
-button.outlined
-	background none
-	border 2px solid #d
-
-button.interactive:hover
-	opacity 0.8
-button.interactive:hover:active
-	opacity 0.5
-
-.animated, .interactive
-	transition 0.3s ease
-
-input
-	padding 0 6px
-	margin 0
-	border 0
-	box-sizing border-box
-	font-size 1.25em
-	font-weight 400
-
-.team-1
-	color #5599cc
-	border-color #5599cc
-.team-2
-	color #dd6677
-	border-color #dd6677
-.team-1-bg
-	background #5599cc
-.team-2-bg
-	background #dd6677
-.team-1-border
-	border 1px solid #5599cc
-.team-2-border
-	border 1px solid #dd6677
-
-.faint
-	color #aaa
-.note
-	font-style italic
+.bar-section {
+	@apply pointer-events-auto;
+	background: rgba(80, 80, 80, 0.85);
+}
 </style>

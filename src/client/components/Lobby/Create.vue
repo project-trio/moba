@@ -1,25 +1,23 @@
 <template>
-<div class="lobby-create inherit scrolls">
+<div class="lobby-create scrolls">
 	<h1>{{ isMod ? 'create game' : 'training bots' }}</h1>
 	<div v-if="loading">
 		...
 	</div>
 	<div v-else>
 		<div v-if="isMod">
-			<h3>game type:</h3>
+			<h2>game type:</h2>
 			<SelectionGroup>
-				<button v-for="mode in gameModes" :key="mode.name" class="selection interactive" :class="{ selected: mode === selectedMode }" @click="onGameMode(mode)">{{ mode.name }}</button>
-				<div class="mode-description">
-					{{ selectedMode.description }}
-				</div>
+				<button v-for="mode in gameModes" :key="mode.name" class="big interactive" :class="{ selected: mode === selectedMode }" @click="onGameMode(mode)">{{ mode.name }}</button>
+				<div class="m-auto text-center">{{ selectedMode.description }}</div>
 			</SelectionGroup>
 		</div>
-		<h3>{{ pvpMode ? 'max players' : 'game size' }}:</h3>
+		<h2>{{ pvpMode ? 'max players' : 'game size' }}:</h2>
 		<GameSizes :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="pvpMode" @select="selectedSize = $event" />
 		<div v-if="selectedSize > 0">
-			<h3>map:</h3>
+			<h2>map:</h2>
 			<GameMaps :selectedSize="selectedSize" :selectedMap="selectedMap" @select="selectedMap = $event" />
-			<button class="big interactive" @click="onSubmit">confirm</button>
+			<button class="interactive  mt-8" @click="onSubmit">confirm</button>
 		</div>
 	</div>
 </div>
@@ -108,12 +106,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="stylus" scoped>
-.mode-description
-	text-align center
-	margin auto
-
-button.big
-	margin-top 32px
-</style>

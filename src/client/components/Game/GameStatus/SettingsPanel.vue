@@ -1,7 +1,7 @@
 <template>
-<div class="settings-panel bar-section panel">
+<div class="bar-section panel  pointer-events-none">
 	<h1>Settings</h1>
-	<div class="settings">
+	<div class="flex flex-wrap justify-center">
 		<div class="setting">
 			<button class="interactive" @click="onFps">{{ fpsDescription }}</button>
 			<div class="label">FPS Cap</div>
@@ -106,22 +106,12 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.settings-panel
-	pointer-events none
+<style lang="postcss" scoped>
+.setting {
+	@apply m-3;
+}
 
-.settings
-	display flex
-	flex-wrap wrap
-	justify-content center
-.setting
-	margin 12px
-	// width 50%
-
-button
-	width 96px
-	height 44px
-	margin-bottom 2px
-	border-radius 6px
-	pointer-events auto
+button {
+	@apply w-24 h-touch mb-px font-semibold bg-gray-500 rounded-lg pointer-events-auto;
+}
 </style>

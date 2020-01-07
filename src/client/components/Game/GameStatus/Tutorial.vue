@@ -1,5 +1,5 @@
 <template>
-<div class="bar-section panel">
+<div class="bar-section  pointer-events-none">
 	<h1>{{ tutorial.title }}</h1>
 	<p>{{ tutorial.body }}</p>
 	<button v-if="tutorial.continue" class="panel-button interactive" @click="onContinue">Continue</button>
@@ -46,8 +46,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="stylus" scoped>
-.panel
-	pointer-events none
-</style>

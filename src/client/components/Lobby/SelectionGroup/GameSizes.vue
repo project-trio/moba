@@ -1,6 +1,6 @@
 <template>
 <SelectionGroup>
-	<button v-for="size in gameSizes" :key="size" class="selection interactive" :class="{ selected: size === selectedSize }" @click="$emit('select', size)">{{ sizeLabel(size) }}</button>
+	<button v-for="size in gameSizes" :key="size" class="big interactive" :class="{ selected: size === selectedSize }" @click="$emit('select', size)">{{ sizeLabel(size) }}</button>
 </SelectionGroup>
 </template>
 
@@ -34,7 +34,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="stylus" scoped>
-
-</style>

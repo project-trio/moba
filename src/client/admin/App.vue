@@ -1,9 +1,9 @@
 <template>
-<div id="app" class="inherit">
+<div id="app" class="">
 	<h1>{{ players.length }} online</h1>
 	<div>{{ players.join(', ') }}</div>
 	<h1>{{ games.length }} games</h1>
-	<div v-for="game in games" :key="game.id" class="game">
+	<div v-for="game in games" :key="game.id" class="mb-2">
 		<div>Mode: {{ game.mode }}</div>
 		<div>Status: {{ game.state }}</div>
 		<div>Size: {{ game.size }}</div>
@@ -40,27 +40,19 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-html
-	height 100%
-	width 100%
+<style lang="postcss">
+@import '../assets/styles/tailwind.postcss';
 
-body
-	margin 0
-	background-color #fffffe
-	width inherit
-	height inherit
+html, body {
+	@apply wh-full;
+}
 
-#app
-	text-align center
+body {
+	background-color: #fffffe;
+}
 
-#app, button
-	font-family 'Avenir', Helvetica, Arial, sans-serif
-	-webkit-font-smoothing antialiased
-	-moz-osx-font-smoothing grayscale
-	font-weight 400
-	color #111110
-
-.game
-	margin-bottom 8px
+#app {
+	@apply text-center antialiased;
+	color: #111110;
+}
 </style>
