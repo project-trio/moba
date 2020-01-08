@@ -19,7 +19,8 @@ export default {
 
 	computed: {
 		localPlayer () {
-			return store.playerForId(store.state.playerId)
+			const user = store.state.signin.user
+			return user && store.playerForId(user.id)
 		},
 
 		retro () {

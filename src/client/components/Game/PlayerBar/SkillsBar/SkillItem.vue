@@ -31,8 +31,6 @@ import Local from '@/client/play/local'
 
 import Bridge from '@/client/play/events/bridge'
 
-import Unit from '@/client/play/game/entity/unit/unit'
-
 const checkTarget = function (target) {
 	if (!target) {
 		return false
@@ -49,10 +47,9 @@ const getUnitTarget = function (skillData) {
 	store.state.local.skills.getUnitTarget = true
 	store.state.local.skills.hitsTowers = skillData.hitsTowers
 	store.state.local.skills.withAlliance = targetType === 3 ? false : targetType === 4 ? true : null
-	if (store.state.local.skills.unitTarget) {
-		const unitTarget = Unit.get(store.state.local.skills.unitTarget)
-		if (checkTarget(unitTarget)) {
-			unitTarget.setSelection(0xff0000)
+	if (Local.unitTarget) {
+		if (checkTarget(Local.unitTarget)) {
+			Local.unitTarget.setSelection(0xff0000)
 		}
 	}
 }
@@ -376,7 +373,7 @@ export default {
 
 		getActivation () {
 			return (target) => {
-				Bridge.emit('action', { skill: this.index, target: target })
+				Bridge.emit('action', { skill: this.index, target: target.id ? target.id : target })
 				store.cancelActiveSkill()
 			}
 		},
@@ -408,11 +405,10 @@ export default {
 						getUnitTarget(this.skill)
 					}
 				} else {
-					const target = groundTargeted ? store.state.local.skills.groundTarget : store.state.local.skills.unitTarget
+					const target = groundTargeted ? Local.groundTarget : Local.unitTarget
 					if (target) {
 						if (!groundTargeted) {
-							const unitTarget = Unit.get(target)
-							if (!checkTarget(unitTarget)) {
+							if (!checkTarget(target)) {
 								return
 							}
 						}

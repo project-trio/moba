@@ -49,7 +49,7 @@ export default {
 		},
 
 		isLocal () {
-			return this.player && this.player.id === store.state.playerId
+			return this.player && this.player.id === store.state.signin.user.id
 		},
 
 		bottom () {

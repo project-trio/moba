@@ -33,7 +33,7 @@ export default class Player {
 		this.unit = null
 		this.name = data.name
 		this.team = parseInt(data.team, 10)
-		this.isLocal = data.id === store.state.playerId
+		this.isLocal = data.id === store.state.signin.user.id
 		this.chatAt = 0
 		this.isActive = true
 		this.bot = data.bot

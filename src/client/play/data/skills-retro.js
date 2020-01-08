@@ -1,6 +1,6 @@
-import { TICK_DURATION } from '@/common/constants'
-
 import store from '@/client/store'
+
+import { TICK_DURATION } from '@/client/play/data/constants'
 
 import Render from '@/client/play/render/render'
 

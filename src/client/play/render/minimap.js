@@ -4,7 +4,7 @@ import util from '@/client/helpers/util'
 
 import Local from '@/client/play/local'
 
-import dataConstants from '@/client/play/data/constants'
+import { TEAM_COLORS, WALL_COLORS } from '@/client/play/data/constants'
 
 let renderer, scene, camera, cameraMesh
 
@@ -126,7 +126,7 @@ export default {
 			size = 1000
 		}
 		const geometry = new THREE.CircleBufferGeometry(size * mapScale / 100 * 2, unit.isLocal ? 32 : 4)
-		const color = unit.isLocal ? 0x222222 : dataConstants.teamColors[unit.team]
+		const color = unit.isLocal ? 0x222222 : TEAM_COLORS[unit.team]
 		const material = new THREE.MeshBasicMaterial({ color })
 		const mesh = new THREE.Mesh(geometry, material)
 		scene.add(mesh)
@@ -170,7 +170,7 @@ export default {
 			geometry.translate(-x, -y, -1)
 		}
 		for (let team = 0; team < 2; team += 1) {
-			const material = new THREE.MeshBasicMaterial({ color: dataConstants.wallColors[team] })
+			const material = new THREE.MeshBasicMaterial({ color: WALL_COLORS[team] })
 			const mesh = new THREE.Mesh(mergedGeometries[team], material)
 			mesh.position.set(-renderWidth / 2, -renderHeight / 2, 1)
 			scene.add(mesh)

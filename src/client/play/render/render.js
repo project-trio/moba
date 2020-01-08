@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import store from '@/client/store'
 import util from '@/client/helpers/util'
 
-import dataConstants from '@/client/play/data/constants'
+import { TEAM_COLORS, DARK_COLORS, WALL_COLORS } from '@/client/play/data/constants'
 
 import Vox from '@/client/play/external/vox'
 import OutlineEffect from '@/client/play/external/OutlineEffect'
@@ -30,7 +30,7 @@ let usePerspectiveCamera = null
 let font
 let voxelCache
 
-const teamMaterials = [ new THREE.MeshBasicMaterial({ color: dataConstants.teamColors[0] }), new THREE.MeshBasicMaterial({ color: dataConstants.teamColors[1] }) ]
+const teamMaterials = [ new THREE.MeshBasicMaterial({ color: TEAM_COLORS[0] }), new THREE.MeshBasicMaterial({ color: TEAM_COLORS[1] }) ]
 
 //LOCAL
 
@@ -297,8 +297,8 @@ export default {
 				voxelCache[team][name] = builder
 			}
 			const mesh = builder.createMesh()
-			const teamColor = dataConstants.teamColors[team]
-			const darkColor = dataConstants.darkColors[team]
+			const teamColor = TEAM_COLORS[team]
+			const darkColor = DARK_COLORS[team]
 			mesh.material.color.setHex(teamColor)
 			mesh.material.outlineParameters = {
 				color: new THREE.Color(darkColor),
@@ -355,9 +355,9 @@ export default {
 			geometry.translate(-x, -y, 0)
 		}
 		for (let team = 0; team < 2; team += 1) {
-			const material = new THREE.MeshLambertMaterial({ color: dataConstants.wallColors[team], blending: THREE.NoBlending })
+			const material = new THREE.MeshLambertMaterial({ color: WALL_COLORS[team], blending: THREE.NoBlending })
 			material.outlineParameters = {
-				color: new THREE.Color(dataConstants.darkColors[team]),
+				color: new THREE.Color(DARK_COLORS[team]),
 			}
 			const mesh = new THREE.Mesh(mergedGeometries[team], material)
 			mesh.position.set(0, 0, WALL_HEIGHT / 2)
@@ -434,13 +434,13 @@ export default {
 
 	sphere (radius, options) {
 		const geometry = new THREE.SphereBufferGeometry(radius, options.segments, options.segments && options.segments * 2 / 3)
-		const color = options.team !== undefined ? dataConstants.teamColors[options.team] : options.color
+		const color = options.team !== undefined ? TEAM_COLORS[options.team] : options.color
 		const material = new THREE.MeshLambertMaterial({ color })
 		if (options.hideOutline) {
 			material.outlineParameters = { visible: false }
 		} else {
 			material.outlineParameters = {
-				color: new THREE.Color(dataConstants.darkColors[options.team]),
+				color: new THREE.Color(DARK_COLORS[options.team]),
 			}
 		}
 		if (options.opacity) {
@@ -460,13 +460,13 @@ export default {
 
 	cube (size, options) {
 		const geometry = new THREE.BoxBufferGeometry(size, size, size)
-		const color = options.team !== undefined ? dataConstants.teamColors[options.team] : options.color
+		const color = options.team !== undefined ? TEAM_COLORS[options.team] : options.color
 		const material = new THREE.MeshStandardMaterial({ color })
 		if (options.hideOutline) {
 			material.outlineParameters = { visible: false }
 		} else {
 			material.outlineParameters = {
-				color: new THREE.Color(dataConstants.darkColors[options.team]),
+				color: new THREE.Color(DARK_COLORS[options.team]),
 			}
 		}
 		if (options.opacity) {

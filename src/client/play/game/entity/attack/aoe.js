@@ -1,4 +1,4 @@
-import { TICKS_PER_SECOND } from '@/common/constants'
+import { TICKS_PER_SECOND } from '@/client/play/data/constants'
 
 import Local from '@/client/play/local'
 

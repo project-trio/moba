@@ -1,33 +1,28 @@
 <template>
 <div class="lobby-create scrolls">
-	<h1>{{ isMod ? 'create game' : 'training bots' }}</h1>
-	<div v-if="loading">
-		...
+	<h1>{{ isAdmin ? 'create game' : 'training bots' }}</h1>
+	<div v-if="isAdmin">
+		<h2>game type:</h2>
+		<SelectionGroup>
+			<button v-for="mode in gameModes" :key="mode.name" class="big interactive" :class="{ selected: mode === selectedMode }" @click="onGameMode(mode)">{{ mode.name }}</button>
+			<div class="m-auto text-center">{{ selectedMode.description }}</div>
+		</SelectionGroup>
 	</div>
-	<div v-else>
-		<div v-if="isMod">
-			<h2>game type:</h2>
-			<SelectionGroup>
-				<button v-for="mode in gameModes" :key="mode.name" class="big interactive" :class="{ selected: mode === selectedMode }" @click="onGameMode(mode)">{{ mode.name }}</button>
-				<div class="m-auto text-center">{{ selectedMode.description }}</div>
-			</SelectionGroup>
-		</div>
-		<h2>{{ pvpMode ? 'max players' : 'game size' }}:</h2>
-		<GameSizes :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="pvpMode" @select="selectedSize = $event" />
-		<div v-if="selectedSize > 0">
-			<h2>map:</h2>
-			<GameMaps :selectedSize="selectedSize" :selectedMap="selectedMap" @select="selectedMap = $event" />
-			<button class="interactive  mt-8" @click="onSubmit">confirm</button>
-		</div>
+	<h2>{{ pvpMode ? 'max players' : 'game size' }}:</h2>
+	<GameSizes :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="pvpMode" @select="selectedSize = $event" />
+	<div v-if="selectedSize > 0">
+		<h2>map:</h2>
+		<GameMaps :selectedSize="selectedSize" :selectedMap="selectedMap" @select="selectedMap = $event" />
+		<button class="interactive  mt-8" @click="onSubmit">confirm</button>
 	</div>
 </div>
 </template>
 
 <script>
-import CommonConsts from '@/common/constants'
-
 import router from '@/client/router'
 import store from '@/client/store'
+
+import { TESTING, GAME_MODES, GAME_SIZES } from '@/client/play/data/constants'
 
 import LobbyEvents from '@/client/play/events/lobby'
 
@@ -44,23 +39,19 @@ export default {
 
 	data () {
 		return {
-			loading: false,
-			selectedMode: CommonConsts.GAME_MODES[0],
+			selectedMode: GAME_MODES[0],
 			selectedSize: 0,
 			selectedMap: null,
 		}
 	},
 
 	computed: {
-		username () {
-			return store.state.signin.username
-		},
-		isMod () {
-			return this.username === 'kiko ' || this.username === 'mod'
+		isAdmin () {
+			return store.state.signin.user.admin
 		},
 
 		gameModes () {
-			return CommonConsts.GAME_MODES
+			return GAME_MODES
 		},
 
 		pvpMode () {
@@ -68,12 +59,12 @@ export default {
 		},
 
 		gameSizes () {
-			return this.pvpMode ? CommonConsts.GAME_SIZES : [ 1, 12, 25 ]
+			return this.pvpMode ? GAME_SIZES : [ 1, 12, 25 ]
 		},
 	},
 
 	created () {
-		if (!this.isMod) {
+		if (!this.isAdmin) {
 			this.selectedMode = this.gameModes[1]
 		}
 	},
@@ -90,7 +81,7 @@ export default {
 			LobbyEvents.connect('create', { mode: this.selectedMode.name, size: this.selectedSize, map: this.selectedMap }, (data) => {
 				if (data.error) {
 					const errorMessage = `Unable to create game: ${data.error}`
-					if (CommonConsts.TESTING) {
+					if (TESTING) {
 						warn(errorMessage)
 					} else {
 						window.alert(errorMessage)

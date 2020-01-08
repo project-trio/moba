@@ -1,9 +1,8 @@
 import * as THREE from 'three'
 
-import { TESTING } from '@/common/constants'
-
 import store from '@/client/store'
 
+import { TESTING } from '@/client/play/data/constants'
 import Local from '@/client/play/local'
 
 import shipStats from '@/client/play/data/ships'

@@ -2,18 +2,15 @@
 
 > A browser-based, webgl MOBA engine
 
-## Build Setup
+## Development
 
-``` bash
-# install dependencies
-yarn
+```bash
+# Install dependencies
+npm install
 
-# run the game server
-yarn start
+# Hot-reload dev environment
+npm run serve
 
-# hot-reload dev environment localhost:8090
-yarn serve
-
-# build for production
-yarn build
+# Build for production
+npm run build
 ```

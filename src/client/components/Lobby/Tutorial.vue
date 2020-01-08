@@ -1,6 +1,6 @@
 <template>
 <h1>
-	Loading...
+	Loading tutorial...
 </h1>
 </template>
 

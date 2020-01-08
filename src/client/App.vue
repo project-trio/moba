@@ -120,7 +120,7 @@ h4 {
 }
 
 .panel-button {
-	@apply w-64 h-touch pointer-events-auto;
+	@apply h-touch px-2 bg-gray-500 rounded-lg font-semibold pointer-events-auto;
 }
 
 button {

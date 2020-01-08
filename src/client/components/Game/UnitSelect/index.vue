@@ -34,9 +34,9 @@
 </template>
 
 <script>
-import CommonConsts from '@/common/constants'
-
 import store from '@/client/store'
+
+import { SHIP_NAMES, RETRO_SHIP_NAMES } from '@/client/play/data/constants'
 
 import Bridge from '@/client/play/events/bridge'
 import RenderPreview from '@/client/play/render/preview'
@@ -55,7 +55,7 @@ export default {
 			return store.state.game.players
 		},
 		localId () {
-			return store.state.playerId
+			return store.state.signin.user && store.state.signin.user.id
 		},
 		localPlayer () {
 			return store.playerForId(this.localId)
@@ -70,7 +70,7 @@ export default {
 			return store.state.game.retro
 		},
 		shipNames () {
-			return this.retro ? CommonConsts.RETRO_SHIP_NAMES : CommonConsts.SHIP_NAMES
+			return this.retro ? RETRO_SHIP_NAMES : SHIP_NAMES
 		},
 
 		teamPlayers () {

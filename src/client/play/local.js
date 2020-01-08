@@ -1,13 +1,15 @@
 export default {
 	name: null,
 	email: null,
-	username: localStorage.getItem('username'),
 
 	gid: null,
 	id: null,
 	game: null,
 	player: null,
 	unit: null,
+
+	unitTarget: null,
+	groundTarget: null,
 
 	destroy () {
 		this.game = null

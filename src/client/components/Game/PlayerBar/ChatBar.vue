@@ -54,7 +54,7 @@ export default {
 		},
 
 		localId () {
-			return store.state.playerId
+			return store.state.signin.user && store.state.signin.user.id
 		},
 		localPlayer () {
 			return store.playerForId(this.localId)

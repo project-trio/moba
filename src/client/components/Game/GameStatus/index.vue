@@ -119,7 +119,7 @@ export default {
 
 <style lang="postcss" scoped>
 .game-status {
-	@apply absolute top-0 left-0 right-0 mx-auto pointer-events-none  flex align-middle justify-center;
+	@apply absolute top-0 left-0 right-0 mx-auto pointer-events-none  flex items-center justify-center;
 	bottom: 64px;
 	color: #fffffe;
 	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;

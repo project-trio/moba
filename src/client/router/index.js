@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Start from '@/client/components/Start'
 import Lobby from '@/client/components/Lobby'
 import LobbyCreate from '@/client/components/Lobby/Create'
 import LobbyJoin from '@/client/components/Lobby/Join'
@@ -16,11 +15,6 @@ export default new Router({
 	routes: [
 		{
 			path: '/',
-			name: 'Start',
-			component: Start,
-		},
-		{
-			path: '/lobby',
 			name: 'Lobby',
 			component: Lobby,
 		},

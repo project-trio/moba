@@ -81,7 +81,7 @@ export default {
 		},
 
 		isHost () {
-			return store.state.playerId === store.state.game.host
+			return store.state.signin.user.id === store.state.game.host
 		},
 		startText () {
 			return this.readyToStart ? 'start!' : 'waiting...'
@@ -95,7 +95,7 @@ export default {
 		Local.gid = this.gid
 		LobbyEvents.connect('join', { gid: this.gid }, (data) => {
 			if (data.error) {
-				warn(`Join error: ${data.error}`)
+				warn(`Join error`, data.error, Local.gid)
 				router.replace({ name: 'Lobby' })
 			} else {
 				this.size = data.size

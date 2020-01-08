@@ -34,12 +34,12 @@
 </template>
 
 <script>
-// import CommonConsts from '@/common/constants'
-
 import store from '@/client/store'
 import router from '@/client/router'
 
 import util from '@/client/helpers/util'
+
+// import { GAME_SIZES } from '@/client/play/data/constants'
 
 import Local from '@/client/play/local'
 
@@ -103,7 +103,7 @@ export default {
 		},
 
 		gameSizes () {
-			return [1, 2, 3, 4] //CommonConsts.GAME_SIZES
+			return [1, 2, 3, 4] //TODO GAME_SIZES
 		},
 	},
 

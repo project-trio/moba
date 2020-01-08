@@ -5,8 +5,6 @@ import Local from '@/client/play/local'
 import render from '@/client/play/render/render'
 import RenderSound from '@/client/play/render/sound'
 
-import Unit from '@/client/play/game/entity/unit/unit'
-
 let selectedUnit = null
 
 const defaultGameState = () => {
@@ -40,8 +38,6 @@ const defaultLocalState = () => {
 			actives: [0, 0, 0],
 
 			active: null,
-			groundTarget: null,
-			unitTarget: null,
 			hitsTowers: false,
 			activation: null,
 			toggle: null,
@@ -60,13 +56,13 @@ const defaultLocalState = () => {
 export default {
 	state: {
 		minuteTime: 0,
-		playerId: null,
 
 		windowWidth: window.innerWidth,
 
 		signin: {
-			username: storage.get('username'),
-			loading: false,
+			token: storage.get('token'),
+			reconnect: null,
+			user: null,
 		},
 
 		manualCamera: storage.getBool('manualCamera', true),
@@ -135,9 +131,9 @@ export default {
 
 	// Signin
 
-	setName (name) {
-		this.state.signin.username = name
-		storage.set('username', name)
+	signinToken (token) {
+		this.state.signin.token = token
+		storage.set('token', token)
 	},
 
 	// Settings
@@ -219,16 +215,13 @@ export default {
 		this.state.local.skills.activation = null
 		this.state.local.skills.getGroundTarget = false
 		this.state.local.skills.getUnitTarget = false
-		this.state.local.skills.groundTarget = null
+		Local.groundTarget = null
 		this.state.local.skills.active = null
 		if (Local.unit) {
 			Local.unit.removeIndicator()
 		}
-		if (cancelHighlight && this.state.local.skills.unitTarget) {
-			const unitTarget = Unit.get(this.state.local.skills.unitTarget)
-			if (unitTarget) {
-				unitTarget.setSelection(null)
-			}
+		if (cancelHighlight && Local.unitTarget) {
+			Local.unitTarget.setSelection(null)
 		}
 	},
 

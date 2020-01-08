@@ -88,8 +88,8 @@ export default {
 		framePanel.showPanel(0)
 		document.body.appendChild(framePanel.dom)
 
-		const username = store.state.signin.username
-		if (username === 'kiko ' || username === 'mod') {
+		const isAdmin = store.state.signin.user.admin
+		if (isAdmin) {
 			tickPanel = new Stats()
 			tickPanel.showPanel(1)
 			document.body.appendChild(tickPanel.dom)

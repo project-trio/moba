@@ -13,13 +13,13 @@
 </template>
 
 <script>
-import { TESTING } from '@/common/constants'
 
 import store from '@/client/store'
 import util from '@/client/helpers/util'
 
-import Local from '@/client/play/local'
+import { TESTING } from '@/client/play/data/constants'
 
+import Local from '@/client/play/local'
 import Loop from '@/client/play/render/loop'
 
 import GameStatus from '@/client/components/Game/GameStatus'

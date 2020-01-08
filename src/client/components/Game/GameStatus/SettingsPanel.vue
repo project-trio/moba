@@ -3,15 +3,15 @@
 	<h1>Settings</h1>
 	<div class="flex flex-wrap justify-center">
 		<div class="setting">
-			<button class="interactive" @click="onFps">{{ fpsDescription }}</button>
+			<button class="panel-button interactive" @click="onFps">{{ fpsDescription }}</button>
 			<div class="label">FPS Cap</div>
 		</div>
 		<div class="setting">
-			<button class="interactive" @click="onResolution">{{ fullResolution ? 'Full' : 'Low' }}</button>
+			<button class="panel-button interactive" @click="onResolution">{{ fullResolution ? 'Full' : 'Low' }}</button>
 			<div class="label">Resolution</div>
 		</div>
 		<div class="setting">
-			<button class="interactive" @click="onShadows">{{ shadows === 0 ? 'Off' : shadows === 1 ? 'Low' : 'High' }}</button>
+			<button class="panel-button interactive" @click="onShadows">{{ shadows === 0 ? 'Off' : shadows === 1 ? 'Low' : 'High' }}</button>
 			<div class="label">Shadows</div>
 		</div>
 		<!-- <div class="setting">
@@ -19,15 +19,15 @@
 			<div class="label">Antialias</div>
 		</div> -->
 		<div class="setting">
-			<button class="interactive" @click="onPerspective">{{ perspective ? '3D' : '2D' }}</button>
+			<button class="panel-button interactive" @click="onPerspective">{{ perspective ? '3D' : '2D' }}</button>
 			<div class="label">Perspective</div>
 		</div>
 		<div class="setting">
-			<button class="interactive" @click="onOutline">{{ outline ? 'On' : 'Off' }}</button>
+			<button class="panel-button interactive" @click="onOutline">{{ outline ? 'On' : 'Off' }}</button>
 			<div class="label">Outline effect</div>
 		</div>
 		<div class="setting">
-			<button class="interactive" @click="onSoundVolume">{{ soundVolume ? `${soundVolume}%` : 'Off ' }}</button>
+			<button class="panel-button interactive" @click="onSoundVolume">{{ soundVolume ? `${soundVolume}%` : 'Off ' }}</button>
 			<div class="label">Sound</div>
 		</div>
 	</div>
@@ -35,9 +35,9 @@
 </template>
 
 <script>
-import { TICK_DURATION } from '@/common/constants'
-
 import store from '@/client/store'
+
+import { TICK_DURATION } from '@/client/play/data/constants'
 
 export default {
 	computed: {
@@ -111,7 +111,7 @@ export default {
 	@apply m-3;
 }
 
-button {
-	@apply w-24 h-touch mb-px font-semibold bg-gray-500 rounded-lg pointer-events-auto;
+.panel-button {
+	@apply w-24 mb-px;
 }
 </style>

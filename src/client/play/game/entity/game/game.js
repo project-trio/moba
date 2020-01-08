@@ -1,6 +1,6 @@
-import { TESTING, TICK_DURATION, UPDATE_DURATION } from '@/common/constants'
-
 import store from '@/client/store'
+
+import { TESTING, TICK_DURATION, UPDATE_DURATION } from '@/client/play/data/constants'
 
 import Local from '@/client/play/local'
 import Render from '@/client/play/render/render'
@@ -227,7 +227,7 @@ export default function (gid, mode, size) {
 
 		this.started = true
 
-		Local.player = this.playerForId(store.state.playerId)
+		Local.player = this.playerForId(store.state.signin.user.id)
 
 		const gameContainer = Render.group()
 		this.container = gameContainer

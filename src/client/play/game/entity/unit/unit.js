@@ -1,8 +1,8 @@
-import { TICK_DURATION, TICKS_PER_SECOND } from '@/common/constants'
-
 import store from '@/client/store'
 
 import Bridge from '@/client/play/events/bridge'
+
+import { TICK_DURATION, TICKS_PER_SECOND } from '@/client/play/data/constants'
 import Local from '@/client/play/local'
 
 import Render from '@/client/play/render/render'
@@ -403,8 +403,8 @@ class Unit {
 		if (this.isDying) {
 			return false
 		}
-		if (this.id !== store.state.local.skills.unitTarget && (!this.tower || store.state.local.skills.hitsTowers)) {
-			store.state.local.skills.unitTarget = this.id
+		if ((!Local.unitTarget || this.id !== Local.unitTarget.id) && (!this.tower || store.state.local.skills.hitsTowers)) {
+			Local.unitTarget = this
 			if (store.state.local.skills.getUnitTarget && store.state.local.skills.withAlliance === this.localAlly) {
 				this.setSelection(0xff0000)
 			}
@@ -413,8 +413,8 @@ class Unit {
 	}
 
 	onBlur () {
-		if (this.id === store.state.local.skills.unitTarget) {
-			store.state.local.skills.unitTarget = null
+		if (this === Local.unitTarget) {
+			Local.unitTarget = null
 			if (store.state.local.skills.getUnitTarget) {
 				this.setSelection(null)
 			}

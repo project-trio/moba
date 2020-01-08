@@ -4,18 +4,11 @@ module.exports = {
 
 	devServer: {
 		open: true,
-		port: 8090,
-		proxy: {
-			'/socket.io': {
-				target: 'http://localhost:8091',
-				changeOrigin: true,
-			},
-		},
+		port: 8033,
 	},
 
 	pages: {
 		index: { entry: 'src/client/main.js' },
-		admin: { entry: 'src/client/admin/main.js' },
 	},
 
 	chainWebpack (config) {

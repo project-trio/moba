@@ -1,6 +1,6 @@
-import { TESTING } from '@/common/constants'
-
 import store from '@/client/store'
+
+import { TESTING } from '@/client/play/data/constants'
 
 import Local from '@/client/play/local'
 import Bridge from '@/client/play/events/bridge'
@@ -167,7 +167,7 @@ const GameMap = function (mapName, parent) {
 			const showActivateGround = store.state.local.skills.getGroundTarget
 			if (showActivateGround || this.aoeRing) {
 				const target = getTargetFromPoint(point)
-				store.state.local.skills.groundTarget = target
+				Local.groundTarget = target
 				const groundX = target[0] / 100
 				const groundY = target[1] / 100
 				if (this.aoeRing) {
