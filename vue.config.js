@@ -1,5 +1,4 @@
 module.exports = {
-
 	productionSourceMap: false,
 
 	devServer: {
@@ -8,7 +7,7 @@ module.exports = {
 	},
 
 	pages: {
-		index: { entry: 'src/client/main.js' },
+		index: { entry: 'src/main.js' },
 	},
 
 	chainWebpack (config) {
