@@ -3,6 +3,7 @@
 	"version": "0.1.0",
 	"author": "Kyle Coburn",
 	"private": true,
+	"license": "ISC",
 	"scripts": {
 		"i": "pnpm install",
 		"serve": "vue-cli-service serve",
