@@ -1,9 +1,9 @@
 {
 	"name": "moba",
 	"version": "0.1.0",
-	"author": "Kyle Coburn",
-	"private": true,
 	"license": "ISC",
+	"repository": "https://github.com/project-trio/moba",
+	"description": "A top-down 3D MOBA that plays in your browser.",
 	"scripts": {
 		"i": "pnpm install",
 		"serve": "vue-cli-service serve",
@@ -11,8 +11,8 @@
 		"lint": "vue-cli-service lint"
 	},
 	"engines": {
-		"node": "^10",
-		"pnpm": "^4"
+		"node": "^12",
+		"npm": "^6"
 	},
 	"dependencies": {
 		"express": "^4.17.1",
@@ -59,6 +59,17 @@
 			]
 		]
 	},
+	"browserslist": {
+		"production": [
+			"> 1%",
+			"last 2 versions",
+			"not ie <= 8"
+		],
+		"development": [
+			"last 1 version",
+			"not dead"
+		]
+	},
 	"eslintConfig": {
 		"extends": "@ky-is/eslint-config/vue",
 		"globals": {
@@ -71,10 +82,5 @@
 		"rules": {
 			"vue/require-default-prop": "off"
 		}
-	},
-	"browserslist": [
-		"> 1%",
-		"last 2 versions",
-		"not ie <= 8"
-	]
+	}
 }

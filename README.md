@@ -4,7 +4,7 @@
 
 ## Development
 
-```bash
+```sh
 # Install dependencies
 npm install
 
