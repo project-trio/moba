@@ -26,7 +26,7 @@ const queue = function (key, property, data) {
 		data.start = data.until - data.duration
 	}
 	// if (!data.start) {
-	//   data.start = store.state.game.renderTime
+	// 	data.start = store.state.game.renderTime
 	// }
 	this.animations.push(data)
 }

@@ -62,7 +62,7 @@ class Ship extends Movable {
 		this.tween = statBase.tween || null
 		this.onDeath = statBase.onDeath || null
 		this.onRespawn = statBase.onRespawn || null
-		this.onDamageDealt =  statBase.onDamageDealt || null
+		this.onDamageDealt = statBase.onDamageDealt || null
 		const statProperties = statBase.properties
 		if (statProperties) {
 			for (const prop in statProperties) {
@@ -380,12 +380,12 @@ class Ship extends Movable {
 				}
 				if (endSkill) {
 					this.endSkill(ai, renderTime)
-				// } else {
-				//   const update = skill.update
-				//   if (update) {
-				//     const startTime = this.skills.started[ai]
-				//     update(this, startTime, renderTime, durationEnd)
-				//   }
+				} else {
+					// const update = skill.update
+					// if (update) {
+					// 	const startTime = this.skills.started[ai]
+					// 	update(this, startTime, renderTime, durationEnd)
+					// }
 				}
 			}
 		}
@@ -624,7 +624,7 @@ class Ship extends Movable {
 			if (this.moveToTarget) {
 				this.moveToTarget = false
 				// if (this.isLocal) {
-				//   p('target canceled')
+				// 	p('target canceled')
 				// }
 			}
 		}

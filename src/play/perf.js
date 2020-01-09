@@ -59,16 +59,16 @@ console.log(value)
 
 // console.time('Decimal.atan2')
 // for (let i = 0; i < iterations; i += 1) {
-//   // randomizePosition()
-//   value = Decimal.atan2(ry, rx)
+// 	// randomizePosition()
+// 	value = Decimal.atan2(ry, rx)
 // }
 // console.timeEnd('Decimal.atan2')
 // console.log(value)
 
 // console.time('Util.angleApproximate')
 // for (let i = 0; i < iterations; i += 1) {
-//   // randomizePosition()
-//   value = Util.angleApproximate(rx, ry)
+// 	// randomizePosition()
+// 	value = Util.angleApproximate(rx, ry)
 // }
 // console.timeEnd('Util.angleApproximate')
 // console.log(value.toNumber())
@@ -97,7 +97,7 @@ console.log(value)
 
 // console.time('Decimal.cos')
 // for (let i = 0; i < iterations; i += 1) {
-//   value = Decimal.cos(anglePrecise)
+// 	value = Decimal.cos(anglePrecise)
 // }
 // console.timeEnd('Decimal.cos')
 // console.log(value.toNumber())
@@ -115,15 +115,15 @@ console.log(value)
 
 // console.time('Decimal.sin')
 // for (let i = 0; i < iterations; i += 1) {
-//   value = Decimal.sin(anglePrecise)
+// 	value = Decimal.sin(anglePrecise)
 // }
 // console.timeEnd('Decimal.sin')
 // console.log(value.toNumber())
 
-//ANGLE COMPARISON
+// ANGLE COMPARISON
 
 // let an = 0
 // while (an < Math.PI*8 + 0.1) {
-//   console.log(Math.sin(an), TrigCache.sin(Math.round(an * 1000))/1000)
-//   an += Math.PI / 4
+// 	console.log(Math.sin(an), TrigCache.sin(Math.round(an * 1000))/1000)
+// 	an += Math.PI / 4
 // }

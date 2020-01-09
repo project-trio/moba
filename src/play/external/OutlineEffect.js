@@ -54,7 +54,7 @@ export default function ( renderer, parameters ) {
 	// save before render and release after render.
 	var originalOnBeforeRenders = {};
 
-	//this.cache = cache;  // for debug
+	//this.cache = cache; // for debug
 
 	// copied from WebGLPrograms and removed some materials
 	var shaderIDs = {

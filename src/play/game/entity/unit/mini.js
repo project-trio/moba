@@ -66,13 +66,13 @@ class Mini extends Movable {
 		super.setDestination(x, y, preadjusted, moveX, moveY)
 
 		// if (fixedMovement) { //SAMPLE
-		//   const moveAngle = Math.atan2(y * 100 - this.py, x * 100 - this.px)
-		//   const diffX = Math.round(Math.cos(moveAngle) * 1000)
-		//   const diffY = Math.round(Math.sin(moveAngle) * 1000)
-		//   if (diffX !== moveX || diffY !== moveY) {
-		//     const sourceDest = this.path[this.pathProgress]
-		//     p('Invalid fixed movement', [sourceDest[0], sourceDest[1]], [moveX, moveY], [diffX, diffY])
-		//   }
+		// 	const moveAngle = Math.atan2(y * 100 - this.py, x * 100 - this.px)
+		// 	const diffX = Math.round(Math.cos(moveAngle) * 1000)
+		// 	const diffY = Math.round(Math.sin(moveAngle) * 1000)
+		// 	if (diffX !== moveX || diffY !== moveY) {
+		// 		const sourceDest = this.path[this.pathProgress]
+		// 		p('Invalid fixed movement', [sourceDest[0], sourceDest[1]], [moveX, moveY], [diffX, diffY])
+		// 	}
 		// }
 	}
 

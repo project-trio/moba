@@ -67,7 +67,7 @@ Bridge.on('update player', (data) => {
 Bridge.on('start game', (data) => {
 	if (!Local.game) {
 		// if (TESTING) { //TODO remove backfilling
-		//   window.alert('Game not found')
+		// 	window.alert('Game not found')
 		// }
 		warn('Game not found', data)
 		Local.game = new Game(data.gid, data.mode, data.size)

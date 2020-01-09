@@ -147,7 +147,7 @@ export default {
 		sightRange: [140, 0],
 		attackRange: [100, 0], //70
 
-		attackDamage: [27, 1], //27  1
+		attackDamage: [27, 1], //27 1
 		attackPierce: [0, 0],
 		attackCooldown: [10, 0],
 
