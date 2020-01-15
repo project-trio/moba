@@ -11,16 +11,6 @@ import Game from '@/play/game/entity/game/game'
 
 let redirectingTo = null
 
-const joinGame = function (gid) {
-	const routeObject = { name: 'Join', params: { gid: gid } }
-	if (router.currentRoute.name === 'Create' || router.currentRoute.name === 'Queue') {
-		router.replace(routeObject)
-	} else {
-		p('join from', router.currentRoute.name)
-		router.push(routeObject)
-	}
-}
-
 Bridge.on('lobby', (data) => {
 	// p('lobby', data)
 	if (data.online) {
@@ -32,18 +22,7 @@ Bridge.on('lobby', (data) => {
 })
 
 Bridge.on('queue', (data) => {
-	// p('queue', data)
-	const gid = data.gid
-	if (gid) {
-		joinGame(gid)
-	} else {
-		store.state.lobby.queue = data
-	}
-})
-
-Bridge.on('join game', (data) => {
-	// p('join game', data)
-	joinGame(data.gid)
+	store.state.lobby.queue = data
 })
 
 Bridge.on('players', (data) => {
@@ -64,22 +43,22 @@ Bridge.on('update player', (data) => {
 	}
 })
 
-Bridge.on('start game', (data) => {
+Bridge.on('started game', (data) => {
 	if (!Local.game) {
 		// if (TESTING) { //TODO remove backfilling
 		// 	window.alert('Game not found')
 		// }
 		warn('Game not found', data)
+		store.state.game.id = data.gid
 		Local.game = new Game(data.gid, data.mode, data.size)
 	}
 	Local.game.setMap(data.map)
 	Local.game.updatePlayers(data)
 
 	if (Local.game.playerForId(store.state.signin.user.id)) {
-		router.replace({ name: 'Game' })
+		router.replace({ name: 'Game', params: { gid: data.gid } })
 	} else {
 		window.alert('Local player not found. You may be connected on another page. Please refresh and try again.')
-		p(store.state.signin.user.id, Local.game)
 		router.replace({ name: 'Lobby' })
 	}
 })
@@ -95,13 +74,21 @@ export default {
 		Bridge.emit('lobby action', data, (response) => {
 			const existingGid = response.reenter
 			if (existingGid) {
-				if (redirectingTo !== existingGid && redirectingTo !== Local.gid) {
+				if (redirectingTo !== existingGid && redirectingTo !== store.state.game.id) {
 					redirectingTo = existingGid
 					p('redirecting to game', router.currentRoute)
 					// router.replace({ name: 'Join', params: { gid: existingGid } })
 				}
-			} else if (callback) {
-				callback(response)
+			} else {
+				if (response.error) {
+					p('ERR: lobby action', response.error)
+				}
+				if (response.backToLobby) {
+					router.replace({ name: 'Lobby' })
+				}
+				if (callback) {
+					callback(response)
+				}
 			}
 		})
 	},

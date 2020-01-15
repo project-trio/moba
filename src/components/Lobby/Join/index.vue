@@ -26,15 +26,10 @@
 </template>
 
 <script>
-import router from '@/router'
 import store from '@/store'
-
-import Game from '@/play/game/entity/game/game'
 
 import Bridge from '@/play/events/bridge'
 import LobbyEvents from '@/play/events/lobby'
-
-import Local from '@/play/local'
 
 import LobbyChat from '@/components/Lobby/Chat'
 import PlayerBox from '@/components/Lobby/Join/PlayerBox'
@@ -49,24 +44,20 @@ export default {
 		gid: String,
 	},
 
-	data () {
-		return {
-			map: null,
-			size: null,
-		}
-	},
-
 	computed: {
-		gameSize () {
-			return `${this.size} v ${this.size}`
+		map () {
+			return store.state.game.map
 		},
 
-		playerCount () {
-			return this.players.length
+		size () {
+			return store.state.game.size
 		},
 
 		players () {
 			return store.state.game.players
+		},
+		playerCount () {
+			return this.players.length
 		},
 		teamPlayers () {
 			const results = [ [], [] ]
@@ -81,7 +72,7 @@ export default {
 		},
 
 		isHost () {
-			return store.state.signin.user.id === store.state.game.host
+			return store.state.signin.user.id === store.state.game.hostID
 		},
 		startText () {
 			return this.readyToStart ? 'start!' : 'waiting...'
@@ -92,20 +83,8 @@ export default {
 	},
 
 	created () {
-		Local.gid = this.gid
-		LobbyEvents.connect('join', { gid: this.gid }, (data) => {
-			if (data.error) {
-				warn(`Join error`, data.error, Local.gid)
-				router.replace({ name: 'Lobby' })
-			} else {
-				this.size = data.size
-				this.map = data.map
-				// p('join', data)
-				const newGame = new Game(data.gid, data.mode, data.size)
-				newGame.updatePlayers(data)
-				Local.game = newGame
-			}
-		})
+		store.state.game.id = this.gid
+		LobbyEvents.connect('join', { gid: this.gid })
 	},
 
 	methods: {

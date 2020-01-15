@@ -302,8 +302,8 @@ export default function (gid, mode, size) {
 		if (gameData.updatesUntilStart !== undefined) {
 			updatesUntilStart = gameData.updatesUntilStart
 		}
-		if (gameData.host) {
-			store.state.game.host = gameData.host
+		if (gameData.hostID) {
+			store.state.game.hostID = gameData.hostID
 		}
 		store.state.game.ready = gameData.ready
 	}

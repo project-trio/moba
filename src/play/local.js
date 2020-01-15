@@ -1,9 +1,4 @@
 export default {
-	name: null,
-	email: null,
-
-	gid: null,
-	id: null,
 	game: null,
 	player: null,
 	unit: null,

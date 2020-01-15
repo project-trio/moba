@@ -19,10 +19,9 @@
 </template>
 
 <script>
-import router from '@/router'
 import store from '@/store'
 
-import { TESTING, GAME_MODES, GAME_SIZES } from '@/play/data/constants'
+import { GAME_MODES, GAME_SIZES } from '@/play/data/constants'
 
 import LobbyEvents from '@/play/events/lobby'
 
@@ -78,21 +77,7 @@ export default {
 		},
 
 		onSubmit () {
-			LobbyEvents.connect('create', { mode: this.selectedMode.name, size: this.selectedSize, map: this.selectedMap }, (data) => {
-				if (data.error) {
-					const errorMessage = `Unable to create game: ${data.error}`
-					if (TESTING) {
-						warn(errorMessage)
-					} else {
-						window.alert(errorMessage)
-					}
-					if (data.backToLobby) {
-						router.replace({ name: 'Lobby' })
-					}
-				} else {
-					router.replace({ name: 'Join', params: { gid: data.gid } })
-				}
-			})
+			LobbyEvents.connect('create', { mode: this.selectedMode.name, size: this.selectedSize, map: this.selectedMap })
 		},
 	},
 }

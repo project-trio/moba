@@ -10,7 +10,9 @@
 
 	<div class="m-header">
 		<div v-if="enoughPlayersForGame">
-			<button class="ready-button big interactive" :class="{ selected: readyRequested }" @click="onReady">{{ readyRequested ? 'ready!' : `ready? (${queueTimer - readyAt})` }}</button>
+			<button class="ready-button big interactive" :class="{ selected: didSayReady }" @click="onReady">
+				{{ didSayReady ? 'ready!' : `ready? (${queuePendingForSize === selectedSize ? queueSecondsRemaining : '…'})` }}
+			</button>
 		</div>
 		<div v-else>
 			<h2>waiting for {{ pluralize(waitingForSize, 'player') }}...</h2>
@@ -25,7 +27,7 @@
 			To be notified when a game becomes available while this page is in the background, please enable notifications for this site in your browser settings.
 		</div>
 		<div v-else>
-			<button class="big interactive" :class="{ selected: readyRequested }" @click="onNotifications">Enable notifications!</button>
+			<button class="big interactive  bg-info-500" :class="{ selected: didSayReady }" @click="onNotifications">Enable notifications!</button>
 			Lets you know when a game is available while the page is in the background.
 		</div>
 	</div>
@@ -50,6 +52,8 @@ import LobbyChat from '@/components/Lobby/Chat'
 import GameMaps from '@/components/Lobby/SelectionGroup/GameMaps'
 import GameSizes from '@/components/Lobby/SelectionGroup/GameSizes'
 
+let queueCountdownInterval = null
+
 export default {
 	components: {
 		GameMaps,
@@ -60,12 +64,11 @@ export default {
 	data () {
 		return {
 			baseUrl: process.env.BASE_URL,
-			queueTimer: 20,
+			queueSecondsRemaining: 0,
 			selectedSize: 2,
 			selectedMap: null,
-			readyRequested: false,
-			readyAt: 0,
-			readyTimer: null,
+			didSayReady: false,
+			notificationTimer: null,
 			notificationPermission: null,
 			hasFocusedWindow: false,
 		}
@@ -97,9 +100,14 @@ export default {
 		availableSizes () {
 			return store.state.lobby.queue.available || []
 		},
-
 		queuedPlayers () {
 			return store.state.lobby.queue.players || 0
+		},
+		queuePendingForSize () {
+			return store.state.lobby.queue.popSize
+		},
+		queuePopAt () {
+			return store.state.lobby.queue.popAt
 		},
 
 		gameSizes () {
@@ -109,35 +117,58 @@ export default {
 
 	watch: {
 		enoughPlayersForGame (enough) {
-			if (!enough && this.readyRequested) {
-				window.alert('Another player did not respond, and has been removed from the queue.')
-			}
-			this.setReadyTimer(enough)
+			this.setNotificationTimer(enough)
 		},
 
 		availableSizes () {
 			if (!this.enoughPlayersForGame) {
-				this.readyRequested = false
+				this.didSayReady = false
 			}
 		},
 
-		readyRequested () {
+		didSayReady () {
 			this.sendQueue()
 		},
 		selectedSize () {
 			this.sendQueue()
 		},
+
+		queuePopAt (queuePopAt) {
+			this.queueSecondsRemaining = queuePopAt - util.seconds()
+		},
+	},
+
+	created () {
+		Bridge.on('queue expired', (data) => {
+			this.cancelTimer()
+			window.alert(data.error)
+			if (data.backToLobby) {
+				router.replace({ name: 'Lobby' })
+			}
+		})
 	},
 
 	mounted () {
 		Local.game = null
 		this.notificationPermission = window.Notification ? Notification.permission : 'unavailable'
 		LobbyEvents.connect('queue', { size: this.selectedSize, ready: false })
+		queueCountdownInterval = window.setInterval(() => {
+			if (this.queueSecondsRemaining > 0) {
+				this.queueSecondsRemaining -= 1
+			}
+		}, 1000)
 	},
 
 	beforeDestroy () {
-		this.setReadyTimer(false)
-		LobbyEvents.connect('leave') //TODO queue
+		Bridge.off('queue expired')
+		this.cancelTimer()
+		window.clearInterval(queueCountdownInterval)
+		queueCountdownInterval = null
+	},
+
+	beforeRouteLeave (to, from, next) {
+		LobbyEvents.connect('leave', { gid: store.state.game.id })
+		next()
 	},
 
 	methods: {
@@ -148,58 +179,40 @@ export default {
 				this.notification.close()
 				this.notification = null
 			}
-			if (this.readyTimer) {
-				window.clearInterval(this.readyTimer)
-				this.readyTimer = null
+			if (this.notificationTimer) {
+				window.clearInterval(this.notificationTimer)
+				this.notificationTimer = null
 			}
 			this.hasFocusedWindow = false
 		},
 
-		checkFocus () {
-			if (!this.hasFocusedWindow && document.hasFocus()) {
-				this.hasFocusedWindow = true
-			}
-		},
-
-		setReadyTimer (enabled) {
+		setNotificationTimer (enabled) {
 			this.cancelTimer()
-
 			if (enabled) {
-				this.readyAt = 0
-				this.readyTimer = window.setInterval(() => {
-					if (this.readyAt >= this.queueTimer) {
-						this.cancelTimer()
-						if (!this.readyRequested) {
-							router.replace({ name: 'Lobby' })
-							window.alert('Removed from the queue due to inactivity')
-						}
-					} else {
-						this.readyAt += 1
-						this.checkFocus()
-						if (this.readyAt === 3 && !this.readyRequested && !this.hasFocusedWindow && this.notificationPermission === 'granted') {
-							this.notification = new Notification('moba queue ready!', {
-								icon: `${this.baseUrl}icon.png`,
-							})
-							this.notification.onclick = () => {
-								if (window.parent) {
-									parent.focus()
-								}
-								window.focus()
-								this.notification.close()
+				this.notificationTimer = window.setTimeout(() => {
+					if (!this.didSayReady && this.notificationPermission === 'granted' && !document.hasFocus()) {
+						this.notification = new Notification('moba queue ready!', {
+							icon: `${this.baseUrl}icon.png`,
+						})
+						this.notification.onclick = () => {
+							if (window.parent) {
+								parent.focus()
 							}
+							window.focus()
+							this.notification.close()
 						}
 					}
-				}, 1000)
+				}, 3000)
 			}
 		},
 
 		onReady () {
-			this.readyRequested = !this.readyRequested
+			this.didSayReady = !this.didSayReady
 		},
 
 		sendQueue () {
-			this.setReadyTimer(this.enoughPlayersForGame)
-			Bridge.emit('queue', { size: this.selectedSize, map: this.selectedMap, ready: this.readyRequested })
+			this.setNotificationTimer(this.enoughPlayersForGame)
+			Bridge.emit('queue', { size: this.selectedSize, map: this.selectedMap, ready: this.didSayReady })
 		},
 
 		onNotifications () {

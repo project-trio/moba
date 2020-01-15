@@ -40,7 +40,8 @@ export default new Router({
 			component: LobbyJoin,
 		},
 		{
-			path: '/play',
+			path: '/play/:gid',
+			props: true,
 			name: 'Game',
 			component: Game,
 		},

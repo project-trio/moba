@@ -13,7 +13,6 @@
 </template>
 
 <script>
-
 import store from '@/store'
 import util from '@/helpers/util'
 
@@ -33,6 +32,10 @@ export default {
 		PlayerBar,
 		SettingsButtons,
 		UnitSelect,
+	},
+
+	props: {
+		gid: String,
 	},
 
 	computed: {

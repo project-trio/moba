@@ -1,19 +1,19 @@
 <template>
 <div class="lobby scrolls">
-<div class="content">
-	<h1>moba lobby</h1>
-	<h2>hello {{ username }}!</h2>
-	<h3>{{ playersOnline }} online</h3>
-	<router-link :to="{ name: 'Queue' }" tag="button" class="big interactive  my-2">enter queue</router-link>
-	<router-link :to="{ name: 'Create' }" tag="button" class="big interactive outlined">{{ isAdmin ? 'create game' : 'training bots' }}</router-link>
-	<div>
-		<router-link v-for="game in games" :key="game.id" :to="{ name: 'Join', params: { gid: game.id } }" tag="div" class="list-game interactive  m-2 p-4">
-			<div>{{ game.mode }} game - {{ game.state }}</div>
-			<div>{{ game.players.length }} of {{ game.size * 2 }} players</div>
-			<div>{{ game.map }} map</div>
-		</router-link>
+	<div class="content">
+		<h1>moba lobby</h1>
+		<h2>hello {{ username }}!</h2>
+		<h3>{{ playersOnline }} online</h3>
+		<router-link :to="{ name: 'Queue' }" tag="button" class="big interactive  my-2">enter queue</router-link>
+		<router-link :to="{ name: 'Create' }" tag="button" class="big interactive outlined">{{ isAdmin ? 'create game' : 'training bots' }}</router-link>
+		<div>
+			<router-link v-for="game in games" :key="game.id" :to="{ name: 'Join', params: { gid: game.id } }" tag="div" class="list-game interactive  m-2 p-4">
+				<div>{{ game.mode }} game - {{ game.state }}</div>
+				<div>{{ game.players.length }} of {{ game.size * 2 }} players</div>
+				<div>{{ game.map }} map</div>
+			</router-link>
+		</div>
 	</div>
-</div>
 </div>
 </template>
 
@@ -21,8 +21,6 @@
 import store from '@/store'
 
 import util from '@/helpers/util'
-
-import Local from '@/play/local'
 
 import LobbyEvents from '@/play/events/lobby'
 
@@ -46,16 +44,12 @@ export default {
 	},
 
 	mounted () {
-		LobbyEvents.connect('enter', { gid: Local.gid }, (data) => {
+		LobbyEvents.connect('enter', { gid: store.state.game.id }, (data) => {
 			// p('joined lobby', data)
+			store.state.game.id = null
 			store.state.lobby.onlineCount = data.online
 			store.state.lobby.games = data.games
-			Local.gid = null
 		})
-	},
-
-	beforeDestroy () {
-		LobbyEvents.connect('leave')
 	},
 }
 </script>

@@ -5,8 +5,14 @@
 </template>
 
 <script>
+import router from '@/router'
 import store from '@/store'
+
 import util from '@/helpers/util'
+
+import Game from '@/play/game/entity/game/game'
+import Bridge from '@/play/events/bridge'
+import Local from '@/play/local'
 
 const KEY_TAB = 9
 const KEY_ESCAPE = 27
@@ -41,6 +47,19 @@ export default {
 		util.addListener(window, 'keydown', this.keydown, true)
 		util.addListener(window, 'keyup', this.keyup, true)
 		util.addListener(window, 'contextmenu', this.onRightClick, true)
+
+		Bridge.on('joined game', (data) => {
+			if (store.state.game.id !== data.gid) {
+				console.log('Joined', data)
+				store.state.game.id = data.gid
+				store.state.game.size = data.size
+				store.state.game.map = data.map
+				const newGame = new Game(data.gid, data.mode, data.size)
+				Local.game = newGame
+				newGame.updatePlayers(data)
+				router.push({ name: 'Join', params: { gid: data.gid } })
+			}
+		})
 
 		this.countdownInterval = window.setInterval(() => {
 			store.state.minuteTime = util.seconds()
@@ -87,6 +106,7 @@ body {
 	@apply overflow-hidden;
 	background-color: #fffffe;
 	-webkit-touch-callout: none;
+	font-variant-numeric: tabular-nums;
 }
 
 html, body {

@@ -9,8 +9,11 @@ let selectedUnit = null
 
 const defaultGameState = () => {
 	return {
+		id: null,
+		size: null,
+		map: null,
 		players: [],
-		host: null,
+		hostID: null,
 		ready: null,
 		winningTeam: null,
 		active: false,
