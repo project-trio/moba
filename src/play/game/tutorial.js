@@ -36,6 +36,10 @@ const Tutorial = {
 		}
 	},
 
+	finish () {
+		storage.set('tutorial', 1)
+	},
+
 	data: [
 		{
 			title: 'Welcome to moba!',
@@ -45,6 +49,7 @@ const Tutorial = {
 				ship.reemergeAt = 999999999
 				ship.levelupSkill(0)
 			},
+			skippable: true,
 			continue: true,
 		},
 		{
@@ -136,7 +141,7 @@ const Tutorial = {
 			body: `Okay, so maybe that was a little easy for you. Now you know the basics, you're ready to play against other people - and that's where the real fun begins!`,
 			noDelay: true,
 			init () {
-				storage.set('tutorial', 1)
+				Tutorial.finish()
 			},
 			continue: true,
 		},
