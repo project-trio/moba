@@ -314,7 +314,7 @@ class Unit {
 					statModifiers.splice(oldIndex, 1)
 				}
 			} else {
-				const mod = [ modifierKey, method, value, ending, callback ]
+				const mod = [ modifierKey, Float[method], value, ending, callback ]
 				if (oldIndex !== -1) {
 					statModifiers[oldIndex] = mod
 				} else {
@@ -340,7 +340,7 @@ class Unit {
 			const mod = statModifiers[idx]
 			const mathMethod = mod[1]
 			const byValue = mod[2]
-			result = Float[mathMethod](result, byValue)
+			result = mathMethod(result, byValue)
 		}
 		this.current[statName] = result
 		if (statName === STAT_MOVE_SPEED) {
