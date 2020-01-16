@@ -127,6 +127,7 @@ class Unit {
 			this.aimingToMove = !this.turnToMove
 
 			this.healthRemaining = this.stats.healthMax
+			this.healthRegenCheck = 0
 			this.attackRangeCheck = Util.squared(this.stats.attackRange)
 			this.armorCheck = calculateArmor(this.stats.armor)
 			if (this.stats.healthRegen) {
