@@ -260,15 +260,16 @@ export default {
 				return levelMultiplier(200, level, -10)
 			},
 			start (index, level, ship, target) {
-				const damage = this.getEffectDamage(level) * 100
+				const attackDamage = this.getEffectDamage(level) * 100
+				const stunDuration = this.getEffectDuration(level)
 				const bulletData = {
 					hitsTowers: this.hitsTowers,
 					bulletSize: 10,
 					bulletColor: 0xdddd00,
-					attackDamage: damage,
+					attackDamage,
 					attackPierce: 0,
 					bulletSpeed: 8,
-					stunDuration: this.getEffectDuration(level),
+					stunDuration,
 					dodgeable: true,
 				}
 				new Bullet(ship, target, bulletData)
@@ -295,7 +296,7 @@ export default {
 				return levelMultiplier(180, level, -10)
 			},
 			start (index, level, ship, target) {
-				const aoeRange = this.getEffectRange(level)
+				const explosionRadius = this.getEffectRange(level)
 				const moveSpeed = Float.subtract(1, Float.divide(this.getEffectMoveSpeed(level), 100))
 				const effectDuration = this.getEffectDuration(level)
 				const bulletData = {
@@ -305,7 +306,7 @@ export default {
 					bulletColor: 0x00ff00,
 					attackPierce: 0,
 					bulletSpeed: 10,
-					explosionRadius: aoeRange,
+					explosionRadius,
 					allies: false,
 					modify: {
 						name: this.name,
@@ -374,17 +375,17 @@ export default {
 				return 120
 			},
 			start (index, level, ship, target) {
-				const damage = this.getEffectDamage(level) * 100
+				const attackDamage = this.getEffectDamage(level) * 100
 				const maxRange = this.getRange(level)
 				const bulletData = {
 					hitsTowers: this.hitsTowers,
 					bulletSize: 10,
 					bulletColor: 0x00dddd,
-					attackDamage: damage,
+					attackDamage,
 					attackPierce: 9001,
 					bulletSpeed: 4,
 					bulletAcceleration: true,
-					maxRange: maxRange,
+					maxRange,
 					dodgeable: true,
 				}
 				new Bullet(ship, target, bulletData)
@@ -408,19 +409,19 @@ export default {
 				return 200
 			},
 			start (index, level, ship, target, startAt, endAt) {
-				const aoeRange = this.getEffectRange(level)
-				const damage = this.getEffectDamage(level) * 100
+				const explosionRadius = this.getEffectRange(level)
+				const attackDamage = this.getEffectDamage(level) * 100
 				const maxRange = this.getRange(level)
 				const bulletSpeed = 4
 				const bulletData = {
 					hitsTowers: this.hitsTowers,
 					bulletSize: 8,
 					bulletColor: 0x660066,
-					attackDamage: damage,
+					attackDamage,
 					attackPierce: 10,
-					bulletSpeed: bulletSpeed,
-					maxRange: maxRange,
-					explosionRadius: aoeRange,
+					bulletSpeed,
+					maxRange,
+					explosionRadius,
 				}
 				const flingBullet = new Bullet(ship, target, bulletData)
 				Animate.apply(flingBullet)
@@ -479,16 +480,16 @@ export default {
 				return 80
 			},
 			start (index, level, ship, target, startAt) {
-				const damage = this.getEffectDamage(level) * 100
-				const aoeRange = this.getEffectRange(level)
+				const attackDamage = this.getEffectDamage(level) * 100
+				const explosionRadius = this.getEffectRange(level)
 				const bulletData = {
 					hitsTowers: this.hitsTowers,
 					bulletSize: 10,
 					bulletColor: 0xdd0000,
-					attackDamage: damage,
+					attackDamage,
 					attackPierce: 0,
 					bulletSpeed: 13,
-					explosionRadius: aoeRange,
+					explosionRadius,
 				}
 				new Bullet(ship, target, bulletData)
 			},

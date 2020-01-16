@@ -545,7 +545,6 @@ class Unit {
 		if (this.healthRemaining === this.stats.healthMax) {
 			return
 		}
-
 		const newHealth = Math.min(this.healthRemaining + addedHealth, this.stats.healthMax)
 		this.updateHealth(newHealth)
 	}

@@ -56,15 +56,15 @@ export default {
 				ship.uncontrollable = false
 				ship.disableAttacking = false
 
-				const damage = this.getEffectDamage(level) * 100
-				const aoeRange = this.getEffectRange(level)
+				const attackDamage = this.getEffectDamage(level) * 100
+				const radius = this.getEffectRange(level)
 				new AreaOfEffect(ship, {
 					dot: false,
 					hitsTowers: this.hitsTowers,
 					color: 0x0000ff,
 					opacity: 0.5,
-					radius: aoeRange,
-					attackDamage: damage,
+					radius,
+					attackDamage,
 					attackPierce: 0,
 				})
 			},
@@ -89,7 +89,7 @@ export default {
 				return levelMultiplier(200, level, -10)
 			},
 			start (index, level, ship, target, startAt, endAt, cooldown) {
-				const aoeRange = this.getRange(level)
+				const radius = this.getRange(level)
 				const stunDelay = this.getEffectDelay(level)
 				const stunDuration = this.getEffectDuration(level)
 				new AreaOfEffect(ship, {
@@ -97,10 +97,10 @@ export default {
 					hitsTowers: this.hitsTowers,
 					color: 0xffaa00,
 					opacity: 0.5,
-					radius: aoeRange,
+					radius,
 					startAt,
 					delay: stunDelay,
-					stunDuration: stunDuration,
+					stunDuration,
 				})
 			},
 		},
@@ -165,18 +165,18 @@ export default {
 			},
 			start (index, level, ship, target, startAt) {
 				const delay = this.getEffectDelay(level)
-				const damage = this.getEffectDamage(level) * 100
-				const aoeRange = this.getEffectRange(level)
+				const radius = this.getEffectRange(level)
+				const attackDamage = this.getEffectDamage(level) * 100
 				new AreaOfEffect(ship, {
 					dot: false,
 					hitsTowers: this.hitsTowers,
 					color: 0xffff00,
 					opacity: 0.9,
 					px: target[0], py: target[1],
-					radius: aoeRange,
+					radius,
 					startAt,
 					delay: delay,
-					attackDamage: damage,
+					attackDamage,
 					attackPierce: 0,
 				})
 			},
@@ -299,15 +299,16 @@ export default {
 				return levelMultiplier(100, level, -5)
 			},
 			start (index, level, ship, target) {
-				const damage = this.getEffectDamage(level) * 100
+				const attackDamage = this.getEffectDamage(level) * 100
+				const propagateRange = this.getEffectRange(level)
 				const bulletData = {
 					hitsTowers: this.hitsTowers,
 					bulletSize: 10,
 					bulletColor: 0xdddd00,
-					attackDamage: damage,
+					attackDamage,
 					attackPierce: 10,
 					bulletSpeed: 7,
-					propagateRange: this.getEffectRange(level),
+					propagateRange,
 				}
 				new Bullet(ship, target, bulletData)
 			},
@@ -335,20 +336,20 @@ export default {
 				return levelMultiplier(90, level, -6)
 			},
 			activate (index, level, ship) {
-				const regen = this.getEffectRegen(level)
-				const regenRange = this.getRange(level)
+				const radius = this.getRange(level)
+				const healthRegen = this.getEffectRegen(level)
 				new AreaOfEffect(ship, {
 					dot: false,
 					follow: true,
 					color: 0x00ff77,
 					opacity: 0.2,
-					radius: regenRange,
+					radius,
 					allies: true,
 					modify: {
 						name: this.name,
 						stat: STAT_DAMAGE_OVER_TIME,
 						method: MATH_SUBTRACT,
-						value: regen,
+						value: healthRegen,
 						duration: 1000,
 					},
 				})
@@ -373,14 +374,14 @@ export default {
 				return levelMultiplier(90, level, -6)
 			},
 			activate (index, level, ship) {
-				const range = this.getRange(level)
+				const radius = this.getRange(level)
 				const moveSpeed = Float.add(1, Float.divide(this.getEffectMoveSpeed(level), 100))
 				new AreaOfEffect(ship, {
 					dot: false,
 					follow: true,
 					color: 0xff7700,
 					opacity: 0.2,
-					radius: range,
+					radius,
 					allies: true,
 					modify: {
 						name: this.name,
@@ -411,13 +412,14 @@ export default {
 				return levelMultiplier(90, level, -6)
 			},
 			activate (index, level, ship) {
+				const radius = this.getRange(level)
 				const attackCooldown = Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100))
 				new AreaOfEffect(ship, {
 					dot: false,
 					follow: true,
 					color: 0xff00cc,
 					opacity: 0.2,
-					radius: this.getRange(level),
+					radius,
 					allies: true,
 					modify: {
 						name: this.name,
@@ -457,7 +459,7 @@ export default {
 				return 100
 			},
 			start (index, level, ship, target) {
-				const damage = this.getEffectDamage(level) * 100
+				const attackDamage = this.getEffectDamage(level) * 100
 				const moveSpeed = Float.subtract(1, Float.divide(this.getEffectMoveSpeed(level), 100))
 				const stunDuration = this.getEffectDuration(level)
 				const maxRange = this.getRange(level)
@@ -465,10 +467,10 @@ export default {
 					hitsTowers: this.hitsTowers,
 					bulletSize: 10,
 					bulletColor: 0xdddd00,
-					attackDamage: damage,
+					attackDamage,
 					attackPierce: 10,
 					bulletSpeed: 8,
-					maxRange: maxRange,
+					maxRange,
 					modify: {
 						name: 'Poison',
 						stat: STAT_MOVE_SPEED,
@@ -476,7 +478,7 @@ export default {
 						value: moveSpeed,
 						duration: 1000,
 					},
-					stunDuration: stunDuration,
+					stunDuration,
 					dodgeable: true,
 				}
 				new Bullet(ship, target, bulletData)
@@ -509,7 +511,7 @@ export default {
 			},
 			start (index, level, ship, target) {
 				const dps = this.getEffectDps(level) * 100
-				const aoeRange = this.getEffectRange(level)
+				const explosionRadius = this.getEffectRange(level)
 				const effectDuration = this.getEffectDuration(level)
 				const moveSpeed = Float.subtract(1, Float.divide(this.getEffectMoveSpeed(level), 100))
 				const bulletData = {
@@ -521,8 +523,8 @@ export default {
 					attackDamage: dps,
 					attackPierce: 0,
 					bulletSpeed: 10,
-					explosionRadius: aoeRange,
-					effectDuration: effectDuration,
+					explosionRadius,
+					effectDuration,
 					allies: false,
 					modify: {
 						name: 'Poison',
@@ -592,14 +594,14 @@ export default {
 				return levelMultiplier(80, level, -4)
 			},
 			start (index, level, ship, target) {
-				const damage = this.getEffectDamage(level) * 100
+				const attackDamage = this.getEffectDamage(level) * 100
 				const maxRange = this.getRange(level)
 				const bulletData = {
 					toMaxRange: true,
 					hitsTowers: this.hitsTowers,
 					bulletSize: 12,
 					bulletColor: 0xcc0000,
-					attackDamage: damage,
+					attackDamage,
 					attackPierce: 10,
 					bulletSpeed: 12,
 					maxRange: maxRange,
@@ -725,16 +727,16 @@ export default {
 				return levelMultiplier(100, level, 10)
 			},
 			start (index, level, ship, target) {
-				const damage = this.getEffectDamage(level)
+				const attackDamage = this.getEffectDamage(level) * 100
 				const maxRange = this.getRange(level)
 				const bulletData = {
 					hitsTowers: this.hitsTowers,
 					bulletSize: 9,
 					bulletColor: 0xcc00ff,
-					attackDamage: damage * 100,
+					attackDamage,
 					attackPierce: 9001,
 					bulletSpeed: 5,
-					maxRange: maxRange,
+					maxRange,
 					toMaxRange: true,
 					collides: true,
 					pierces: true,
@@ -761,19 +763,19 @@ export default {
 				return 240
 			},
 			start (index, level, ship, target, startAt, endAt) {
-				const aoeRange = this.getEffectRange(level)
-				const damage = this.getEffectDamage(level) * 100
+				const explosionRadius = this.getEffectRange(level)
+				const attackDamage = this.getEffectDamage(level) * 100
 				const maxRange = this.getRange(level)
 				const bulletSpeed = 4
 				const bulletData = {
 					hitsTowers: this.hitsTowers,
 					bulletSize: 8,
 					bulletColor: 0x660066,
-					attackDamage: damage,
+					attackDamage,
 					attackPierce: 10,
 					bulletSpeed: bulletSpeed,
 					maxRange: maxRange,
-					explosionRadius: aoeRange,
+					explosionRadius,
 				}
 				const flingBullet = new Bullet(ship, target, bulletData)
 				Animate.apply(flingBullet)
@@ -879,7 +881,7 @@ export default {
 					hitsTowers: this.hitsTowers,
 					color: 0x0066aa,
 					opacity: 0.33,
-					radius: radius,
+					radius,
 					allies: true,
 					modify: {
 						name: this.name,
@@ -985,7 +987,7 @@ export default {
 				this.whirlpoolDamage = 0
 
 				const dps = this.getEffectDps(level) * 100
-				const aoeRange = this.getEffectRange(level)
+				const radius = this.getEffectRange(level)
 				new AreaOfEffect(ship, {
 					dot: true,
 					px: target[0],
@@ -993,7 +995,7 @@ export default {
 					hitsTowers: this.hitsTowers,
 					color: 0x0066ff,
 					opacity: 0.5,
-					radius: aoeRange,
+					radius,
 					attackDamage: dps,
 					attackPierce: 0,
 					afflicts: this.name,
@@ -1033,15 +1035,15 @@ export default {
 				ship.disableAttacking = true
 
 				const radius = this.getRange(level)
-				const damage = this.getEffectDps(level) * 100
+				const attackDamage = this.getEffectDps(level) * 100
 				new AreaOfEffect(ship, {
 					dot: true,
 					follow: true,
 					hitsTowers: this.hitsTowers,
 					color: 0x0066aa,
 					opacity: 0.5,
-					radius: radius,
-					attackDamage: damage,
+					radius,
+					attackDamage,
 					attackPierce: 0,
 					startAt,
 					endAt,
