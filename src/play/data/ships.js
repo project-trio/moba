@@ -1,4 +1,7 @@
 import * as THREE from 'three'
+
+import { AXIS_Z } from '@/play/data/constants'
+
 import Render from '@/play/render/render'
 
 //HELPERS
@@ -97,7 +100,7 @@ export default {
 
 		onDeath (renderTime) {
 			this.queueAnimation('cloudGroup', 'position', {
-				axis: 'z',
+				axis: AXIS_Z,
 				from: 0,
 				to: -50,
 				start: renderTime,
@@ -106,7 +109,7 @@ export default {
 		},
 		onRespawn (renderTime) {
 			this.queueAnimation('cloudGroup', 'position', {
-				axis: 'z',
+				axis: AXIS_Z,
 				from: -50,
 				to: 0,
 				pow: 2,

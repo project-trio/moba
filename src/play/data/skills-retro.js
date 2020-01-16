@@ -1,6 +1,7 @@
 import store from '@/store'
 
-import { TICK_DURATION } from '@/play/data/constants'
+import { TICK_DURATION, AXIS_X, AXIS_Y, AXIS_Z, MATH_ADD, MATH_MULTIPLY, MATH_SUBTRACT, PERCENT, STAT_ARMOR, STAT_ATTACK_COOLDOWN, STAT_DAMAGE_OVER_TIME, STAT_MOVE_SPEED, STAT_SIGHT_RANGE, TARGET_SELF, TARGET_GROUND, TARGET_ENEMY } from '@/play/data/constants'
+import { levelMultiplier } from '@/play/data/skillsHelper'
 
 import Render from '@/play/render/render'
 
@@ -10,19 +11,6 @@ import Util from '@/play/game/util'
 
 import AreaOfEffect from '@/play/game/entity/attack/aoe'
 import Bullet from '@/play/game/entity/attack/bullet'
-
-//LOCAL
-
-// const TARGET_NONE = 0
-const TARGET_SELF = 1
-const TARGET_GROUND = 2
-const TARGET_ENEMY = 3
-
-const levelMultiplier = function (base, level, multiplier) {
-	return base + (level - 1) * multiplier
-}
-
-//SKILLS
 
 export default {
 
@@ -54,11 +42,11 @@ export default {
 				// 18	47%
 				// 20	50%
 				// 22	52%
-				ship.modify(this.name, 'armor', 'add', this.getEffectArmor(level))
+				ship.modify(this.name, STAT_ARMOR, MATH_ADD, this.getEffectArmor(level))
 				ship.armorMesh = Render.outline(ship.base.children[0], 0x000000, 1.07)
 			},
 			end (ship) {
-				ship.modify(this.name, 'armor', null)
+				ship.modify(this.name, STAT_ARMOR, null)
 				if (ship.armorMesh) {
 					Render.remove(ship.armorMesh)
 					ship.armorMesh = null
@@ -80,11 +68,11 @@ export default {
 				return 200
 			},
 			start (index, level, ship) {
-				ship.modify(this.name, 'dot', 'subtract', this.getEffectRegen(level))
+				ship.modify(this.name, STAT_DAMAGE_OVER_TIME, MATH_SUBTRACT, this.getEffectRegen(level))
 				ship.healMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.1)
 			},
 			end (ship) {
-				ship.modify(this.name, 'dot', null)
+				ship.modify(this.name, STAT_DAMAGE_OVER_TIME, null)
 				if (ship.healMesh) {
 					Render.remove(ship.healMesh)
 					ship.healMesh = null
@@ -99,7 +87,7 @@ export default {
 				return levelMultiplier(10, level, 3)
 			},
 			levelup (index, level, ship) {
-				ship.modify(this.name, 'sightRange', 'add', this.getEffectRange(level) * 100)
+				ship.modify(this.name, STAT_SIGHT_RANGE, MATH_ADD, this.getEffectRange(level) * 100)
 			},
 		},
 	],
@@ -122,11 +110,11 @@ export default {
 				return 120
 			},
 			start (index, level, ship) {
-				ship.modify(this.name, 'attackCooldown', 'multiply', Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100)))
+				ship.modify(this.name, STAT_ATTACK_COOLDOWN, MATH_MULTIPLY, Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100)))
 				ship.overloadMesh = Render.outline(ship.top.children[0], 0xffcc00, 1.07)
 			},
 			end (ship) {
-				ship.modify(this.name, 'attackCooldown', null)
+				ship.modify(this.name, STAT_ATTACK_COOLDOWN, null)
 				if (ship.overloadMesh) {
 					Render.remove(ship.overloadMesh)
 					ship.overloadMesh = null
@@ -204,8 +192,8 @@ export default {
 					allies: true,
 					modify: {
 						name: this.name,
-						stat: 'dot',
-						method: 'subtract',
+						stat: STAT_DAMAGE_OVER_TIME,
+						method: MATH_SUBTRACT,
 						value: regen,
 						duration: effectDuration,
 					},
@@ -227,10 +215,10 @@ export default {
 				return 150
 			},
 			start (index, level, ship) {
-				ship.modify(this.name, 'sightRange', 'add', this.getEffectRange(level) * 100)
+				ship.modify(this.name, STAT_SIGHT_RANGE, MATH_ADD, this.getEffectRange(level) * 100)
 			},
 			end (ship) {
-				ship.modify(this.name, 'sightRange', null)
+				ship.modify(this.name, STAT_SIGHT_RANGE, null)
 			},
 		},
 		{
@@ -244,7 +232,7 @@ export default {
 			},
 			levelup (index, level, ship) {
 				const moveSpeed = Float.divide(this.getEffectMoveSpeed(level), 15)
-				ship.modify(this.name, 'moveSpeed', 'add', moveSpeed)
+				ship.modify(this.name, STAT_MOVE_SPEED, MATH_ADD, moveSpeed)
 			},
 		},
 	],
@@ -255,7 +243,7 @@ export default {
 		{
 			name: `Stun Bolt`,
 			description: 'Deals [[Damage]] to the target, and stuns them for [[Duration]].',
-			suffixMoveSpeed: '%',
+			suffixMoveSpeed: PERCENT,
 			hitsTowers: true,
 			target: TARGET_ENEMY,
 			continueToDestination: true,
@@ -289,7 +277,7 @@ export default {
 		{
 			name: 'Glue Bomb',
 			description: 'Slows enemy movement [[MoveSpeed]] for [[Duration]]',
-			suffixMoveSpeed: '%',
+			suffixMoveSpeed: PERCENT,
 			target: TARGET_GROUND,
 			getEffectRange (level) {
 				return 60 //TODO
@@ -321,8 +309,8 @@ export default {
 					allies: false,
 					modify: {
 						name: this.name,
-						stat: 'moveSpeed',
-						method: 'multiply',
+						stat: STAT_MOVE_SPEED,
+						method: MATH_MULTIPLY,
 						value: moveSpeed,
 						duration: effectDuration,
 					},
@@ -333,7 +321,7 @@ export default {
 		{
 			name: 'Boost',
 			description: 'Boost attack speed [[AttackSpeed]], and movement speed by [[MoveSpeed]]',
-			suffixAttackSpeed: '%',
+			suffixAttackSpeed: PERCENT,
 			divisorMoveSpeed: 10,
 			target: TARGET_SELF,
 			endOnDeath: true,
@@ -350,15 +338,15 @@ export default {
 				return 150
 			},
 			start (index, level, ship) {
-				ship.modify(this.name, 'attackCooldown', 'multiply', Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100)))
+				ship.modify(this.name, STAT_ATTACK_COOLDOWN, MATH_MULTIPLY, Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100)))
 				const moveSpeed = Float.divide(this.getEffectMoveSpeed(level), 10)
-				ship.modify(this.name, 'moveSpeed', 'add', moveSpeed)
+				ship.modify(this.name, STAT_MOVE_SPEED, MATH_ADD, moveSpeed)
 
 				ship.enrageMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
 			end (ship) {
-				ship.modify(this.name, 'attackCooldown', null)
-				ship.modify(this.name, 'moveSpeed', null)
+				ship.modify(this.name, STAT_ATTACK_COOLDOWN, null)
+				ship.modify(this.name, STAT_MOVE_SPEED, null)
 				if (ship.enrageMesh) {
 					Render.remove(ship.enrageMesh)
 					ship.enrageMesh = null
@@ -439,7 +427,7 @@ export default {
 				const moveConstant = flingBullet.moveConstant
 				const animationDuration = Math.sqrt(Util.pointDistance(ship.px, ship.py, target[0], target[1])) / moveConstant / 1000
 				flingBullet.queueAnimation('container', 'position', {
-					axis: 'z',
+					axis: AXIS_Z,
 					from: 0,
 					to: 0,
 					parabola: 2,
@@ -544,7 +532,7 @@ export default {
 					duration: duration,
 				})
 				ship.queueAnimation('container', 'position', {
-					axis: 'x',
+					axis: AXIS_X,
 					from: ship.px / 100,
 					to: destX / 100,
 					pow: 2,
@@ -552,7 +540,7 @@ export default {
 					duration: duration,
 				})
 				ship.queueAnimation('container', 'position', {
-					axis: 'y',
+					axis: AXIS_Y,
 					from: ship.py / 100,
 					to: destY / 100,
 					pow: 2,
@@ -578,7 +566,7 @@ export default {
 				return levelMultiplier(2, level, 2)
 			},
 			levelup (index, level, ship) {
-				ship.modify(this.name, 'armor', 'add', this.getEffectArmor(level))
+				ship.modify(this.name, STAT_ARMOR, MATH_ADD, this.getEffectArmor(level))
 			},
 		},
 	],
@@ -589,7 +577,7 @@ export default {
 		{
 			name: 'Frenzy',
 			description: 'Increases attack speed [[AttackSpeed]]',
-			suffixAttackSpeed: '%',
+			suffixAttackSpeed: PERCENT,
 			target: TARGET_SELF,
 			endOnDeath: true,
 			getEffectAttackSpeed (level) {
@@ -602,11 +590,11 @@ export default {
 				return levelMultiplier(300, level, -10)
 			},
 			start (index, level, ship, target, startAt, endAt) {
-				ship.modify(this.name, 'attackCooldown', 'multiply', Float.divide(50, this.getEffectAttackSpeed(level)))
+				ship.modify(this.name, STAT_ATTACK_COOLDOWN, MATH_MULTIPLY, Float.divide(50, this.getEffectAttackSpeed(level)))
 				ship.frenzyMesh = Render.outline(ship.top.children[0], 0xffaa00, 1.07)
 			},
 			end (ship) {
-				ship.modify(this.name, 'attackCooldown', null)
+				ship.modify(this.name, STAT_ATTACK_COOLDOWN, null)
 				if (ship.frenzyMesh) {
 					Render.remove(ship.frenzyMesh)
 					ship.frenzyMesh = null
@@ -631,7 +619,7 @@ export default {
 				ship.removeTarget()
 				ship.invisible = true
 				const moveSpeed = this.getEffectMoveSpeed(level)
-				ship.modify(this.name, 'moveSpeed', 'add', moveSpeed)
+				ship.modify(this.name, STAT_MOVE_SPEED, MATH_ADD, moveSpeed)
 
 				const animDuration = 500
 				ship.queueAnimation(null, 'opacity', {
@@ -656,7 +644,7 @@ export default {
 				}
 			},
 			end (ship) {
-				ship.modify(this.name, 'moveSpeed', null)
+				ship.modify(this.name, STAT_MOVE_SPEED, null)
 
 				ship.invisible = false
 				ship.endInvisible = null

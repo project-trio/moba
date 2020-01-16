@@ -31,4 +31,26 @@ module.exports = {
 		0x7799aa,
 		0xaa7788,
 	],
+
+	AXIS_X: 'x',
+	AXIS_Y: 'y',
+	AXIS_Z: 'z',
+
+	MATH_ADD: 'add',
+	MATH_DIVIDE: 'divide',
+	MATH_MULTIPLY: 'multiply',
+	MATH_SUBTRACT: 'subtract',
+
+	PERCENT: '%',
+
+	STAT_ATTACK_COOLDOWN: 'attackCooldown',
+	STAT_ARMOR: 'armor',
+	STAT_DAMAGE_OVER_TIME: 'dot',
+	STAT_MOVE_SPEED: 'moveSpeed',
+	STAT_SIGHT_RANGE: 'sightRange',
+
+	// TARGET_NONE: 0,
+	TARGET_SELF: 1,
+	TARGET_GROUND: 2,
+	TARGET_ENEMY: 3,
 }

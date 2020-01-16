@@ -1,5 +1,7 @@
 import store from '@/store'
 
+import { STAT_MOVE_SPEED } from '@/play/data/constants'
+
 import Local from '@/play/local'
 import Render from '@/play/render/render'
 import Float from '@/play/game/helpers/float'
@@ -177,7 +179,7 @@ class Bullet {
 					new Bullet(this.target, this.source, data, 0, this.px, this.py, this.container.rotation.z) //TODO rotation
 				}
 			}
-			if (this.stunDuration && (this.hitsTowers || !this.target.tower) && (!this.modify || this.target.modifierIndex('moveSpeed', 'Poison') !== -1)) {
+			if (this.stunDuration && (this.hitsTowers || !this.target.tower) && (!this.modify || this.target.modifierIndex(STAT_MOVE_SPEED, 'Poison') !== -1)) {
 				this.target.stun(renderTime, this.stunDuration)
 			} else if (this.modify) {
 				this.target.modifyData(renderTime, this.modify)

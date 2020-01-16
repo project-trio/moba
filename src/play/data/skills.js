@@ -1,5 +1,8 @@
 import store from '@/store'
 
+import { AXIS_X, AXIS_Y, AXIS_Z, MATH_ADD, MATH_MULTIPLY, MATH_SUBTRACT, PERCENT, STAT_ARMOR, STAT_ATTACK_COOLDOWN, STAT_DAMAGE_OVER_TIME, STAT_MOVE_SPEED, TARGET_SELF, TARGET_GROUND, TARGET_ENEMY } from '@/play/data/constants'
+import { levelMultiplier, isDisabledBy } from '@/play/data/skillsHelper'
+
 import Render from '@/play/render/render'
 
 import Animate from '@/play/game/helpers/animate'
@@ -10,28 +13,6 @@ import AreaOfEffect from '@/play/game/entity/attack/aoe'
 import Bullet from '@/play/game/entity/attack/bullet'
 
 import Unit from '@/play/game/entity/unit/unit'
-
-//LOCAL
-
-// const TARGET_NONE = 0
-const TARGET_SELF = 1
-const TARGET_GROUND = 2
-const TARGET_ENEMY = 3
-
-const levelMultiplier = function (base, level, multiplier) {
-	return base + (level - 1) * multiplier
-}
-
-const isDisabledBy = function (actives) {
-	for (let idx = actives.length - 1; idx >= 0; idx -= 1) {
-		if (actives[idx] > 0 && this.disabledBy[idx]) {
-			return true
-		}
-	}
-	return false
-}
-
-//SKILLS
 
 export default {
 
@@ -58,7 +39,7 @@ export default {
 				return levelMultiplier(100, level, -4)
 			},
 			start (index, level, ship, target, startAt, endAt, cooldown) {
-				ship.modify(this.name, 'moveSpeed', 'multiply', 5)
+				ship.modify(this.name, STAT_MOVE_SPEED, MATH_MULTIPLY, 5)
 				ship.uncontrollable = true
 				ship.disableAttacking = true
 				ship.opacity(0.75)
@@ -70,7 +51,7 @@ export default {
 			},
 			end (ship, level) {
 				ship.onStopped = null
-				ship.modify(this.name, 'moveSpeed', null)
+				ship.modify(this.name, STAT_MOVE_SPEED, null)
 				ship.opacity(1)
 				ship.uncontrollable = false
 				ship.disableAttacking = false
@@ -126,7 +107,7 @@ export default {
 		{
 			name: 'Prickle',
 			description: 'Heal for [[Strength]] of damage taken, and deal half that amount back as damage to attackers',
-			suffixStrength: '%',
+			suffixStrength: PERCENT,
 			target: TARGET_SELF,
 			disabledBy: [false, true, null],
 			isDisabledBy: isDisabledBy,
@@ -249,7 +230,7 @@ export default {
 
 				const duration = endAt - startAt
 				ship.queueAnimation('container', 'position', {
-					axis: 'x',
+					axis: AXIS_X,
 					from: ship.px / 100,
 					to: destX / 100,
 					pow: 2,
@@ -257,7 +238,7 @@ export default {
 					duration: duration,
 				})
 				ship.queueAnimation('container', 'position', {
-					axis: 'y',
+					axis: AXIS_Y,
 					from: ship.py / 100,
 					to: destY / 100,
 					pow: 2,
@@ -270,7 +251,7 @@ export default {
 
 				ship.queueAnimation('top', 'position', {
 					child: 0,
-					axis: 'z',
+					axis: AXIS_Z,
 					from: 0,
 					to: 0,
 					parabola: 4,
@@ -365,8 +346,8 @@ export default {
 					allies: true,
 					modify: {
 						name: this.name,
-						stat: 'dot',
-						method: 'subtract',
+						stat: STAT_DAMAGE_OVER_TIME,
+						method: MATH_SUBTRACT,
 						value: regen,
 						duration: 1000,
 					},
@@ -377,7 +358,7 @@ export default {
 			name: 'Turbo Wave',
 			description: 'Speed up nearby allies by [[MoveSpeed]]',
 			toggle: 10,
-			suffixMoveSpeed: '%',
+			suffixMoveSpeed: PERCENT,
 			target: TARGET_SELF,
 			disabledBy: [true, null, true],
 			isDisabledBy: isDisabledBy,
@@ -403,8 +384,8 @@ export default {
 					allies: true,
 					modify: {
 						name: this.name,
-						stat: 'moveSpeed',
-						method: 'multiply',
+						stat: STAT_MOVE_SPEED,
+						method: MATH_MULTIPLY,
 						value: moveSpeed,
 						duration: 1000,
 					},
@@ -415,7 +396,7 @@ export default {
 			name: 'Power Wave',
 			description: 'Boost nearby allies\' attack speed by [[AttackSpeed]]',
 			toggle: 10,
-			suffixAttackSpeed: '%',
+			suffixAttackSpeed: PERCENT,
 			target: TARGET_SELF,
 			disabledBy: [true, true, null],
 			isDisabledBy: isDisabledBy,
@@ -440,8 +421,8 @@ export default {
 					allies: true,
 					modify: {
 						name: this.name,
-						stat: 'attackCooldown',
-						method: 'multiply',
+						stat: STAT_ATTACK_COOLDOWN,
+						method: MATH_MULTIPLY,
 						value: attackCooldown,
 						duration: 1000,
 					},
@@ -456,7 +437,7 @@ export default {
 		{
 			name: `Poison Sting`,
 			description: 'Deals [[Damage]] to the target, and slowing by [[MoveSpeed]] for [[Duration]]. If target is [[poisoned:poison]], they are stunned instead.',
-			suffixMoveSpeed: '%',
+			suffixMoveSpeed: PERCENT,
 			hitsTowers: false,
 			target: TARGET_ENEMY,
 			isDisabledBy: null,
@@ -490,8 +471,8 @@ export default {
 					maxRange: maxRange,
 					modify: {
 						name: 'Poison',
-						stat: 'moveSpeed',
-						method: 'multiply',
+						stat: STAT_MOVE_SPEED,
+						method: MATH_MULTIPLY,
 						value: moveSpeed,
 						duration: 1000,
 					},
@@ -504,7 +485,7 @@ export default {
 		{
 			name: 'Acid Drop',
 			description: 'Spit a toxic glob on the ground for [[Duration]], [[poisoning:poison]] enemies for [[Dps]] and [[MoveSpeed]] move speed',
-			suffixMoveSpeed: '%',
+			suffixMoveSpeed: PERCENT,
 			target: TARGET_GROUND,
 			hitsTowers: true,
 			isDisabledBy: null,
@@ -545,8 +526,8 @@ export default {
 					allies: false,
 					modify: {
 						name: 'Poison',
-						stat: 'moveSpeed',
-						method: 'multiply',
+						stat: STAT_MOVE_SPEED,
+						method: MATH_MULTIPLY,
 						value: moveSpeed,
 						duration: effectDuration,
 					},
@@ -557,8 +538,8 @@ export default {
 		{
 			name: 'Enrage',
 			description: 'Boost attack speed [[AttackSpeed]], and movement speed [[MoveSpeed]]',
-			suffixAttackSpeed: '%',
-			suffixMoveSpeed: '%',
+			suffixAttackSpeed: PERCENT,
+			suffixMoveSpeed: PERCENT,
 			target: TARGET_SELF,
 			isDisabledBy: null,
 			endOnDeath: true,
@@ -575,14 +556,14 @@ export default {
 				return levelMultiplier(150, level, -5)
 			},
 			start (index, level, ship) {
-				ship.modify(this.name, 'attackCooldown', 'multiply', Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100)))
-				ship.modify(this.name, 'moveSpeed', 'multiply', Float.add(1, Float.divide(this.getEffectMoveSpeed(level), 100)))
+				ship.modify(this.name, STAT_ATTACK_COOLDOWN, MATH_MULTIPLY, Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100)))
+				ship.modify(this.name, STAT_MOVE_SPEED, MATH_MULTIPLY, Float.add(1, Float.divide(this.getEffectMoveSpeed(level), 100)))
 
 				ship.enrageMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
 			end (ship) {
-				ship.modify(this.name, 'attackCooldown', null)
-				ship.modify(this.name, 'moveSpeed', null)
+				ship.modify(this.name, STAT_ATTACK_COOLDOWN, null)
+				ship.modify(this.name, STAT_MOVE_SPEED, null)
 				if (ship.enrageMesh) {
 					Render.remove(ship.enrageMesh)
 					ship.enrageMesh = null
@@ -645,7 +626,7 @@ export default {
 				return levelMultiplier(150, level, -10)
 			},
 			start (index, level, ship, target, startAt, endAt, cooldown) {
-				ship.modify(this.name, 'moveSpeed', 'multiply', 3)
+				ship.modify(this.name, STAT_MOVE_SPEED, MATH_MULTIPLY, 3)
 				ship.base.aim = ship.moveTargetAngle
 				ship.base.rotation.z = ship.moveTargetAngle
 				ship.uncontrollable = true
@@ -663,7 +644,7 @@ export default {
 				const angleChange = Math.PI * 2
 				ship.queueAnimation('base', 'rotation', {
 					child: 1,
-					axis: 'x',
+					axis: AXIS_X,
 					from: 0.5 * Math.PI,
 					to: 0.5 * Math.PI,
 					parabola: 2,
@@ -672,7 +653,7 @@ export default {
 					duration: duration,
 				})
 				ship.queueAnimation('model', 'position', {
-					axis: 'z',
+					axis: AXIS_Z,
 					from: 0,
 					to: 0,
 					parabola: 4,
@@ -683,7 +664,7 @@ export default {
 				ship.propGroup.visible = false
 			},
 			end (ship) {
-				ship.modify(this.name, 'moveSpeed', null)
+				ship.modify(this.name, STAT_MOVE_SPEED, null)
 				ship.onStopped = null
 				ship.propGroup.visible = true
 				ship.base.rotation.x = 0
@@ -697,7 +678,7 @@ export default {
 		{
 			name: 'Rebound',
 			description: 'Attacking heals for [[Rebound]] of damage dealt',
-			suffixRebound: '%',
+			suffixRebound: PERCENT,
 			target: TARGET_SELF,
 			disabledBy: [false, true, null],
 			isDisabledBy: isDisabledBy,
@@ -799,7 +780,7 @@ export default {
 				const moveConstant = flingBullet.moveConstant
 				const animationDuration = Math.sqrt(Util.pointDistance(ship.px, ship.py, target[0], target[1])) / moveConstant / 1000
 				flingBullet.queueAnimation('container', 'position', {
-					axis: 'z',
+					axis: AXIS_Z,
 					from: 0,
 					to: 0,
 					parabola: 2,
@@ -856,7 +837,7 @@ export default {
 			},
 			start (index, level, ship, target, startAt, endAt) {
 				const shieldDamage = this.getEffectDamage(level) * 100
-				ship.modify(`${ship.id}${this.name}`, 'shield', 'add', shieldDamage, endAt, () => {
+				ship.modify(`${ship.id}${this.name}`, 'shield', MATH_ADD, shieldDamage, endAt, () => {
 					// p('cancel shield')
 					ship.endSkill(index)
 				})
@@ -902,8 +883,8 @@ export default {
 					allies: true,
 					modify: {
 						name: this.name,
-						stat: 'armor',
-						method: 'add',
+						stat: STAT_ARMOR,
+						method: MATH_ADD,
 						value: armor,
 						duration: 200,
 					},
@@ -1046,7 +1027,7 @@ export default {
 				return levelMultiplier(150, level, -10)
 			},
 			start (index, level, ship, target, startAt, endAt) {
-				ship.modify(this.name, 'moveSpeed', 'multiply', Float.add(1, Float.divide(this.getEffectMoveSpeed(level), 100)))
+				ship.modify(this.name, STAT_MOVE_SPEED, MATH_MULTIPLY, Float.add(1, Float.divide(this.getEffectMoveSpeed(level), 100)))
 				ship.removeTarget()
 				ship.untargetable = true
 				ship.disableAttacking = true
@@ -1067,7 +1048,7 @@ export default {
 				})
 
 				ship.queueAnimation('model', 'position', {
-					axis: 'z',
+					axis: AXIS_Z,
 					from: 0,
 					to: 0,
 					parabola: 8,
@@ -1077,7 +1058,7 @@ export default {
 				})
 			},
 			end (ship) {
-				ship.modify(this.name, 'moveSpeed', null)
+				ship.modify(this.name, STAT_MOVE_SPEED, null)
 				ship.model.position.z = 0
 				ship.untargetable = false
 				ship.disableAttacking = false
@@ -1096,7 +1077,7 @@ export default {
 		{
 			name: 'Brute Force',
 			description: 'Boosts attack speed [[AttackSpeed]], while more vulnerable to damage',
-			suffixAttackSpeed: '%',
+			suffixAttackSpeed: PERCENT,
 			target: TARGET_SELF,
 			disabledBy: [null, false, true],
 			isDisabledBy: isDisabledBy,
@@ -1111,13 +1092,13 @@ export default {
 				return levelMultiplier(150, level, 5)
 			},
 			start (index, level, ship, target, startAt, endAt) {
-				ship.modify(this.name, 'attackCooldown', 'multiply', Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100)))
-				ship.modify(this.name, 'armor', 'multiply', 0.5)
+				ship.modify(this.name, STAT_ATTACK_COOLDOWN, MATH_MULTIPLY, Float.subtract(1, Float.divide(this.getEffectAttackSpeed(level), 100)))
+				ship.modify(this.name, STAT_ARMOR, MATH_MULTIPLY, 0.5)
 				ship.bruteForceMesh = Render.outline(ship.top.children[0], 0xff0000, 1.07)
 			},
 			end (ship) {
-				ship.modify(this.name, 'attackCooldown', null)
-				ship.modify(this.name, 'armor', null)
+				ship.modify(this.name, STAT_ATTACK_COOLDOWN, null)
+				ship.modify(this.name, STAT_ARMOR, null)
 				if (ship.bruteForceMesh) {
 					Render.remove(ship.bruteForceMesh)
 					ship.bruteForceMesh = null
@@ -1127,7 +1108,7 @@ export default {
 		{
 			name: 'Encrypt',
 			description: 'Turn invisible and untargetable to enemies, boosting move speed [[MoveSpeed]]',
-			suffixMoveSpeed: '%',
+			suffixMoveSpeed: PERCENT,
 			target: TARGET_SELF,
 			disabledBy: [false, null, true],
 			isDisabledBy: isDisabledBy,
@@ -1144,7 +1125,7 @@ export default {
 			start (index, level, ship, target, startAt, endAt, cooldown) {
 				ship.removeTarget()
 				ship.invisible = true
-				ship.modify(this.name, 'moveSpeed', 'multiply', Float.add(1, Float.divide(this.getEffectMoveSpeed(level), 100)))
+				ship.modify(this.name, STAT_MOVE_SPEED, MATH_MULTIPLY, Float.add(1, Float.divide(this.getEffectMoveSpeed(level), 100)))
 
 				const animDuration = 500
 				ship.queueAnimation(null, 'opacity', {
@@ -1169,7 +1150,7 @@ export default {
 				}
 			},
 			end (ship) {
-				ship.modify(this.name, 'moveSpeed', null)
+				ship.modify(this.name, STAT_MOVE_SPEED, null)
 
 				ship.invisible = false
 				ship.endInvisible = null
@@ -1192,14 +1173,14 @@ export default {
 				return 100
 			},
 			start (index, level, ship) {
-				ship.modify(this.name, 'dot', 'subtract', this.getEffectRegen(level))
-				ship.modify(this.name, 'moveSpeed', 'multiply', 0.33)
+				ship.modify(this.name, STAT_DAMAGE_OVER_TIME, MATH_SUBTRACT, this.getEffectRegen(level))
+				ship.modify(this.name, STAT_MOVE_SPEED, MATH_MULTIPLY, 0.33)
 
 				ship.salvageMesh = Render.outline(ship.top.children[0], 0x0000ff, 1.07)
 			},
 			end (ship) {
-				ship.modify(this.name, 'dot', null)
-				ship.modify(this.name, 'moveSpeed', null)
+				ship.modify(this.name, STAT_DAMAGE_OVER_TIME, null)
+				ship.modify(this.name, STAT_MOVE_SPEED, null)
 
 				if (ship.salvageMesh) {
 					Render.remove(ship.salvageMesh)

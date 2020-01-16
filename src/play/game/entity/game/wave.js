@@ -1,3 +1,5 @@
+import { AXIS_Z } from '@/play/data/constants'
+
 import Mini from '@/play/game/entity/unit/mini'
 
 export default {
@@ -24,7 +26,7 @@ export default {
 						})
 						mini.model.position.z = -10
 						mini.queueAnimation('model', 'position', {
-							axis: 'z',
+							axis: AXIS_Z,
 							from: -10,
 							to: 0,
 							start: renderTime,

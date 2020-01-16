@@ -2,6 +2,7 @@ import * as THREE from 'three'
 
 import store from '@/store'
 
+import { AXIS_Z } from '@/play/data/constants'
 import towersData from '@/play/data/towers'
 import retroTowersData from '@/play/data/towers-retro'
 
@@ -103,7 +104,7 @@ class Tower extends Unit {
 		this.isBlocking = false
 		const fallDuration = 1500
 		this.queueAnimation('model', 'position', { //TODO ease
-			axis: 'z',
+			axis: AXIS_Z,
 			to: -43,
 			start: renderTime,
 			duration: fallDuration,

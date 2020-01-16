@@ -2,7 +2,8 @@ import * as THREE from 'three'
 
 import store from '@/store'
 
-import { TESTING } from '@/play/data/constants'
+import { TESTING, MATH_MULTIPLY, STAT_MOVE_SPEED } from '@/play/data/constants'
+
 import Local from '@/play/local'
 
 import shipStats from '@/play/data/ships'
@@ -90,7 +91,7 @@ class Ship extends Movable {
 		this.respawned = true
 		this.isBlocking = false
 		this.reemergeAt = TESTING ? 2000 : 4000 //SAMPLE
-		this.modify('Spawn', 'moveSpeed', 'multiply', 2)
+		this.modify('Spawn', STAT_MOVE_SPEED, MATH_MULTIPLY, 2)
 
 		this.queuedForActivation = [false, false, false]
 		this.queuedForTarget = null
@@ -498,7 +499,7 @@ class Ship extends Movable {
 		this.isBlocking = false
 		this.isDying = false
 		this.stunnedUntil = 0
-		this.modify('Spawn', 'moveSpeed', 'multiply', 0.5)
+		this.modify('Spawn', STAT_MOVE_SPEED, MATH_MULTIPLY, 0.5)
 
 		this.setLocation(this.ox, this.oy)
 
@@ -513,7 +514,7 @@ class Ship extends Movable {
 		this.timeOfDeath = null
 		this.isBlocking = true
 		this.opacity(1.0)
-		this.modify('Spawn', 'moveSpeed', null)
+		this.modify('Spawn', STAT_MOVE_SPEED, null)
 
 		this.infoContainer.visible = true
 		if (this.isLocal) {

@@ -2,7 +2,7 @@ import store from '@/store'
 
 import Bridge from '@/play/events/bridge'
 
-import { TICK_DURATION, TICKS_PER_SECOND } from '@/play/data/constants'
+import { TICK_DURATION, TICKS_PER_SECOND, MATH_DIVIDE, MATH_SUBTRACT, STAT_ARMOR, STAT_DAMAGE_OVER_TIME, STAT_MOVE_SPEED, STAT_SIGHT_RANGE } from '@/play/data/constants'
 import Local from '@/play/local'
 
 import Render from '@/play/render/render'
@@ -147,9 +147,9 @@ class Unit {
 			if (statBase.moveSpeed) {
 				this.modifiers.moveSpeed = []
 				this.stats.moveSpeed = statBase.moveSpeed[0]
-				this.modify('Constant', 'moveSpeed', 'divide', TICKS_PER_SECOND * 5)
+				this.modify('Constant', STAT_MOVE_SPEED, MATH_DIVIDE, TICKS_PER_SECOND * 5)
 			}
-			this.modify('Constant', 'dot', 'divide', TICKS_PER_SECOND / 10)
+			this.modify('Constant', STAT_DAMAGE_OVER_TIME, MATH_DIVIDE, TICKS_PER_SECOND / 10)
 
 			// Health Bar
 			let hpHeight, hpWidth, hpOffsetZ
@@ -342,11 +342,11 @@ class Unit {
 			result = Float[mathMethod](result, byValue)
 		}
 		this.current[statName] = result
-		if (statName === 'moveSpeed') {
+		if (statName === STAT_MOVE_SPEED) {
 			this.cacheMoveSpeed = result / TICK_DURATION
-		} else if (statName === 'sightRange') {
+		} else if (statName === STAT_SIGHT_RANGE) {
 			this.sightRangeCheck = Util.squared(result)
-		} else if (statName === 'armor') {
+		} else if (statName === STAT_ARMOR) {
 			this.armorCheck = calculateArmor(result)
 		}
 		if (changingModifier && this.selected) {
@@ -576,7 +576,7 @@ class Unit {
 			if (this.repairDamageRatio) {
 				const duration = 2000
 				const healthPer = Math.floor(Float.multiply(this.repairDamageRatio, damage) / (duration / 100))
-				this.modify(`${source.id}${renderTime}`, 'dot', 'subtract', healthPer, renderTime + duration)
+				this.modify(`${source.id}${renderTime}`, STAT_DAMAGE_OVER_TIME, MATH_SUBTRACT, healthPer, renderTime + duration)
 			}
 		}
 		let dealDamage = damage
