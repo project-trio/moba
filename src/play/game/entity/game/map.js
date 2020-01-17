@@ -212,7 +212,7 @@ const GameMap = function (mapName, parent) {
 			return true
 		}
 
-		if (!Local.game.tutorial && (TESTING || Local.player.name === 'bot')) {
+		if (TESTING && !Local.game.tutorialMode) {
 			automateTimer = setInterval(() => { //SAMPLE
 				if (Local.player) {
 					const dx = Math.round(Math.random() * 100 * layout.width)

@@ -35,8 +35,8 @@ export default function (gid, mode, size) {
 	this.playing = false
 	this.finished = false
 	this.serverUpdate = -1
-	this.bots = mode === 'bots'
-	this.tutorial = mode === 'tutorial'
+	this.botsMode = mode === 'bots'
+	this.tutorialMode = mode === 'tutorial'
 
 	// Update
 
@@ -194,7 +194,7 @@ export default function (gid, mode, size) {
 
 		this.centerOnUnit()
 
-		if (mode === 'tutorial') {
+		if (this.tutorialMode) {
 			Tutorial.start()
 		}
 	}

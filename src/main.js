@@ -31,7 +31,7 @@ util.addListener(window, 'touchstart', emptyFunction)
 router.beforeEach((to, from, next) => {
 	if (to.name === 'Lobby') {
 		if (!storage.get('tutorial')) {
-			return next({name: 'Tutorial'})
+			return next({ name: 'Tutorial' })
 		}
 	}
 	next()

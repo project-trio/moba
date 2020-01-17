@@ -17,7 +17,6 @@ export default {
 	props: {
 		selectedSize: Number,
 		selectedMap: String,
-		bots: Boolean,
 	},
 
 	computed: {
