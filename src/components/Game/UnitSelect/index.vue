@@ -6,7 +6,7 @@
 		</div>
 		<h1 v-if="tall">choose your unit</h1>
 		<div class="flex justify-center flex-wrap">
-			<div class="selection-half  mb-8 rounded-lg bg-gray-100">
+			<div class="selection-half  mb-8 rounded-lg bg-gray-300">
 				<canvas id="preview" class="wh-full" />
 			</div>
 			<div class="selection-half  flex justify-center flex-wrap" :class="`team-${localTeam + 1}`">

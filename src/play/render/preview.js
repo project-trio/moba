@@ -98,7 +98,7 @@ export default {
 		scene = new THREE.Scene()
 
 		const geometry = new THREE.PlaneBufferGeometry(128, 128)
-		const material = new THREE.MeshLambertMaterial({ color: 0xaaaaaa })
+		const material = new THREE.MeshLambertMaterial({ color: 0xa7acb1 })
 		const rectangle = new THREE.Mesh(geometry, material)
 		rectangle.rotation.z = unitRotation
 
