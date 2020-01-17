@@ -4,8 +4,8 @@
 		<h1>Loading...</h1>
 	</div>
 	<div v-else>
-		<h1>{{ size }} v {{ size }}</h1>
-		<h2>{{ map }} map</h2>
+		<h1 class="m-header">{{ size }} v {{ size }}</h1>
+		<h2 class="m-header">{{ map }} map</h2>
 		<div class="scrolls  w-full h-80 overflow-x-auto  md-max:flex-row md-max:h-auto  flex flex-col justify-between">
 			<div class="team-players team-1">
 				<h3 class="vertical">Team Blue</h3>

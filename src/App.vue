@@ -120,9 +120,15 @@ html, body {
 
 h1 {
 	@apply text-5xl;
+	&.m-header {
+		@apply mt-12 mb-6;
+	}
 }
 h2 {
 	@apply text-3xl;
+	&.m-header {
+		@apply mt-4 mb-2;
+	}
 }
 h3 {
 	@apply text-2xl;

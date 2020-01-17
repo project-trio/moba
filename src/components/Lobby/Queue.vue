@@ -1,34 +1,32 @@
 <template>
 <div class="lobby-queue wh-full scrolls">
-	<div class="m-header">
-		<h1>{{ queuedPlayers }} in queue</h1>
-	</div>
-	<h2>minimum game size:</h2>
+	<h1 class="m-header">{{ queuedPlayers }} in queue</h1>
+	<h2 class="m-header">Minimum game size:</h2>
 	<GameSizes :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="true" @select="selectedSize = $event" />
-	<h2>vote for a map:</h2>
+	<h2 class="m-header">Vote for a map:</h2>
 	<GameMaps :selectedSize="selectedSize" :selectedMap="selectedMap" @select="selectedMap = $event" />
 
-	<div class="m-header">
+	<div class="my-6">
 		<div v-if="enoughPlayersForGame">
 			<button class="ready-button big interactive" :class="{ selected: didSayReady }" @click="onReady">
-				{{ didSayReady ? 'ready!' : `ready? (${queuePendingForSize === selectedSize ? queueSecondsRemaining : '…'})` }}
+				Ready{{ didSayReady ? '!' : `? (${queuePendingForSize === selectedSize ? queueSecondsRemaining : '…'})` }}
 			</button>
 		</div>
 		<div v-else>
-			<h2>waiting for {{ pluralize(waitingForSize, 'player') }}...</h2>
+			<h2 class="m-header">Waiting for {{ pluralize(waitingForSize, 'player') }}...</h2>
 			<p v-if="enoughWithOneMore">Reduce size to <span class="bg-gray-300 font-semibold">{{ enoughWithOneMore }} v {{ enoughWithOneMore }}</span> to start now!</p>
 		</div>
 	</div>
 	<div v-if="notificationPermission !== 'granted'" class="queue-notification">
-		<div v-if="notificationPermission === 'unavailable'">
+		<p v-if="notificationPermission === 'unavailable'">
 			(Notifications are unavailable in your browser.)
-		</div>
-		<div v-else-if="notificationPermission === 'denied'">
+		</p>
+		<p v-else-if="notificationPermission === 'denied'">
 			To be notified when a game becomes available while this page is in the background, please enable notifications for this site in your browser settings.
-		</div>
+		</p>
 		<div v-else>
 			<button class="big interactive  bg-info-500" :class="{ selected: didSayReady }" @click="onNotifications">Enable notifications!</button>
-			Lets you know when a game is available while the page is in the background.
+			<p>Lets you know when a game is available while the page is in the background.</p>
 		</div>
 	</div>
 	<LobbyChat />
@@ -227,9 +225,5 @@ export default {
 <style lang="postcss" scoped>
 .ready-button.selected {
 	background-color: #1ea;
-}
-
-.m-header {
-	@apply mx-auto my-12;
 }
 </style>

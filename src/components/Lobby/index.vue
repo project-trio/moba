@@ -1,11 +1,11 @@
 <template>
 <div class="lobby scrolls">
 	<div class="content">
-		<h1>moba lobby</h1>
-		<h2>hello {{ username }}!</h2>
-		<h3>{{ playersOnline }} online</h3>
-		<router-link :to="{ name: 'Queue' }" tag="button" class="big interactive  my-2">enter queue</router-link>
-		<router-link :to="{ name: 'Create' }" tag="button" class="big interactive outlined">{{ isAdmin ? 'create game' : 'training bots' }}</router-link>
+		<h1 class="m-header">Moba Lobby</h1>
+		<h2 class="m-header">Hello {{ username }}!</h2>
+		<h3 class="m-header">{{ playersOnline }} online</h3>
+		<router-link :to="{ name: 'Queue' }" tag="button" class="big interactive  my-2">Enter queue</router-link>
+		<router-link :to="{ name: 'Create' }" tag="button" class="big interactive outlined">{{ isAdmin ? 'Create game' : 'Training bots' }}</router-link>
 		<div>
 			<router-link v-for="game in games" :key="game.id" :to="{ name: 'Join', params: { gid: game.id } }" tag="div" class="list-game interactive  m-2 p-4">
 				<div>{{ game.mode }} game - {{ game.state }}</div>

@@ -2,9 +2,9 @@
 <div class="absolute inset-0 wh-full mx-auto">
 	<div class="contents  wh-full p-4">
 		<div class="start-countdown">
-			<h1>starting in {{ countdownTime }}s</h1>
+			<h1>Starting in {{ countdownTime }}s</h1>
 		</div>
-		<h1 v-if="tall">choose your unit</h1>
+		<h1 v-if="tall">Choose your unit</h1>
 		<div class="flex justify-center flex-wrap">
 			<div class="selection-half  mb-8 rounded-lg bg-gray-300">
 				<canvas id="preview" class="wh-full" />

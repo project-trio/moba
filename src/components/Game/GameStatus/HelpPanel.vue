@@ -1,7 +1,7 @@
 <template>
 <div class="bar-section panel  pointer-events-none w-64">
 	<h1>Help</h1>
-	<p>Click the gear icon to access quality settings. Tweak these settings as needed if your framerate is dropping below 30.</p>
+	<p>Click the gear icon to access quality settings.</p>
 	<h2>Hotkeys</h2>
 	<h3>Skills</h3>
 	<p>Activate: <b>1</b>, <b>2</b>, <b>3</b></p>

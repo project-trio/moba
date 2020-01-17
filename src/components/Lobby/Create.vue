@@ -2,16 +2,16 @@
 <div class="lobby-create scrolls">
 	<h1>{{ isAdmin ? 'create game' : 'training bots' }}</h1>
 	<div v-if="isAdmin">
-		<h2>game type:</h2>
+		<h2 class="m-header">game type:</h2>
 		<SelectionGroup>
 			<button v-for="mode in gameModes" :key="mode.name" class="big interactive" :class="{ selected: mode === selectedMode }" @click="onGameMode(mode)">{{ mode.name }}</button>
 			<div class="m-auto text-center">{{ selectedMode.description }}</div>
 		</SelectionGroup>
 	</div>
-	<h2>{{ pvpMode ? 'max players' : 'game size' }}:</h2>
+	<h2 class="m-header">{{ pvpMode ? 'max players' : 'game size' }}:</h2>
 	<GameSizes :gameSizes="gameSizes" :selectedSize="selectedSize" :pvpMode="pvpMode" @select="selectedSize = $event" />
 	<div v-if="selectedSize > 0">
-		<h2>map:</h2>
+		<h2 class="m-header">map:</h2>
 		<GameMaps :selectedSize="selectedSize" :selectedMap="selectedMap" @select="selectedMap = $event" />
 		<button class="interactive  mt-8" @click="onSubmit">confirm</button>
 	</div>
