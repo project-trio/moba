@@ -8,7 +8,7 @@
 
 	<SettingsButtons class="bar-section" />
 
-	<PlayerBar class="ui-bar  absolute left-0 right-0 flex justify-center select-none pointer-events-none" />
+	<PlayerBar class="ui-bar" />
 </div>
 </template>
 

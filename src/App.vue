@@ -132,7 +132,7 @@ h4 {
 }
 
 .scrolls {
-	@apply relative scrolling-touch overflow-x-hidden overflow-y-auto;
+	@apply scrolling-touch overflow-x-hidden overflow-y-scroll;
 }
 
 .interactive, button {
@@ -164,6 +164,12 @@ button {
 	transition: 0.3s ease;
 }
 
+.team-0 {
+	@apply text-gray-500 border-gray-500;
+}
+.team-0-bg {
+	@apply bg-gray-500 border-gray-500;
+}
 .team-1 {
 	color: #5599cc;
 	border-color: #5599cc;

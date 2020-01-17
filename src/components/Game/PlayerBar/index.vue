@@ -1,8 +1,8 @@
 <template>
-<div class="bottom-0">
+<div class="absolute left-0 right-0 bottom-0  select-none pointer-events-none  flex md-max:justify-end md:justify-center">
 	<ChatBar />
-	<PlayerInfo class="bar-section section-centered  lg-max:hidden" />
-	<SkillsBar class="bar-section section-centered  lg-max:bg-transparent" />
+	<PlayerInfo class="bar-section section-primary  lg-max:hidden" />
+	<SkillsBar class="bar-section section-primary  lg-max:bg-transparent" />
 	<Minimap v-show="playing" class="bar-section  md-max:hidden" />
 </div>
 </template>
@@ -88,7 +88,13 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-.section-centered {
+.section-primary {
 	@apply mx-2 p-2 rounded-t;
+}
+
+@screen md-max {
+	.section-primary {
+		@apply mx-0 rounded-tl;
+	}
 }
 </style>

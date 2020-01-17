@@ -1,17 +1,15 @@
 <template>
 <div class="absolute left-0 bottom-0 w-80" :class="{ active: showingInput }">
-	<div class="chat-messages-container">
-		<div ref="chatScroll" class="chat-messages scrolls">
+	<div ref="chatScroll" class="chat-messages scrolls italic">
 			<div v-for="(msg, index) in messages" :key="index" class="w-80 my-1">
 				<div v-if="msg.active !== undefined"><span :class="`msg-from team-${msg.team + 1}`">{{ msg.name }}</span> {{ msg.active ? 'rejoined' : 'left' }} the game</div>
 				<div v-else-if="msg.kill"><span :class="`msg-from team-${msg.team + 1}`">{{ msg.kill }}</span> {{ msg.executed ? 'died to ' + (msg.damagers.indexOf('base') !== -1 ? 'the' : 'a') : 'killed by' }} <span :class="`msg-from team-${1 - msg.team + 1}`">{{ msg.damagers.join(', ') }}</span></div>
 				<div v-else-if="msg.tower"><span :class="`msg-from team-${msg.team + 1}`">{{ msg.tower }}</span> destroyed!</div>
-				<div v-else><span class="text-gray-500">{{ msg.all ? '[ALL] ' : null }}</span><span :class="`msg-from team-${msg.team + 1}`">{{ msg.from }}</span>: {{ msg.body }}</div>
+				<div v-else class="not-italic"><span v-if="canToggleChatMode && msg.all" class="team-0">[ALL] </span><span :class="`msg-from team-${msg.team + 1}`">{{ msg.from }}</span>: {{ msg.body }}</div>
 			</div>
-		</div>
 	</div>
-	<div class="relative h-8">
-		<button v-show="showingInput" :class="chatVisibilityClass" class="interactive absolute left-0 w-12 h-full z-1 pointer-events-auto" @click="onTeamVisibility">
+	<div class="relative h-8 pl-1">
+		<button v-show="showingInput" :class="chatVisibilityClass" class="interactive absolute left-0 w-12 h-full z-1 pointer-events-auto" @click="toggleChatMode">
 			{{ allChat ? 'ALL' : 'team' }}
 		</button>
 		<input ref="chatInput" v-model.trim="draftMessage" class="chat-input  wh-full pl-12 text-white pointer-events-auto opacity-0" :class="{ active: showingInput }" @focus="onFocusChat" @blur="onBlurChat">
@@ -36,6 +34,7 @@ export default {
 			showingInput: false,
 			draftMessage: '',
 			allChat: false,
+			canToggleChatMode: false,
 		}
 	},
 
@@ -63,14 +62,14 @@ export default {
 			return this.localPlayer ? this.localPlayer.team : 0
 		},
 		chatVisibilityClass () {
-			return this.allChat ? 'team-all' : `team-${this.localTeam + 1}-bg`
+			return `team-${this.allChat ? 0 : this.localTeam + 1}-bg`
 		},
 	},
 
 	watch: {
 		pressed (key) {
 			if (key.code === KEY_ESCAPE) {
-				this.toggleChat(false)
+				this.toggleChatFocus(false)
 			} else if (key.code === KEY_ENTER) {
 				if (this.showingInput) {
 					if (this.draftMessage) {
@@ -83,13 +82,20 @@ export default {
 							}
 						}) //TODO or global
 					}
-					this.toggleChat(false)
+					this.toggleChatFocus(false)
 				} else {
-					this.setChatVisiblity(key.modifier)
-					this.toggleChat(true)
+					this.setChatMode(!!key.modifier)
+					this.toggleChatFocus(true)
 				}
 			}
 		},
+	},
+
+	mounted () {
+		this.canToggleChatMode = Local.game && !Local.game.botsMode && Local.game.size > 1
+		if (!this.canToggleChatMode) {
+			this.allChat = Local.game && !Local.game.botsMode
+		}
 	},
 
 	methods: {
@@ -101,7 +107,7 @@ export default {
 			})
 		},
 
-		toggleChat (showing) {
+		toggleChatFocus (showing) {
 			if (showing) {
 				this.$refs.chatInput.focus()
 			} else {
@@ -122,23 +128,20 @@ export default {
 			this.scrollToBottom()
 		},
 
-		setChatVisiblity (enabled) {
-			let setAllChat = true
-			if (Local.game) {
-				if (Local.game.bots) {
-					setAllChat = false
-				} else if (Local.game.size > 1) {
-					setAllChat = enabled
-				}
+		setChatMode (requestedAll) {
+			if (this.canToggleChatMode) {
+				this.allChat = requestedAll
 			}
-			this.allChat = setAllChat
+		},
+		toggleChatMode () {
+			return this.setChatMode(!this.allChat)
 		},
 
 		onTeamVisibility () {
 			if (this.showingInput) {
-				this.setChatVisiblity(!this.allChat)
+				this.setChatMode(!this.allChat)
 			} else {
-				this.toggleChat(true)
+				this.toggleChatFocus(true)
 			}
 		},
 	},
@@ -157,17 +160,16 @@ export default {
 	color: rgba(255, 255, 255, 0.5);
 }
 
-.chat-messages-container {
-	@apply pl-1 overflow-hidden;
+.chat-messages {
 	max-height: 200px;
 }
-.active .chat-messages-container {
+.active .chat-messages {
 	background: rgba(96, 96, 96, 0.5);
 	max-height: 500px;
 }
 
 .chat-messages {
-	@apply w-full max-h-full text-lg text-left text-white;
+	@apply wh-full pl-1 text-lg text-left text-white;
 	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 	padding-right: 100px;
 }
@@ -180,8 +182,8 @@ export default {
 }
 
 @screen md-max {
-	.chat-messages-container {
-		@apply mb-16;
+	.chat-messages {
+		@apply mb-32;
 	}
 }
 </style>

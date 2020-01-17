@@ -496,8 +496,7 @@ export default {
 }
 
 .skill-item .skill-button {
-	@apply relative m-1 p-1 font-semibold bg-transparent rounded-full cursor-pointer;
-	/* TODO wh-full? */
+	@apply relative m-1 p-1 text-2xl font-black text-gray-900 bg-transparent rounded-full cursor-pointer;
 	width: 76px;
 	height: 76px;
 	z-index: 100;

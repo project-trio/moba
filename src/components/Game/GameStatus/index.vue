@@ -4,7 +4,7 @@
 	<div v-else-if="gameOver">
 		<div class="bar-section panel">
 			<h1 :class="`team-${winningTeam + 1}`">{{ victory ? 'Victory!' : 'Defeat' }}</h1>
-			<button class="panel-button interactive" @click="onReturnToLobby">Leave</button>
+			<button class="panel-button interactive  w-48" @click="onReturnToLobby">Leave</button>
 		</div>
 		<PlayerScores />
 	</div>
