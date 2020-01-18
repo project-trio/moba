@@ -36,9 +36,7 @@ class Unit {
 		this.cacheMoveSpeed = 0
 		this.cacheAttackCheck = false
 		this.expiringModifiers = []
-		this.afflictions = {
-			Whirlpool: {},
-		}
+		this.afflictions = {}
 
 		this.renderInBackground = renderInBackground
 		this.movable = false

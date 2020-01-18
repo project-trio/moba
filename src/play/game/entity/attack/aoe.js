@@ -103,7 +103,12 @@ class AreaOfEffect {
 				}
 				if (!isAlly) {
 					if (this.afflicts) {
-						target.afflictions[this.afflicts][fromUnit.id] = renderTime
+						let affliction = target.afflictions[this.afflicts]
+						if (!affliction) {
+							affliction = {}
+							target.afflictions[this.afflicts] = affliction
+						}
+						affliction[fromUnit.id] = renderTime
 					}
 					const attackDamage = this.attackDamage
 					if (attackDamage) {

@@ -306,7 +306,7 @@ export default {
 		create: createMeshes,
 
 		onDamageDealt (renderTime, source, target, damage) {
-			const whirpooledAt = target.afflictions['Whirlpool'][source.id]
+			const whirpooledAt = target.afflictions['Whirlpool']?.[source.id]
 			if (whirpooledAt && renderTime < whirpooledAt + 1000) {
 				source.whirlpoolDamage += damage
 			}
