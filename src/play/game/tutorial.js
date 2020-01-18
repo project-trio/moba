@@ -42,7 +42,7 @@ const Tutorial = {
 
 	data: [
 		{
-			title: 'Welcome to moba!',
+			title: 'Welcome to Moba!',
 			body: `This quick tutorial will introduce the game and its controls.`,
 			init (ship) {
 				ship.stunnedUntil = 999999999

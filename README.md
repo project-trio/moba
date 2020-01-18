@@ -1,4 +1,4 @@
-# moba
+# Moba
 
 > A browser-based, webgl MOBA engine
 

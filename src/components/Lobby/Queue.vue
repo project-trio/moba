@@ -189,7 +189,7 @@ export default {
 			if (enabled) {
 				this.notificationTimer = window.setTimeout(() => {
 					if (!this.didSayReady && this.notificationPermission === 'granted' && !document.hasFocus()) {
-						this.notification = new Notification('moba queue ready!', {
+						this.notification = new Notification('Moba queue ready!', {
 							icon: `${this.baseUrl}icon.png`,
 						})
 						this.notification.onclick = () => {
