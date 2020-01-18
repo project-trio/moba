@@ -89,7 +89,7 @@ export default function (gid, mode, size) {
 		return true
 	}
 
-	this.dequeueUpdate = function (_renderTime) {
+	this.dequeueUpdate = function (renderTime) {
 		const nextUpdate = updateQueue[updateCount]
 		if (!nextUpdate) {
 			return false

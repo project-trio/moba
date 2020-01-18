@@ -359,7 +359,7 @@ class Ship extends Movable {
 
 	// Health
 
-	endSkill (index, _renderTime) {
+	endSkill (index, renderTime) {
 		this.skills.actives[index] = 0
 		this.skills.data[index].end(this, this.skills.levels[index]) //TODO level when skill started
 

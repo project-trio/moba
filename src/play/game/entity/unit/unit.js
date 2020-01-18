@@ -506,7 +506,7 @@ class Unit {
 
 	// Health
 
-	update (renderTime, _timeDelta) {
+	update (renderTime, timeDelta) {
 		if (this.selected) {
 			store.everyUpdateStats(this)
 		}
@@ -619,7 +619,7 @@ class Unit {
 		return damage
 	}
 
-	die (time, _isRetro) {
+	die (time, isRetro) {
 		this.isDead = true
 		this.timeOfDeath = time
 		if (this.infoContainer) {
@@ -670,7 +670,7 @@ class Unit {
 		this.removeTarget()
 	}
 
-	checkUpdateTarget (_renderTime) {
+	checkUpdateTarget (renderTime) {
 	}
 
 	checkTarget (renderTime) {
@@ -796,7 +796,7 @@ class Unit {
 		return renderTime - this.lastAttack > this.current.attackCooldown
 	}
 
-	getAttackTarget (_units) {
+	getAttackTarget (units) {
 		return null
 	}
 

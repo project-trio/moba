@@ -126,7 +126,7 @@ class Movable extends Unit {
 		return this.moveDestination && this.aimingToMove && !this.isAttackingTargetedUnit && this.stunnedUntil === 0
 	}
 
-	reachedDestination (_needsNewDestination) {
+	reachedDestination (needsNewDestination) {
 		this.moveDestination = false
 	}
 
@@ -203,7 +203,7 @@ class Movable extends Unit {
 		this.reachedDestination(false)
 	}
 
-	checkUpdateTarget (_renderTime) {
+	checkUpdateTarget (renderTime) {
 		this.isAttackingTargetedUnit = this.inRangeFor(this.attackTarget)
 		if (!this.isAttackingTargetedUnit) {
 			this.setDestination(this.attackTarget.px, this.attackTarget.py, true)
