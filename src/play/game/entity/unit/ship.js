@@ -14,7 +14,7 @@ import retroSkillsData from '@/play/data/skills-retro'
 import Render from '@/play/render/render'
 import RenderSound from '@/play/render/sound'
 
-import Util from '@/play/game/util'
+import { squared } from '@/play/game/util'
 
 import Movable from '@/play/game/entity/unit/movable'
 import Unit from '@/play/game/entity/unit/unit'
@@ -247,7 +247,7 @@ class Ship extends Movable {
 			return true
 		}
 		const skillLevel = this.skills.levels[index]
-		const skillRangeCheck = Util.squared(skill.getRange(skillLevel) * 100)
+		const skillRangeCheck = squared(skill.getRange(skillLevel) * 100)
 		if (typeof targetData === 'string') {
 			const target = this.setTargetId(targetData)
 			if (target) {
@@ -564,7 +564,7 @@ class Ship extends Movable {
 		const addAttackRange = this.statBase.attackRange[1]
 		if (addAttackRange) {
 			this.stats.attackRange += addAttackRange * 100
-			this.attackRangeCheck = Util.squared(this.stats.attackRange)
+			this.attackRangeCheck = squared(this.stats.attackRange)
 		}
 		const addArmor = this.statBase.armor[1]
 		if (addArmor) {

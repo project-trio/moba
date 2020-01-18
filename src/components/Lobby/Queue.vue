@@ -37,7 +37,7 @@
 import store from '@/store'
 import router from '@/router'
 
-import util from '@/helpers/util'
+import { getTimestamp, pluralize } from '@/helpers/util'
 
 // import { GAME_SIZES } from '@/play/data/constants'
 
@@ -132,7 +132,7 @@ export default {
 		},
 
 		queuePopAt (queuePopAt) {
-			this.queueSecondsRemaining = queuePopAt - util.seconds()
+			this.queueSecondsRemaining = queuePopAt - getTimestamp()
 		},
 	},
 
@@ -170,7 +170,7 @@ export default {
 	},
 
 	methods: {
-		pluralize: util.pluralize,
+		pluralize,
 
 		cancelTimer () {
 			if (this.notification) {

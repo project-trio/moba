@@ -9,7 +9,7 @@
 
 <script>
 import store from '@/store'
-import util from '@/helpers/util'
+import { addListener, removeListener } from '@/helpers/util'
 
 import ChatBar from '@/components/Game/PlayerBar/ChatBar'
 import Minimap from '@/components/Game/PlayerBar/Minimap'
@@ -39,15 +39,15 @@ export default {
 	},
 
 	created () {
-		util.addListener(window, 'keydown', this.keydown)
-		util.addListener(window, 'keyup', this.keyup)
-		util.addListener(window, 'wheel', this.scroll)
+		addListener(window, 'keydown', this.keydown)
+		addListener(window, 'keyup', this.keyup)
+		addListener(window, 'wheel', this.scroll)
 	},
 
 	destroyed () {
-		util.removeListener(window, 'keydown', this.keydown)
-		util.removeListener(window, 'keyup', this.keyup)
-		util.removeListener(window, 'wheel', this.scroll)
+		removeListener(window, 'keydown', this.keydown)
+		removeListener(window, 'keyup', this.keyup)
+		removeListener(window, 'wheel', this.scroll)
 	},
 
 	methods: {

@@ -27,7 +27,7 @@ export default {
 	},
 
 	computed: {
-		now () {
+		minuteTime () {
 			return store.state.minuteTime
 		},
 
@@ -79,7 +79,7 @@ export default {
 
 	methods: {
 		timeSince (timestamp) {
-			const diff = this.now - timestamp
+			const diff = this.minuteTime - timestamp
 			if (diff < 30) {
 				return `just now`
 			}

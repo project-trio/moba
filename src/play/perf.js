@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js'
 
 import Float from '@/play/game/helpers/float'
-import Util from '@/play/game/util'
+import { angleOf } from '@/play/game/util'
 
 const iterations = 99999
 
@@ -65,20 +65,20 @@ console.log(value)
 // console.timeEnd('Decimal.atan2')
 // console.log(value)
 
-// console.time('Util.angleApproximate')
+// console.time('angleApproximate')
 // for (let i = 0; i < iterations; i += 1) {
 // 	// randomizePosition()
-// 	value = Util.angleApproximate(rx, ry)
+// 	value = angleApproximate(rx, ry)
 // }
-// console.timeEnd('Util.angleApproximate')
+// console.timeEnd('angleApproximate')
 // console.log(value.toNumber())
 
-console.time('Util.angleOf')
+console.time('angleOf')
 for (let i = 0; i < iterations; i += 1) {
 	// randomizePosition()
-	value = Util.angleOf(rx, ry, false)
+	value = angleOf(rx, ry, false)
 }
-console.timeEnd('Util.angleOf')
+console.timeEnd('angleOf')
 console.log(value / 1000)
 
 //COS
@@ -86,7 +86,7 @@ console.log(value / 1000)
 console.log('\nCOS')
 
 const anglePrecise = Math.atan2(ry, rx)
-// const angleApprox = Util.angleOf(rx, ry, false)
+// const angleApprox = angleOf(rx, ry, false)
 
 console.time('Math.cos')
 for (let i = 0; i < iterations; i += 1) {

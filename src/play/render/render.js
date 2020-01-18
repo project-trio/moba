@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 
 import store from '@/store'
-import util from '@/helpers/util'
+import { addListener, removeListener } from '@/helpers/util'
 
 import { TEAM_COLORS, DARK_COLORS, WALL_COLORS } from '@/play/data/constants'
 
@@ -162,11 +162,11 @@ export default {
 
 		this.createRenderer()
 
-		util.addListener(window, 'resize', resize)
+		addListener(window, 'resize', resize)
 	},
 
 	destroy () {
-		util.removeListener(window, 'resize', resize)
+		removeListener(window, 'resize', resize)
 		gameScene = null
 		gameCamera = null
 		perspectiveCamera = null

@@ -1,7 +1,7 @@
 import Local from '@/play/local'
 
 import Float from '@/play/game/helpers/float'
-import Util from '@/play/game/util'
+import { pointDistance, withinSquared } from '@/play/game/util'
 
 import Unit from '@/play/game/entity/unit/unit'
 
@@ -103,8 +103,8 @@ class Movable extends Unit {
 					return true
 				}
 			} else {
-				const dist = Util.pointDistance(wx, wy, bx, by)
-				if (Util.withinSquared(dist, collisionSize + ww)) {
+				const dist = pointDistance(wx, wy, bx, by)
+				if (withinSquared(dist, collisionSize + ww)) {
 					return true
 				}
 			}
@@ -114,8 +114,8 @@ class Movable extends Unit {
 		const units = Unit.all()
 		for (const unit of units) {
 			if (this !== unit && unit.isBlocking) {
-				const dist = Util.pointDistance(bx, by, unit.px, unit.py)
-				if (Util.withinSquared(dist, collisionSize + unit.stats.collision)) {
+				const dist = pointDistance(bx, by, unit.px, unit.py)
+				if (withinSquared(dist, collisionSize + unit.stats.collision)) {
 					return true
 				}
 			}

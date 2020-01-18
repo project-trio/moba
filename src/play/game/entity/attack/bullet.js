@@ -5,7 +5,7 @@ import { STAT_MOVE_SPEED } from '@/play/data/constants'
 import Local from '@/play/local'
 import Render from '@/play/render/render'
 import Float from '@/play/game/helpers/float'
-import Util from '@/play/game/util'
+import { pointDistance, squared, withinSquared } from '@/play/game/util'
 
 import AreaOfEffect from '@/play/game/entity/attack/aoe'
 import Unit from '@/play/game/entity/unit/unit'
@@ -76,7 +76,7 @@ class Bullet {
 			this.dropRate = 1400000 * this.moveConstant / Math.sqrt(source.distanceTo(target))
 		}
 		if (!this.unitTarget) {
-			this.collisionCheck = Util.squared(data.collisionSize || data.bulletSpeed * 50)
+			this.collisionCheck = squared(data.collisionSize || data.bulletSpeed * 50)
 		}
 		this.setLocation(sx, sy, source.height || 10, startAngle)
 		this.setTarget(target)
@@ -93,7 +93,7 @@ class Bullet {
 	setTarget (target) {
 		this.target = target
 		if (this.unitTarget) {
-			this.collisionCheck = Util.squared(target.stats.collision)
+			this.collisionCheck = squared(target.stats.collision)
 		}
 		if (this.unitTarget) {
 			this.targeted.push(target.id)
@@ -190,7 +190,7 @@ class Bullet {
 			const units = Unit.all()
 			const targetTeam = this.target.team
 			let nearestUnit
-			let nearestDistance = Util.squared(this.propagateRange * 100)
+			let nearestDistance = squared(this.propagateRange * 100)
 			for (const unit of units) {
 				if (unit.team === targetTeam && unit.targetable() && this.targeted.indexOf(unit.id) === -1) {
 					const distance = unit.distanceTo(this.target)
@@ -222,7 +222,7 @@ class Bullet {
 	}
 
 	distanceToStart () {
-		return Util.pointDistance(this.px, this.py, this.sx, this.sy)
+		return pointDistance(this.px, this.py, this.sx, this.sy)
 	}
 
 	move (renderTime, timeDelta, tweening) {
@@ -257,13 +257,13 @@ class Bullet {
 			this.updatePosition(movingToX, movingToY)
 		} else {
 			let reachedApproximate = false
-			if (this.maxRange && !Util.withinSquared(this.distanceToStart(), this.maxRange * 100)) {
+			if (this.maxRange && !withinSquared(this.distanceToStart(), this.maxRange * 100)) {
 				reachedApproximate = true
 			} else if (!this.toMaxRange) {
 				const distX = this.destX - movingToX
 				const distY = this.destY - movingToY
 				if (Math.abs(distX) < this.collisionCheck && Math.abs(distY) < this.collisionCheck) {
-					reachedApproximate = Util.pointDistance(movingToX, movingToY, this.destX, this.destY) <= this.collisionCheck
+					reachedApproximate = pointDistance(movingToX, movingToY, this.destX, this.destY) <= this.collisionCheck
 				}
 			}
 			if (reachedApproximate) {

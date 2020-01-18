@@ -14,7 +14,7 @@
 
 <script>
 import store from '@/store'
-import util from '@/helpers/util'
+import { addListener, removeListener } from '@/helpers/util'
 
 import { TESTING } from '@/play/data/constants'
 
@@ -56,7 +56,7 @@ export default {
 		Loop.start()
 
 		window.onbeforeunload = this.confirmExit
-		util.addListener(window, 'touchmove', this.cancelZoom, true)
+		addListener(window, 'touchmove', this.cancelZoom, true)
 	},
 
 	beforeDestroy () {
@@ -66,7 +66,7 @@ export default {
 		Loop.stop()
 
 		window.onbeforeunload = null
-		util.removeListener(window, 'touchmove', this.cancelZoom, true)
+		removeListener(window, 'touchmove', this.cancelZoom, true)
 	},
 
 	methods: {

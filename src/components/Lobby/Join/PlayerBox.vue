@@ -20,7 +20,7 @@
 <script>
 import store from '@/store'
 
-import Util from '@/helpers/util'
+import { getTimestamp } from '@/helpers/util'
 
 export default {
 	props: {
@@ -63,10 +63,10 @@ export default {
 
 	watch: {
 		playerMessages (playerMessages) {
-			const now = Util.seconds()
+			const currentTimestamp = getTimestamp()
 			for (let idx = this.cachedMessages.length - 1; idx >= 0; idx -= 1) {
 				const message = this.cachedMessages[idx]
-				if (now - message.at > 15) {
+				if (currentTimestamp - message.at > 15) {
 					this.cachedMessages.splice(idx, 1)
 				}
 			}

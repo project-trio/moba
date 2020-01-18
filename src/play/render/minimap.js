@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-import util from '@/helpers/util'
+import { addListener, removeListener } from '@/helpers/util'
 
 import Local from '@/play/local'
 
@@ -51,9 +51,9 @@ export default {
 
 		const canvas = document.getElementById('minimap')
 
-		util.addListener(canvas, 'mousedown', onMouseDown)
-		util.addListener(canvas, 'mousemove', onMouseMove)
-		util.addListener(canvas, 'mouseup', onMouseUp)
+		addListener(canvas, 'mousedown', onMouseDown)
+		addListener(canvas, 'mousemove', onMouseMove)
+		addListener(canvas, 'mouseup', onMouseUp)
 
 		renderer = new THREE.WebGLRenderer({
 			antialias: true,
@@ -83,9 +83,9 @@ export default {
 	destroy () {
 		const canvas = document.getElementById('canvas')
 		if (canvas) {
-			util.removeListener(canvas, 'mousedown', onMouseDown)
-			util.removeListener(canvas, 'mousemove', onMouseMove)
-			util.removeListener(canvas, 'mouseup', onMouseUp)
+			removeListener(canvas, 'mousedown', onMouseDown)
+			removeListener(canvas, 'mousemove', onMouseMove)
+			removeListener(canvas, 'mouseup', onMouseUp)
 		}
 
 		renderer = null

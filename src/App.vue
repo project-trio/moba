@@ -8,7 +8,7 @@
 import router from '@/router'
 import store from '@/store'
 
-import util from '@/helpers/util'
+import { addListener, removeListener, getTimestamp } from '@/helpers/util'
 
 import Game from '@/play/game/entity/game/game'
 import Bridge from '@/play/events/bridge'
@@ -44,9 +44,9 @@ export default {
 	},
 
 	created () {
-		util.addListener(window, 'keydown', this.keydown, true)
-		util.addListener(window, 'keyup', this.keyup, true)
-		util.addListener(window, 'contextmenu', this.onRightClick, true)
+		addListener(window, 'keydown', this.keydown, true)
+		addListener(window, 'keyup', this.keyup, true)
+		addListener(window, 'contextmenu', this.onRightClick, true)
 
 		Bridge.on('joined game', (data) => {
 			if (store.state.game.id !== data.gid) {
@@ -62,14 +62,14 @@ export default {
 		})
 
 		this.countdownInterval = window.setInterval(() => {
-			store.state.minuteTime = util.seconds()
+			store.state.minuteTime = getTimestamp()
 		}, 60 * 1000)
 	},
 
 	destroyed () {
-		util.removeListener(window, 'keydown', this.keydown, true)
-		util.removeListener(window, 'keyup', this.keyup, true)
-		util.removeListener(window, 'contextmenu', this.onRightClick, true)
+		removeListener(window, 'keydown', this.keydown, true)
+		removeListener(window, 'keyup', this.keyup, true)
+		removeListener(window, 'contextmenu', this.onRightClick, true)
 
 		if (this.countdownInterval) {
 			window.clearInterval(this.countdownInterval)

@@ -7,7 +7,7 @@ import Render from '@/play/render/render'
 
 import Animate from '@/play/game/helpers/animate'
 import Float from '@/play/game/helpers/float'
-import Util from '@/play/game/util'
+import { pointDistance } from '@/play/game/util'
 
 import AreaOfEffect from '@/play/game/entity/attack/aoe'
 import Bullet from '@/play/game/entity/attack/bullet'
@@ -426,7 +426,7 @@ export default {
 				const flingBullet = new Bullet(ship, target, bulletData)
 				Animate.apply(flingBullet)
 				const moveConstant = flingBullet.moveConstant
-				const animationDuration = Math.sqrt(Util.pointDistance(ship.px, ship.py, target[0], target[1])) / moveConstant / 1000
+				const animationDuration = Math.sqrt(pointDistance(ship.px, ship.py, target[0], target[1])) / moveConstant / 1000
 				flingBullet.queueAnimation('container', 'position', {
 					axis: AXIS_Z,
 					from: 0,

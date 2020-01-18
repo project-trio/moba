@@ -6,7 +6,7 @@ import Render from '@/play/render/render'
 
 import Animate from '@/play/game/helpers/animate'
 import Float from '@/play/game/helpers/float'
-import Util from '@/play/game/util'
+import { withinSquared } from '@/play/game/util'
 
 const POSITION_MAGNITUDE_OFFSET = 100
 
@@ -97,7 +97,7 @@ class AreaOfEffect {
 				continue
 			}
 			const dist = target.distanceToPoint(px, py)
-			if (Util.withinSquared(dist, this.collisionSize + target.stats.collision)) {
+			if (withinSquared(dist, this.collisionSize + target.stats.collision)) {
 				if (this.modify) {
 					target.modifyData(renderTime, this.modify)
 				}

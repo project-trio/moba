@@ -20,7 +20,7 @@
 <script>
 import store from '@/store'
 
-import util from '@/helpers/util'
+import { pluralize } from '@/helpers/util'
 
 import LobbyEvents from '@/play/events/lobby'
 
@@ -35,7 +35,7 @@ export default {
 		},
 
 		playersOnline () {
-			return util.pluralize(store.state.lobby.onlineCount, 'player')
+			return pluralize(store.state.lobby.onlineCount, 'player')
 		},
 
 		games () {

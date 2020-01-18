@@ -9,7 +9,7 @@ import Render from '@/play/render/render'
 
 import Animate from '@/play/game/helpers/animate'
 import Float from '@/play/game/helpers/float'
-import Util from '@/play/game/util'
+import { pointDistance, radianDistance, radiansBetween, squared } from '@/play/game/util'
 
 import Bullet from '@/play/game/entity/attack/bullet'
 
@@ -87,7 +87,7 @@ class Unit {
 			sightRange,
 			dot: 0,
 		}
-		this.sightRangeCheck = Util.squared(sightRange)
+		this.sightRangeCheck = squared(sightRange)
 
 		if (!this.static) {
 			const ringOffset = unitScale > 3 ? 2 : 6
@@ -115,7 +115,7 @@ class Unit {
 			this.stats.bulletSpeed = statBase.bulletSpeed
 			this.stats.bulletOffset = statBase.bulletOffset
 			this.stats.collision = statBase.collision * 100
-			this.collisionCheck = Util.squared(this.stats.collision)
+			this.collisionCheck = squared(this.stats.collision)
 			this.stats.bulletSize = statBase.bulletSize
 			this.stats.bulletColor = statBase.bulletColor
 
@@ -126,7 +126,7 @@ class Unit {
 
 			this.healthRemaining = this.stats.healthMax
 			this.healthRegenCheck = 0
-			this.attackRangeCheck = Util.squared(this.stats.attackRange)
+			this.attackRangeCheck = squared(this.stats.attackRange)
 			this.armorCheck = calculateArmor(this.stats.armor)
 			if (this.stats.healthRegen) {
 				this.addHealthRegen(0)
@@ -344,7 +344,7 @@ class Unit {
 		if (statName === STAT_MOVE_SPEED) {
 			this.cacheMoveSpeed = result / TICK_DURATION
 		} else if (statName === STAT_SIGHT_RANGE) {
-			this.sightRangeCheck = Util.squared(result)
+			this.sightRangeCheck = squared(result)
 		} else if (statName === STAT_ARMOR) {
 			this.armorCheck = calculateArmor(result)
 		}
@@ -469,10 +469,10 @@ class Unit {
 	}
 
 	distanceTo (unit) {
-		return Util.pointDistance(this.px, this.py, unit.px, unit.py)
+		return pointDistance(this.px, this.py, unit.px, unit.py)
 	}
 	distanceToPoint (px, py) {
-		return Util.pointDistance(this.px, this.py, px, py)
+		return pointDistance(this.px, this.py, px, py)
 	}
 
 	// Movement
@@ -687,7 +687,7 @@ class Unit {
 
 	angleTo (container, destAngle, timeDelta, tweening) {
 		const currentAngle = tweening ? container.rotation.z : container.aim
-		const angleDiff = Util.radianDistance(currentAngle, destAngle, tweening)
+		const angleDiff = radianDistance(currentAngle, destAngle, tweening)
 		const turnDistance = tweening ? (this.turnSpeed * timeDelta / 2000) : Float.divide(this.turnSpeed * timeDelta, 2000)
 		let newAngle
 		if (Math.abs(angleDiff) < turnDistance) {
@@ -713,7 +713,7 @@ class Unit {
 			if (tweening) {
 				aimTop = this.attackTargetAim
 			} else {
-				aimTop = Util.radiansBetween(this, this.attackTarget)
+				aimTop = radiansBetween(this, this.attackTarget)
 				this.attackTargetAim = aimTop
 			}
 		}

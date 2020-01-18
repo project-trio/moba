@@ -5,7 +5,7 @@ import App from './App'
 
 import router from '@/router'
 import store from '@/store'
-import util from '@/helpers/util'
+import { addListener } from '@/helpers/util'
 import storage from '@/helpers/storage'
 
 import { TESTING } from '@/play/data/constants'
@@ -24,7 +24,7 @@ console.log = console.warn = emptyFunction
 
 Vue.config.productionTip = false
 
-util.addListener(window, 'touchstart', emptyFunction)
+addListener(window, 'touchstart', emptyFunction)
 
 //GUARD
 
