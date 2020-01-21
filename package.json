@@ -5,7 +5,6 @@
 	"repository": "https://github.com/project-trio/moba",
 	"description": "A top-down 3D MOBA that plays in your browser.",
 	"scripts": {
-		"i": "pnpm install",
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build --modern",
 		"lint": "vue-cli-service lint"
@@ -13,11 +12,6 @@
 	"engines": {
 		"node": "^12",
 		"npm": "^6"
-	},
-	"dependencies": {
-		"express": "^4.17.1",
-		"pg": "^7.17.0",
-		"socket.io": "^2.3.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.7.7",
