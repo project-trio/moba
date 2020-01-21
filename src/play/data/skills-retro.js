@@ -1,4 +1,4 @@
-import store from '@/store'
+import store from '@/app/store'
 
 import { TICK_DURATION, AXIS_X, AXIS_Y, AXIS_Z, MATH_ADD, MATH_MULTIPLY, MATH_SUBTRACT, PERCENT, STAT_ARMOR, STAT_ATTACK_COOLDOWN, STAT_DAMAGE_OVER_TIME, STAT_MOVE_SPEED, STAT_SIGHT_RANGE, TARGET_SELF, TARGET_GROUND, TARGET_ENEMY } from '@/play/data/constants'
 import { levelMultiplier } from '@/play/data/skillsHelper'

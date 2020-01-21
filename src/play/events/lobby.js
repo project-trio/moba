@@ -1,5 +1,5 @@
-import router from '@/router'
-import store from '@/store'
+import router from '@/app/router'
+import store from '@/app/store'
 
 import { TESTING } from '@/play/data/constants'
 

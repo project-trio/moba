@@ -1,6 +1,6 @@
 import TrioClient from '@ky-is/trio-client'
 
-import store from '@/store'
+import store from '@/app/store'
 
 import { TESTING } from '@/play/data/constants'
 

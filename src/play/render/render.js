@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-import store from '@/store'
+import store from '@/app/store'
 import { addListener, removeListener } from '@/helpers/util'
 
 import { TEAM_COLORS, DARK_COLORS, WALL_COLORS } from '@/play/data/constants'
@@ -248,12 +248,12 @@ export default {
 		if (font) {
 			renderText(font)
 		} else {
-			new THREE.FontLoader().load(require('@/assets/font.typeface'), renderText)
+			new THREE.FontLoader().load(require('@/play/assets/font.typeface'), renderText)
 		}
 	},
 
 	sprite (name, options) {
-		const map = new THREE.TextureLoader().load(require(`@/assets/${name}.png`))
+		const map = new THREE.TextureLoader().load(require(`@/play/assets/${name}.png`))
 		const material = new THREE.SpriteMaterial({map: map, color: 0xffffff, fog: true})
 		const sprite = new THREE.Sprite(material)
 		sprite.scale.set(88, 88, 1)
@@ -291,7 +291,7 @@ export default {
 			const mesh = builder.createMesh()
 			return this.voxelMesh(mesh, team, options)
 		}
-		new Vox.Parser().parse(require(`@/assets/${type}/${name}.vox`)).then((voxelData) => {
+		new Vox.Parser().parse(require(`@/play/assets/${type}/${name}.vox`)).then((voxelData) => {
 			builder = new Vox.MeshBuilder(voxelData, { voxelSize: options.size || 2 })
 			if (voxelCache && options.cache) {
 				voxelCache[team][name] = builder
@@ -308,7 +308,7 @@ export default {
 	},
 
 	generate (type, name, count, size, container, x, y, width, height) {
-		new Vox.Parser().parse(require(`@/assets/${type}/${name}.vox`)).then((voxelData) => {
+		new Vox.Parser().parse(require(`@/play/assets/${type}/${name}.vox`)).then((voxelData) => {
 			const builder = new Vox.MeshBuilder(voxelData, { voxelSize: size })
 			for (let i = 0; i < count; i += 1) {
 				const mesh = builder.createMesh()

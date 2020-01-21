@@ -7,7 +7,7 @@ module.exports = {
 	},
 
 	pages: {
-		index: { entry: 'src/main.js' },
+		index: { entry: 'src/app/main.js' },
 	},
 
 	chainWebpack (config) {

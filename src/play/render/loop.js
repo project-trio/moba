@@ -1,6 +1,6 @@
 import Stats from 'stats.js'
 
-import store from '@/store'
+import store from '@/app/store'
 
 import Local from '@/play/local'
 

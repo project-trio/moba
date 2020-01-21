@@ -1,4 +1,4 @@
-import store from '@/store'
+import store from '@/app/store'
 
 import { TESTING, TICK_DURATION, UPDATE_DURATION } from '@/play/data/constants'
 

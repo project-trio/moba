@@ -1,4 +1,4 @@
-import store from '@/store'
+import store from '@/app/store'
 
 import { STAT_MOVE_SPEED } from '@/play/data/constants'
 

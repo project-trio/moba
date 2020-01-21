@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-import store from '@/store'
+import store from '@/app/store'
 
 import shipStats from '@/play/data/ships'
 import retroShipStats from '@/play/data/ships-retro'

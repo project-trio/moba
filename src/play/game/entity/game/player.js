@@ -1,4 +1,4 @@
-import store from '@/store'
+import store from '@/app/store'
 
 import Local from '@/play/local'
 import Ship from '@/play/game/entity/unit/ship'

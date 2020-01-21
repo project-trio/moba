@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-import store from '@/store'
+import store from '@/app/store'
 
 let audioListener
 let dieBuffer, respawnBuffer, levelupBuffer, activateBuffer
@@ -27,16 +27,16 @@ export default {
 		this.setVolume(store.state.settings.soundVolume)
 
 		const audioLoader = new THREE.AudioLoader()
-		audioLoader.load(require('@/assets/sounds/fizzle1.wav'), (buffer) => {
+		audioLoader.load(require('@/play/assets/sounds/fizzle1.wav'), (buffer) => {
 			dieBuffer = buffer
 		})
-		audioLoader.load(require('@/assets/sounds/bubble1.wav'), (buffer) => {
+		audioLoader.load(require('@/play/assets/sounds/bubble1.wav'), (buffer) => {
 			respawnBuffer = buffer
 		})
-		audioLoader.load(require('@/assets/sounds/confirm1.wav'), (buffer) => {
+		audioLoader.load(require('@/play/assets/sounds/confirm1.wav'), (buffer) => {
 			levelupBuffer = buffer
 		})
-		audioLoader.load(require('@/assets/sounds/select1.wav'), (buffer) => {
+		audioLoader.load(require('@/play/assets/sounds/select1.wav'), (buffer) => {
 			activateBuffer = buffer
 		})
 

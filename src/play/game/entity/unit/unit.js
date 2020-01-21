@@ -1,4 +1,4 @@
-import store from '@/store'
+import store from '@/app/store'
 
 import Bridge from '@/play/events/bridge'
 

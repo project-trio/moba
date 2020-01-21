@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-import store from '@/store'
+import store from '@/app/store'
 
 import { AXIS_Z } from '@/play/data/constants'
 import towersData from '@/play/data/towers'
@@ -17,10 +17,10 @@ import Unit from '@/play/game/entity/unit/unit'
 
 const audioLoader = new THREE.AudioLoader()
 let attackAllyBuffer, attackEnemyBuffer
-audioLoader.load(require('@/assets/sounds/switch1.wav'), (buffer) => {
+audioLoader.load(require('@/play/assets/sounds/switch1.wav'), (buffer) => {
 	attackAllyBuffer = buffer
 })
-audioLoader.load(require('@/assets/sounds/switch2.wav'), (buffer) => {
+audioLoader.load(require('@/play/assets/sounds/switch2.wav'), (buffer) => {
 	attackEnemyBuffer = buffer
 })
 

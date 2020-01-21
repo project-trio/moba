@@ -1,5 +1,5 @@
 import storage from '@/helpers/storage'
-import store from '@/store'
+import store from '@/app/store'
 
 import Local from '@/play/local'
 
