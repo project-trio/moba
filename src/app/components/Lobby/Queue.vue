@@ -59,6 +59,11 @@ export default {
 		LobbyChat,
 	},
 
+	beforeRouteLeave (to, from, next) {
+		LobbyEvents.connect('leave', { gid: store.state.game.id })
+		next()
+	},
+
 	data () {
 		return {
 			baseUrl: process.env.BASE_URL,
@@ -162,11 +167,6 @@ export default {
 		this.cancelTimer()
 		window.clearInterval(queueCountdownInterval)
 		queueCountdownInterval = null
-	},
-
-	beforeRouteLeave (to, from, next) {
-		LobbyEvents.connect('leave', { gid: store.state.game.id })
-		next()
 	},
 
 	methods: {
